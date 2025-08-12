@@ -1,0 +1,32 @@
+export const usermanageData = [
+    {
+        key:1,
+        fullname:'Abdullah Ali',
+        email:'abdullah@gmail.com',
+        district:'Makkah',
+        city:'Makkah',
+        mobileno:'1234567890',
+        type:'New',
+        status:1,
+    },
+    {
+        key:2,
+        fullname:'Sheraz Khan',
+        email:'sheraz@gmail.com',
+        district:'Jeddah',
+        city:'Jeddah',
+        mobileno:'1234567890',
+        type:'Old',
+        status:0,
+    },
+    {
+        key:3,
+        fullname:'Shujat Ali',
+        email:'shujat@gmail.com',
+        district:'Riyadh',
+        city:'Riyadh',
+        mobileno:'1234567890',
+        type:'New',
+        status:1,
+    },
+]

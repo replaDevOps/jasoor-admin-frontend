@@ -1,0 +1,6 @@
+.notifications .ant-list-item>div:last-of-type{
+    display: none;
+}
+.nofitication{
+    transform: translate(50%, -100%) !important;
+}
