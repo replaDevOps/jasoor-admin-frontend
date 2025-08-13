@@ -4,8 +4,6 @@ import { message } from "antd";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../../graphql/mutation/login";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
 import { MyInput } from "../../components";
 
 const { Title, Paragraph } = Typography;

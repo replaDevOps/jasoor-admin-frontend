@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { SyncOutlined } from '@ant-design/icons'
 import { Image, Space } from 'antd'
 
-import Sidebar from '../pages/Sidebar';
+import {Sidebar} from '../pages/Sidebar';
 import { ForgotPassword, LoginPage } from '../pages'
 
 const Fallback = () => (
@@ -20,7 +20,6 @@ const isLoggedIn = () => !!localStorage.getItem('accessToken')
 const ProtectedRoute = ({ children }) => {
   const location = useLocation()
   if (!isLoggedIn()) {
-    console.log('Redirecting to login from', location.pathname)
     return <Navigate to='/login' state={{ from: location }} replace />
   }
   return children

@@ -2,12 +2,16 @@ import React from 'react';
 import { Card, Col, Flex, Row, Typography } from 'antd';
 import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../PageComponents';
+import { GET_BUSINESS_CATEGORY_COUNT } from '../../../graphql/query/business'
+import { useQuery } from '@apollo/client'
+import { message,Spin } from "antd";
 
 const { Text } = Typography
 const BusinessCategoryDonut = () => {
-
+  const { data:categoryData, loading, error } = useQuery(GET_BUSINESS_CATEGORY_COUNT);
+console.log("categoryData?.getCountByEachCategory",categoryData?.getCountByEachCategory)
   const chartData = {
-    series: [15, 18, 20, 16, 28, 10, 12, 14, 16, 18],
+    series: categoryData?.getCountByEachCategory.map((item) => item.count) || [],
     options: {
       chart: {
         type: 'donut',
@@ -99,6 +103,14 @@ const BusinessCategoryDonut = () => {
       title:'Automotive, & Logistics'
     },
   ]
+
+  if (loading) {
+          return (
+            <Flex justify="center" align="center" style={{ height: 200 }}>
+              <Spin size="large" />
+            </Flex>
+         );
+      }
 
   return (
     <div>

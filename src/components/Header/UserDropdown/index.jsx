@@ -2,43 +2,43 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Dropdown, Flex, Image, Space, Typography } from 'antd'
 import { SwitchAccount } from './SwitchAccount';
+import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import { LOGOUT } from '../../../graphql/mutation/login';
+
+import { client } from '../../../config';
 
 const UserDropdown = ()=> {
-  const [ switchAccount , setSwitchAccount] = useState(false)
-  const [loading, setLoading]= useState(false)
-  // const dispatch = useDispatch()
-  //   const { profiledata } = useSelector(state => state?.profilegetApi)
-  //   useEffect(() => {
-  //       dispatch(actionsApi?.getUpdateProfile())
-  //   }, [dispatch])
+  const [user, setUser] = useState(null)
+  const navigate = useNavigate()
 
-  // const logout = () => {
-  //     setLoading(true)
-  //     const {userToken}= checkAuthorization()
-  //     var myHeaders = new Headers();
-  //     myHeaders.append("Authorization", userToken)
-  //     var requestOptions = {
-  //       method: 'GET',
-  //       headers: myHeaders,
-  //       redirect: 'follow'
-  //     }
-  //     fetch(domainUrl + '/logout', requestOptions)
-  //     .then(response => response.json())
-  //     .then(result => {
-  //     if (result?.success)
-  //         {
-  //             localStorage.clear()
-  //             window.location.href = '/'
-  //         }
-  //     else
-  //         throw 'error'
-  //     })
-  //     .catch(() => {
-  //         setLoading(false)
-  //         localStorage.clear()
-  //         window.location.href = '/'
-  //     })
-  // }
+  const [logout, { loading }] = useMutation(LOGOUT, {
+    onCompleted: () => {
+      localStorage.removeItem("accessToken"); 
+localStorage.removeItem("refreshToken");
+localStorage.removeItem("userId");
+client.resetStore(); 
+window.location.reload();
+    },
+    onError: (err) => message.error("Logout error:", err.message)
+  });
+  
+  const handleLogout = () => {
+    logout(); 
+  };
+  
+  const items = [
+    {
+      key: 'setting',
+      label: <Text className='fw-500'>{'Settings'}</Text>,
+      onClick: () => navigate('/setting', { state: { user } }),
+    },
+    {
+      key: 'logout',
+      label: (<Text className='fw-500' >{'Logout'}</Text>),
+      onClick: handleLogout,
+    },
+  ];
 
   const dropdownContent = (
     <Card className='radius-12 shadow-c card-cs'>
@@ -53,8 +53,7 @@ const UserDropdown = ()=> {
         <Button className='btnsave w-100'
           type='primary' 
           loading={loading}
-          // onClick={logout}>
-          >
+          onClick={logout}>
             Logout
         </Button>
       </Space>
@@ -75,10 +74,10 @@ const UserDropdown = ()=> {
           <img src='/assets/images/av-1.png' width={40} style={{borderRadius:50}}/>
         </Flex>
       </Dropdown>
-      <SwitchAccount 
+      {/* <SwitchAccount 
           visible={switchAccount}
           onClose={()=>{setSwitchAccount(false)}}
-        />
+        /> */}
     </div>
   )
 }
