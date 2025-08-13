@@ -3,7 +3,6 @@ import { useNavigate, Route, Routes, useLocation } from 'react-router-dom';
 import './index.css';
 import { Layout, Menu, Image, Space, Divider } from 'antd';
 import { Notifications, UserDropdown } from '../../components/Header';
-import { Dashboard } from '../Dashboard';
 import { BusinesslIstingPage } from '../BusinesslIstingPage';
 import { AddArticle, AddNewCategory, AddRolePermission, BusinessDealsDetails, SingleviewBusinesslist } from '../../components';
 import { CategoriesManagement } from '../CategoriesManagement';
@@ -23,8 +22,7 @@ import { Alerts } from '../Alerts';
 import { SettingsPage } from '../SettingsPage';
 import { FinancePage } from '../FinancePage';
 import { FaqsPage } from '../FaqsPage';
-import { LoginPage } from '../LoginPage';
-import { ForgotPassword } from '../ForgotPassword';
+import { Dashboard } from '../Dashboard';
 
 
 const { Header, Sider, Content } = Layout;
@@ -253,8 +251,6 @@ const Sidebar = () => {
             <Route path="/rolepermission" element={<RolePermission />} />
             <Route path="/addrolepermission" element={<AddRolePermission />} />
             <Route path="/addrolepermission/:id" element={<AddRolePermission />} />
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/forgotpass" element={<ForgotPassword />} />
           </Routes>
         </Content>
       </Layout>

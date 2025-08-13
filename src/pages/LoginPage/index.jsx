@@ -1,45 +1,43 @@
 import { Form, Button, Typography, Row, Col, Divider, Checkbox, Flex, Image } from "antd";
-import { NavLink } from "react-router-dom";
+import { NavLink,useLocation } from "react-router-dom";
 import { message } from "antd";
-// import { useMutation } from "@apollo/client";
-// import { LOGIN } from "../graphql/mutation/login";
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../../graphql/mutation/login";
 import { useNavigate } from "react-router-dom";
-// import { useContext } from "react";
-// import { AuthContext } from "../context/AuthContext";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import { MyInput } from "../../components";
 
 const { Title, Paragraph } = Typography;
 
 const LoginPage = () => {
-    // const { login } = useContext(AuthContext);
+    const navigate = useNavigate()
+    const location = useLocation()
 
     const [messageApi, contextHolder] = message.useMessage();
-    const navigate = useNavigate();
-    // const [loginUser, { loading, error }] = useMutation(LOGIN);
+    const [loginUser, { loading, error }] = useMutation(LOGIN);
     const [form] = Form.useForm();
 
     const handleFinish = async (values) => {
-        console.log('Form Value', values)
-        // try {
-        //     const { email, password } = values;
-
-        //     const { data } = await loginUser({ variables: { email, password } });
-
-        //     if (data?.login?.token) {
-        //         localStorage.setItem("accessToken", data.login.token);
-        //         localStorage.setItem("userId", data.login.user.id);
-        //         login(data?.login?.token);
-        //         messageApi.success("Login successful!");
-        //         setTimeout(() => navigate("/"), 1000);
-        //     } else {
-        //         messageApi.error("Login failed: Invalid credentials");
-        //     }
-        // } catch (error) {
-        //     console.error("Login error:", error);
-        //     messageApi.error("Login failed: Something went wrong");
-        // }
-    };
+        try {
+          const { email, password } = values;
+          const { data } = await loginUser({ variables: { email, password } });
+      
+          if (data?.login?.token) {
+            // store token/id
+            localStorage.setItem("accessToken", data.login.token);
+            localStorage.setItem("userId", data.login.user.id);      
+            messageApi.success("Login successful!");
+            navigate("/")
+            // compute destination safely (it could be a string or Location object)
+          } else {
+            messageApi.error("Login failed: Invalid credentials");
+          }
+        } catch (error) {
+          console.error("Login error:", error);
+          messageApi.error("Login failed: Something went wrong");
+        }
+      };
 
     return (
         <>
