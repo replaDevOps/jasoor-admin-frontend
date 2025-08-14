@@ -9,7 +9,6 @@ import { message,Spin } from "antd";
 const { Text } = Typography
 const BusinessCategoryDonut = () => {
   const { data:categoryData, loading, error } = useQuery(GET_BUSINESS_CATEGORY_COUNT);
-console.log("categoryData?.getCountByEachCategory",categoryData?.getCountByEachCategory)
   const chartData = {
     series: categoryData?.getCountByEachCategory.map((item) => item.count) || [],
     options: {

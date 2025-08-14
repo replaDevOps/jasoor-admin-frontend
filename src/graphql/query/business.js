@@ -46,10 +46,42 @@ query GetCountByEachCategory {
   }
 }
 `
+const GET_BUSINESSES = gql`
+query GetAllBusinesses($limit: Int, $offSet: Int, $search: String,$filter: BusinessFilterInput) {
+  getAllBusinesses(limit: $limit, offSet: $offSet, search: $search, filter: $filter) {
+    totalActiveCount
+    totalCount
+    totalPendingCount
+    businesses {
+      id
+      businessTitle
+      seller {
+        name
+      }
+      category {
+        name
+      }
+      price
+      createdAt
+      businessStatus
+    }
+  }
+}
+`
+const GET_CATEGORIES = gql`
+query GetAllCategories {
+  getAllCategories {
+    id
+    name
+  }
+}
+`
 export {
   GET_BUSINESS_STATS,
   GET_BUSINESS_STATS_GRAPH,
   GET_BUSINESS_PRICE_TIER,
   GET_BUSINESS_REVENUE_TIER,
-  GET_BUSINESS_CATEGORY_COUNT
+  GET_BUSINESS_CATEGORY_COUNT,
+  GET_BUSINESSES,
+  GET_CATEGORIES,
 }

@@ -7,6 +7,33 @@ import { categoriesItems } from '../../../shared';
 import { categoryData, categoryStatsProfColumn, categorystatsProfData } from '../../../data';
 import { useEffect, useState } from 'react';
 import { TableContent } from '../../BusinesslistingComponents';
+import { CREATE_CATEGORY } from '../../../graphql/mutation/mutations';
+import { useMutation } from '@apollo/client';
+import { message,Spin } from "antd";
+
+const mapDensity = (value) => {
+    if (!value) return null;
+  
+    switch(value) {
+      case 1:
+      case "1":
+      case "Low":
+      case "LOW":
+        return "LOW";
+      case 2:
+      case "2":
+      case "Medium":
+      case "MEDIUM":
+        return "MEDIUM";
+      case 3:
+      case "3":
+      case "High":
+      case "HIGH":
+        return "HIGH";
+      default:
+        return null;
+    }
+};
 
 const { Text, Title } = Typography;
 
@@ -16,7 +43,30 @@ const AddNewCategory = () => {
     const [form] = Form.useForm();
     const editdata = categoryData?.find((list)=>list?.key === Number(id))
     const [categoryProfData, setCategoryProfData] = useState(categorystatsProfData);
+    const [documents, setDocuments] = useState( { title: "Category Icon", fileName: "", fileType: "", filePath: "" }, );
+    const [createCategory, { loading: createLoading }] = useMutation(CREATE_CATEGORY, {
+        onCompleted: (data) => {
+            message.success("Category created successfully");
+            navigate("/categorymanagement");
+        },
+        onError: (error) => {
+            message.error(`Error creating category: ${error.message}`);
+        },
+    });
 
+    const transformGrowthRecords = (data) => {
+        return data.map((row) => ({
+          regionName: row.regionname,
+          populationDensity: mapDensity(row.populationdensity),
+          industryDemand: mapDensity(row.industrydemand),
+          years: [
+            { year: 2021, localBusinessGrowth: parseFloat(row.value2021 || 0) },
+            { year: 2022, localBusinessGrowth: parseFloat(row.value2022 || 0) },
+            { year: 2023, localBusinessGrowth: parseFloat(row.value2023 || 0) },
+            { year: 2024, localBusinessGrowth: parseFloat(row.value2024 || 0) },
+          ],
+        }));
+      };
 
     useEffect(()=>{
         if(id && editdata){
@@ -35,11 +85,54 @@ const AddNewCategory = () => {
         setCategoryProfData(updated);
     };
 
-
     const onFinish = (values) => {
-        console.log('Received values:', values);
-        console.log('Category profile data:', categoryProfData);
-    };
+        console.log("Form values:", values);
+        console.log("Category stats data:", categoryProfData);
+      
+        const input = {
+          name: values.title,
+          icon: documents.filePath || null, // from uploaded file
+          isDigital: values.category === "digital" ? true : false, // adjust based on your dropdown
+          growthRecords: transformGrowthRecords(categoryProfData),
+        };
+      
+        createCategory({ variables: { input } });
+      };
+    const handleSingleFileUpload = async (file) => {
+        try {
+          let processedFile = file;
+      
+          // Prepare FormData
+          const formData = new FormData();
+          formData.append("file", processedFile);
+      
+          // Upload to server
+          const response = await fetch("https://220.152.66.148.host.secureserver.net/upload", {
+            method: "POST",
+            body: formData,
+          });
+      
+          if (!response.ok) {
+            throw new Error("Upload failed");
+          }
+      
+          const result = await response.json();
+          // set it to documents state
+          setDocuments({
+            title: "Category Icon",
+            fileName: processedFile.name,
+            fileType: processedFile.type,
+            filePath: result.fileUrl || result.url, // Assuming your API returns the file URL
+          });
+      
+          // Return file URL or whatever your API returns
+          return result.fileUrl || result.url;
+        } catch (error) {
+          console.error("Error uploading file:", error);
+          return null;
+        }
+      };
+
     return (
         <>
             <Flex vertical gap={25}>
@@ -122,7 +215,12 @@ const AddNewCategory = () => {
                                     form={form}
                                     name={'uploadcr'}
                                     title={'Upload'}
-                                    // onUpload={handleSingleFileUpload}
+                                    onUpload={async (file) => {
+                                        const fileUrl = await handleSingleFileUpload(file);
+                                        if (fileUrl) {
+                                          form.setFieldsValue({ uploadcr: fileUrl });
+                                        }
+                                      }}
                                     // uploading={uploading}
                                     multiple={false}
                                 />

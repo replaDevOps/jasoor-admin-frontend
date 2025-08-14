@@ -5,10 +5,14 @@ import { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination, DeleteModal } from '../../Ui';
+import { GET_CATEGORIES } from '../../../graphql/query/business'
+import { useQuery } from '@apollo/client'
+import { message,Spin } from "antd";
 
 
 const CategoryTable = () => {
     const [form] = Form.useForm();
+    const { data, loading:isLoading, error } = useQuery(GET_CATEGORIES);
     const [selectedStatus, setSelectedStatus] = useState('Status');
     const [selectedCategory, setSelectedCategory] = useState('Business Type');
     const navigate = useNavigate();

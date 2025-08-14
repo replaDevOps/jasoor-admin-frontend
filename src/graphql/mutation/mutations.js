@@ -71,6 +71,13 @@ mutation UpdateDeal($input: UpdateDealInput!) {
   }
 }
 `
+const CREATE_CATEGORY = gql`
+mutation CreateCategory($input: CreateCategoryInput!) {
+  createCategory(input: $input) {
+    id
+  }
+}
+`
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -82,5 +89,6 @@ export {
   UPDATE_MEETING,
   APPROVE_MEETING,
   UPLOAD_DOC,
-  FINALIZE_DEAL
+  FINALIZE_DEAL,
+  CREATE_CATEGORY
 }

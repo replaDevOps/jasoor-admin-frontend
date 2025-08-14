@@ -1,25 +1,25 @@
 import { Card, Row, Col, Flex, Typography } from 'antd'
 
 const { Title, Text } = Typography
-const BusinesslistCards = () => {
+const BusinesslistCards = ({totalActiveCount,totalCount,totalPendingCount}) => {
 
     const data = [
         {
             id:1,
             icon:'dc-1.png',
-            title:'6,784',
+            title:totalCount,
             subtitle:'Total Listing',
         },
         {
             id:2,
             icon:'abl.png',
-            title:'678',
+            title:totalActiveCount,
             subtitle:'Total Active Listing',
         },
         {
             id:3,
             icon:'pbl.png',
-            title:'424',
+            title:totalPendingCount,
             subtitle:'Total Pending Lisitng',
         },
     ]

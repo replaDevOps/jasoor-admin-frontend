@@ -1,48 +1,122 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table } from 'antd';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table,Space,Typography } from 'antd';
 import { MyDatepicker, SearchInput } from '../../Forms';
-import { businesslistmaincolumn, businesslisttableData } from '../../../data';
-import { useState } from 'react';
+import { useState,useMemo } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { maincategoriesItem } from '../../../shared';
 import { CustomPagination } from '../../Ui';
+import { GET_CATEGORIES } from '../../../graphql/query/business'
+import { useQuery } from '@apollo/client'
+import { message,Spin } from "antd";
+import dayjs from 'dayjs';
 
 
-const BusinessListingTable = () => {
+const { Text } = Typography
+const BusinessListingTable = ({
+    businesses,
+    totalCount,
+    loading,
+    page,
+    pageSize,
+    onPageChange,
+    onFiltersChange,
+    search, 
+    setSearch,
+    setStatus
+}) => {
+    const { data, loading:isLoading, error } = useQuery(GET_CATEGORIES);
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState('Status');
     const [selectedCategory, setSelectedCategory] = useState('Category');
-    const [dateRange, setDateRange] = useState();
-    const navigate = useNavigate();
-    const [pageSize, setPageSize] = useState(10);
+    const [dateRange, setDateRange] = useState(null);
     const [current, setCurrent] = useState(1);
-
-    const total = businesslisttableData.length;
-    const handlePageChange = (page, size) => {
-        setCurrent(page);
-        setPageSize(size);
-    };
-    
+    const navigate = useNavigate();
+  
     const handleStatusClick = ({ key }) => {
-        const selectedItem = statusItems.find(item => item.key === key);
-        if (selectedItem) {
-            setSelectedStatus(selectedItem.label);
+      const selectedItem = statusItems.find(item => item.key === key);
+      if (selectedItem) {
+        setSelectedStatus(selectedItem.label);
+        // onFiltersChange({ status: selectedItem.key });
+        if (key === '1') {
+            setStatus(null); // Reset status if 'All' is selected
         }
+        else{
+        setStatus(selectedItem.key);
+        }
+      }
     };
-
+console.log("dateRange",dateRange)
+    const categoryItems = useMemo(() => {
+        if (!data?.getAllCategories) return [];
+        // Map API categories to Antd dropdown items
+        return data.getAllCategories.map(cat => ({
+            key: cat.id,       // send this key to API filter
+            label: cat.name
+        }));
+    }, [data]);
+    
     const handleCategoryClick = ({ key }) => {
-        const selectedItem = maincategoriesItem.find(item => item.key === key);
+        const selectedItem = categoryItems.find(item => item.key === key);
         if (selectedItem) {
             setSelectedCategory(selectedItem.label);
+            // Send selected category id to parent to filter API
+            onFiltersChange({ categoryId: selectedItem.key });
         }
     };
 
     const statusItems = [
         { key: '1', label: 'All' },
-        { key: '2', label: 'Active' },
-        { key: '3', label: 'Pending' },
-        { key: '4', label: 'Inactive' }
+        { key: 'ACTIVE', label: 'Active' },
+        { key: 'UNDER_REVIEW', label: 'Pending' },
+        { key: 'INACTIVE', label: 'Inactive' }
     ];
+    const columns =[
+        {
+            title: 'Business Title',
+            dataIndex: 'businessTitle',
+        },
+        {
+            title: 'Seller Name',
+            render:(_,record)=>record?.seller?.name
+        },
+        {
+            title: 'Category',
+            dataIndex: 'category',
+            render:(_,record)=>record?.category?.name
+        },
+        {
+            title: 'Business Price',
+            dataIndex: 'price',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'businessStatus',
+            render:(_,record) => {
+                const status=record?.businessStatus;
+                return (
+                    status === 'UNDER_REVIEW' ? (
+                        <Space align='center'>
+                            <Text className='btnpill fs-12 pending'>Under Review</Text>
+                        </Space>
+                    ) : status === 'INACTIVE' ? (
+                        <Text className='btnpill fs-12 inactive'>Inactive</Text>
+                    ) : status === 'ACTIVE' ? (
+                        <Text className='btnpill fs-12 success'>Active</Text>
+                    ) : status === 'SOLD' ? (
+                        <Text className='btnpill fs-12 success'>Sold</Text>
+                    ) : null
+                );
+            }
+        },
+        {
+            title: 'Date',
+            render:(_,record)=>{
+                const date = new Date(record?.createdAt);
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                return date.toLocaleDateString('en-US', options);
+            }
+        },
+    ]
 
     return (
         <Card className='radius-12 border-gray'>
@@ -54,6 +128,10 @@ const BusinessListingTable = () => {
                                 <SearchInput
                                     name='name'
                                     placeholder='Search'
+                                    value={search}
+                                    onChange={(e) => {
+                                        setSearch(e.target.value);
+                                    }}
                                     prefix={<img src='/assets/icons/search.png' width={14} />}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                 />
@@ -73,7 +151,7 @@ const BusinessListingTable = () => {
                                 </Dropdown>
                                 <Dropdown 
                                     menu={{ 
-                                        items: maincategoriesItem,
+                                        items: [{ key: null, label: 'All' }, ...categoryItems], // Add "All" option
                                         onClick: handleCategoryClick
                                     }} 
                                     trigger={['click']}
@@ -94,7 +172,13 @@ const BusinessListingTable = () => {
                                     label='Date'
                                     rangePicker
                                     value={dateRange}
-                                    onChange={(dates) => setDateRange(dates)}
+                                    onChange={(dates) => {
+                                        console.log("dates",dates)
+                                        setDateRange([dayjs(dates[0]), dayjs(dates[1])]); // keep as Day.js objects
+                                        const startDate = dates?.[0] ? dates[0].format('YYYY-MM-DD') : null;
+                                        const endDate = dates?.[1] ? dates[1].format('YYYY-MM-DD') : null;
+                                        onFiltersChange({ startDate, endDate });
+                                      }}
                                 />
                             </Flex>
                         </Col>
@@ -102,8 +186,8 @@ const BusinessListingTable = () => {
                 </Form>
                 <Table
                     size='large'
-                    columns={businesslistmaincolumn}
-                    dataSource={businesslisttableData.slice((current - 1) * pageSize, current * pageSize)}
+                    columns={columns}
+                    dataSource={businesses}
                     className='pagination table-cs table'
                     showSorterTooltip={false}
                     scroll={{ x: 1000 }}
@@ -120,10 +204,10 @@ const BusinessListingTable = () => {
                     // }
                 />
                 <CustomPagination 
-                    total={total}
+                    total={totalCount}
                     current={current}
                     pageSize={pageSize}
-                    onPageChange={handlePageChange}
+                    onPageChange={onPageChange}
                 />
             </Flex>
         </Card>

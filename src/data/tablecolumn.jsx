@@ -7,11 +7,6 @@ const { Text } = Typography
 
 const businesslistmaincolumn= [
     {
-        title: 'Reference No',
-        dataIndex: 'refno',
-        render:(refno)=> <Text>REF-{refno}</Text>
-    },
-    {
         title: 'Business Title',
         dataIndex: 'title',
     },
