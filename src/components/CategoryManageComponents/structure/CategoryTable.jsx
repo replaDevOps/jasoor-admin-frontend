@@ -1,7 +1,7 @@
 import { Button, Card, Col, Dropdown, Flex, Form, Row, Table } from 'antd';
 import { SearchInput } from '../../Forms';
 import { categoryColumn, categoryData } from '../../../data';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination, DeleteModal } from '../../Ui';
@@ -19,8 +19,16 @@ const CategoryTable = () => {
     const [deleteItem, setDeleteItem] = useState(false);
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
+    const [categories, setCategories] = useState([]);
 
     const total = categoryData.length;
+    useEffect(()=>{
+        if (data?.getAllCategories?.length) {
+            setCategories(data.getAllCategories)
+        }
+        else 
+            setCategories([])
+    },[data])
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
@@ -102,7 +110,7 @@ const CategoryTable = () => {
                     <Table
                         size='large'
                         columns={categoryColumn(setDeleteItem, navigate)}
-                        dataSource={categoryData.slice((current - 1) * pageSize, current * pageSize)}
+                        dataSource={categories}
                         className='pagination table-cs table'
                         showSorterTooltip={false}
                         scroll={{ x: 1000 }}

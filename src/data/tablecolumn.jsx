@@ -219,7 +219,7 @@ const categoryColumn = ( setDeleteItem, navigate ) =>  [
     },
     {
         title: 'Category Name',
-        dataIndex: 'categoryname',
+        dataIndex: 'name',
     },
     {
         title: 'Business Type',

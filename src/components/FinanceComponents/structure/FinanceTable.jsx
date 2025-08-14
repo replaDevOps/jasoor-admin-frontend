@@ -1,10 +1,10 @@
 import { Button, Card, Col, Flex, Form, Row, Table } from 'antd';
 import { MyDatepicker, SearchInput } from '../../Forms';
 import { financeColumn, financeData } from '../../../data';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CustomPagination } from '../../Ui';
-
-
+import moment from 'moment';
+import dayjs from 'dayjs';
 const FinanceTable = () => {
     const [form] = Form.useForm();
     const [dateRange, setDateRange] = useState();
@@ -15,8 +15,7 @@ const FinanceTable = () => {
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
-    };
-
+    }
     return (
         <>
             <Card className='radius-12 border-gray'>
@@ -37,7 +36,13 @@ const FinanceTable = () => {
                                     rangePicker
                                     className='datepicker-cs'
                                     value={dateRange}
-                                    onChange={(dates) => setDateRange(dates)}
+                                    onChange={(dates) => {
+                                        console.log(dates)
+                                        if(!dates?.length)
+                                            setDateRange(null)
+                                        else
+                                        setDateRange(dates)
+                                    }}
                                 />
                             </Col>
                         </Row>

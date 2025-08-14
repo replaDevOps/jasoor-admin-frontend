@@ -20,7 +20,7 @@ export const MyDatepicker = ({withoutForm, name, label, disabled, required, mess
                 rangePicker ?
                     <DatePicker.RangePicker
                         disabled={disabled || false}
-                        value={value ? moment(value, 'YYYY-MM-DD') : ''}
+                        value={value}
                         style={{ width: '100%' }}
                         {...props}
                         className='fs-14 without-timeinput'
