@@ -1,15 +1,20 @@
-import { Form, Button, Typography, Row, Col, Image, Flex } from "antd";
+import { Form, Button, Typography, Row, Col, Image, Flex, Dropdown, Space } from "antd";
 import { MyInput } from "../../components";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
 import { useState } from "react";
 
-const { Title, Paragraph } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 const ForgotPassword = () => {
     const [form] = Form.useForm();
     const [ requestState, setRequestState ] = useState('request')
     const navigate = useNavigate()
+    const [selectedLang, setSelectedLang] = useState({
+        key: "1",
+        label: "EN",
+        icon: "assets/icons/en.png",
+    });
 
      const forgotpass = () => {
         if (requestState === "request") {
@@ -29,6 +34,31 @@ const ForgotPassword = () => {
             setRequestState('request')
         }
     };
+
+    const lang = [
+        {
+          key: "1",
+          label: (
+            <Space>
+              <Image src="assets/icons/en.png" width={20} alt="English" preview={false} />
+              <Text className='fs-13'>EN</Text>
+            </Space>
+          ),
+          onClick: () =>
+            setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+        },
+        {
+          key: "2",
+          label: (
+            <Space>
+              <Image src="assets/icons/ar.png" width={20} alt="Arabic" preview={false} />
+              <Text className='fs-13'>AR</Text>
+            </Space>
+          ),
+          onClick: () =>
+            setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+        },
+    ];
 
     return (
         <Row className="signup-page">
@@ -176,6 +206,23 @@ const ForgotPassword = () => {
                 lg={8}
                 className="signup-visual-container"
             >
+                <Dropdown menu={{ items: lang }} trigger={["click"]} className="lang-dropdown">
+                    <Button
+                        onClick={(e) => e.preventDefault()}
+                        className="bg-transparent btn-outline btn p-2 border-white"
+                    >
+                        <Space align="center">
+                            <Image
+                                src={selectedLang.icon}
+                                width={20}
+                                alt={selectedLang.label}
+                                preview={false}
+                            />
+                            <Text className="text-white fs-13">{selectedLang.label}</Text>
+                            <DownOutlined className="text-white" />
+                        </Space>
+                    </Button>
+                </Dropdown>
                 <Flex vertical justify="space-between" className="h-100">
                     <Flex vertical justify="center" align="center" className="logo-sp">
                         <Image src="/assets/images/logo.png" width={200} preview={false} />

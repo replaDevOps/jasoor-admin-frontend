@@ -165,5 +165,14 @@ const yearOp = [
     },
 ]
 
+const langItems = [
+    {
+        id: '1', name: 'English'
+    },
+    {
+        id: '2', name: 'Arabic'
+    },
+]
 
-export { categoriesItems, maincategoriesItem, priorityItems, districtItems, statusItems, typeItems,meetingItems, businessdealItems, pushstatusItem,groupItems, groupselectItem, districtselectItems, yearOp };
+
+export { categoriesItems, maincategoriesItem, priorityItems, districtItems, statusItems, typeItems,meetingItems, businessdealItems, pushstatusItem,groupItems, groupselectItem, districtselectItems, yearOp, langItems };

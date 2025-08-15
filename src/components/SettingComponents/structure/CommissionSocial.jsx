@@ -1,5 +1,6 @@
 import { Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
-import { MyInput } from '../../Forms'
+import { MyInput, MySelect } from '../../Forms'
+import { langItems } from '../../../shared';
 
 const { Title } = Typography
 const CommissionSocial = () => {
@@ -24,6 +25,17 @@ const CommissionSocial = () => {
                 requiredMark={false}
             >
                 <Title level={5} className='mt-0 mb-3 fw-600'>
+                    System Language
+                </Title>
+                <MySelect
+                    label="Language"
+                    name="language"
+                    required
+                    message="Choose language"
+                    options={langItems}
+                    placeholder="Choose language"
+                />
+                <Title level={5} className='my-3 fw-600'>
                     Commission Rate
                 </Title>
                 <Row className='mb-3'>
