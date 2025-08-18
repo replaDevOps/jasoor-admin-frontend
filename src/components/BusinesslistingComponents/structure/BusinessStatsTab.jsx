@@ -1,10 +1,78 @@
 import { Card, Col, Flex, Image, Row, Switch, Typography } from 'antd'
-import { businessstatsData, postsaleColumn, postsaleData } from '../../../data'
+import { postsaleColumn } from '../../../data'
 import { TableContent } from './TableContent'
+import { UPDATE_BUSINESS } from '../../../graphql/mutation'
+import { useMutation,useQuery } from '@apollo/client';
+import {GET_BUSINESSES_STATS_BY_ID} from '../../../graphql/query'
+import { message,Spin } from "antd";
 
 const { Title,Text } = Typography
-const BusinessStatsTab = () => {
+const BusinessStatsTab = ({status}) => {
+    const [messageApi, contextHolder] = message.useMessage();
+    
+    const businessstatsData = [
+        {
+            id: 1,
+            icon:'/assets/icons/rev.png',
+            title: status?.revenue,
+            subtitle:`Revenue ${(status?.revenueTime)}`,
+        },
+        {
+            id: 2,
+            icon:'/assets/icons/pro.png',
+            title:status?.profit,
+            subtitle:`Profit ${(status?.profittime)}`,
+        },
+        {
+            id: 3,
+            icon:'/assets/icons/teamsize.png',
+            title:status?.numberOfEmployees,
+            subtitle:'Team Size'
+        },
+        {
+            id: 4,
+            icon:'/assets/icons/promar.png',
+            title:status?.profitMargen,
+            subtitle:'Profit Margin %'
+        },
+        {
+            id: 5,
+            icon:'/assets/icons/cap-re.png',
+            title:status?.recoveryTime,
+            subtitle:'Capital Recovery'
+        },
+        {
+            id: 6,
+            icon:'/assets/icons/multiple.png',
+            title:status?.multiple,
+            subtitle:'Multiples'
+        },
+    ]
+    const postsaleData = [
+        {
+            key:1,
+            supportperiod:status?.supportSession,
+            nosession:status?.suppportDuration,
+        },
+    ]
+    const [updateBusiness] = useMutation(UPDATE_BUSINESS, {
+        refetchQueries: [
+          {
+            query: GET_BUSINESSES_STATS_BY_ID,
+            variables: { getBusinessByIdId: status?.id }, // make sure you pass the current business id
+          },
+        ],
+        awaitRefetchQueries: true,
+        onCompleted: () => {
+            messageApi.success("Stats changed successfully!");
+          },
+          onError: (err) => {
+            messageApi.error(err.message || "Something went wrong!");
+          },
+    });
   return (
+    <>
+    {contextHolder}
     <Flex vertical gap={15}>
         <Card className='radius-12 border-gray w-100'>
             <Row gutter={[24,24]}>
@@ -13,8 +81,19 @@ const BusinessStatsTab = () => {
                         <Title level={5} className="m-0">
                             Business Stats
                         </Title>
-                        <Switch 
-                            size="small" defaultChecked
+                        <Switch
+                            size="small"
+                            checked={status?.isStatsVerified}
+                            onChange={(checked) => {
+                                updateBusiness({
+                                  variables: {
+                                    input: {
+                                        id: status?.id,
+                                        isStatsVerified: checked,
+                                      },
+                                  },
+                                });
+                            }}
                         />
                     </Flex>
                 </Col>
@@ -47,7 +126,7 @@ const BusinessStatsTab = () => {
                     Growth Opportunity
                 </Title>
                 <Text className='text-gray'>
-                    The café has strong potential for growth by introducing an online ordering system, partnering with food delivery apps, and expanding into nearby residential areas. Franchising or launching a second location in a busy district can further increase revenue.
+                    {status?.growthOpportunities}
                 </Text>
             </Flex>
         </Card>
@@ -57,7 +136,7 @@ const BusinessStatsTab = () => {
                     Reason for Selling
                 </Title>
                 <Text className='text-gray'>
-                    The owner is relocating abroad for personal reasons and is looking for a serious buyer to take over and continue the café’s success.
+                    {status?.reason}
                 </Text>
             </Flex>
         </Card>
@@ -67,14 +146,27 @@ const BusinessStatsTab = () => {
                     <Title level={5} className="m-0">
                         Post - Sale Support
                     </Title>
-                    <Switch 
-                        size="small" defaultChecked
-                    />
+                    <Switch
+                            size="small"
+                            checked={status?.isSupportVerified}
+                            onChange={(checked) => {
+                                updateBusiness({
+                                  variables: {
+                                    input: {
+                                        id: status?.id,
+                                        isSupportVerified: checked,
+                                      },
+                                  },
+                                });
+                            }}
+                        />
                 </Flex>
                 <TableContent data={postsaleData} columns={postsaleColumn} />
             </Flex>
         </Card>
     </Flex>
+    </>
+   
   )
 }
 

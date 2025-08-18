@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { MyInput } from '../../Forms';
 import { permissionsData, rolepermissionData } from '../../../data';
+import { CREATE_ROLE } from '../../../graphql/mutation/login';
+import { useMutation } from '@apollo/client';
 
 const { Text, Title } = Typography;
 
@@ -14,48 +16,100 @@ const AddRolePermission = () => {
     const [selectedPermissions, setSelectedPermissions] = useState({});
     const { id } = useParams()
     const detail = rolepermissionData?.find((items)=> items?.key === Number(id))
+    const [createRole] = useMutation(CREATE_ROLE);
     
-    useEffect(()=>{
-        if(id){
-            form.setFieldsValue({
-                roleName: detail?.rolename
-            })
+    useEffect(() => {
+        if (id && detail) {
+          form.setFieldsValue({ roleName: detail?.rolename });
+          setSelectedPermissions(detail?.permissions || {});
+        } else {
+          form.resetFields();
+          setSelectedPermissions({});
         }
-        else{
-            form.resetFields()
-        }
-    },[id])
-
-    const handleCategoryChange = (category, checked) => {
+      }, [id, detail]);
+    
+      const handleCategoryChange = (category, checked) => {
+        setSelectedPermissions(prev => {
+            const newCategory = {};
+            permissionsData.find(g => g.category === category).options.forEach(opt => {
+                newCategory[opt] = checked;
+            });
+            return {
+                ...prev,
+                [category]: newCategory
+            };
+        });
+    };
+    
+    const handleOptionChange = (category, option, checked) => {
         setSelectedPermissions(prev => ({
-        ...prev,
-        [category]: checked ? permissionsData.find(g => g.category === category).options.reduce((acc, opt) => {
-            acc[opt] = true;
-            return acc;
-        }, {}) : {}
+            ...prev,
+            [category]: {
+                ...prev[category],
+                [option]: checked
+            }
         }));
     };
-
-    const handleOptionChange = (category, option, checked) => {
-        setSelectedPermissions(prev => {
-            const newPermissions = { ...prev };
-            if (!newPermissions[category]) newPermissions[category] = {};
-                newPermissions[category][option] = checked;
-                return newPermissions;
-            }
-        );
-    };
-
+    
     const isCategoryChecked = (category) => {
-        const group = permissionsData.find(g => g.category === category);
-        return group.options.every(opt => selectedPermissions[category]?.[opt]);
+        const options = permissionsData.find(g => g.category === category).options;
+        return options.every(opt => selectedPermissions[category]?.[opt]);
     };
-
-    const onFinish = (values) => {
-        console.log('Role Name:', values.roleName);
-        console.log('Permissions:', selectedPermissions);
+    const transformPermissionsForBackend = (selectedPermissions) => {
+        const map = {
+          "Dashboard": { "View Dashboard": "viewDashboard" },
+          "Business Listing": {
+            "View Listings": "viewListings",
+            "Edit Listings": "editListings",
+            "Approve/Reject Listings": "approveRejectListings"
+          },
+          "Meeting Request": {
+            "View Meeting Requests": "viewMeetingRequests",
+            "Schedule Meetings": "scheduleMeetings",
+            "Edit Meeting Details": "editMeetingDetails",
+            "Cancel Meetings": "cancelMeetings"
+          },
+          "Deals": {
+            "View Deals": "viewDeals",
+            "Track Deal Progress": "trackDealProgress",
+            "Verify Documents": "verifyDocuments",
+            "Finalize Deal": "finalizeDeal"
+          },
+          "Finance": {
+            "View Finance Dashboard": "viewFinanceDashboard",
+            "Download Financial Reports": "downloadFinancialReports"
+          },
+          "Website Pages": {
+            "View Website Pages": "viewWebsitePages",
+            "Edit Article": "editArticle",
+            "Delete Article": "deleteArticle",
+            "Publish Article": "publishArticle"
+          },
+          "Alerts": { "View Alerts": "viewAlerts" },
+          "Admin Setting": { "Add/Edit/Delete Roles": "manageRoles" }
+        };
+      
+        const flat = {};
+        Object.keys(selectedPermissions).forEach(category => {
+          Object.keys(selectedPermissions[category]).forEach(option => {
+            const key = map[category][option];
+            if (key) flat[key] = selectedPermissions[category][option];
+          });
+        });
+        return flat;
+      };
+      
+      const onFinish = (values) => {
+        const input = {
+          name: values.roleName,
+          ...transformPermissionsForBackend(selectedPermissions)
+        };
+      
+        createRole({ variables: { input } });
+        // redirect to /rolepermission
         navigate("/rolepermission");
-    };
+      };   
+
 
     return (
         <Flex vertical gap={25}>

@@ -4,11 +4,18 @@ import { DownOutlined } from '@ant-design/icons';
 import ReactApexChart from 'react-apexcharts';
 import { yearOp } from '../../../shared';
 import { ModuleTopHeading } from '../../PageComponents';
+import {GET_FINANCE_GRAPH} from '../../../graphql/query';
+import { useQuery } from '@apollo/client';
 
 const { Title } = Typography;
 
 const FinanceAreaChart = () => {
   const [selectedStatus, setSelectedStatus] = useState('2025');
+
+  const { data, loading, error } = useQuery(GET_FINANCE_GRAPH, {
+    variables: { year: Number(selectedStatus) },
+    fetchPolicy: 'cache-and-network',
+  });
 
   const handleStatusClick = ({ key }) => {
     const selectedItem = yearOp.find(item => item.key === key);
@@ -21,86 +28,30 @@ const FinanceAreaChart = () => {
     series: [
       {
         name: 'Revenue',
-        data: [
-                50000,
-                210000,
-                10000,
-                110000,
-                80000,
-                3000,
-                90000,
-                220000,
-                60000,
-                70000,
-                85000,
-                200000
-            ],
-        },
+        data: data?.getRenenueGraph?.map(item => Number(item.revenue.toFixed(2))) || Array(12).fill(0),
+      },
     ],
     options: {
       chart: {
         type: 'area',
-        toolbar: {
-          show: false,
-        },
+        toolbar: { show: false },
       },
-      stroke: {
-        curve: 'smooth',
-        width: 2,
-      },
+      stroke: { curve: 'smooth', width: 2 },
       fill: {
         type: 'gradient',
-        gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.6,
-          opacityTo: 0.05,
-          stops: [0, 100],
-        },
+        gradient: { shadeIntensity: 1, opacityFrom: 0.6, opacityTo: 0.05, stops: [0, 100] },
       },
-      dataLabels: {
-        enabled: false,
-      },
+      dataLabels: { enabled: false },
       xaxis: {
-        categories: [
-          'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July',
-          'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-        ],
-        labels: {
-          style: {
-            colors: '#000',
-          },
-        },
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        labels: { style: { colors: '#000' } },
       },
-      yaxis: {
-        labels: {
-          formatter: value => `${value}k`,
-          style: {
-            colors: '#000',
-          },
-        },
-      },
-      markers: {
-        size: 4,
-        colors: ['#2563EB'],
-        strokeWidth: 2,
-        strokeColors: '#fff',
-        hover: {
-          size: 6,
-        },
-      },
-      tooltip: {
-        y: {
-          formatter: val => `SAR ${val}`,
-        },
-      },
-      grid: {
-        borderColor: '#eee',
-        strokeDashArray: 4,
-      },
+      yaxis: { labels: { formatter: val => `${val}k`, style: { colors: '#000' } } },
+      markers: { size: 4, colors: ['#2563EB'], strokeWidth: 2, strokeColors: '#fff', hover: { size: 6 } },
+      tooltip: { y: { formatter: val => `SAR ${val}` } },
+      grid: { borderColor: '#eee', strokeDashArray: 4 },
       colors: ['#2563EB'],
-      legend: {
-        show: false,
-      },
+      legend: { show: false },
     },
   };
 

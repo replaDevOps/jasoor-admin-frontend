@@ -2,10 +2,14 @@ import { Button, Card, Col, Divider, Flex, Form, Image, Modal, Row, Typography }
 import { MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
 import { useEffect } from 'react'
+import { ADD_ADMIN_BANK } from '../../../graphql/mutation'
+import { useMutation } from '@apollo/client'
+import { GET_SETTINGS } from '../../../graphql/query'
+import { message } from 'antd'
 
 const { Title, Text } = Typography
-const AddNewBankAccount = ({visible,onClose,edititem}) => {
-
+const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm()
 
     useEffect(() => {
@@ -20,8 +24,31 @@ const AddNewBankAccount = ({visible,onClose,edititem}) => {
     }
     }, [visible, edititem]);
 
-    
+    const [addBank, { loading }] = useMutation(ADD_ADMIN_BANK, {
+        refetchQueries: [{ query: GET_SETTINGS }], 
+        awaitRefetchQueries: true,
+        onCompleted: () => {
+            messageApi.success(edititem ? 'Bank account updated successfully!' : 'Bank account added successfully!');
+            onClose();
+        },
+        onError: (err) => {
+            messageApi.error(err.message || 'Failed to add bank account.');
+        }
+    });
 
+    const onFinish = (values) => {
+        addBank({
+            variables: {
+                addAdminBankId: settingId,
+                input: {
+                    bankName: values.bankname,
+                    accountTitle: values.accountName,
+                    iban: values.ibanNumber,
+                },
+                addAdminBankId: edititem?.id || null
+            }
+        });
+    }
 
     return (
         <Modal
@@ -66,6 +93,8 @@ const AddNewBankAccount = ({visible,onClose,edititem}) => {
                     layout='vertical'
                     form={form}
                     requiredMark={false}
+                    onFinish={onFinish} 
+
                 >
                     <Row>
                         <Col span={24}>
@@ -76,10 +105,17 @@ const AddNewBankAccount = ({visible,onClose,edititem}) => {
                                 message='Please choose bank name'
                                 placeholder='Choose'
                                 options={[
-                                    {
-                                        id: 1,
-                                        name: 'Al-Saudia Bank'
-                                    }
+                                    { id: 1, name: 'Saudi National Bank' },
+                                    { id: 2, name: 'Saudi Awwal Bank' },
+                                    { id: 3, name: 'The Saudi Investment Bank' },
+                                    { id: 4, name: 'Alinma Bank' },
+                                    { id: 5, name: 'Banque Saudi Fransi' },
+                                    { id: 6, name: 'Riyad Bank' },
+                                    { id: 7, name: 'Al Rajhi Bank' },
+                                    { id: 8, name: 'Arab National Bank' },
+                                    { id: 9, name: 'Bank Albilad' },
+                                    { id: 10, name: 'Bank AlJazira' },
+                                    { id: 11, name: 'Gulf International Bank' }
                                 ]}
                             />
                         </Col>

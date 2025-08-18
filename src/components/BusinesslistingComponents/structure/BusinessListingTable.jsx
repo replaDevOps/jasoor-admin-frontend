@@ -1,15 +1,12 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table,Space,Typography } from 'antd';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table,Space,Typography,Spin } from 'antd';
 import { MyDatepicker, SearchInput } from '../../Forms';
 import { useState,useMemo } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { maincategoriesItem } from '../../../shared';
 import { CustomPagination } from '../../Ui';
 import { GET_CATEGORIES } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
-import { message,Spin } from "antd";
 import dayjs from 'dayjs';
-
 
 const { Text } = Typography
 const BusinessListingTable = ({
@@ -36,7 +33,6 @@ const BusinessListingTable = ({
       const selectedItem = statusItems.find(item => item.key === key);
       if (selectedItem) {
         setSelectedStatus(selectedItem.label);
-        // onFiltersChange({ status: selectedItem.key });
         if (key === '1') {
             setStatus(null); // Reset status if 'All' is selected
         }
@@ -45,7 +41,7 @@ const BusinessListingTable = ({
         }
       }
     };
-console.log("dateRange",dateRange)
+
     const categoryItems = useMemo(() => {
         if (!data?.getAllCategories) return [];
         // Map API categories to Antd dropdown items
@@ -54,6 +50,14 @@ console.log("dateRange",dateRange)
             label: cat.name
         }));
     }, [data]);
+
+    if (isLoading) {
+          return (
+            <Flex justify="center" align="center" style={{ height: '200px' }}>
+              <Spin size="large" />
+            </Flex>
+          );
+        }
     
     const handleCategoryClick = ({ key }) => {
         const selectedItem = categoryItems.find(item => item.key === key);
@@ -193,7 +197,7 @@ console.log("dateRange",dateRange)
                     scroll={{ x: 1000 }}
                     rowHoverable={false}
                     onRow={(record) => ({
-                        onClick: () => navigate('/businesslisting/details/'+record?.key)
+                        onClick: () => navigate('/businesslisting/details/'+record?.id)
                     })}
                     pagination={false}
                     // loading={

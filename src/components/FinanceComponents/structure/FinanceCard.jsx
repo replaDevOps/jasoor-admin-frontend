@@ -1,27 +1,37 @@
 import { Card, Col, Flex, Row, Typography } from 'antd'
 import { ModuleTopHeading } from '../../PageComponents'
+import React from 'react'
+import { GET_FINANCE_COUNT } from '../../../graphql/query/'
+import { useQuery } from '@apollo/client'
 
 const { Title, Text } = Typography
 const FinanceCard = () => {
+    const { data:count, loading, error } = useQuery(GET_FINANCE_COUNT, {fetchPolicy: 'cache-and-network',});
 
     const data = [
         {
-            id:1,
-            icon:'totalbusinessprice.png',
-            title:'SAR 2,209,456,865',
-            subtitle:'Total Businesses Price',
+            id: 1,
+            icon: 'totalbusinessprice.png',
+            title: count?.getFinanceCount?.totalPrice
+                ? `SAR ${count.getFinanceCount.totalPrice.toFixed(2)}`
+                : 'SAR 0.00',
+            subtitle: 'Total Businesses Price',
         },
         {
-            id:2,
-            icon:'revgen.png',
-            title:'SAR 36,784,000',
-            subtitle:'Revenue Generated',
+            id: 2,
+            icon: 'revgen.png',
+            title: count?.getFinanceCount?.revenueGenerated
+                ? `SAR ${count.getFinanceCount.revenueGenerated.toFixed(2)}`
+                : 'SAR 0.00',
+            subtitle: 'Revenue Generated',
         },
         {
-            id:3,
-            icon:'revgen.png',
-            title:'SAR 4240',
-            subtitle:'Revenue Generated (This Month)',
+            id: 3,
+            icon: 'revgen.png',
+            title: count?.getFinanceCount?.thisMonthRevenue
+                ? `SAR ${count.getFinanceCount.thisMonthRevenue.toFixed(2)}`
+                : 'SAR 0.00',
+            subtitle: 'Revenue Generated (This Month)',
         },
     ]
 

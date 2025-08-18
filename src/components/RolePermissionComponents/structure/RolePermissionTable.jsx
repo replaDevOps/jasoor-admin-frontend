@@ -5,36 +5,79 @@ import { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination, DeleteModal } from '../../Ui';
-
+import { GETROLES } from '../../../graphql/query/user';
+import { useQuery } from '@apollo/client';
 
 const RolePermissionTable = () => {
     const [form] = Form.useForm();
-    const [selectedStatus, setSelectedStatus] = useState('Status');
-    const navigate = useNavigate();
-    const [deleteItem, setDeleteItem] = useState(false);
-    const [pageSize, setPageSize] = useState(10);
-    const [current, setCurrent] = useState(1);
+  const [selectedStatus, setSelectedStatus] = useState("Status");
+  const navigate = useNavigate();
+  const [deleteItem, setDeleteItem] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
+  const [current, setCurrent] = useState(1);
+  const [searchText, setSearchText] = useState("");
 
-    const total = rolepermissionData.length;
-    const handlePageChange = (page, size) => {
-        setCurrent(page);
-        setPageSize(size);
-    };
-    
-    const handleStatusClick = ({ key }) => {
-        const selectedItem = statusItems.find(item => item.key === key);
-        if (selectedItem) {
-            setSelectedStatus(selectedItem.label);
-        }
-    };
+  const { loading, data, refetch } = useQuery(GETROLES, {
+    variables: {
+        limit: pageSize,
+        offset: (current - 1) * pageSize,
+        search: searchText || null,
+    },
+    fetchPolicy: "network-only"
+});
 
+  const statusItems = [
+    { key: "1", label: "All" },
+    { key: "2", label: "Active" },
+    { key: "3", label: "Inactive" },
+  ];
 
+  const rolepermissionData = (data?.getRoles || []).map((role, index) => ({
+    key: role.id || index,             // Use API id or fallback to index
+    rolename: role.name,               // Matches your table's 'rolename'
+    status: role.isActive ? 0 : 1      // 2 for Completed/Active, 1 for Inactive — adjust if you want Pending logic
+  }));
 
-    const statusItems = [
-        { key: '1', label: 'All' },
-        { key: '2', label: 'Active' },
-        { key: '3', label: 'Inactive' }
-    ];
+  const handleStatusClick = ({ key }) => {
+    const selectedItem = statusItems.find((item) => item.key === key);
+    console.log("Selected Status:", selectedItem);
+    if (selectedItem) {
+      setSelectedStatus(selectedItem.label);
+        refetch({
+            limit: pageSize,
+            offset: 0,
+            search: searchText || null,
+            isActive: selectedItem.key === "2" ? true 
+                      : selectedItem.key === "3" ? false 
+                      : selectedItem.key === "1" ?  null
+                        : null, // Adjust logic for 'All' or other statuses
+        });
+    }
+  };
+
+  // filter by status
+  let tableData = data?.getRoles || [];
+  if (selectedStatus === "Active") {
+    tableData = tableData.filter((role) => role.isActive);
+  } else if (selectedStatus === "Inactive") {
+    tableData = tableData.filter((role) => !role.isActive);
+  }
+
+  const total = tableData.length;
+
+  const handlePageChange = (page, size) => {
+    setCurrent(page);
+    setPageSize(size);
+  };
+
+  const handleSearch = (value) => {
+    setSearchText(value);
+    refetch({
+        limit: pageSize,
+        offset: 0,
+        search: value || null,
+    });
+};
 
     return (
         <>
@@ -49,6 +92,7 @@ const RolePermissionTable = () => {
                                         placeholder='Search'
                                         prefix={<img src='/assets/icons/search.png' width={14} />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
+                                        onChange={(e) => handleSearch(e.target.value.trim())}
                                     />
                                     <Dropdown 
                                         menu={{ 

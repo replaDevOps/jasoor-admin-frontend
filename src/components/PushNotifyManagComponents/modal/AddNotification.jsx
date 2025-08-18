@@ -1,12 +1,23 @@
 import { Button, Col, Divider, Flex, Form, Modal, Row, Typography } from 'antd'
 import { MyDatepicker, MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
-import { useEffect } from 'react'
+import { useEffect,useState } from 'react'
 import { districtselectItems, groupselectItem } from '../../../shared'
 import moment from 'moment'
+import { CREATE_CAMPAIGN} from '../../../graphql/mutation'
+import { useMutation } from '@apollo/client'
+import { message } from 'antd'
+import {GET_CAMPAIGNS} from '../../../graphql/query'
 
 const { Title } = Typography
 const AddNotification = ({visible,onClose,edititem,viewnotify}) => {
+    const [messageApi, contextHolder] = message.useMessage();
+     const [searchValue, setSearchValue] = useState('');
+     const [selectedCategory, setSelectedCategory] = useState(null);
+     const [selectedDistrict, setSelectedDistrict] = useState(null);
+     const [pageSize, setPageSize] = useState(10);
+    const [current, setCurrent] = useState(1);
+    const [selectedStatus, setSelectedStatus] = useState(null);
 
     const [form] = Form.useForm()
 
@@ -30,8 +41,49 @@ const AddNotification = ({visible,onClose,edititem,viewnotify}) => {
     }
     }, [visible, edititem, viewnotify]);
 
-    
+    const [campaign, { loading }] = useMutation(CREATE_CAMPAIGN, {
+        refetchQueries: [
+            {
+              query: GET_CAMPAIGNS,
+              variables: {
+                filter: {
+                  search: searchValue || null,
+                  district: selectedDistrict || null,
+                  group: selectedCategory || null,
+                  status: selectedStatus !== null ? selectedStatus : null,
+                  limit: pageSize,
+                  offset: (current - 1) * pageSize,
+                }
+              }
+            }
+          ],
+        awaitRefetchQueries: true,
+        onCompleted: () => {
+            messageApi.success('campaign created successfully!');
+            onClose();
+        },
+        onError: (err) => {
+            messageApi.error(err.message || 'Failed to create campaign.');
+        }
+    });
 
+    const onFinish = (values) => {
+        const districts = Array.isArray(values.district)
+        ? values.district.map((d) => (d.value ? d.value : d)) // handle MySelect returning objects or strings
+        : [];
+
+    // Ensure group matches GraphQL enum
+    const groupEnum = values.group.toUpperCase(); // e.g., 'NEW', 'OLD', 'BOTH'
+        campaign({
+            variables: {
+                title: values.title,
+                group: groupEnum,
+                district: districts, 
+                schedule: values.dateTime,
+                description: values.description,
+            },
+        });
+    }
 
     return (
         <Modal
@@ -77,6 +129,7 @@ const AddNotification = ({visible,onClose,edititem,viewnotify}) => {
                     layout='vertical'
                     form={form}
                     requiredMark={false}
+                    onFinish={onFinish} 
                 >
                     <Row>
                         <Col span={24}>

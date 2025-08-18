@@ -1,6 +1,4 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table } from 'antd';
-import { SearchInput } from '../../Forms';
-import { categoryColumn, categoryData } from '../../../data';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table,Input,Image,Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -8,104 +6,234 @@ import { CustomPagination, DeleteModal } from '../../Ui';
 import { GET_CATEGORIES } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
 import { message,Spin } from "antd";
+import { NavLink } from "react-router-dom";
 
+const { Text } = Typography
 
 const CategoryTable = () => {
     const [form] = Form.useForm();
-    const { data, loading:isLoading, error } = useQuery(GET_CATEGORIES);
-    const [selectedStatus, setSelectedStatus] = useState('Status');
-    const [selectedCategory, setSelectedCategory] = useState('Business Type');
     const navigate = useNavigate();
-    const [deleteItem, setDeleteItem] = useState(false);
+    const categoryColumn = ( setDeleteItem, navigate ) =>  [
+        {
+            title: 'Category Icon',
+            dataIndex: 'categoryicon',
+            render:(categoryicon)=> <Image src={categoryicon} preview={false} width={25} />
+        },
+        {
+            title: 'Category Name',
+            dataIndex: 'categoryname',
+        },
+        {
+            title: 'Business Type',
+            dataIndex: 'businesstype',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            render: (status) => {
+                console.log("Status:", status);
+                return (
+                    status === 'UNDER_REVIEW' ? (
+                        <Text className='btnpill fs-12 pending'>Pending</Text>
+                    ) : status === 'INACTIVE' ? (
+                        <Text className='btnpill fs-12 inactive'>Inactive</Text>
+                    ) : status === 'ACTIVE' ? (
+                        <Text className='btnpill fs-12 success'>Completed</Text>
+                    ) : null
+                );
+            }
+        },
+        {
+            title: 'Action',
+            key: "action",
+            fixed: "right",
+            width: 100,
+            render: (_,row) => (
+                <Dropdown
+                    menu={{
+                        items: [
+                            { label: <NavLink onClick={(e) => {e.preventDefault(); navigate('/addnewcategory/detail/'+row?.key)}}>Edit</NavLink>, key: '1' },
+                            { label: <NavLink onClick={() => { setDeleteItem(true) }}>Delete</NavLink>, key: '2' },
+                        ],
+                    }}
+                    trigger={['click']}
+                >
+                    <Button className="bg-transparent border0 p-0">
+                        <img src="/assets/icons/dots.png" alt="" width={16} />
+                    </Button>
+                </Dropdown>
+            ),
+        },
+    ];
+    // State for filters
+    const [selectedStatus, setSelectedStatus] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [searchName, setSearchName] = useState(null);
+
+    // Pagination state
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
-    const [categories, setCategories] = useState([]);
 
-    const total = categoryData.length;
-    useEffect(()=>{
+    const [categories, setCategories] = useState([]);
+    const [deleteItem, setDeleteItem] = useState(false);
+
+    const statusItems = [
+        { key: null, label: 'All' },
+        { key: 'ACTIVE', label: 'Active' },
+        { key: 'UNDER_REVIEW', label: 'Pending' },
+        { key: 'INACTIVE', label: 'Inactive' }
+    ];
+
+    const typeItems = [
+        { key: null, label: 'All' },
+        { key: false, label: 'Physical Business' },
+        { key: true, label: 'Online Business' }
+    ];
+
+    // Apollo query with variables
+    const { data, loading: isLoading, error, refetch } = useQuery(GET_CATEGORIES, {
+        variables: {
+            limit: pageSize,
+            offset: (current - 1) * pageSize,
+            filter: {
+                isDigital: selectedCategory,
+                name: searchName,
+                status: selectedStatus
+            }
+        },
+        fetchPolicy: "network-only"
+    });
+
+    // Map API response to table data
+    useEffect(() => {
         if (data?.getAllCategories?.length) {
-            setCategories(data.getAllCategories)
+            const mappedCategories = data.getAllCategories.map((item) => ({
+                key: item.id,
+                categoryicon: item.icon,
+                categoryname: item.name,
+                businesstype: item.isDigital ? 'Online Business' : 'Physical Business',
+                status: item.status
+            }));
+            setCategories(mappedCategories);
+        } else {
+            setCategories([]);
         }
-        else 
-            setCategories([])
-    },[data])
+    }, [data]);
+
+    // Pagination change
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
     };
-    
+
+    // Dropdown selections
     const handleStatusClick = ({ key }) => {
-        const selectedItem = statusItems.find(item => item.key === key);
-        if (selectedItem) {
-            setSelectedStatus(selectedItem.label);
-        }
+        setSelectedStatus(key === "null" ? null : key);
+        refetch({
+            limit: pageSize,
+            offset: (current - 1) * pageSize,
+            filter: {
+                isDigital: selectedCategory,
+                name: searchName,
+                status: key === "null" ? null : key
+            }
+        });
     };
 
     const handleCategoryClick = ({ key }) => {
-        const selectedItem = categoryItems.find(item => item.key === key);
-        if (selectedItem) {
-            setSelectedCategory(selectedItem.label);
-        }
+        const isDigitalValue = key === "null" ? null : key === "true";
+        setSelectedCategory(isDigitalValue);
+        refetch({
+            limit: pageSize,
+            offset: (current - 1) * pageSize,
+            filter: {
+                isDigital: isDigitalValue,
+                name: searchName,
+                status: selectedStatus
+            }
+        });
     };
 
-    const statusItems = [
-        { key: '1', label: 'All' },
-        { key: '2', label: 'Active' },
-        { key: '3', label: 'Pending' },
-        { key: '4', label: 'Inactive' }
-    ];
-
-    const typeItems = [
-        { key: '1', label: 'All' },
-        { key: '2', label: 'Physical Business' },
-        { key: '3', label: 'Online Business' }
-    ];
-
+    const handleSearch = (value) => {
+        setSearchName(value || null);
+      };
+      
+      useEffect(() => {
+        refetch({
+          limit: pageSize,
+          offset: (current - 1) * pageSize,
+          filter: {
+            isDigital: selectedCategory,
+            name: searchName,
+            status: selectedStatus
+          }
+        });
+      }, [searchName, selectedCategory, selectedStatus, pageSize, current]);
+      
     return (
         <>
             <Card className='radius-12 border-gray'>
                 <Flex vertical gap={20}>
                     <Form form={form} layout="vertical">
-                        <Row gutter={[16, 16]} align={'middle'} justify={'space-between'}>
-                            <Col lg={24} md={12} sm={24} xs={24}>
-                                <Flex gap={5} wrap>
-                                    <SearchInput
-                                        name='name'
-                                        placeholder='Search'
-                                        prefix={<img src='/assets/icons/search.png' width={14} />}
-                                        className='border-light-gray pad-x ps-0 radius-8 fs-13'
-                                    />
-                                    <Dropdown 
-                                        menu={{ 
-                                            items: typeItems,
-                                            onClick: handleCategoryClick
-                                        }} 
-                                        trigger={['click']}
-                                    >
-                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
-                                            <Flex justify='space-between' align='center' gap={30}>
-                                                {selectedCategory}
-                                                <DownOutlined />
-                                            </Flex>
-                                        </Button>
-                                    </Dropdown>
-                                    <Dropdown 
-                                        menu={{ 
-                                            items: statusItems,
-                                            onClick: handleStatusClick
-                                        }} 
-                                        trigger={['click']}
-                                    >
-                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
-                                            <Flex justify='space-between' align='center' gap={30}>
-                                                {selectedStatus}
-                                                <DownOutlined />
-                                            </Flex>
-                                        </Button>
-                                    </Dropdown>
-                                </Flex>
+                    <Row gutter={[16, 16]} justify="left" align="middle">
+                        <Col lg={12} md={16} sm={24} xs={24}>
+                            <Row gutter={[16, 16]}>
+                            {/* Search Input - double width */}
+                            <Col span={12}>
+                                <Input
+                                name="name"
+                                placeholder="Search"
+                                prefix={<img src="/assets/icons/search.png" width={14} />}
+                                allowClear
+                                className="border-light-gray pad-x ps-0 radius-8 fs-13"
+                                onChange={(e) => handleSearch(e.target.value.trim())}
+                                />
                             </Col>
-                        </Row>
+
+                            {/* Category Filter */}
+                            <Col span={6}>
+                                <Dropdown
+                                menu={{
+                                    items: typeItems.map((item) => ({
+                                    key: String(item.key),
+                                    label: item.label
+                                    })),
+                                    onClick: handleCategoryClick
+                                }}
+                                trigger={['click']}
+                                >
+                                <Button className="btncancel px-3 filter-bg fs-13 text-black" block>
+                                    <Flex justify="space-between" align="center" gap={30}>
+                                    {typeItems.find((i) => i.key === selectedCategory)?.label || "Business Type"}
+                                    <DownOutlined />
+                                    </Flex>
+                                </Button>
+                                </Dropdown>
+                            </Col>
+
+                            {/* Status Filter */}
+                            <Col span={6}>
+                                <Dropdown
+                                menu={{
+                                    items: statusItems.map((item) => ({
+                                    key: String(item.key),
+                                    label: item.label
+                                    })),
+                                    onClick: handleStatusClick
+                                }}
+                                trigger={['click']}
+                                >
+                                <Button className="btncancel px-3 filter-bg fs-13 text-black" block>
+                                    <Flex justify="space-between" align="center" gap={30}>
+                                    {statusItems.find((i) => i.key === selectedStatus)?.label || "Status"}
+                                    <DownOutlined />
+                                    </Flex>
+                                </Button>
+                                </Dropdown>
+                            </Col>
+                            </Row>
+                        </Col>
+                    </Row>
                     </Form>
                     <Table
                         size='large'
@@ -116,15 +244,10 @@ const CategoryTable = () => {
                         scroll={{ x: 1000 }}
                         rowHoverable={false}
                         pagination={false}
-                        // loading={
-                        //     {
-                        //         ...TableLoader,
-                        //         spinning: loading
-                        //     }
-                        // }
+                        loading={isLoading}
                     />
                     <CustomPagination 
-                        total={total}
+                        total={categories.length}
                         current={current}
                         pageSize={pageSize}
                         onPageChange={handlePageChange}

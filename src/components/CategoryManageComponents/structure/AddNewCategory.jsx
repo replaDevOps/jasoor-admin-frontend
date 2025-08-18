@@ -96,6 +96,7 @@ const AddNewCategory = () => {
           growthRecords: transformGrowthRecords(categoryProfData),
         };
       
+      
         createCategory({ variables: { input } });
       };
     const handleSingleFileUpload = async (file) => {
@@ -117,6 +118,7 @@ const AddNewCategory = () => {
           }
       
           const result = await response.json();
+          console.log("Upload successful:", result);
           // set it to documents state
           setDocuments({
             title: "Category Icon",

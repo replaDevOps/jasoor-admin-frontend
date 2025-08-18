@@ -6,6 +6,9 @@ import { DownOutlined } from '@ant-design/icons';
 import { meetingItems } from '../../../shared';
 import { CustomPagination, DeleteModal } from '../../Ui';
 import { ScheduleMeeting } from '../modal';
+import { GETADMINPENDINGMEETINGS } from '../../../graphql/query/meeting'
+import { useQuery } from '@apollo/client'
+import { message,Spin } from "antd";
 
 
 const MeetingRequestTable = () => {
@@ -15,18 +18,64 @@ const MeetingRequestTable = () => {
     const [deleteItem, setDeleteItem] = useState(false);
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
+    const [searchValue, setSearchValue] = useState('');
 
-    const total = mainmeetingreqData.length;
+    // Apollo query
+    const { data, loading, refetch } = useQuery(GETADMINPENDINGMEETINGS, {
+        variables: {
+            search: searchValue,
+            status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null
+        },
+        fetchPolicy: 'network-only'
+    });
+    const mainmeetingreqData = (data?.getAdminPendingMeetings?.items || []).map((item, index) => ({
+        key: item.id,
+        businessTitle: item.business?.businessTitle || '-',
+        buyerName: item.requestedBy?.name || '-',
+        email: item.requestedBy?.email || '-',
+        phoneNumber: item.requestedBy?.phone || '-',
+        sellerName: item.business?.seller?.name || '-',
+        sellerEmail: item.business?.seller?.email || '-',
+        sellerPhoneNumber: item.business?.seller?.phone || '-',
+        scheduleDateTime: item.requestedDate
+            ? new Date(item.requestedDate).toLocaleString()
+            : '-',
+        businessPrice: item.business?.price
+            ? `SAR ${item.business.price.toLocaleString()}`
+            : '-',
+        offerPrice: item.offer?.price
+            ? `SAR ${item.offer.price.toLocaleString()}`
+            : '-',
+        meetLink: item.meetingLink || '',
+        status: item.status || '-',
+    }));
+
+    const total = data?.getAdminPendingMeetings?.totalCount || 0;
+
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
     };
-    
+
     const handleStatusClick = ({ key }) => {
         const selectedItem = meetingItems.find(item => item.key === key);
         if (selectedItem) {
             setSelectedStatus(selectedItem.label);
+            if( selectedItem.label === 'Pending' ){
+                refetch({ status: 'REQUESTED' });
+            }
+            else if (selectedItem.label === 'Cancel Meeting' ){
+                refetch({ status: 'REJECTED', search: searchValue });
+            }else if (selectedItem.label === 'All') {
+                refetch({ status: null });
+            }
+            // refetch({ status: selectedItem.label.toUpperCase(), search: searchValue });
         }
+    };
+
+    const handleSearch = (value) => {
+        setSearchValue(value);
+        refetch({ status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null, search: value });
     };
 
     return (
@@ -41,6 +90,7 @@ const MeetingRequestTable = () => {
                                     placeholder='Search'
                                     prefix={<img src='/assets/icons/search.png' width={14} />}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
+                                    onChange={(e) => handleSearch(e.target.value)}
                                 />
                                 <Dropdown 
                                     menu={{ 

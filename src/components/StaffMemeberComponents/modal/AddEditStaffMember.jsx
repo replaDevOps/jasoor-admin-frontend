@@ -1,10 +1,27 @@
-import { Button, Col, Divider, Flex, Form, Modal, Row, Typography } from 'antd'
+import { Button, Col, Divider, Flex, Form, Modal, Row, Typography,Dropdown } from 'antd'
 import { MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
-import { useEffect } from 'react'
+import { useEffect,useState } from 'react'
+import { GETROLES } from '../../../graphql/query';
+import { CREATE_USER } from '../../../graphql/mutation';
+import { useQuery,useMutation } from '@apollo/client';
+import { groupselectItem } from '../../../shared'
+
 
 const { Title } = Typography
 const AddEditStaffMember = ({visible,onClose,edititem}) => {
+    const [selectedRole, setSelectedRole] = useState(null);
+    const { loading, data } = useQuery(GETROLES, {
+        variables: {
+            limit: null,
+            offset: null,
+            search: null,
+            isActive: true
+        },
+        fetchPolicy: "network-only",
+        skip: !visible // 👈 Skip until modal is visible
+    });
+    const roles = data?.getRoles || [];
 
     const [form] = Form.useForm()
     useEffect(()=>{
@@ -19,9 +36,33 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
             form.resetFields()
         }
     },[visible,edititem])
-    
 
-
+    const [createUser, { loading: creating }] = useMutation(CREATE_USER, {
+        onCompleted: () => {
+          // maybe show success toast
+          onClose();
+        },
+        onError: (err) => {
+          console.error(err);
+          // maybe show error toast
+        }
+    });
+    const handleRoleChange = (key) => {
+        setSelectedRole(key)
+      };
+    const handleFinish = (values) => {
+        createUser({
+          variables: {
+            input: {
+              name: values.fullName,
+              email: values.email,
+              phone: values.phoneNo || null,
+              password: values.password,
+              roleId: selectedRole // this will now be the role id
+            }
+          }
+        });
+      };
     return (
         <Modal
             title={null}
@@ -54,6 +95,7 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
                     layout='vertical'
                     form={form}
                     requiredMark={false}
+                    onFinish={handleFinish}
                 >
                     <Row>
                         <Col span={24}>
@@ -88,13 +130,13 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
                                 name='assignRole'
                                 required
                                 message='Please choose a role'
-                                option={[
-                                    {
-                                        id: 1,
-                                        name: 'Manager'
-                                    }
-                                ]}
+                                options={roles.map(role => ({
+                                    name: role.name,
+                                    id: role.id
+                                }))}
                                 placeholder='Select a role'
+                                value={selectedRole}
+                                onChange={handleRoleChange}
                             />
                         </Col>
                         <Col span={24}>

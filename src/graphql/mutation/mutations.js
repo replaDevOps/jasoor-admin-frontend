@@ -21,6 +21,35 @@ const CREATE_BUSINESS = gql `
     }
   } 
 `
+
+const UPDATE_BUSINESS = gql `
+mutation UpdateBusiness($input: UpdateBusinessInput!) {
+  updateBusiness(input: $input) {
+    id
+  }
+}
+`
+const UPDATE_ASSET = gql `
+mutation UpdateAsset($input: UpdateInput!) {
+  updateAsset(input: $input) {
+    id
+  }
+}
+`
+const UPDATE_INVENTORY = gql `
+mutation UpdateInventory($input: UpdateInput!) {
+  updateInventory(input: $input) {
+    id
+  }
+}
+`
+const UPDATE_LIABILITY = gql `
+mutation UpdateLiability($input: UpdateInput!) {
+  updateLiability(input: $input) {
+    id
+  }
+}
+`
 const CREATE_SAVE_BUSINESS = gql `
   mutation SaveBusiness($saveBusinessId: ID!) {
     saveBusiness(id: $saveBusinessId)
@@ -78,6 +107,13 @@ mutation CreateCategory($input: CreateCategoryInput!) {
   }
 }
 `
+const CREATE_CAMPAIGN = gql`
+mutation CreateCampaign($title: String!, $group: CampaignGroup!, $schedule: DateTime!, $description: String, $district: [String]!) {
+  createCampaign(title: $title, group: $group, schedule: $schedule, description: $description, district: $district) {
+    id
+  }
+}
+`
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -90,5 +126,10 @@ export {
   APPROVE_MEETING,
   UPLOAD_DOC,
   FINALIZE_DEAL,
-  CREATE_CATEGORY
+  CREATE_CATEGORY,
+  CREATE_CAMPAIGN,
+  UPDATE_BUSINESS,
+  UPDATE_ASSET,
+  UPDATE_INVENTORY,
+  UPDATE_LIABILITY
 }

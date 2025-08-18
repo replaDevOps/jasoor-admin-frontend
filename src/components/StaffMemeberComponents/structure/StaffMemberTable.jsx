@@ -4,7 +4,8 @@ import { staffData, staffmemberColumn } from '../../../data';
 import { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { CustomPagination, DeleteModal } from '../../Ui';
-
+import { GETSTAFFMEMBERS,GETROLES } from '../../../graphql/query';
+import { useQuery } from '@apollo/client';
 
 const StaffMemberTable = ({setVisible,setEditItem}) => {
     const [form] = Form.useForm();
@@ -13,8 +14,30 @@ const StaffMemberTable = ({setVisible,setEditItem}) => {
     const [ deleteitem, setDeleteItem ] = useState(false)
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
+  const [searchText, setSearchText] = useState("");
 
-    const total = staffData.length;
+
+  const { loading: rolesLoading, data: rolesData } = useQuery(GETROLES)
+
+    const { loading, data,refetch } = useQuery(GETSTAFFMEMBERS, {
+        variables: {
+            limit: pageSize,
+            offset: (current - 1) * pageSize,
+            search: form.getFieldValue('name') || '',
+            isActive: selectedStatus === 'Active' ? true : selectedStatus === 'Inactive' ? false : null,
+            role: selectedRole === 'All' ? null : selectedRole
+        },
+        fetchPolicy: "network-only"
+    });
+    const roles = rolesData?.getRoles
+        ?.filter(role => role.name !== "Customer") || [];
+    const total = data?.getStaffMembers?.totalCount || 0;
+    const staffData = data?.getStaffMembers?.users.map(user => ({
+        ...user,
+        key: user.id,
+        role: user.role?.name || 'N/A',
+    })) || [];
+
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
@@ -24,14 +47,25 @@ const StaffMemberTable = ({setVisible,setEditItem}) => {
         const selectedItem = statusItems.find(item => item.key === key);
         if (selectedItem) {
             setSelectedStatus(selectedItem.label);
+            refetch({
+                limit: pageSize,
+                offset: 0,
+                search: searchText || null,
+                isActive: selectedItem.key === "2" ? true 
+                        : selectedItem.key === "3" ? false 
+                        : selectedItem.key === "1" ?  null
+                            : null, // Adjust logic for 'All' or other statuses
+            });
         }
     };
 
-    const handleCategoryClick = ({ key }) => {
-        const selectedItem = roleItems.find(item => item.key === key);
-        if (selectedItem) {
-            setSelectedRole(selectedItem.label);
-        }
+    const handleSearch = (value) => {
+        setSearchText(value);
+        refetch({
+            limit: pageSize,
+            offset: 0,
+            search: value || null,
+        });
     };
 
     const statusItems = [
@@ -40,11 +74,30 @@ const StaffMemberTable = ({setVisible,setEditItem}) => {
         { key: '3', label: 'Inactive' }
     ];
 
-    const roleItems = [
-        { key: '1', label: 'All' },
-        { key: '2', label: 'Manager' },
-        { key: '3', label: 'Sub-admin' }
-    ];
+    // const roleItems = [
+    //     { key: '1', label: 'All' },
+    //     { key: '2', label: 'Manager' },
+    //     { key: '3', label: 'Sub-admin' }
+    // ];
+
+    const roleItems = roles?.map(role => ({
+        key: role?.id,        
+        label: role?.name
+    })) || [];
+    
+    const handleCategoryClick = ({ key, domEvent }) => {
+        domEvent.preventDefault(); // prevent default if needed
+        const selected = roles.find(r => r.id === key);
+        if (selected) {
+            setSelectedRole(selected.name);
+            refetch({
+                limit: pageSize,
+                offset: 0,
+                search: searchText || null,
+                roleId: selected.id
+            });
+        }
+    };
 
     return (
         <>
@@ -59,6 +112,7 @@ const StaffMemberTable = ({setVisible,setEditItem}) => {
                                         placeholder='Search'
                                         prefix={<img src='/assets/icons/search.png' width={14} />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
+                                        onChange={(e) => handleSearch(e.target.value.trim())}
                                     />
                                     <Dropdown 
                                         menu={{ 

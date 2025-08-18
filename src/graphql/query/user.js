@@ -23,7 +23,23 @@ const ME = gql`
   }
 }
 `
-
+const USERS = gql`
+query GetUsers($limit: Int, $offset: Int, $filter: UserFilterInput) {
+  getUsers(limit: $limit, offset: $offset, filter: $filter) {
+    totalCount
+    users {
+      id
+      name
+      email
+      phone
+      district
+      city
+      status
+      type
+    }
+  }
+}
+`
 const NOTIFICATION = gql`
   query GetNotifications($userId: ID!) {
     getNotifications(userId: $userId) {
@@ -211,7 +227,104 @@ query GetUserBanks {
     accountTitle
   }
 }
+`
+const GETROLES = gql`
+query GetRoles($limit: Int, $offset: Int, $search: String, $isActive: Boolean) {
+  getRoles(limit: $limit, offset: $offset, search: $search, isActive: $isActive) {
+    id,
+    name,
+    isActive,
+    viewDashboard,
+    viewListings,
+    editListings,
+    approveRejectListings,
+    viewMeetingRequests,
+    scheduleMeetings,
+    editMeetingDetails,
+    cancelMeetings,
+    viewDeals,
+    trackDealProgress,
+    verifyDocuments,
+    finalizeDeal,
+    viewFinanceDashboard,
+    downloadFinancialReports,
+    viewWebsitePages,
+    editArticle,
+    deleteArticle,
+    publishArticle,
+    viewAlerts,
+    manageRoles,
+  }
+}
   `
+const GETSTAFFMEMBERS = gql`
+query GetStaffMembers($limit: Int, $offset: Int, $search: String, $isActive: Boolean, $roleId: ID) {
+  getStaffMembers(limit: $limit, offset: $offset, search: $search, isActive: $isActive, roleId: $roleId) {
+    totalCount
+    users {
+      id
+    name
+    email
+    phone
+    role {
+      id
+      name
+    }
+    status
+    }
+  }
+}
+`
+const GET_ALL_CONTACT_US = gql`
+query GetAllContactUs($limit: Int, $offset: Int, $search: String, $status: Boolean) {
+  getAllContactUs(limit: $limit, offset: $offset, search: $search, status: $status) {
+    totalCount
+    contactUs {
+      id
+      name
+      email
+      message
+      answer
+      createdAt
+      isResponded
+    }
+  }
+}
+`
+const GET_SETTINGS = gql`
+query GetSetting {
+  getSetting {
+    id
+    commissionRate
+    faceBook
+    instagram
+    whatsApp
+    x
+    email
+    banks {
+      id
+      accountTitle
+      bankName
+      accountNumber
+      iban
+    }
+  }
+}
+`
+const GET_CAMPAIGNS = gql`
+query GetCampaigns($filter: CampaignFilter) {
+  getCampaigns(filter: $filter) {
+    totalCount
+    campaigns {
+      id
+      title
+      district
+      group
+      description
+    }
+  }
+}
+`
 export {
     ME,
     NOTIFICATION,
@@ -224,5 +337,11 @@ export {
     GETFAVORITBUSINESS,
     GETADMINBANK,
     GETADMINACTIVEBANK,
-    GETUSERBANK
+    GETUSERBANK,
+    USERS,
+    GETROLES,
+    GETSTAFFMEMBERS,
+    GET_ALL_CONTACT_US,
+    GET_SETTINGS,
+    GET_CAMPAIGNS
 }

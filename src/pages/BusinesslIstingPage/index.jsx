@@ -1,9 +1,8 @@
-import { Row, Col, Flex, Button } from 'antd'
+import { Row, Col, Flex, Button,Spin,message } from 'antd'
 import { BusinesslistCards, BusinessListingTable, ModuleTopHeading } from '../../components'
 import { PlusOutlined } from '@ant-design/icons';
 import { GET_BUSINESSES } from '../../graphql/query/business'
 import { useQuery } from '@apollo/client'
-import { message,Spin } from "antd";
 import moment from 'moment';
 import React, { useState,useEffect } from 'react';
 
@@ -28,6 +27,14 @@ const BusinesslIstingPage = () => {
       },
       fetchPolicy: "network-only"
     });
+
+    if (loading) {
+      return (
+        <Flex justify="center" align="center" style={{ height: '200px' }}>
+          <Spin size="large" />
+        </Flex>
+      );
+    }
   
     const totalActiveCount = data?.getAllBusinesses?.totalActiveCount
     const totalCount = data?.getAllBusinesses?.totalCount
