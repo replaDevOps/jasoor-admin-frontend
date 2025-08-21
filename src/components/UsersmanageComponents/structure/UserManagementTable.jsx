@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { districtItems, statusItems, typeItems } from '../../../shared';
 import { CustomPagination } from '../../Ui';
+import { ViewIdentity } from '../modals';
 
 
 const UserManagementTable = () => {
@@ -13,6 +14,8 @@ const UserManagementTable = () => {
     const [selectedCategory, setSelectedCategory] = useState('Type');
     const [selectedDistrict, setSelectedDistrict] = useState('District');
     const [selectedCity, setSelectedCity] = useState('City');
+    const [ visible, setVisible ] = useState(false)
+    const [ viewstate, SetViewState ] = useState(null)
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
 
@@ -128,7 +131,7 @@ const UserManagementTable = () => {
                     </Form>
                     <Table
                         size='large'
-                        columns={usermanageColumn()}
+                        columns={usermanageColumn(setVisible,SetViewState)}
                         dataSource={usermanageData.slice((current - 1) * pageSize, current * pageSize)}
                         className='pagination table-cs table'
                         showSorterTooltip={false}
@@ -150,6 +153,12 @@ const UserManagementTable = () => {
                     />
                 </Flex>
             </Card>
+
+            <ViewIdentity 
+                visible={visible}
+                viewstate={viewstate}
+                onClose={()=>{setVisible(false);SetViewState(null)}}
+            />
         </>
     );
 };

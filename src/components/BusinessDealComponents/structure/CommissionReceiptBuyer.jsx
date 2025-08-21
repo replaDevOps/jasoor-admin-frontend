@@ -7,10 +7,10 @@ const CommissionReceiptBuyer = () => {
     return (
         <Row gutter={[16, 24]}>
             <Col span={24}>
-                <Text className='fs-14 text-gray'>
+                <Text className='fs-13 fw-600 text-medium-gray'>
                     Jasoor’s Commission bank statement or screenshot
                 </Text>
-                <Card className='card-cs border-gray rounded-12' >
+                <Card className='card-cs border-gray rounded-12 mt-2' >
                     <Flex justify='space-between' align='center'>
                         <Flex gap={15}>
                             <Image src={'/assets/icons/file.png'} preview={false} width={20} />

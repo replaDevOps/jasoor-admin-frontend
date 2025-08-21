@@ -15,6 +15,7 @@
     "@rive-app/react-canvas": "^4.22.1",
     "antd": "^5.26.6",
     "apexcharts": "^5.3.1",
+    "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.13",
     "graphql": "^16.11.0",
     "moment": "^2.30.1",

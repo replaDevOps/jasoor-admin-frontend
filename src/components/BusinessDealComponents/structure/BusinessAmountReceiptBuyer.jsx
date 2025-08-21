@@ -12,8 +12,8 @@ const BusinessAmountReceiptBuyer = () => {
                         businessamountrecpData?.map((list,index)=>
                             <Col xs={24} sm={12} md={6} lg={6} key={index}>
                                 <Flex vertical gap={3}>
-                                    <Text className='text-gray fs-14'>{list?.title}</Text>
-                                    <Text className='fs-15 fw-500'>{list?.desc}</Text>
+                                    <Text className='fw-600 text-medium-gray fs-14'>{list?.title}</Text>
+                                    <Text className='fs-14 fw-500'>{list?.desc}</Text>
                                 </Flex>
                             </Col>
                         )
@@ -21,10 +21,10 @@ const BusinessAmountReceiptBuyer = () => {
                 </Row>
             </Col>
             <Col span={24}>
-                <Text className='fs-14 text-gray'>
+                <Text className='fs-14 fw-600 text-medium-gray'>
                     Upload transaction receipt or screenshot
                 </Text>
-                <Card className='card-cs border-gray rounded-12' >
+                <Card className='card-cs border-gray rounded-12 mt-2' >
                     <Flex justify='space-between' align='center'>
                         <Flex gap={15}>
                             <Image src={'/assets/icons/file.png'} preview={false} width={20} />
@@ -41,13 +41,13 @@ const BusinessAmountReceiptBuyer = () => {
                     </Flex>
                 </Card>
             </Col>
-            <Col span={24}>
+            {/* <Col span={24}>
                 <Flex>
                     <Button type="primary" className='btnsave bg-brand'>
                         Mark as Verified
                     </Button>
                 </Flex>
-            </Col>
+            </Col> */}
         </Row>
     )
 }

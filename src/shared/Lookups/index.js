@@ -174,5 +174,15 @@ const langItems = [
     },
 ]
 
+const revenueLookups = [
+    {
+        id: 1,
+        name: 'Last 6 Months'
+    },
+    {
+        id: 2,
+        name: 'Last Year'
+    },
+]
 
-export { categoriesItems, maincategoriesItem, priorityItems, districtItems, statusItems, typeItems,meetingItems, businessdealItems, pushstatusItem,groupItems, groupselectItem, districtselectItems, yearOp, langItems };
+export { categoriesItems, revenueLookups, maincategoriesItem, priorityItems, districtItems, statusItems, typeItems,meetingItems, businessdealItems, pushstatusItem,groupItems, groupselectItem, districtselectItems, yearOp, langItems };

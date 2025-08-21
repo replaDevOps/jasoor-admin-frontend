@@ -7,7 +7,7 @@ const BankAccountDetails = () => {
 
     return (
         <Flex vertical gap={5}>
-            <Text className='fw-600 fs-14'>Bank Account</Text>
+            <Text className='fs-13 fw-600 text-medium-gray'>Bank Account</Text>
             <Flex vertical className='deals-status w-100 sky-lightest'>
                 <Text className='fs-15 fw-500 text-gray'>
                     Master Card

@@ -7,7 +7,7 @@ const DocumentPaymentConfirmation = () => {
 
     const data = [
         {
-            title:'Business Transaction Receipt .pdf',
+            title:'',
             subtitle:'Business Transaction Receipt',
         },
         {
@@ -25,8 +25,8 @@ const DocumentPaymentConfirmation = () => {
             {
                 data?.map((list,index)=>
                     <Col span={24} key={index}>
-                        <Text className='fw-600 fs-14'>{list?.title}</Text>
-                        <Card className='card-cs border-gray rounded-12 mt-3' >
+                        <Text className='fw-600 text-medium-gray fs-13'>{list?.title}</Text>
+                        <Card className='card-cs border-gray rounded-12 mt-2' >
                             <Flex justify='space-between' align='center'>
                                 <Flex gap={15}>
                                     <Image src={'/assets/icons/file.png'} preview={false} width={20} />

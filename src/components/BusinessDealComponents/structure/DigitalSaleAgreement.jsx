@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Card, Checkbox, Col, Flex, Image, Row, Typography } from 'antd'
+import { CheckCircleOutlined } from '@ant-design/icons'
 
 const { Text } = Typography
 const DigitalSaleAgreement = ({form,completedeal}) => {
@@ -8,7 +9,7 @@ const DigitalSaleAgreement = ({form,completedeal}) => {
         <Row gutter={[16, 24]}>
             <Col span={24}>
                 <Flex vertical gap={0} className='mb-3'>
-                    <Text className='fw-600 fs-14'>Downloads Digital Sale Agreement</Text>
+                    <Text className='fw-600 text-medium-gray fs-13'>Downloads Digital Sale Agreement</Text>
                     <Text className='fs-13 text-gray'>
                         This agreement outlines the final terms of the business transfer. Please review the details carefully before proceeding.
                     </Text>
@@ -39,6 +40,20 @@ const DigitalSaleAgreement = ({form,completedeal}) => {
                         I accept the terms of the agreement and agree to proceed.
                     </Checkbox>
                 </Flex>
+            </Col>
+            <Col span={24}>
+                <Flex vertical gap={10}>
+                    <Flex gap={5} className='badge-cs success fs-12 fit-content' align='center'>
+                        <CheckCircleOutlined className='fs-14' /> Seller accept the "Sale Agreement"
+                    </Flex>
+                    {/* pending status (below badge) */}
+                    <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
+                        <CheckCircleOutlined className='fs-14' /> Waiting for seller to sign the sales agreement
+                    </Flex>
+                    <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
+                        <CheckCircleOutlined className='fs-14' /> Waiting for buyer to sign the sales agreement
+                    </Flex>
+                </Flex> 
             </Col>
             {/* <>
                 {
