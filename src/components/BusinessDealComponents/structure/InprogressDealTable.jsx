@@ -47,7 +47,6 @@ const InprogressDealTable = () => {
         const selectedItem = businessdealItems.find(item => item.key === key);
         if (selectedItem) {
             setSelectedStatus(selectedItem.label);
-            console.log(selectedItem.label);
             if( selectedItem.label === 'Document & Payment Confirmation' ){
                 refetch({ status: 'DOCUMENT_PAYMENT_CONFIRMATION', isCompleted: false });
             }
@@ -126,7 +125,7 @@ const InprogressDealTable = () => {
                     onRow={(record) => ({
                         onClick: () => navigate('/businessdeal/details/'+record?.key)
                     })}
-                    pagination={false}
+                    pagination={true}
                     // loading={
                     //     {
                     //         ...TableLoader,

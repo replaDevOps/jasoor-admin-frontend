@@ -229,7 +229,6 @@ const categoryColumn = ( setDeleteItem, navigate ) =>  [
         title: 'Status',
         dataIndex: 'status',
         render: (status) => {
-            console.log("Status:", status);
             return (
                 status === 'UNDER_REVIEW' ? (
                     <Text className='btnpill fs-12 pending'>Pending</Text>

@@ -5,23 +5,72 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { MyInput } from '../../Forms';
 import { permissionsData, rolepermissionData } from '../../../data';
-import { CREATE_ROLE } from '../../../graphql/mutation/login';
-import { useMutation } from '@apollo/client';
+import { CREATE_ROLE,UPDATE_ROLE } from '../../../graphql/mutation/login';
+import {GETROLE} from '../../../graphql/query'
+import { useMutation,useQuery } from '@apollo/client';
+import { message,Spin } from "antd";
 
 const { Text, Title } = Typography;
 
 const AddRolePermission = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
     const [selectedPermissions, setSelectedPermissions] = useState({});
     const { id } = useParams()
-    const detail = rolepermissionData?.find((items)=> items?.key === Number(id))
+    const { loading, error, data } = useQuery(GETROLE, { variables: { getRoleId: id },skip: !id, });
+    const detail = data?.getRole
     const [createRole] = useMutation(CREATE_ROLE);
-    
-    useEffect(() => {
+    const backendToFrontendMap = {
+        viewDashboard: ["Dashboard", "View Dashboard"],
+        viewListings: ["Business Listing", "View Listings"],
+        editListings: ["Business Listing", "Edit Listings"],
+        approveRejectListings: ["Business Listing", "Approve/Reject Listings"],
+      
+        viewMeetingRequests: ["Meeting Request", "View Meeting Requests"],
+        scheduleMeetings: ["Meeting Request", "Schedule Meetings"],
+        editMeetingDetails: ["Meeting Request", "Edit Meeting Details"],
+        cancelMeetings: ["Meeting Request", "Cancel Meetings"],
+      
+        viewDeals: ["Deals", "View Deals"],
+        trackDealProgress: ["Deals", "Track Deal Progress"],
+        verifyDocuments: ["Deals", "Verify Documents"],
+        finalizeDeal: ["Deals", "Finalize Deal"],
+      
+        viewFinanceDashboard: ["Finance", "View Finance Dashboard"],
+        downloadFinancialReports: ["Finance", "Download Financial Reports"],
+      
+        viewWebsitePages: ["Website Pages", "View Website Pages"],
+        editArticle: ["Website Pages", "Edit Article"],
+        deleteArticle: ["Website Pages", "Delete Article"],
+        publishArticle: ["Website Pages", "Publish Article"],
+      
+        viewAlerts: ["Alerts", "View Alerts"],
+      
+        manageRoles: ["Admin Setting", "Add/Edit/Delete Roles"],
+      };      
+
+    const buildPermissionsFromBackend = (detail) => {
+        const permissions = {};
+        Object.keys(backendToFrontendMap).forEach((backendKey) => {
+          const [category, option] = backendToFrontendMap[backendKey];
+          permissions[backendKey] = !!selectedPermissions[category]?.[option];
+        });
+        return permissions;
+      };
+
+      useEffect(() => {
         if (id && detail) {
-          form.setFieldsValue({ roleName: detail?.rolename });
-          setSelectedPermissions(detail?.permissions || {});
+          form.setFieldsValue({ name: detail?.name });
+      
+          const mappedPermissions = {};
+          Object.keys(backendToFrontendMap).forEach((key) => {
+            const [category, option] = backendToFrontendMap[key];
+            if (!mappedPermissions[category]) mappedPermissions[category] = {};
+            mappedPermissions[category][option] = !!detail[key]; // <-- use detail[key]
+          });
+      
+          setSelectedPermissions(mappedPermissions);
         } else {
           form.resetFields();
           setSelectedPermissions({});
@@ -55,156 +104,154 @@ const AddRolePermission = () => {
         const options = permissionsData.find(g => g.category === category).options;
         return options.every(opt => selectedPermissions[category]?.[opt]);
     };
-    const transformPermissionsForBackend = (selectedPermissions) => {
-        const map = {
-          "Dashboard": { "View Dashboard": "viewDashboard" },
-          "Business Listing": {
-            "View Listings": "viewListings",
-            "Edit Listings": "editListings",
-            "Approve/Reject Listings": "approveRejectListings"
+
+    const [updateRole,{ loading: updating }] = useMutation(UPDATE_ROLE, {
+        refetchQueries: [ {
+            query: GETROLE,
+            variables: { getRoleId: id }, 
           },
-          "Meeting Request": {
-            "View Meeting Requests": "viewMeetingRequests",
-            "Schedule Meetings": "scheduleMeetings",
-            "Edit Meeting Details": "editMeetingDetails",
-            "Cancel Meetings": "cancelMeetings"
+        ],
+        awaitRefetchQueries: true,
+        onCompleted: () => {
+            messageApi.success("Stats changed successfully!");
           },
-          "Deals": {
-            "View Deals": "viewDeals",
-            "Track Deal Progress": "trackDealProgress",
-            "Verify Documents": "verifyDocuments",
-            "Finalize Deal": "finalizeDeal"
+          onError: (err) => {
+            messageApi.error(err.message || "Something went wrong!");
           },
-          "Finance": {
-            "View Finance Dashboard": "viewFinanceDashboard",
-            "Download Financial Reports": "downloadFinancialReports"
-          },
-          "Website Pages": {
-            "View Website Pages": "viewWebsitePages",
-            "Edit Article": "editArticle",
-            "Delete Article": "deleteArticle",
-            "Publish Article": "publishArticle"
-          },
-          "Alerts": { "View Alerts": "viewAlerts" },
-          "Admin Setting": { "Add/Edit/Delete Roles": "manageRoles" }
-        };
+    });
+
       
-        const flat = {};
-        Object.keys(selectedPermissions).forEach(category => {
-          Object.keys(selectedPermissions[category]).forEach(option => {
-            const key = map[category][option];
-            if (key) flat[key] = selectedPermissions[category][option];
-          });
-        });
-        return flat;
-      };
-      
-      const onFinish = (values) => {
+    const onFinish = (values) => {
         const input = {
-          name: values.roleName,
-          ...transformPermissionsForBackend(selectedPermissions)
+            ...(id && { id }),
+            name: values.name,
+            ...buildPermissionsFromBackend(selectedPermissions)
         };
-      
+      if(id){
+        updateRole({ variables: { input } });
+      }else{
         createRole({ variables: { input } });
         // redirect to /rolepermission
         navigate("/rolepermission");
-      };   
+    }
+};  
 
+return (
+    <>
+    {contextHolder}
+    <Flex vertical gap={25}>
+      {/* Breadcrumb + Header */}
+      <Breadcrumb
+        separator=">"
+        items={[
+          {
+            title: (
+              <Text
+                className="cursor fs-13 text-gray"
+                onClick={() => navigate("/rolepermission")}
+              >
+                Role & Permission
+              </Text>
+            ),
+          },
+          {
+            title: (
+              <Text className="fw-500 fs-14 text-black">
+                {detail?.name ? detail?.name : "Add Roles"}
+              </Text>
+            ),
+          },
+        ]}
+      />
 
-    return (
-        <Flex vertical gap={25}>
-            <Breadcrumb
-                separator=">"
-                items={[
-                    {
-                        title: (
-                            <Text className="cursor fs-13 text-gray" onClick={() => navigate("/rolepermission")}>
-                                Role & Permission
-                            </Text>
-                        ),
-                    },
-                    {
-                        title: <Text className="fw-500 fs-14 text-black">
-                            { detail?.rolename ? detail?.rolename: 'Add Roles' } 
-                        </Text>,
-                    },
-                ]}
-            />
-            
-            <Flex gap={10} justify='space-between' align="center">
-                <Flex gap={10} align="center">
-                    <Button className="border0 p-0 bg-transparent" onClick={() => navigate("/rolepermission")}>
-                        <ArrowLeftOutlined />
-                    </Button>
-                    <Title level={4} className="fw-500 m-0">
-                        { detail?.rolename ? detail?.rolename: 'Add New Role' } 
-                    </Title>
-                </Flex>
-                <Flex gap={10}>
-                    <Button className="btncancel" onClick={() => navigate("/rolepermission")}>
-                        Cancel
-                    </Button>
-                    <Button 
-                        className="btnsave brand-bg border0 text-white" 
-                        onClick={() => form.submit()}
-                    >
-                        {id ? 'Update':'Save' }
-                    </Button>
-                </Flex>
-            </Flex>
-            <Card>
-                <Form layout='vertical' form={form} onFinish={onFinish}>
-                    <Row gutter={[24, 14]}>
-                        <Col span={24}>
-                            <Title level={5} className="m-0">
-                                Role Details
-                            </Title>
-                        </Col>
-                        <Col span={24}>
-                            <MyInput
-                                label="Role Name"
-                                size='large'
-                                name='roleName'
-                                className='w-100'
-                                placeholder={'Enter Role Name'}
-                                rules={[{ required: true, message: 'Please enter role name' }]}
-                            />
-                        </Col>
-                        <Col span={24}>
-                            <Text strong>Permissions</Text>
-                        </Col>
-                        <Col span={24}>
-                            <Form.Item name="permissions">
-                                <Flex vertical gap={20}>
-                                    {permissionsData.map((permission, index) => (
-                                        <Flex vertical gap={10} key={index}>
-                                            <Checkbox
-                                                checked={isCategoryChecked(permission.category)}
-                                                onChange={e => handleCategoryChange(permission.category, e.target.checked)}
-                                            >
-                                                {permission.category}
-                                            </Checkbox>
-                                            <Space direction='vertical' className="px-3">
-                                                {permission.options.map((option, _) => (
-                                                    <Checkbox 
-                                                        key={option}
-                                                        checked={!!selectedPermissions[permission.category]?.[option]}
-                                                        onChange={e => handleOptionChange(permission.category, option, e.target.checked)}
-                                                    >
-                                                        {option}
-                                                    </Checkbox>
-                                                ))}
-                                            </Space>
-                                        </Flex>
-                                    ))}
-                                </Flex>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>
-            </Card>
+      <Flex gap={10} justify="space-between" align="center">
+        <Flex gap={10} align="center">
+          <Button
+            className="border0 p-0 bg-transparent"
+            onClick={() => navigate("/rolepermission")}
+          >
+            <ArrowLeftOutlined />
+          </Button>
+          <Title level={4} className="fw-500 m-0">
+            {detail?.name ? detail?.name : "Add New Role"}
+          </Title>
         </Flex>
-    );
+        <Flex gap={10}>
+          <Button className="btncancel" onClick={() => navigate("/rolepermission")}>
+            Cancel
+          </Button>
+          <Button
+            className="btnsave brand-bg border0 text-white"
+            onClick={() => form.submit()}
+          >
+            {id ? "Update" : "Save"}
+          </Button>
+        </Flex>
+      </Flex>
+
+      {/* Form */}
+      <Card>
+        <Form layout="vertical" form={form} onFinish={onFinish}>
+          <Row gutter={[24, 14]}>
+            <Col span={24}>
+              <Title level={5} className="m-0">
+                Role Details
+              </Title>
+            </Col>
+            <Col span={24}>
+              <MyInput
+                label="Role Name"
+                size="large"
+                name="name"
+                className="w-100"
+                placeholder="Enter Role Name"
+                rules={[{ required: true, message: "Please enter role name" }]}
+              />
+            </Col>
+            <Col span={24}>
+              <Text strong>Permissions</Text>
+            </Col>
+            <Col span={24}>
+              <Form.Item name="permissions">
+                <Flex vertical gap={20}>
+                  {permissionsData.map((permission, index) => (
+                    <Flex vertical gap={10} key={index}>
+                      <Checkbox
+                        checked={isCategoryChecked(permission.category)}
+                        onChange={(e) =>
+                          handleCategoryChange(permission.category, e.target.checked)
+                        }
+                      >
+                        {permission.category}
+                      </Checkbox>
+                      <Space direction="vertical" className="px-3">
+                        {permission.options.map((option, _) => (
+                          <Checkbox
+                            key={option}
+                            checked={!!selectedPermissions[permission.category]?.[option]}
+                            onChange={(e) =>
+                              handleOptionChange(
+                                permission.category,
+                                option,
+                                e.target.checked
+                              )
+                            }
+                          >
+                            {option}
+                          </Checkbox>
+                        ))}
+                      </Space>
+                    </Flex>
+                  ))}
+                </Flex>
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Card>
+    </Flex>
+    </>
+  );
 };
 
 export { AddRolePermission };

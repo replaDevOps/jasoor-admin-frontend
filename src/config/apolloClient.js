@@ -1,8 +1,10 @@
-import { ApolloClient, InMemoryCache, createHttpLink, from } from "@apollo/client";
+import { ApolloClient, InMemoryCache, createHttpLink, from, split } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
+import { WebSocketLink } from "apollo-link-ws";
+import { getMainDefinition } from "@apollo/client/utilities";
 
-const API_URL =  "https://220.152.66.148.host.secureserver.net/graphql";
+const API_URL = "https://220.152.66.148.host.secureserver.net/graphql";
 
 // HTTP Link
 const httpLink = createHttpLink({
@@ -12,8 +14,7 @@ const httpLink = createHttpLink({
 
 // Auth Link (Attaches token)
 const authLink = setContext((_, { headers }) => {
-  // const token = typeof window !== "undefined" ? localStorage.getItem("auth-token") : null;
-  const token= localStorage.getItem("accessToken")
+  const token = localStorage.getItem("accessToken");
   return {
     headers: {
       ...headers,
@@ -21,6 +22,30 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
+
+// WebSocket link for subscriptions
+const wsLink = new WebSocketLink({
+  uri: "wss://220.152.66.148.host.secureserver.net/subscriptions",
+  options: {
+    reconnect: true,
+    connectionParams: {
+      authorization: `Bearer${localStorage.getItem("accessToken")}`,
+    },
+  },
+});
+
+// Split links: send subscriptions to wsLink, others to httpLink
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  authLink.concat(httpLink) // make sure auth applies to http
+);
 
 // Error Handling Link (Detect expired token)
 const errorLink = onError(({ graphQLErrors }) => {
@@ -38,9 +63,7 @@ const errorLink = onError(({ graphQLErrors }) => {
   }
 });
 
-const link = from([errorLink, authLink, httpLink]);
-
 export const client = new ApolloClient({
-  link,
+  link: from([errorLink, splitLink]),
   cache: new InMemoryCache(),
 });

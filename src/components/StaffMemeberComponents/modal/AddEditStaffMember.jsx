@@ -2,14 +2,12 @@ import { Button, Col, Divider, Flex, Form, Modal, Row, Typography,Dropdown } fro
 import { MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
 import { useEffect,useState } from 'react'
-import { GETROLES } from '../../../graphql/query';
+import { GETROLES,GETSTAFFMEMBERS } from '../../../graphql/query';
 import { CREATE_USER } from '../../../graphql/mutation';
 import { useQuery,useMutation } from '@apollo/client';
-import { groupselectItem } from '../../../shared'
-
 
 const { Title } = Typography
-const AddEditStaffMember = ({visible,onClose,edititem}) => {
+const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
     const [selectedRole, setSelectedRole] = useState(null);
     const { loading, data } = useQuery(GETROLES, {
         variables: {
@@ -38,8 +36,16 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
     },[visible,edititem])
 
     const [createUser, { loading: creating }] = useMutation(CREATE_USER, {
+        refetchQueries: [ {
+            query: GETSTAFFMEMBERS 
+          },
+        ],
+        awaitRefetchQueries: true,
         onCompleted: () => {
           // maybe show success toast
+          if (typeof refetchStaff === 'function') {
+            refetchStaff();
+          }
           onClose();
         },
         onError: (err) => {
@@ -47,9 +53,13 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
           // maybe show error toast
         }
     });
-    const handleRoleChange = (key) => {
-        setSelectedRole(key)
+    const handleRoleChange = (selectedName) => {
+        // Find the role object by name
+        const role = roles.find(r => r.name === selectedName);
+        const id = role?.id;
+        setSelectedRole(id);
       };
+      
     const handleFinish = (values) => {
         createUser({
           variables: {
@@ -125,19 +135,13 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
                             />
                         </Col>
                         <Col span={24}>
-                            <MySelect
-                                label='Assign Role'
-                                name='assignRole'
-                                required
-                                message='Please choose a role'
-                                options={roles.map(role => ({
-                                    name: role.name,
-                                    id: role.id
-                                }))}
-                                placeholder='Select a role'
-                                value={selectedRole}
-                                onChange={handleRoleChange}
-                            />
+                        <MySelect
+                            label="Assign Role"
+                            name="assignRole"
+                            options={roles.map(role => ({ name: role.name, id: role.id }))}
+                            value={selectedRole}
+                            onChange={handleRoleChange}   // ✅ correct
+                        />
                         </Col>
                         <Col span={24}>
                             <MyInput

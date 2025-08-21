@@ -1,8 +1,10 @@
 import { Button, Col, Flex, Row } from 'antd'
 import { CheckCircleOutlined } from '@ant-design/icons'
+import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
+import { useMutation } from '@apollo/client';
+import { message,Spin } from "antd";
 
-const FinalDeal = () => {
-
+const FinalDeal = ({details}) => {
     return (
         <Row gutter={[16, 24]}>
             <Col span={24}>
@@ -14,7 +16,11 @@ const FinalDeal = () => {
                         <CheckCircleOutlined className='fs-14' /> Waiting for seller to mark the deal as "Finalized".
                     </Flex>
                     <Flex>
-                        <Button type="button" className='btnsave bg-gray border0 text-white'>
+                    <Button
+                            type="primary"
+                            className="btnsave bg-brand"
+                            disabled={details?.status !== "WAITING"} // ✅ enable only if status = WAITING
+                        >
                             Mark Deal as Completed
                         </Button>
                     </Flex>

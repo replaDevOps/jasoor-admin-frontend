@@ -11,17 +11,17 @@ import { FinalDealBuyer } from './FinalDealBuyer';
 
 const { Title, Text } = Typography;
 
-const SingleInprogressSteps = ({ completedeal }) => {
+const SingleInprogressSteps = ({ details }) => {
     const [form] = Form.useForm();
-    const [activeStep, setActiveStep] = useState(completedeal ? 3 : 0);
+    const [activeStep, setActiveStep] = useState(details ? 3 : 0);
     const [activeTab, setActiveTab] = useState('seller');
-    const [openPanels, setOpenPanels] = useState(completedeal ? ['1', '2', '3', '4'] : ['1']);
+    const [openPanels, setOpenPanels] = useState(details ? ['1', '2', '3', '4'] : ['1']);
 
     const sellerSteps = [
         {
             key: '1',
             label: 'Digital Sale Agreement',
-            content: <DigitalSaleAgreement form={form} completedeal={completedeal} />,
+            content: <DigitalSaleAgreement form={form} details={details} />,
             status: 'Pending',
             emptytitle: 'DSA Pending!',
             emptydesc: 'Waiting for the seller to sign the digital sale agreement.',
@@ -29,7 +29,7 @@ const SingleInprogressSteps = ({ completedeal }) => {
         {
             key: '2',
             label: 'Bank Account Details',
-            content: <BankAccountDetails />,
+            content: <BankAccountDetails details={details} />,
             status: 'Signed',
             emptytitle: 'Bank Details Pending!',
             emptydesc: 'Waiting for the seller to choose the bank account.',
@@ -37,7 +37,7 @@ const SingleInprogressSteps = ({ completedeal }) => {
         {
             key: '3',
             label: 'Document & Payment Confirmation',
-            content: <DocumentPaymentConfirmation />,
+            content: <DocumentPaymentConfirmation details={details} />,
             status: 'Jusoor verification pending',
             emptytitle: 'Payment Confirmation Pending!',
             emptydesc: 'Waiting for the buyer to transfer the payment.',
@@ -45,7 +45,7 @@ const SingleInprogressSteps = ({ completedeal }) => {
         {
             key: '4',
             label: 'Finalize Deal',
-            content: <FinalDeal />,
+            content: <FinalDeal details={details} />,
             status: 'Deal Closed',
             emptytitle: 'Deal Pending!',
             emptydesc: 'Waiting for the buyer to transfer the payment so that seller uploads the document.',
@@ -56,7 +56,7 @@ const SingleInprogressSteps = ({ completedeal }) => {
         {
             key: '1',
             label: 'Commission Receipt',
-            content: <CommissionReceiptBuyer />,
+            content: <CommissionReceiptBuyer details={details} />,
             status: 'Jusoor verification pending',
             emptytitle: 'Commission Pending!',
             emptydesc: 'Waiting for the buyer to pay the platform commission.',
@@ -64,7 +64,7 @@ const SingleInprogressSteps = ({ completedeal }) => {
         {
             key: '2',
             label: 'Digital Sale Agreement',
-            content: <DigitalSaleAgreement />,
+            content: <DigitalSaleAgreement details={details} />,
             status: 'Signed',
             emptytitle: 'DSA Pending!',
             emptydesc: 'Waiting for the buyer to sign the digital sale agreement.',
@@ -72,7 +72,7 @@ const SingleInprogressSteps = ({ completedeal }) => {
         {
             key: '3',
             label: 'Pay Business Amount',
-            content: <BusinessAmountReceiptBuyer />,
+            content: <BusinessAmountReceiptBuyer details={details} />,
             status: 'Waiting for jasoor to verify',
             emptytitle: 'Business Amount Pending!',
             emptydesc: 'Waiting for the buyer to pay the seller business amount.',
@@ -80,7 +80,7 @@ const SingleInprogressSteps = ({ completedeal }) => {
         {
             key: '4',
             label: 'Finalize Deal',
-            content: <FinalDealBuyer />,
+            content: <FinalDealBuyer details={details} />,
             status: 'Completed',
             emptytitle: 'Deal Pending!',
             emptydesc: 'Waiting for the buyer to transfer the payment so that seller uploads the document and finalize the deal.',

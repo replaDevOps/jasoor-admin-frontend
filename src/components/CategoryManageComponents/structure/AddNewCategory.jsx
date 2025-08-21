@@ -7,8 +7,9 @@ import { categoriesItems } from '../../../shared';
 import { categoryData, categoryStatsProfColumn, categorystatsProfData } from '../../../data';
 import { useEffect, useState } from 'react';
 import { TableContent } from '../../BusinesslistingComponents';
-import { CREATE_CATEGORY } from '../../../graphql/mutation/mutations';
-import { useMutation } from '@apollo/client';
+import { UPDATE_CATEGORY, CREATE_CATEGORY} from '../../../graphql/mutation/mutations';
+import {GET_CATEGORIES_BY_ID} from '../../../graphql/query'
+import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
 
 const mapDensity = (value) => {
@@ -40,9 +41,39 @@ const { Text, Title } = Typography;
 const AddNewCategory = () => {
     const navigate = useNavigate()
     const {id} = useParams()
+    const [messageApi, contextHolder] = message.useMessage();
+
     const [form] = Form.useForm();
-    const editdata = categoryData?.find((list)=>list?.key === Number(id))
-    const [categoryProfData, setCategoryProfData] = useState(categorystatsProfData);
+    const { loading, error, data:category } = useQuery(GET_CATEGORIES_BY_ID, {
+        variables: { getCategoryByIdId: id },
+        skip: !id, // skip if no id
+    });
+    const editdata = category?.getCategoryById
+    const [categoryProfData, setCategoryProfData] = useState([]);
+
+    // load data from server into state when editing
+    useEffect(() => {
+    if (editdata?.growthRecords) {
+        const mappedData = editdata.growthRecords.map((record, idx) => {
+        const yearValues = record.years.reduce((acc, y) => {
+            acc[`value${y.year}`] = y.localBusinessGrowth || 0;
+            return acc;
+        }, {});
+
+        return {
+            key: idx + 1,
+            regionname: record.regionName,
+            localbusinessgrowth: record.years?.[0]?.localBusinessGrowth ?? 0,
+            populationdensity: record.populationDensity,
+            industrydemand: record.industryDemand,
+            ...yearValues,
+        };
+        });
+
+        setCategoryProfData(mappedData);
+    }
+    }, [editdata]);
+
     const [documents, setDocuments] = useState( { title: "Category Icon", fileName: "", fileType: "", filePath: "" }, );
     const [createCategory, { loading: createLoading }] = useMutation(CREATE_CATEGORY, {
         onCompleted: (data) => {
@@ -71,8 +102,8 @@ const AddNewCategory = () => {
     useEffect(()=>{
         if(id && editdata){
             form.setFieldsValue({
-                title: editdata?.categoryname,
-                category: editdata?.businesstype
+                title: editdata?.name,
+                category: editdata?.isDigital ? "Digital" : "Physical",
             })
         }else{
             form.resetFields()
@@ -85,19 +116,35 @@ const AddNewCategory = () => {
         setCategoryProfData(updated);
     };
 
-    const onFinish = (values) => {
-        console.log("Form values:", values);
-        console.log("Category stats data:", categoryProfData);
-      
+    const [updateCategory,{ loading: updating }] = useMutation(UPDATE_CATEGORY, {
+        refetchQueries: [
+          {
+            query: GET_CATEGORIES_BY_ID,
+            variables: { getCategoryByIdId: id }, 
+          },
+        ],
+        awaitRefetchQueries: true,
+        onCompleted: () => {
+            messageApi.success("Stats changed successfully!");
+          },
+          onError: (err) => {
+            messageApi.error(err.message || "Something went wrong!");
+          },
+    });
+
+    const onFinish = (values) => {      
         const input = {
+        ...(id && { id }),
           name: values.title,
           icon: documents.filePath || null, // from uploaded file
-          isDigital: values.category === "digital" ? true : false, // adjust based on your dropdown
+          isDigital: values.category.status === "Digital" ? true : false, // adjust based on your dropdown
           growthRecords: transformGrowthRecords(categoryProfData),
         };
-      
-      
-        createCategory({ variables: { input } });
+        if(id){
+            updateCategory({variables:{ input }})
+        }else{
+            createCategory({ variables: { input } });
+        }
       };
     const handleSingleFileUpload = async (file) => {
         try {
@@ -118,7 +165,6 @@ const AddNewCategory = () => {
           }
       
           const result = await response.json();
-          console.log("Upload successful:", result);
           // set it to documents state
           setDocuments({
             title: "Category Icon",
@@ -134,9 +180,16 @@ const AddNewCategory = () => {
           return null;
         }
       };
-
+    if (loading || updating) {
+        return (
+          <Flex justify="center" align="center" style={{ height: '200px' }}>
+            <Spin size="large" />
+          </Flex>
+        );
+    }
     return (
         <>
+        {contextHolder}
             <Flex vertical gap={25}>
                 <Breadcrumb
                     separator=">"
@@ -150,7 +203,7 @@ const AddNewCategory = () => {
                         },
                         {
                             title: <Text className="fw-500 fs-14 text-black">
-                                {editdata?.categoryname ? editdata?.categoryname : 'Add New Category' }
+                                {editdata?.name ? editdata?.name : 'Add New Category' }
                             </Text>,
                         },
                     ]}
@@ -161,7 +214,7 @@ const AddNewCategory = () => {
                             <ArrowLeftOutlined />
                         </Button>
                         <Title level={4} className="fw-500 m-0">
-                            {editdata?.categoryname ? editdata?.categoryname : 'Add New Category' }
+                            {editdata?.name ? editdata?.name : 'Add New Category' }
                         </Title>
                     </Flex>
                     <Flex gap={10}>
@@ -169,9 +222,7 @@ const AddNewCategory = () => {
                             Cancel      
                         </Button>
                         <Button className="btnsave brand-bg border0 text-white" onClick={()=>form.submit()}>
-                            {
-                                id ? 'Update' : 'Save'
-                            }
+                            {    id ? 'Update' : 'Save'    }
                         </Button>
                     </Flex>
                 </Flex>
@@ -203,29 +254,37 @@ const AddNewCategory = () => {
                                 />                        
                             </Col>  
                             <Col span={24}>
-                                <SingleFileUpload
-                                    label={
-                                        <Flex vertical>
-                                            <Title level={5} className="m-0 fw-500">
-                                                Category Icon
-                                            </Title>
-                                            <Text className="text-gray">
-                                                Accepted formats: JPEG, JPG & PNG, Max size: 5MB per file. Aspect Ratio: 1:1.
-                                            </Text>
-                                        </Flex>
-                                    }   
-                                    form={form}
-                                    name={'uploadcr'}
-                                    title={'Upload'}
-                                    onUpload={async (file) => {
-                                        const fileUrl = await handleSingleFileUpload(file);
-                                        if (fileUrl) {
-                                          form.setFieldsValue({ uploadcr: fileUrl });
-                                        }
-                                      }}
-                                    // uploading={uploading}
-                                    multiple={false}
-                                />
+                            {!editdata?.icon ? (
+                            <SingleFileUpload
+                                label={
+                                <Flex vertical>
+                                    <Title level={5} className="m-0 fw-500">
+                                    Category Icon
+                                    </Title>
+                                    <Text className="text-gray">
+                                    Accepted formats: JPEG, JPG & PNG, Max size: 5MB per file. Aspect Ratio: 1:1.
+                                    </Text>
+                                </Flex>
+                                }
+                                form={form}
+                                name={'uploadcr'}
+                                title={'Upload'}
+                                onUpload={async (file) => {
+                                const fileUrl = await handleSingleFileUpload(file);
+                                if (fileUrl) {
+                                    form.setFieldsValue({ uploadcr: fileUrl });
+                                }
+                                }}
+                                multiple={false}
+                            />
+                            ) : (
+                            <img
+                                src={editdata?.icon}
+                                alt="Category Icon"
+                                style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8 }}
+                            />
+                            )}
+
                             </Col>
                         </Row>
                     </Form>

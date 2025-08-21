@@ -3,14 +3,16 @@ import { useEffect, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination, DeleteModal } from '../../Ui';
+import { DELETE_BUSINESS } from '../../../graphql/mutation'
 import { GET_CATEGORIES } from '../../../graphql/query/business'
-import { useQuery } from '@apollo/client'
+import { useQuery,useMutation } from '@apollo/client'
 import { message,Spin } from "antd";
 import { NavLink } from "react-router-dom";
 
 const { Text } = Typography
 
 const CategoryTable = () => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const categoryColumn = ( setDeleteItem, navigate ) =>  [
@@ -31,7 +33,6 @@ const CategoryTable = () => {
             title: 'Status',
             dataIndex: 'status',
             render: (status) => {
-                console.log("Status:", status);
                 return (
                     status === 'UNDER_REVIEW' ? (
                         <Text className='btnpill fs-12 pending'>Pending</Text>
@@ -53,7 +54,7 @@ const CategoryTable = () => {
                     menu={{
                         items: [
                             { label: <NavLink onClick={(e) => {e.preventDefault(); navigate('/addnewcategory/detail/'+row?.key)}}>Edit</NavLink>, key: '1' },
-                            { label: <NavLink onClick={() => { setDeleteItem(true) }}>Delete</NavLink>, key: '2' },
+                            { label: <NavLink onClick={() => {setSelectedCategoryId(row.key); setDeleteItem(true) }}>Delete</NavLink>, key: '2' },
                         ],
                     }}
                     trigger={['click']}
@@ -68,6 +69,7 @@ const CategoryTable = () => {
     // State for filters
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [searchName, setSearchName] = useState(null);
 
     // Pagination state
@@ -158,20 +160,39 @@ const CategoryTable = () => {
         setSearchName(value || null);
       };
       
-      useEffect(() => {
+    useEffect(() => {
         refetch({
-          limit: pageSize,
-          offset: (current - 1) * pageSize,
-          filter: {
+        limit: pageSize,
+        offset: (current - 1) * pageSize,
+        filter: {
             isDigital: selectedCategory,
             name: searchName,
             status: selectedStatus
-          }
+        }
         });
-      }, [searchName, selectedCategory, selectedStatus, pageSize, current]);
-      
+    }, [searchName, selectedCategory, selectedStatus, pageSize, current]);
+
+    const [deleteBusiness, { loading: deleting }] = useMutation(DELETE_BUSINESS, {
+        refetchQueries: [{ query: GET_CATEGORIES },],
+        awaitRefetchQueries: true,
+        onCompleted: () => {
+          message.success("Category deleted successfully");
+          setDeleteItem(false);
+        },
+        onError: (err) => {
+          message.error(err.message || "Something went wrong");
+        }
+    });
+    if (isLoading || deleting) {
+        return (
+          <Flex justify="center" align="center" style={{ height: '200px' }}>
+            <Spin size="large" />
+          </Flex>
+        );
+    }
     return (
         <>
+        {contextHolder}
             <Card className='radius-12 border-gray'>
                 <Flex vertical gap={20}>
                     <Form form={form} layout="vertical">
@@ -260,6 +281,13 @@ const CategoryTable = () => {
                 title='Are you sure?'
                 subtitle='This action cannot be undone. Are you sure you want to delete this Category?'
                 type='danger'
+                onConfirm={() => {
+                    if (selectedCategoryId) {
+                      deleteBusiness({
+                        variables:  { deleteCategoryId: selectedCategoryId } ,
+                      });
+                    }
+                }}
             />
         </>
     );

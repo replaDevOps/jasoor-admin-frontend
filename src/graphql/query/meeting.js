@@ -63,6 +63,7 @@ query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType) {
       }
       requestedDate
       offer {
+        id
         price
       }
       status
@@ -75,6 +76,7 @@ query GetDeals($limit: Int, $offset: Int, $search: String, $status: String, $isC
   getDeals(limit: $limit, offset: $offset, search: $search, status: $status, isCompleted: $isCompleted) {
     totalCount
     deals {
+    id
       business {
       businessTitle
       seller {

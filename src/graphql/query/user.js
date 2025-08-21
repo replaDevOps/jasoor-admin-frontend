@@ -17,8 +17,12 @@ const ME = gql`
       accountTitle
       bankName
       iban
-    cardNumber
-    cardType
+      cardNumber
+      cardType
+    }
+    role{
+      id
+      name
     }
   }
 }
@@ -256,13 +260,42 @@ query GetRoles($limit: Int, $offset: Int, $search: String, $isActive: Boolean) {
     manageRoles,
   }
 }
-  `
+`
+const GETROLE = gql`
+query GetRole($getRoleId: ID) {
+  getRole(id: $getRoleId) {
+    id,
+    name,
+    isActive,
+    viewDashboard,
+    viewListings,
+    editListings,
+    approveRejectListings,
+    viewMeetingRequests,
+    scheduleMeetings,
+    editMeetingDetails,
+    cancelMeetings,
+    viewDeals,
+    trackDealProgress,
+    verifyDocuments,
+    finalizeDeal,
+    viewFinanceDashboard,
+    downloadFinancialReports,
+    viewWebsitePages,
+    editArticle,
+    deleteArticle,
+    publishArticle,
+    viewAlerts,
+    manageRoles,
+  }
+}
+`
 const GETSTAFFMEMBERS = gql`
-query GetStaffMembers($limit: Int, $offset: Int, $search: String, $isActive: Boolean, $roleId: ID) {
-  getStaffMembers(limit: $limit, offset: $offset, search: $search, isActive: $isActive, roleId: $roleId) {
+query GetStaffMembers($limit: Int, $offset: Int, $search: String, $roleId: ID, $status: UserStatus) {
+  getStaffMembers(limit: $limit, offset: $offset, search: $search, roleId: $roleId, status: $status) {
     totalCount
     users {
-      id
+    id
     name
     email
     phone
@@ -325,6 +358,38 @@ query GetCampaigns($filter: CampaignFilter) {
   }
 }
 `
+const GET_NOTIFICATIONS = gql`
+query GetNotifications($userId: ID!) {
+  getNotifications(userId: $userId) {
+    count
+    notifications {
+      id
+      createdAt
+      isRead
+      name
+      message
+      user {
+        id
+        name
+      }
+    }
+  }
+}
+`
+const GET_ALERTS = gql`
+query Notifications($userId: ID) {
+  getAlerts(userId: $userId) {
+    time
+    notifications {
+      id
+      isRead
+      message
+      name
+      createdAt
+    }
+  }
+}
+`
 export {
     ME,
     NOTIFICATION,
@@ -340,8 +405,11 @@ export {
     GETUSERBANK,
     USERS,
     GETROLES,
+    GETROLE,
     GETSTAFFMEMBERS,
     GET_ALL_CONTACT_US,
     GET_SETTINGS,
-    GET_CAMPAIGNS
+    GET_CAMPAIGNS,
+    GET_NOTIFICATIONS,
+    GET_ALERTS
 }

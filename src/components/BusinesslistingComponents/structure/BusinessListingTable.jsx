@@ -177,7 +177,6 @@ const BusinessListingTable = ({
                                     rangePicker
                                     value={dateRange}
                                     onChange={(dates) => {
-                                        console.log("dates",dates)
                                         setDateRange([dayjs(dates[0]), dayjs(dates[1])]); // keep as Day.js objects
                                         const startDate = dates?.[0] ? dates[0].format('YYYY-MM-DD') : null;
                                         const endDate = dates?.[1] ? dates[1].format('YYYY-MM-DD') : null;

@@ -160,15 +160,18 @@ query GetAllCategories($limit: Int, $offset: Int, $filter: CategoryFilter) {
 const GET_CATEGORIES_BY_ID = gql`
 query GetCategoryById($getCategoryByIdId: ID!) {
   getCategoryById(id: $getCategoryByIdId) {
-    icon
+    id
     isDigital
     name
     status
+    icon
     growthRecords {
-      regionName
+      id
       industryDemand
+      regionName
       populationDensity
       years {
+        id
         localBusinessGrowth
         year
       }

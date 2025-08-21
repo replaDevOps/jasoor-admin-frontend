@@ -1,31 +1,40 @@
 import React, { useState } from "react"
-import { Drawer, Button, Avatar, List, theme, Typography} from "antd"
+import { Drawer, Button, Avatar, List, theme, Typography, message,Spin} from "antd"
 import "./index.css"
 import {
     DeleteOutlined
 } from '@ant-design/icons'
+
+import { MARK_AS_READ } from '../../../graphql/mutation';
+import {GET_NOTIFICATIONS} from '../../../graphql/query'
+import { useMutation,useQuery } from '@apollo/client';
+
 const { useToken } = theme;
 const { Text } = Typography
 const NotificationsDrawer= ({visible, onClose})=>{
-    const { token } = useToken();
-    const [ closedraw, setCloseDraw ] = useState(false)
-    const data = [
-        {   
-            img:'av-1.png',
-            title: 'Josph Smart',
-            desc:"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer."
-        },
-        {
-            img:'av-1.png',
-            title: 'Sarah Beauty',
-            desc: 'Took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.'
-        },
-        {
-            img:'av-1.png',
-            title: 'Zainab Shabir',
-            desc:"Remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-        },
-    ];
+    const userId = localStorage.getItem("userId"); 
+    const { data, loading, refetch } = useQuery(GET_NOTIFICATIONS, {
+        variables: { userId },
+        skip: !userId,
+        fetchPolicy: "network-only",
+    });
+    
+    const [markAsRead] = useMutation(MARK_AS_READ, refetch() );
+    
+      // Mark single notification as read
+      const handleMarkAsRead = (id) => {
+        markAsRead({ variables: { markNotificationAsReadId: id } });
+      };
+    
+      // Mark all notifications as read
+      const handleClearAll = () => {
+        if (data?.getNotifications?.count) {
+          data.getNotifications?.notifications.forEach((notif) =>
+            markAsRead({ variables: { markNotificationAsReadId: notif.id } })
+          );
+        }
+      };
+    
     return (
         <Drawer
             title='Notifications'
@@ -38,29 +47,33 @@ const NotificationsDrawer= ({visible, onClose})=>{
                     block 
                     className="btnsave py-2"
                     type="primary"
-                    onClick={() => setCloseDraw(true)}
+                    onClick={handleClearAll}
                 >
                     Clear All
                 </Button>
             }
         >
-
-                <List
-                    itemLayout="horizontal"
-                    dataSource={data}
-                    renderItem={(item) => (
-                    <List.Item>
-                        <List.Item.Meta
-                        avatar={<Avatar src={'/assets/images/'+item?.img} />}
-                        title={<a href="" >{item?.title}</a>}
-                        description={<Text >{item?.desc}</Text>}
-                        />
-                        <div className="nofitication">
-                            <Avatar size={28} style={{background: 'transparent',color:'red',borderColor:'red'}} src={<DeleteOutlined />} />
-                        </div>
-                    </List.Item>
-                    )}
+         <List
+            itemLayout="horizontal"
+            dataSource={data?.getNotifications?.notifications || []}
+            renderItem={(item) => (
+              <List.Item
+                actions={[
+                  <Button
+                    type="text"
+                    icon={<DeleteOutlined />}
+                    onClick={() => handleMarkAsRead(item.id)}
+                  />,
+                ]}
+              >
+                <List.Item.Meta
+                  avatar={<Avatar src={"/assets/images/av-1.png"} />}
+                  title={<Text strong>{item.name}</Text>}
+                  description={<Text>{item.message}</Text>}
                 />
+              </List.Item>
+            )}
+          />
         </Drawer>
     )
 }

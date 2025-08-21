@@ -26,7 +26,7 @@ const LoginPage = () => {
     const handleFinish = async (values) => {
         try {
           const { email, password } = values;
-          const { data } = await loginUser({ variables: { email, password } });
+          const { data,error } = await loginUser({ variables: { email, password } });
       
           if (data?.login?.token) {
             // store token/id
@@ -43,7 +43,7 @@ const LoginPage = () => {
           messageApi.error("Login failed: Something went wrong");
         }
       };
-
+console.log("error",error)
       const lang = [
             {
               key: "1",

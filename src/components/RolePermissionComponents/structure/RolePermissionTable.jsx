@@ -1,12 +1,15 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table } from 'antd';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table,Typography } from 'antd';
 import { SearchInput } from '../../Forms';
-import { rolepermissionData, rolepermissionColumn } from '../../../data';
+import { NavLink } from "react-router-dom";
 import { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination, DeleteModal } from '../../Ui';
 import { GETROLES } from '../../../graphql/query/user';
-import { useQuery } from '@apollo/client';
+import { UPDATE_ROLE,DELETE_ROLE } from '../../../graphql/mutation'
+import { useQuery,useMutation } from '@apollo/client'
+import { message,Spin } from "antd";
+const { Text } = Typography
 
 const RolePermissionTable = () => {
     const [form] = Form.useForm();
@@ -16,6 +19,95 @@ const RolePermissionTable = () => {
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
   const [searchText, setSearchText] = useState("");
+  const [selectedRoleId, setRoleId] = useState(null);
+  const rolepermissionColumn = (setDeleteItem, navigate) => [
+    {
+      title: "Role Name",
+      dataIndex: "rolename",
+    },
+    {
+      title: "Status",
+      dataIndex: "isActive",
+      render: (isActive) => {
+        return isActive ? (
+          <Text className="btnpill fs-12 success">Active</Text>
+        ) : (
+          <Text className="btnpill fs-12 inactive">Inactive</Text>
+        );
+      },
+    },
+    {
+      title: "Action",
+      key: "action",
+      fixed: "right",
+      width: 100,
+      render: (_, row) => {
+        // only show dropdown if status === "Customer"
+        if (row.rolename === "Customer") return null;
+        return (
+          <Dropdown
+            menu={{
+              items: [
+                {
+                  label: (
+                    <NavLink
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate("/addrolepermission/" + row.key);
+                      }}
+                    >
+                      Edit
+                    </NavLink>
+                  ),
+                  key: "1",
+                },
+                {
+                  label: (
+                    <NavLink
+                      onClick={async () => {
+                        setDeleteItem(true);
+                        setRoleId(row.key)
+                      }}
+                    >
+                      Delete
+                    </NavLink>
+                  ),
+                  key: "2",
+                },
+                {
+                  label: (
+                    <NavLink
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        await updateRole({
+                            variables: {
+                                input:{
+                                    id: row.key,
+                                    isActive: !row.isActive, 
+                                }
+                            }
+                        });
+                        // TODO: Add mutation or handler for activation toggle
+                      }}
+                    >
+                      {row.isActive ? "Deactivate" : "Activate"}
+                    </NavLink>
+                  ),
+                  key: "3",
+                },
+              ],
+            }}
+            trigger={["click"]}
+          >
+            <Button className="bg-transparent border0 p-0">
+              <img src="/assets/icons/dots.png" alt="" width={16} />
+            </Button>
+          </Dropdown>
+        );
+      }
+      
+    },
+  ];
 
   const { loading, data, refetch } = useQuery(GETROLES, {
     variables: {
@@ -35,12 +127,11 @@ const RolePermissionTable = () => {
   const rolepermissionData = (data?.getRoles || []).map((role, index) => ({
     key: role.id || index,             // Use API id or fallback to index
     rolename: role.name,               // Matches your table's 'rolename'
-    status: role.isActive ? 0 : 1      // 2 for Completed/Active, 1 for Inactive — adjust if you want Pending logic
+    isActive: role.isActive   
   }));
 
   const handleStatusClick = ({ key }) => {
     const selectedItem = statusItems.find((item) => item.key === key);
-    console.log("Selected Status:", selectedItem);
     if (selectedItem) {
       setSelectedStatus(selectedItem.label);
         refetch({
@@ -78,6 +169,35 @@ const RolePermissionTable = () => {
         search: value || null,
     });
 };
+
+    const [deleteRole,{ loading: onDeleteing }] = useMutation(DELETE_ROLE,{
+        refetchQueries: [ { query: GETROLES} ], 
+        awaitRefetchQueries: true, 
+        onCompleted: () => {
+            messageApi.success("Role deleted successfully!");
+          },
+          onError: (err) => {
+            messageApi.error(err.message || "Something went wrong!");
+          },
+});
+    const [updateRole,{ loading: updating }] = useMutation(UPDATE_ROLE, {
+        refetchQueries: [ { query: GETROLES} ], 
+        awaitRefetchQueries: true, 
+        onCompleted: () => {
+            messageApi.success("Stats changed successfully!");
+          },
+          onError: (err) => {
+            messageApi.error(err.message || "Something went wrong!");
+          },
+    });
+
+    if (loading || onDeleteing ||updating) {
+        return (
+        <Flex justify="center" align="center" style={{ height: '200px' }}>
+            <Spin size="large" />
+        </Flex>
+        );
+    }
 
     return (
         <>
@@ -142,6 +262,14 @@ const RolePermissionTable = () => {
                 title='Are you sure?'
                 subtitle='This action cannot be undone. Are you sure you want to delete this Role?'
                 type='danger'
+                onConfirm={() => {
+                    if (selectedRoleId) {
+                      deleteRole({
+                        variables:  { deleteRoleId: selectedRoleId } ,
+                      });
+                      setDeleteItem(false);
+                    }
+                }}
             />
         </>
     );

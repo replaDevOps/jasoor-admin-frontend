@@ -1,7 +1,7 @@
 import { Button, Divider, Flex, Modal, Typography } from 'antd'
 
 const { Title, Text } = Typography
-const DeleteModal = ({visible,onClose,title,subtitle,type}) => {
+const DeleteModal = ({visible,onClose,title,subtitle,type,onConfirm}) => {
   return (
     <Modal
         title={null}
@@ -11,10 +11,10 @@ const DeleteModal = ({visible,onClose,title,subtitle,type}) => {
         centered
         footer={
             <Flex justify='center' gap={5}>
-                <Button type='button' onClick={onClose} className='btncancel text-black border-gray'>
+                <Button type='button' onClick={onClose} className='btncancel text-black border-gray' >
                     Cancel
                 </Button>
-                <Button className={`btnsave border0 text-white ${type==='danger'? 'bg-red':'bg-brand'}`}>
+                <Button className={`btnsave border0 text-white ${type==='danger'? 'bg-red':'bg-brand'}`} onClick={onConfirm} >
                     Confirm
                 </Button>
             </Flex>

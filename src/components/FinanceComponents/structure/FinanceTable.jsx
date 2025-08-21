@@ -62,7 +62,6 @@ const FinanceTable = () => {
                                     className='datepicker-cs'
                                     value={dateRange}
                                     onChange={(dates) => {
-                                        console.log(dates)
                                         if(!dates?.length)
                                             setDateRange(null)
                                         else

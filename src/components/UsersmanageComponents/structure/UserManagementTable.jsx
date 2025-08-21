@@ -1,17 +1,114 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Input} from 'antd';
-import { SearchInput } from '../../Forms';
-import { usermanageColumn, usermanageData } from '../../../data';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Input,Typography,Space} from 'antd';
+import { NavLink } from "react-router-dom";
 import { useState } from 'react';
-import { DownOutlined } from '@ant-design/icons';
 import { districtItems, statusItems, typeItems } from '../../../shared';
 import { CustomPagination } from '../../Ui';
+import { UPDATE_USER } from '../../../graphql/mutation'
+
 import { USERS } from '../../../graphql/query/user';
-import { useQuery } from '@apollo/client'
+import { useQuery,useMutation } from '@apollo/client'
 import { message,Spin } from "antd";
 
+const { Text } = Typography
 
 const UserManagementTable = () => {
     const [form] = Form.useForm();
+    const [messageApi, contextHolder] = message.useMessage();
+    const usermanageColumn = ( ) =>  [
+        {
+            title: 'Full Name',
+            dataIndex: 'fullname',
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+        },
+        {
+            title: 'District',
+            dataIndex: 'district',
+        },
+        {
+            title: 'City',
+            dataIndex: 'city',
+        },
+        {
+            title: 'Mobile Number',
+            dataIndex: 'mobileno',
+        },
+        {
+            title: 'Type',
+            dataIndex: 'type',
+             render: (type) => {
+                return (
+                    type === 'New' ? (
+                        <Text className='btnpill fs-12 branded'>New</Text>
+                    ) : (
+                        <Text className='btnpill fs-12 pending'>Old</Text>
+                    ) 
+                )
+            }
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            render: (status) => {
+                return (
+                    status === 1 ? (
+                        <Space align='center'>
+                            <Text className='btnpill fs-12 success'>Active</Text>
+                        </Space>
+                    ) : (
+                        <Text className='btnpill fs-12 inactive'>Inactive</Text>
+                    )
+                )
+            }
+        },
+        {
+            title: 'Action',
+            key: "action",
+            fixed: "right",
+            width: 100,
+            render: (_, row) => {
+                const handleSetInactive = async () => {
+                    try {
+                        await updateUser({
+                            variables: {
+                                input: {
+                                    id: row.key, 
+                                    isActive: row.status === 1, // send null as requested
+                                }
+                            }
+                        });
+                        messageApi.success("User status updated successfully!");
+                    } catch (err) {
+                        messageApi.error(err.message || "Something went wrong!");
+                    }
+                };
+        
+                return (
+                    <Dropdown
+                        menu={{
+                            items: [
+                                { 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); handleSetInactive(); }}>Inactive</NavLink>, 
+                                    key: '1' 
+                                },
+                                { 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); /* handle view passport */ }}>View Passport & National ID</NavLink>, 
+                                    key: '2' 
+                                },
+                            ],
+                        }}
+                        trigger={['click']}
+                    >
+                        <Button className="bg-transparent border0 p-0">
+                            <img src="/assets/icons/dots.png" alt="" width={16} />
+                        </Button>
+                    </Dropdown>
+                );
+            }
+        },
+    ];
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
@@ -125,7 +222,7 @@ const UserManagementTable = () => {
     };
 
     const users = data?.getUsers?.users?.map((user, index) => ({
-        key: index + 1,
+        key: user.id,
         fullname: user.name,
         email: user.email,
         district: user.district,
@@ -136,7 +233,21 @@ const UserManagementTable = () => {
     })) || [];
     const total = data?.getUsers?.totalCount; // Or return total count from backend if available
 
+    const [updateUser,{ loading: updating }] = useMutation(UPDATE_USER, {
+        refetchQueries: [  { query: USERS } ],
+        awaitRefetchQueries: true,
+    });
+    if (loading || updating) {
+        return (
+          <Flex justify="center" align="center" style={{ height: '200px' }}>
+            <Spin size="large" />
+          </Flex>
+        );
+    }
+
     return (
+        <>
+        {contextHolder}
         <Card className='radius-12 border-gray'>
             <Flex vertical gap={20}>
                 <Form form={form} layout="vertical">
@@ -191,6 +302,7 @@ const UserManagementTable = () => {
                 />
             </Flex>
         </Card>
+        </>
     );
 };
 
