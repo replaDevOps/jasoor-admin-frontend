@@ -23,7 +23,6 @@ const AddArticle = () => {
     }
 
     useEffect(() => {
-        console.log(detail)
         if (detail) {
         form.setFieldsValue({
             articletitle: detail?.title,

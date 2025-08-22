@@ -6,8 +6,9 @@ import { DownOutlined } from '@ant-design/icons';
 import { businessdealItems } from '../../../shared';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination } from '../../Ui';
-
-
+import { GETDEALS } from '../../../graphql/query/meeting'
+import { useQuery } from '@apollo/client'
+import { message,Spin } from "antd";
 
 const InprogressDealTable = () => {
     const [form] = Form.useForm();
@@ -15,8 +16,28 @@ const InprogressDealTable = () => {
     const navigate = useNavigate()
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
+    const [searchValue, setSearchValue] = useState('');
 
-    const total = inprogressdealData.length;
+    const { data, loading, refetch } = useQuery(GETDEALS, {
+        variables: {
+            search: searchValue,
+            status: selectedStatus !== 'Status' ? selectedStatus : null,
+            isCompleted: false
+        },
+        fetchPolicy: 'network-only'
+    });
+
+    const inprogressdealData = (data?.getDeals?.deals || []).map((item, index) => ({
+        key:item?.id,
+        businessTitle:item?.business?.businessTitle || '-',
+        buyerName: item?.buyer?.name || '-',
+        sellerName: item?.business?.seller?.name || '-',
+        finalizedOffer: item?.offer?.price ? `SAR ${item?.offer?.price?.toLocaleString()}` : '-',
+        status: item?.status || 0,
+        date:item?.createdAt ? new Date(item?.createdAt).toLocaleDateString() : '-',
+    }));
+
+    const total = data?.getDeals?.totalCount || 0;
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
@@ -26,7 +47,39 @@ const InprogressDealTable = () => {
         const selectedItem = businessdealItems.find(item => item.key === key);
         if (selectedItem) {
             setSelectedStatus(selectedItem.label);
+            if( selectedItem.label === 'Document & Payment Confirmation' ){
+                refetch({ status: 'DOCUMENT_PAYMENT_CONFIRMATION', isCompleted: false });
+            }
+            else if (selectedItem.label === 'Commission Verification Pending' ){
+                refetch({ status: 'COMMISSION_VERIFICATION_PENDING', isCompleted: false });
+            }
+            else if (selectedItem.label === 'Seller Payment Verification Pending' ){
+                refetch({ status: 'SELLER_PAYMENT_VERIFICATION_PENDING', isCompleted: false });
+            }
+            else if (selectedItem.label === 'Closed Deal Verification Pending' ){
+                refetch({ status: 'PAYMENT_APPROVAL_FROM_SELLER_PENDING', isCompleted: false });
+            }
+            else if (selectedItem.label === 'Payment Approval From Seller Pending' ){
+                refetch({ status: 'BANK_DETAILS_FROM_SELLER_PENDING', isCompleted: false });
+            }
+            else if (selectedItem.label === 'Bank Details  From Seller Pending' ){
+                refetch({ status: 'COMMISSION_TRANSFER_FROM_BUYER_PENDING', isCompleted: false });
+            }
+            else if (selectedItem.label === 'DSA From Seller Pendin' ){
+                refetch({ status: 'DSA_FROM_SELLER_PENDING', isCompleted: false });
+            }
+            else if (selectedItem.label === 'DSA From Buyer Pending' ){
+                refetch({ status: 'DSA_FROM_BUYER_PENDING', isCompleted: false });
+            }
+            else if (selectedItem.label === 'All') {
+                refetch({ status: null });
+            }
         }
+    };
+
+    const handleSearch = (value) => {
+        setSearchValue(value);
+        refetch({ status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null, search: value });
     };
 
     return (
@@ -41,6 +94,7 @@ const InprogressDealTable = () => {
                                     placeholder='Search'
                                     prefix={<img src='/assets/icons/search.png' width={14} />}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
+                                    onChange={(e) => handleSearch(e.target.value)}
                                 />
                                 <Dropdown 
                                     menu={{ 
@@ -71,7 +125,7 @@ const InprogressDealTable = () => {
                     onRow={(record) => ({
                         onClick: () => navigate('/businessdeal/details/'+record?.key)
                     })}
-                    pagination={false}
+                    pagination={true}
                     // loading={
                     //     {
                     //         ...TableLoader,

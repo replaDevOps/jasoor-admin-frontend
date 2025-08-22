@@ -22,7 +22,6 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, lab
         // upload all files in parallel
         await Promise.all(files.map(file => onUpload(file)));
       } else {
-console.log("files",files)
         await onUpload(files);
       }
       // You can show success message or update UI here if needed

@@ -1,8 +1,14 @@
 import { Card, Col, Flex, Image, Row, Typography } from 'antd'
-import { documentsData } from '../../../data'
+import { useQuery } from '@apollo/client';
+import {GET_BUSINESSES_DOCUMENT_ID} from '../../../graphql/query'
 
 const { Title, Text } = Typography
-const DocumentTab = () => {
+const DocumentTab = ({businessId}) => {
+    const { loading, error, data:business } = useQuery(GET_BUSINESSES_DOCUMENT_ID, {
+        variables: { getBusinessByIdId: businessId },
+    });
+
+    const data = business?.getBusinessById?.documents;
     return (
         <Card className='radius-12 border-gray'>
             <Row gutter={[24,24]}>
@@ -12,7 +18,7 @@ const DocumentTab = () => {
                     </Title>
                 </Col>
                 {
-                    documentsData?.map((items,i)=>
+                    data?.map((items,i)=>
                         <Col lg={{span:12}} md={{span:24}} sm={{span:24}} xs={{span:24}} key={i}>
                             <Card className='card-cs border-gray rounded-12 mb-2'  >
                                 <Flex justify='space-between' align='center'>

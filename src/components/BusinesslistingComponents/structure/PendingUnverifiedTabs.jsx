@@ -5,21 +5,22 @@ import { DocumentTab } from './DocumentTab'
 import { OfferTable } from './OfferTable'
 
 const PendingUnverifiedTabs = ({ status }) => {
+    const businessId = status?.id
     const baseTabs = [
         {
             key: '1',
             label: 'Business Stats',
-            children: <BusinessStatsTab />,
+            children: <BusinessStatsTab status={status} />,
         },
         {
             key: '2',
             label: 'Assets',
-            children: <AssetsTab />,
+            children: <AssetsTab businessId={businessId} />,
         },
         {
             key: '3',
             label: 'Documents',
-            children: <DocumentTab />,
+            children: <DocumentTab businessId={businessId} />,
         }
     ]
     

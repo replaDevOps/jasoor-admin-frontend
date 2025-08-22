@@ -1,92 +1,104 @@
 import { gql } from "@apollo/client";
 
-const SENTMEETINGS = gql`
-query GetMySentMeetingRequests($search: String) {
-  getMySentMeetingRequests(search: $search) {
-    id
-    createdAt
-    requestedBy {
-      name
-    }
-    business {
-      businessTitle
-      price
-    }
-    offer {
+const GETMEETINGSCOUNT = gql`
+query GetAdminMeetingCounts {
+  getAdminMeetingCounts {
+    todayMeetings
+    totalPendingMeetings
+    totalScheduleMeetings
+  }
+}
+`
+const GETADMINPENDINGMEETINGS = gql`
+query GetAdminPendingMeetings($search: String, $status: MeetingFilterType) {
+  getAdminPendingMeetings(search: $search, status: $status) {
+    totalCount
+    items {
       id
-      price
+      business {
+        businessTitle
+        price
+        seller {
+          name
+          email
+          phone
+        }
+      }
+      requestedBy {
+        name
+        email
+        phone
+      }
+      requestedDate
+      offer {
+        price
+      }
+      status
     }
   }
 }
 `
-const RECEIVEDMEETINGS = gql`
-query GetReceivedMeetingRequests($search: String) {
-  getReceivedMeetingRequests(search: $search) {
-    id
-    createdAt
-    requestedBy {
-      name
-    }
-    business {
+const GETADMINSCHEDULEMEETINGS = gql`
+query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType) {
+  getAdminScheduledMeetings(search: $search, status: $status) {
+    totalCount
+    items {
       id
-      businessTitle
-      price
-    }
-    offer {
-      id
-      price
+      meetingLink
+      business {
+        businessTitle
+        price
+        
+        seller {
+          name
+          email
+          phone
+        }
+      }
+      requestedBy {
+        id
+        name
+        email
+        phone
+      }
+      requestedDate
+      offer {
+        id
+        price
+      }
+      status
     }
   }
 }
 `
-
-
-const READYSCHEDULEDMEETINGS = gql`
-query GetMeetingsReadyForScheduling($search: String) {
-  getMeetingsReadyForScheduling(search: $search) {
+const GETDEALS = gql`
+query GetDeals($limit: Int, $offset: Int, $search: String, $status: String, $isCompleted: Boolean) {
+  getDeals(limit: $limit, offset: $offset, search: $search, status: $status, isCompleted: $isCompleted) {
+    totalCount
+    deals {
     id
-    createdAt
-    requestedDate
-    ownerAvailabilityDate
-    requestedBy {
+      business {
+      businessTitle
+      seller {
+        name
+      }
+    }
+    buyer {
       name
     }
-    business {
-      businessTitle
-      price
-    }
-    offer {
-      id
-      price
-    }
-  }
-}
-`
-const SCHEDULEDMEETINGS = gql`
-query GetScheduledMeetings($search: String) {
-  getScheduledMeetings(search: $search) {
-    id
     createdAt
-    requestedDate
-    ownerAvailabilityDate
-    requestedBy {
-      name
-    }
-    business {
-      businessTitle
-      price
-    }
+    status
     offer {
-      id
       price
+    }
     }
   }
 }
 `
 
 export {
-    SENTMEETINGS,
-    RECEIVEDMEETINGS,
-    READYSCHEDULEDMEETINGS,
-    SCHEDULEDMEETINGS
+  GETMEETINGSCOUNT,
+  GETADMINSCHEDULEMEETINGS,
+  GETADMINPENDINGMEETINGS,
+  GETDEALS
 }

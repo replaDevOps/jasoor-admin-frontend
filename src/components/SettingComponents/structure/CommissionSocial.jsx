@@ -1,17 +1,58 @@
 import { Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { MyInput, MySelect } from '../../Forms'
 import { langItems } from '../../../shared';
+import React, { useEffect } from 'react'
+import { UPDATE_SETTING } from '../../../graphql/mutation/'
+import { GET_SETTINGS } from '../../../graphql/query'
+import { useMutation } from '@apollo/client'
+import { message,Spin } from "antd";
 
 const { Title } = Typography
-const CommissionSocial = () => {
-
+const CommissionSocial = ({comssionSocial}) => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
-
+    useEffect(() => {
+        if (comssionSocial) {
+            form.setFieldsValue({
+                rate: comssionSocial.commissionRate,
+                facebook: comssionSocial.facebook,
+                instagram: comssionSocial.instagram,
+                whatsapp: comssionSocial.whatsapp,
+                twitter: comssionSocial.twitter,
+                email: comssionSocial.email,
+            });
+        }
+    }, [comssionSocial, form]);
+    const [changeSetting, { loading }] = useMutation(UPDATE_SETTING, {
+        refetchQueries: [{ query: GET_SETTINGS }], 
+        awaitRefetchQueries: true,
+        onCompleted: () => {
+            messageApi.success('Data updated successfully!');
+        },
+        onError: (err) => {
+            messageApi.error(err || 'Failed to change password.');
+        }
+    });
+    const onFinish = (values) => {
+        changeSetting({
+            variables: {
+                updateSettingsId: comssionSocial?.id,
+                commissionRate: values.rate,
+                facebook: values.facebook,
+                instagram: values.instagram,
+                whatsApp: values.whatsapp,
+                twitter: values.twitter,
+                email: values.email,
+            }
+        });
+    };
     return (
+        <>
+        {contextHolder}
         <Card className='radius-12 border-gray'
             actions={[
                 <Flex justify='end' className='px-3'>
-                    <Button type='button' className='btncancel text-black border-gray'>
+                    <Button type='button' className='btncancel text-black border-gray'  onClick={() => form.submit()} >
                         Save Changes
                     </Button>
                 </Flex>
@@ -21,7 +62,7 @@ const CommissionSocial = () => {
             <Form
                 layout='vertical'
                 form={form}
-                // onFinish={onFinish} 
+                onFinish={onFinish} 
                 requiredMark={false}
             >
                 <Title level={5} className='mt-0 mb-3 fw-600'>
@@ -97,6 +138,7 @@ const CommissionSocial = () => {
                 </Row>
             </Form>
         </Card>
+        </>
     )
 }
 

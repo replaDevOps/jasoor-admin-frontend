@@ -219,7 +219,7 @@ const categoryColumn = ( setDeleteItem, navigate ) =>  [
     },
     {
         title: 'Category Name',
-        dataIndex: 'name',
+        dataIndex: 'categoryname',
     },
     {
         title: 'Business Type',
@@ -230,11 +230,11 @@ const categoryColumn = ( setDeleteItem, navigate ) =>  [
         dataIndex: 'status',
         render: (status) => {
             return (
-                status === 0 ? (
+                status === 'UNDER_REVIEW' ? (
                     <Text className='btnpill fs-12 pending'>Pending</Text>
-                ) : status === 1 ? (
+                ) : status === 'INACTIVE' ? (
                     <Text className='btnpill fs-12 inactive'>Inactive</Text>
-                ) : status === 2 ? (
+                ) : status === 'ACTIVE' ? (
                     <Text className='btnpill fs-12 success'>Completed</Text>
                 ) : null
             );
@@ -456,10 +456,6 @@ const meetingreqColumn = ( setVisible, setDeleteItem ) =>  [
         dataIndex: 'phoneNumber',
     },
     {
-        title: 'Preferred Date & Time',
-        dataIndex: 'preferredDateTime',
-    },
-    {
         title: 'Seller Name',
         dataIndex: 'sellerName',
     },
@@ -473,7 +469,7 @@ const meetingreqColumn = ( setVisible, setDeleteItem ) =>  [
     },
     {
         title: 'Preferred Date & Time',
-        dataIndex: 'sellerPreferredDateTime',
+        dataIndex: 'scheduleDateTime',
     },
     {
         title: 'Business Price',
@@ -488,7 +484,7 @@ const meetingreqColumn = ( setVisible, setDeleteItem ) =>  [
         dataIndex: 'status',
         render: (status) => {
             return (
-                status === 1 ? (
+                status === 'REQUESTED' ? (
                     <Text className='btnpill fs-12 pending'>Pending</Text>
                 ) : (
                     <Text className='btnpill fs-12 inactive'>Cancel Meeting</Text>
@@ -610,34 +606,34 @@ const inprogressdealColumn = [
         dataIndex: 'status',
         render: (status) => {
             return (
-                status === 0 ? (
+                status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? (
                     <Text className='btnpill fs-12 branded'>Document & Payment Confirmation</Text>
                 ) : 
-                status === 1 ? (
+                status === 'COMMISSION_VERIFICATION_PENDING' ? (
                     <Text className='btnpill fs-12 pending'>Commission Verification Pending</Text>
                 )
                 :
-                status === 2 ? (
+                status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? (
                     <Text className='btnpill fs-12 sellerpendingstatus'>Seller Payment Verification Pending</Text>
                 )
                 :
-                status === 3 ? (
+                status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? (
                     <Text className='btnpill fs-12 paymentapprovalpending'>Payment Approval From Seller Pending</Text>
                 )
                 :
-                status === 4 ? (
+                status === 'BANK_DETAILS_FROM_SELLER_PENDING' ? (
                     <Text className='btnpill fs-12 bankdetailpending'>Bank Details  From Seller Pending</Text>
                 )
                 :
-                status === 5 ? (
+                status === 'COMMISSION_TRANSFER_FROM_BUYER_PENDING' ? (
                     <Text className='btnpill fs-12 commissiontransferbuyer'>Commission Transfer From Buyer Pending</Text>
                 )
                 :
-                status === 6 ? (
+                status === 'DSA_FROM_SELLER_PENDING' ? (
                     <Text className='btnpill fs-12 dsasellerpending'>DSA From Seller Pending</Text>
                 )
                 :
-                status === 7 ? (
+                status === 'DSA_FROM_BUYER_PENDING' ? (
                     <Text className='btnpill fs-12 dsabuyerpending'>DSA From Buyer Pending</Text>
                 )
                 :
@@ -676,49 +672,80 @@ const completedealColumn = [
     },
 ]
 
-const rolepermissionColumn = ( setDeleteItem, navigate ) =>  [
+const rolepermissionColumn = (setDeleteItem, navigate) => [
     {
-        title: 'Role Name',
-        dataIndex: 'rolename',
+      title: "Role Name",
+      dataIndex: "rolename",
     },
     {
-        title: 'Status',
-        dataIndex: 'status',
-        render: (status) => {
-            return (
-                status === 0 ? (
-                    <Text className='btnpill fs-12 pending'>Pending</Text>
-                ) : status === 1 ? (
-                    <Text className='btnpill fs-12 inactive'>Inactive</Text>
-                ) : status === 2 ? (
-                    <Text className='btnpill fs-12 success'>Completed</Text>
-                ) : null
-            );
-        }
+      title: "Status",
+      dataIndex: "isActive",
+      render: (isActive) => {
+        return 1 ? (
+          <Text className="btnpill fs-12 success">Active</Text>
+        ) : (
+          <Text className="btnpill fs-12 inactive">Inactive</Text>
+        );
+      },
     },
     {
-        title: 'Action',
-        key: "action",
-        fixed: "right",
-        width: 100,
-        render: (_,row) => (
-            <Dropdown
-                menu={{
-                    items: [
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); navigate('/addrolepermission/'+row?.key);}}>Edit</NavLink>, key: '1' },
-                        { label: <NavLink onClick={() => { setDeleteItem(true) }}>Delete</NavLink>, key: '2' },
-                        { label: <NavLink onClick={(e) => { e.preventDefault(); }}>Inactive</NavLink>, key: '3' },
-                    ],
-                }}
-                trigger={['click']}
-            >
-                <Button className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} />
-                </Button>
-            </Dropdown>
-        ),
+      title: "Action",
+      key: "action",
+      fixed: "right",
+      width: 100,
+      render: (_, row) => (
+        <Dropdown
+          menu={{
+            items: [
+              {
+                label: (
+                  <NavLink
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate("/addrolepermission/" + row.id);
+                    }}
+                  >
+                    Edit
+                  </NavLink>
+                ),
+                key: "1",
+              },
+              {
+                label: (
+                  <NavLink
+                    onClick={() => {
+                      setDeleteItem(true);
+                    }}
+                  >
+                    Delete
+                  </NavLink>
+                ),
+                key: "2",
+              },
+              {
+                label: (
+                  <NavLink
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                  >
+                    {row.isActive ? "Deactivate" : "Activate"}
+                  </NavLink>
+                ),
+                key: "3",
+              },
+            ],
+          }}
+          trigger={["click"]}
+        >
+          <Button className="bg-transparent border0 p-0">
+            <img src="/assets/icons/dots.png" alt="" width={16} />
+          </Button>
+        </Dropdown>
+      ),
     },
-];
+  ];
+  
 
 const staffmemberColumn = (setVisible,setDeleteItem,setEditItem) =>  [
     {
@@ -969,10 +996,6 @@ const faqsColumn = ( setVisible, setEditItem, setDeleteItem ) =>  [
 ];
 
 const financeColumn =  [
-    {
-        title: 'Reference No',
-        dataIndex: 'refNo',
-    },
     {
         title: 'Business Title',
         dataIndex: 'businessTitle',

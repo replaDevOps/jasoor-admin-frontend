@@ -1,7 +1,6 @@
 export const financeData = [
     {
         key: 1,
-        refNo: 'REF-2657998',
         businessTitle: 'Al Madinah Coffee Shop',
         sellerName: 'Zaid Rahman',
         buyerName: 'Musa Ali',
@@ -11,7 +10,6 @@ export const financeData = [
     },
     {
         key: 2,
-        refNo:'REF-2878983',
         businessTitle: 'Al Madinah Coffee Shop',
         sellerName: 'Zaid Rahman',
         buyerName: 'Musa Ali',
@@ -21,7 +19,6 @@ export const financeData = [
     },
     {
         key: 3,
-        refNo:'REF-3996438',
         businessTitle: 'Al Madinah Coffee Shop',
         sellerName: 'Zaid Rahman',
         buyerName: 'Musa Ali',

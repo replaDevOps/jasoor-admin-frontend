@@ -1,16 +1,54 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
-import { buyerdealsData, inprogressdealData } from '../../../data'
 import { useNavigate, useParams } from 'react-router-dom'
 import { SingleInprogressSteps } from './SingleInprogressSteps'
+import { UPDATE_DEAL } from '../../../graphql/mutation/mutations';
+import {GETDEAL} from '../../../graphql/query'
+import { useMutation,useQuery } from '@apollo/client';
+import { message,Spin } from "antd";
 
 const { Title, Text } = Typography
 const BusinessDealsDetails = () => {
-
+    const [messageApi, contextHolder] = message.useMessage();
     const {id} = useParams();
     const navigate = useNavigate()
-    const details = inprogressdealData?.find((item) => item.key == id);
- 
+    // const details = inprogressdealData?.find((item) => item.key == id);
+    const { loading, error, data } = useQuery(GETDEAL, {
+        variables: { getDealId: id },
+        skip: !id, // skip if no id
+    });
+    const details = data?.getDeal
+    ? {
+        key: data.getDeal.id, // use actual id from API
+        businessTitle: data.getDeal.business?.businessTitle || '-',
+        buyerName: data.getDeal.buyer?.name || '-',
+        sellerName: data.getDeal.business?.seller?.name || '-',
+        finalizedOffer: data.getDeal.offer?.price ? `SAR ${data.getDeal.offer.price.toLocaleString()}` : '-',
+        status: data.getDeal.status || 0,
+        date: data.getDeal.createdAt ? new Date(data.getDeal.createdAt).toLocaleDateString() : '-',
+        busines: data.getDeal.business || '-',
+        banks: data.getDeal.buyer?.banks || '-',
+    }
+    : null;
+    const buyerdealsData = [
+        {
+            title:'Seller Name',
+            desc:details?.sellerName
+        },
+        {
+            title:'Buyer Name',
+            desc:details?.buyerName
+        },
+        {
+            title:'Finalized Offer',
+            desc:details?.finalizedOffer
+        },
+        {
+            title:'Status',
+            desc:details?.status
+        },
+    ]
+    
     return (
         <Flex vertical gap={20}>
             <Flex vertical gap={25}>
@@ -62,7 +100,7 @@ const BusinessDealsDetails = () => {
                             }
                         </Row>
                     </div>
-                    <SingleInprogressSteps />
+                    <SingleInprogressSteps details={details} />
                 </Flex>
             </Card>
         </Flex>

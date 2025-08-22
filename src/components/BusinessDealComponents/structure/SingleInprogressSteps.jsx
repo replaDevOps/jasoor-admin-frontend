@@ -10,7 +10,7 @@ import { BusinessAmountReceiptBuyer } from './BusinessAmountReceiptBuyer';
 
 const { Title, Text } = Typography;
 
-const SingleInprogressSteps = ({ completedeal }) => {
+const SingleInprogressSteps = ({ details }) => {
     const [form] = Form.useForm();
     const [activeStep, setActiveStep] = useState(completedeal ? 5 : 0);
     const [openPanels, setOpenPanels] = useState(completedeal ? ['1', '2', '3', '4','5','6'] : ['1']);
@@ -27,7 +27,7 @@ const SingleInprogressSteps = ({ completedeal }) => {
         {
             key: '2',
             label: 'Digital Sale Agreement',
-            content: <DigitalSaleAgreement form={form} completedeal={completedeal} />,
+            content: <DigitalSaleAgreement form={form} details={details} />,
             status: 'Pending',
             emptytitle: 'DSA Pending!',
             emptydesc: 'Waiting for the seller & buyer to sign the digital sale agreement.',
@@ -35,7 +35,7 @@ const SingleInprogressSteps = ({ completedeal }) => {
         {
             key: '3',
             label: 'Bank Account Details',
-            content: <BankAccountDetails />,
+            content: <BankAccountDetails details={details} />,
             status: 'Signed',
             emptytitle: 'Bank Details Pending!',
             emptydesc: 'Waiting for the seller to choose the bank account.',

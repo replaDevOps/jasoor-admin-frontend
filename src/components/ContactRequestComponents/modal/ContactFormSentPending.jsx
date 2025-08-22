@@ -2,15 +2,29 @@ import { Button, Col, Divider, Flex, Form, Modal, Row, Typography } from 'antd'
 import { MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
 import { useEffect } from 'react'
+import { UPDATE_CONTACT_US } from '../../../graphql/mutation';
+import { useQuery,useMutation } from '@apollo/client';
+import { message,Spin } from "antd";
 
 const { Title } = Typography
-const ContactFormSentPending = ({visible,onClose,sendview,viewitem}) => {
-
+const ContactFormSentPending = ({visible,onClose,sendview,viewitem,refetchTable}) => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm()
+    const [updateContactUs, { loading: updating }] = useMutation(UPDATE_CONTACT_US, {
+        onCompleted: () => {
+            messageApi.success('Response sent successfully!');
+          if(refetchTable) refetchTable(); // call the function safely
+            onClose();
+        },
+        onError: (err) => {
+            messageApi.error(err.message || 'Something went wrong!');
+        }
+      });
     
     useEffect(()=>{
         if(visible && viewitem){
             form.setFieldsValue({
+                id:viewitem.key,
                 fullName: viewitem?.name,
                 email: viewitem?.email,
                 question: viewitem?.msgPreview,
@@ -18,7 +32,20 @@ const ContactFormSentPending = ({visible,onClose,sendview,viewitem}) => {
             })
         }
     },[visible,viewitem])
+
+    const onFinish = (values) => {
+        if (!viewitem) return;
+        updateContactUs({
+          variables: {
+            updateContactUsId: viewitem.key, // or viewitem.id if available
+            status: true,
+            answer: values.answer
+          }
+        });
+      };
     return (
+        <>
+        {contextHolder}
         <Modal
             title={null}
             open={visible}
@@ -53,6 +80,7 @@ const ContactFormSentPending = ({visible,onClose,sendview,viewitem}) => {
                     layout='vertical'
                     form={form}
                     requiredMark={false}
+                    onFinish={onFinish}
                 >
                     <Row>
                         <Col span={24}>
@@ -98,6 +126,7 @@ const ContactFormSentPending = ({visible,onClose,sendview,viewitem}) => {
             </div>
             <Divider className='my-2 bg-light-brand' />
         </Modal>
+        </>
     )
 }
 

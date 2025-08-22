@@ -1,5 +1,12 @@
 import { gql } from "@apollo/client";
 
+const UPDATE_USER = gql`
+  mutation UpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    id
+  }
+}
+`
 const CREATE_OFFER = gql`
   mutation CreateOffer($input: CreateOfferInput!) {
   createOffer(input: $input) {
@@ -8,9 +15,9 @@ const CREATE_OFFER = gql`
 }
 `
 const UPDATE_OFFER = gql `
-  mutation UpdateOffer($input: UpdateOfferInput) {
-  updateOffer(input: $input) {
-    status
+mutation UpdateOfferStatus($input: UpdateOfferStatusInput!) {
+  updateOfferStatus(input: $input) {
+    id
   }
 }
 `
@@ -20,6 +27,40 @@ const CREATE_BUSINESS = gql `
       id
     }
   } 
+`
+
+const UPDATE_BUSINESS = gql `
+mutation UpdateBusiness($input: UpdateBusinessInput!) {
+  updateBusiness(input: $input) {
+    id
+  }
+}
+`
+const DELETE_BUSINESS = gql `
+mutation DeleteCategory($deleteCategoryId: ID!) {
+  deleteCategory(id: $deleteCategoryId)
+}
+`
+const UPDATE_ASSET = gql `
+mutation UpdateAsset($input: UpdateInput!) {
+  updateAsset(input: $input) {
+    id
+  }
+}
+`
+const UPDATE_INVENTORY = gql `
+mutation UpdateInventory($input: UpdateInput!) {
+  updateInventory(input: $input) {
+    id
+  }
+}
+`
+const UPDATE_LIABILITY = gql `
+mutation UpdateLiability($input: UpdateInput!) {
+  updateLiability(input: $input) {
+    id
+  }
+}
 `
 const CREATE_SAVE_BUSINESS = gql `
   mutation SaveBusiness($saveBusinessId: ID!) {
@@ -41,6 +82,13 @@ const ACCEPT_ENDA = gql `
 const BUSINESS_MEETING = gql `
   mutation RequestMeeting($input: CreateMeetingInput!) {
   requestMeeting(input: $input) {
+    id
+  }
+}
+`
+const UPDATE_BUSINESS_MEETING = gql `
+  mutation UpdateMeeting($input: UpdateMeetingInput!) {
+  updateMeeting(input: $input) {
     id
   }
 }
@@ -78,6 +126,48 @@ mutation CreateCategory($input: CreateCategoryInput!) {
   }
 }
 `
+const UPDATE_CATEGORY =gql`
+mutation UpdateCategory($input: UpdateCategoryInput!) {
+  updateCategory(input: $input) {
+    id
+  }
+}
+`
+const CREATE_CAMPAIGN = gql`
+mutation CreateCampaign($title: String!, $group: CampaignGroup!, $schedule: DateTime!, $description: String, $district: [String]!) {
+  createCampaign(title: $title, group: $group, schedule: $schedule, description: $description, district: $district) {
+    id
+  }
+}
+`
+const UPDATE_CONTACT_US = gql`
+mutation UpdateContactUs($updateContactUsId: ID!, $status: Boolean, $answer: String) {
+  updateContactUs(id: $updateContactUsId, status: $status, answer: $answer) {
+    id
+  }
+}
+`
+const UPDATE_DEAL = gql`
+mutation UpdateDeal($input: UpdateDealInput!) {
+  updateDeal(input: $input) {
+    id
+  }
+}
+`
+const UPLOAD_DOCUMENT = gql`
+mutation UploadDocument($input: UpdateDocumentInput!) {
+  uploadDocument(input: $input) {
+    id
+  }
+}
+`
+const SEND_BANK = gql`
+mutation SendBankToBuyer($sendBankToBuyerId: ID) {
+  sendBankToBuyer(id: $sendBankToBuyerId) {
+    iban
+  }
+}
+`
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -90,5 +180,18 @@ export {
   APPROVE_MEETING,
   UPLOAD_DOC,
   FINALIZE_DEAL,
-  CREATE_CATEGORY
+  CREATE_CATEGORY,
+  CREATE_CAMPAIGN,
+  UPDATE_BUSINESS,
+  UPDATE_ASSET,
+  UPDATE_INVENTORY,
+  UPDATE_LIABILITY,
+  UPDATE_CATEGORY,
+  DELETE_BUSINESS,
+  UPDATE_USER,
+  UPDATE_BUSINESS_MEETING,
+  UPDATE_CONTACT_US,
+  UPDATE_DEAL,
+  UPLOAD_DOCUMENT,
+  SEND_BANK
 }

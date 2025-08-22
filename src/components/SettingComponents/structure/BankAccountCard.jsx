@@ -5,8 +5,7 @@ import { DeleteModal, MaskedAccount } from '../../Ui';
 import { AddNewBankAccount } from '../modal';
 
 const { Title, Text } = Typography
-const BankAccountCard = () => {
-
+const BankAccountCard = ({banks,settingId}) => {
     const [form] = Form.useForm();
     const [value, setValue] = useState(1);
     const [ visible, setVisible ] = useState(false)
@@ -16,22 +15,13 @@ const BankAccountCard = () => {
         setValue(e.target.value);
     };
 
-    const data = [
-        {
-            id: 1,
-            title:'Default',
-            bankname:'Al-saudi Bank',
-            accountno:'DE89370400440532013000',
-            ibanNo: 'PK65REWQ6677646372G63234'
-        },
-        {
-            id: 2,
-            title:'Default',
-            bankname:'Al-saudi Bank',
-            accountno:'DE89370400440532013000',
-            ibanNo: 'PK65REWQ6677646372G63234'
-        },
-    ]
+    const data = banks?.map((b, index) => ({
+        id: b.id,
+        title: index === 0 ? 'Default' : `Account ${index + 1}`,
+        bankname: b.bankName,
+        accountno: b.accountNumber,
+        ibanNo: b.iban
+    })) || [];
 
     return (
         <>
@@ -68,7 +58,7 @@ const BankAccountCard = () => {
                                                         <Image src='/assets/icons/bank-ic.svg' width={20} preview={false} />
                                                         <Flex vertical gap={0}>
                                                             <Text className='fs-14'>{items.bankname}</Text>
-                                                            <MaskedAccount iban={items.accountno} className={'fs-13 text-gray'} />
+                                                            <MaskedAccount iban={items.ibanNo} className={'fs-13 text-gray'} />
                                                         </Flex>
                                                     </Flex>
                                                 </Flex>
@@ -98,6 +88,7 @@ const BankAccountCard = () => {
                 visible={visible}
                 edititem={edititem}
                 onClose={()=>{setVisible(false);setEditItem(null)}}
+                settingId={settingId}
             />
             <DeleteModal 
                 visible={deleteitem}

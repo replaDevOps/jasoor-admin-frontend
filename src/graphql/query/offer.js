@@ -141,19 +141,37 @@ const GETDEAL = gql `
 query GetDeal($getDealId: ID!) {
   getDeal(id: $getDealId) {
     id
+    price
+    status
+    createdAt
     business {
       id
       businessTitle
       seller {
+        id
         name
+      }
+      documents {
+        title
+        filePath
       }
     }
     buyer {
+      id
       name
+      banks {
+        id
+        bankName
+        iban
+        accountTitle
+        isSend
+      }
     }
-    price
-    status
-    createdAt
+    offer {
+      id
+      price
+      status
+    }
   }
 }
 `

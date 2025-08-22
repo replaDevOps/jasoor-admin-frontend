@@ -1,10 +1,25 @@
-import { Button, Col, Divider, Flex, Form, Modal, Row, Typography } from 'antd'
+import { Button, Col, Divider, Flex, Form, Modal, Row, Typography,Dropdown } from 'antd'
 import { MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
-import { useEffect } from 'react'
+import { useEffect,useState } from 'react'
+import { GETROLES,GETSTAFFMEMBERS } from '../../../graphql/query';
+import { CREATE_USER } from '../../../graphql/mutation';
+import { useQuery,useMutation } from '@apollo/client';
 
 const { Title } = Typography
-const AddEditStaffMember = ({visible,onClose,edititem}) => {
+const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
+    const [selectedRole, setSelectedRole] = useState(null);
+    const { loading, data } = useQuery(GETROLES, {
+        variables: {
+            limit: null,
+            offset: null,
+            search: null,
+            isActive: true
+        },
+        fetchPolicy: "network-only",
+        skip: !visible // 👈 Skip until modal is visible
+    });
+    const roles = data?.getRoles || [];
 
     const [form] = Form.useForm()
     useEffect(()=>{
@@ -19,9 +34,45 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
             form.resetFields()
         }
     },[visible,edititem])
-    
 
-
+    const [createUser, { loading: creating }] = useMutation(CREATE_USER, {
+        refetchQueries: [ {
+            query: GETSTAFFMEMBERS 
+          },
+        ],
+        awaitRefetchQueries: true,
+        onCompleted: () => {
+          // maybe show success toast
+          if (typeof refetchStaff === 'function') {
+            refetchStaff();
+          }
+          onClose();
+        },
+        onError: (err) => {
+          console.error(err);
+          // maybe show error toast
+        }
+    });
+    const handleRoleChange = (selectedName) => {
+        // Find the role object by name
+        const role = roles.find(r => r.name === selectedName);
+        const id = role?.id;
+        setSelectedRole(id);
+      };
+      
+    const handleFinish = (values) => {
+        createUser({
+          variables: {
+            input: {
+              name: values.fullName,
+              email: values.email,
+              phone: values.phoneNo || null,
+              password: values.password,
+              roleId: selectedRole // this will now be the role id
+            }
+          }
+        });
+      };
     return (
         <Modal
             title={null}
@@ -54,6 +105,7 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
                     layout='vertical'
                     form={form}
                     requiredMark={false}
+                    onFinish={handleFinish}
                 >
                     <Row>
                         <Col span={24}>
@@ -83,19 +135,13 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
                             />
                         </Col>
                         <Col span={24}>
-                            <MySelect
-                                label='Assign Role'
-                                name='assignRole'
-                                required
-                                message='Please choose a role'
-                                option={[
-                                    {
-                                        id: 1,
-                                        name: 'Manager'
-                                    }
-                                ]}
-                                placeholder='Select a role'
-                            />
+                        <MySelect
+                            label="Assign Role"
+                            name="assignRole"
+                            options={roles.map(role => ({ name: role.name, id: role.id }))}
+                            value={selectedRole}
+                            onChange={handleRoleChange}   // ✅ correct
+                        />
                         </Col>
                         <Col span={24}>
                             <MyInput
