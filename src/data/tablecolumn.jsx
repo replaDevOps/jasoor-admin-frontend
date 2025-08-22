@@ -607,38 +607,26 @@ const inprogressdealColumn = [
         render: (status) => {
             return (
                 status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? (
-                    <Text className='btnpill fs-12 branded'>Document & Payment Confirmation</Text>
+                    <Text className='btnpill fs-12 branded'>Commission Receipt</Text>
                 ) : 
                 status === 'COMMISSION_VERIFICATION_PENDING' ? (
-                    <Text className='btnpill fs-12 pending'>Commission Verification Pending</Text>
+                    <Text className='btnpill fs-12 pending'>Digital Sale Aggrement</Text>
                 )
                 :
                 status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? (
-                    <Text className='btnpill fs-12 sellerpendingstatus'>Seller Payment Verification Pending</Text>
+                    <Text className='btnpill fs-12 sellerpendingstatus'>Bank Account Details</Text>
                 )
                 :
                 status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? (
-                    <Text className='btnpill fs-12 paymentapprovalpending'>Payment Approval From Seller Pending</Text>
+                    <Text className='btnpill fs-12 paybusinessamount'>Pay Business Amount</Text>
                 )
                 :
                 status === 'BANK_DETAILS_FROM_SELLER_PENDING' ? (
-                    <Text className='btnpill fs-12 bankdetailpending'>Bank Details  From Seller Pending</Text>
-                )
-                :
-                status === 'COMMISSION_TRANSFER_FROM_BUYER_PENDING' ? (
-                    <Text className='btnpill fs-12 commissiontransferbuyer'>Commission Transfer From Buyer Pending</Text>
-                )
-                :
-                status === 'DSA_FROM_SELLER_PENDING' ? (
-                    <Text className='btnpill fs-12 dsasellerpending'>DSA From Seller Pending</Text>
-                )
-                :
-                status === 'DSA_FROM_BUYER_PENDING' ? (
-                    <Text className='btnpill fs-12 dsabuyerpending'>DSA From Buyer Pending</Text>
+                    <Text className='btnpill fs-12 paymentapprovalpending'>Payment Confirmation & Document</Text>
                 )
                 :
                 (
-                    <Text className='btnpill fs-12 inactive'>Closed Deal Verification Pending</Text>
+                    <Text className='btnpill fs-12 commissiontransferbuyer'>Finalize Deal</Text>
                 )
             )
         }

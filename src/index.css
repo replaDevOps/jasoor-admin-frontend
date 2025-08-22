@@ -50,6 +50,8 @@
     --bg-violet-light: #EEE1FE;
     --light-brand-2: #BED5FA;
     --subtitle-color: #353945;
+    --vivid-bg: #FFE1EA;
+    --vivid-color: #FF3470;
 }   
 
 .success{
@@ -1028,6 +1030,11 @@
 .dsabuyerpending{
     background-color: var(--light-orange-1) !important;
     color: var(--dark-orange) !important;
+}
+
+.paybusinessamount{
+    background-color: var(--vivid-bg) !important;
+    color: var(--vivid-color) !important;
 }
 
 .fit-content{
