@@ -366,7 +366,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
     },
 ]
 
-const usermanageColumn = ( ) =>  [
+const usermanageColumn = ( setVisible,SetViewState ) =>  [
     {
         title: 'Full Name',
         dataIndex: 'fullname',
@@ -425,7 +425,7 @@ const usermanageColumn = ( ) =>  [
                 menu={{
                     items: [
                         { label: <NavLink onClick={(e) => {e.preventDefault(); }}>Inactive</NavLink>, key: '1' },
-                        { label: <NavLink onClick={() => {e.preventDefault(); }}>View Passport & National ID</NavLink>, key: '2' },
+                        { label: <NavLink onClick={(e) => {e.preventDefault();setVisible(true),SetViewState(row) }}>View Passport & National ID</NavLink>, key: '2' },
                     ],
                 }}
                 trigger={['click']}

@@ -4,7 +4,7 @@ import './index.css';
 import { Layout, Menu, Image, Space, Divider } from 'antd';
 import { Notifications, UserDropdown } from '../../components/Header';
 import { BusinesslIstingPage } from '../BusinesslIstingPage';
-import { AddArticle, AddNewCategory, AddRolePermission, BusinessDealsDetails, SingleviewBusinesslist } from '../../components';
+import { AddArticle, AddNewCategory, AddRolePermission, BusinessDealsDetails, CreateBusinessList, SingleviewBusinesslist } from '../../components';
 import { CategoriesManagement } from '../CategoriesManagement';
 import { UserManagement } from '../UserManagement';
 import { MeetingRequestPage } from '../MeetingRequestPage';
@@ -41,7 +41,7 @@ const Sidebar = () => {
   useEffect(() => {
     let tab = location?.pathname?.split("/")[1];
     tab = tab === '' ? '1' :
-      tab === 'businesslist' || tab === 'businesslisting' ? '2' :
+      tab === 'businesslist' || tab === 'businesslisting' || tab === 'createbusinesslist' ? '2' :
       tab === 'categorymanagement' || tab === 'addnewcategory' || tab === 'addnewcategory/detail' ? '3' : 
       tab === 'usermanagement' ? '4' :
       tab === 'meetingrequest' ? '5' :
@@ -226,6 +226,7 @@ const Sidebar = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/businesslist" element={<BusinesslIstingPage />} />
             <Route path="/businesslisting/details/:id" element={<SingleviewBusinesslist />} />
+            <Route path="/createbusinesslist" element={<CreateBusinessList />} />
             <Route path="/categorymanagement" element={<CategoriesManagement />} />
             <Route path="/addnewcategory" element={<AddNewCategory />} />
             <Route path="/addnewcategory/detail/:id" element={<AddNewCategory />} />

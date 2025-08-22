@@ -5,11 +5,13 @@ import { GET_BUSINESSES } from '../../graphql/query/business'
 import { useQuery } from '@apollo/client'
 import moment from 'moment';
 import React, { useState,useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const BusinesslIstingPage = () => {
     const [page, setPage] = useState(1); // current page
     const [search, setSearch] = useState(""); // search string
     const [status, setStatus] = useState(null); // filter status (e.g., SOLD)
+    const navigate = useNavigate()
     const limit = 10;
     const offSet = (page - 1) * limit;
   
@@ -78,8 +80,8 @@ const BusinesslIstingPage = () => {
                 <Col span={24}>
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='Business Listing' />
-                        <Button type='primary' className='btnsave'> 
-                            <PlusOutlined /> Add Business
+                        <Button type='primary' className='btnsave' onClick={()=>navigate('/createbusinesslist')}> 
+                          <PlusOutlined /> Add Business
                         </Button>
                     </Flex>
                 </Col>
@@ -87,7 +89,7 @@ const BusinesslIstingPage = () => {
                     <BusinesslistCards totalActiveCount={totalActiveCount} totalCount={totalCount} totalPendingCount={totalPendingCount}  />
                 </Col>
                 <Col span={24}>
-                <BusinessListingTable
+                  <BusinessListingTable
                     businesses={data?.getAllBusinesses?.businesses || []}
                     totalCount={totalCount}
                     loading={loading}
@@ -98,7 +100,7 @@ const BusinesslIstingPage = () => {
                     search={search}
                     setSearch={setSearch}
                     setStatus={setStatus}
-                />
+                  />
                 </Col>
             </Row>
         </>

@@ -1,20 +1,28 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Input,Typography,Space} from 'antd';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Input,Typography,Space,message,Spin} from 'antd';
 import { NavLink } from "react-router-dom";
 import { useState } from 'react';
 import { districtItems, statusItems, typeItems } from '../../../shared';
 import { CustomPagination } from '../../Ui';
+import { ViewIdentity } from '../modals';
 import { UPDATE_USER } from '../../../graphql/mutation'
-
 import { USERS } from '../../../graphql/query/user';
 import { useQuery,useMutation } from '@apollo/client'
-import { message,Spin } from "antd";
 
 const { Text } = Typography
 
 const UserManagementTable = () => {
     const [form] = Form.useForm();
+    const [selectedStatus, setSelectedStatus] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedDistrict, setSelectedDistrict] = useState(null);
+    const [selectedCity, setSelectedCity] = useState(null);
+    const [pageSize, setPageSize] = useState(10);
+    const [current, setCurrent] = useState(1);
+    const [searchText, setSearchText] = useState("");
+    const [ visible, setVisible ] = useState(false)
+    const [ viewstate, SetViewState ] = useState(null)
     const [messageApi, contextHolder] = message.useMessage();
-    const usermanageColumn = ( ) =>  [
+    const usermanageColumn = [
         {
             title: 'Full Name',
             dataIndex: 'fullname',
@@ -94,7 +102,7 @@ const UserManagementTable = () => {
                                     key: '1' 
                                 },
                                 { 
-                                    label: <NavLink onClick={(e) => { e.preventDefault(); /* handle view passport */ }}>View Passport & National ID</NavLink>, 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); setVisible(true);SetViewState(row) }}>View Passport & National ID</NavLink>, 
                                     key: '2' 
                                 },
                             ],
@@ -109,13 +117,7 @@ const UserManagementTable = () => {
             }
         },
     ];
-    const [selectedStatus, setSelectedStatus] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedDistrict, setSelectedDistrict] = useState(null);
-    const [selectedCity, setSelectedCity] = useState(null);
-    const [pageSize, setPageSize] = useState(10);
-    const [current, setCurrent] = useState(1);
-    const [searchText, setSearchText] = useState("");
+    
 
     // Prepare filter object for API
     const filter = {
@@ -251,11 +253,9 @@ const UserManagementTable = () => {
         <Card className='radius-12 border-gray'>
             <Flex vertical gap={20}>
                 <Form form={form} layout="vertical">
-                    <Row gutter={[16, 16]} align={'middle'} justify={'space-between'}>
-                        <Col lg={24} md={16} sm={24} xs={24}>
-                        <Row gutter={[16, 16]}>
-                        <Col span={6}>
-                        <Input
+                    <Row gutter={[16, 16]}>
+                            <Col span={6}>
+                                <Input
                                     name='name'
                                     placeholder='Search'
                                     prefix={<img src='/assets/icons/search.png' width={14} />}
@@ -263,9 +263,9 @@ const UserManagementTable = () => {
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                     onChange={(e) => handleSearch(e.target.value.trim())}
                                 />
-                        </Col>
-                        <Col span={14}>
-                        <Dropdown menu={{ items: districtItems, onClick: handleDistrictClick }}>
+                            </Col>
+                            <Col span={14}>
+                                <Dropdown menu={{ items: districtItems, onClick: handleDistrictClick }}>
                                     <Button>{selectedDistrict || "District"}</Button>
                                 </Dropdown>
                                 <Dropdown menu={{ items: districtItems, onClick: handleCityClick }}>
@@ -279,29 +279,37 @@ const UserManagementTable = () => {
                                 </Dropdown>
                             </Col>
                         </Row>
-                            <Flex gap={5} wrap>
-                               
-                               
-                            </Flex>
-                        </Col>
-                    </Row>
-                </Form>
-                <Table
-                    size='large'
-                    columns={usermanageColumn()}
-                    dataSource={users}
-                    className='pagination table-cs table'
-                    loading={loading}
-                    pagination={false}
-                />
-                <CustomPagination
-                    total={total}
-                    current={current}
-                    pageSize={pageSize}
-                    onPageChange={handlePageChange}
-                />
-            </Flex>
-        </Card>
+                    </Form>
+                    <Table
+                        size='large'
+                        columns={usermanageColumn}
+                        dataSource={usermanageData.slice((current - 1) * pageSize, current * pageSize)}
+                        className='pagination table-cs table'
+                        showSorterTooltip={false}
+                        scroll={{ x: 1000 }}
+                        rowHoverable={false}
+                        pagination={false}
+                        // loading={
+                        //     {
+                        //         ...TableLoader,
+                        //         spinning: loading
+                        //     }
+                        // }
+                    />
+                    <CustomPagination 
+                        total={total}
+                        current={current}
+                        pageSize={pageSize}
+                        onPageChange={handlePageChange}
+                    />
+                </Flex>
+            </Card>
+
+            <ViewIdentity 
+                visible={visible}
+                viewstate={viewstate}
+                onClose={()=>{setVisible(false);SetViewState(null)}}
+            />
         </>
     );
 };
