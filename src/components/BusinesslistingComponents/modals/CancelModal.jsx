@@ -8,6 +8,7 @@ const CancelModal = ({visible,onClose}) => {
         open={visible}
         onCancel={onClose}
         closeIcon={false}
+        centered
         footer={
             <Flex justify='center' gap={5}>
                 <Button type='button' className='btncancel text-black border-gray' onClick={onClose}>
@@ -22,7 +23,7 @@ const CancelModal = ({visible,onClose}) => {
 
         <Flex vertical align='center' gap={6}>
             <img src='/assets/icons/cancel-ic.png' width={50} />
-            <Title level={4} className='m-0'>
+            <Title level={4} className='mb-0 mt-2'>
                 Cancel Listing?
             </Title>
             <Text>

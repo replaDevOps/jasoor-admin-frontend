@@ -6,9 +6,8 @@ import { useState } from 'react';
 import { GETDEALS } from '../../../graphql/query/meeting'
 import { useQuery } from '@apollo/client'
 import { useNavigate } from 'react-router-dom';
-import { message,Spin } from "antd";
 
-const CompleteDealsTable = () => {
+const CompleteDealsTable = ({setCompleteDeal}) => {
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState('Status');
     const navigate = useNavigate()
@@ -68,6 +67,12 @@ const CompleteDealsTable = () => {
                     showSorterTooltip={false}
                     scroll={{ x: 1200 }}
                     rowHoverable={false}
+                    onRow={(record) => ({
+                        onClick: () => {
+                            navigate('/businessdeal/details/'+record?.key)
+                            setCompleteDeal(record)
+                        }
+                    })}
                     pagination={false}
                     // loading={
                     //     {

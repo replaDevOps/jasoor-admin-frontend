@@ -8,7 +8,7 @@ import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
 
 const { Title, Text } = Typography
-const BusinessDealsDetails = () => {
+const BusinessDealsDetails = ({completedeal}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const {id} = useParams();
     const navigate = useNavigate()
@@ -90,9 +90,9 @@ const BusinessDealsDetails = () => {
                                             (list?.title === 'Status') ? (
                                                 list.desc === 'In-progress' ?
                                                 <Text className='brand-bg text-white fs-12 sm-pill'>{list?.desc}</Text>:
-                                                <Text className='bg-green fs-12 sm-pill'>{list?.desc}</Text>
+                                                <Text className='bg-green text-white fs-12 sm-pill'>{list?.desc}</Text>
                                             ) : (
-                                                <Text className='fs-15 fw-500'>{list?.desc}</Text>
+                                                <Text className='fs-12 fw-500'>{list?.desc}</Text>
                                             )}
                                         </Flex>
                                     </Col>
@@ -100,7 +100,7 @@ const BusinessDealsDetails = () => {
                             }
                         </Row>
                     </div>
-                    <SingleInprogressSteps details={details} />
+                    <SingleInprogressSteps details={details} completedeal={completedeal} />
                 </Flex>
             </Card>
         </Flex>

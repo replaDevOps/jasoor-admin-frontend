@@ -199,59 +199,57 @@ const CategoryTable = () => {
                     <Row gutter={[16, 16]} justify="left" align="middle">
                         <Col lg={12} md={16} sm={24} xs={24}>
                             <Row gutter={[16, 16]}>
-                            {/* Search Input - double width */}
-                            <Col span={12}>
-                                <Input
-                                name="name"
-                                placeholder="Search"
-                                prefix={<img src="/assets/icons/search.png" width={14} />}
-                                allowClear
-                                className="border-light-gray pad-x ps-0 radius-8 fs-13"
-                                onChange={(e) => handleSearch(e.target.value.trim())}
-                                />
-                            </Col>
+                                {/* Search Input - double width */}
+                                <Col span={12}>
+                                    <Input
+                                    name="name"
+                                    placeholder="Search"
+                                    prefix={<img src="/assets/icons/search.png" width={14} />}
+                                    allowClear
+                                    className="border-light-gray pad-x ps-0 radius-8 fs-13"
+                                    onChange={(e) => handleSearch(e.target.value.trim())}
+                                    />
+                                </Col>
 
-                            {/* Category Filter */}
-                            <Col span={6}>
-                                <Dropdown
-                                menu={{
-                                    items: typeItems.map((item) => ({
-                                    key: String(item.key),
-                                    label: item.label
-                                    })),
-                                    onClick: handleCategoryClick
-                                }}
-                                trigger={['click']}
-                                >
-                                <Button className="btncancel px-3 filter-bg fs-13 text-black" block>
-                                    <Flex justify="space-between" align="center" gap={30}>
-                                    {typeItems.find((i) => i.key === selectedCategory)?.label || "Business Type"}
-                                    <DownOutlined />
+                                {/* Category Filter */}
+                                <Col span={6}>
+                                    <Flex gap={5}>
+                                        <Dropdown
+                                            menu={{
+                                                items: typeItems.map((item) => ({
+                                                key: String(item.key),
+                                                label: item.label
+                                                })),
+                                                onClick: handleCategoryClick
+                                            }}
+                                            trigger={['click']}
+                                            >
+                                            <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                                <Flex justify="space-between" align="center" gap={30}>
+                                                {typeItems.find((i) => i.key === selectedCategory)?.label || "Business Type"}
+                                                <DownOutlined />
+                                                </Flex>
+                                            </Button>
+                                        </Dropdown>
+                                        <Dropdown
+                                            menu={{
+                                                items: statusItems.map((item) => ({
+                                                key: String(item.key),
+                                                label: item.label
+                                                })),
+                                                onClick: handleStatusClick
+                                            }}
+                                            trigger={['click']}
+                                        >
+                                            <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                                <Flex justify="space-between" align="center" gap={30}>
+                                                    {statusItems.find((i) => i.key === selectedStatus)?.label || "Status"}
+                                                    <DownOutlined />
+                                                </Flex>
+                                            </Button>
+                                        </Dropdown>
                                     </Flex>
-                                </Button>
-                                </Dropdown>
-                            </Col>
-
-                            {/* Status Filter */}
-                            <Col span={6}>
-                                <Dropdown
-                                menu={{
-                                    items: statusItems.map((item) => ({
-                                    key: String(item.key),
-                                    label: item.label
-                                    })),
-                                    onClick: handleStatusClick
-                                }}
-                                trigger={['click']}
-                                >
-                                <Button className="btncancel px-3 filter-bg fs-13 text-black" block>
-                                    <Flex justify="space-between" align="center" gap={30}>
-                                    {statusItems.find((i) => i.key === selectedStatus)?.label || "Status"}
-                                    <DownOutlined />
-                                    </Flex>
-                                </Button>
-                                </Dropdown>
-                            </Col>
+                                </Col>
                             </Row>
                         </Col>
                     </Row>

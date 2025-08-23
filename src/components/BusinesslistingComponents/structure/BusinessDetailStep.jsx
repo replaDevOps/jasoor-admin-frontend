@@ -76,9 +76,10 @@ const BusinessDetailStep = ({ data, setData }) => {
           </Flex>
         </Flex>
   
-        <Card className="shadow-d radius-12 border-gray">
+        <Card className="bg-transparent radius-12 border-gray">
           <Form layout="vertical" form={form} 
           // onValuesChange={handleFormChange}
+          requiredMark={false}
           >
             <Row gutter={24}>
               <Col span={24}>
@@ -107,7 +108,17 @@ const BusinessDetailStep = ({ data, setData }) => {
                   </Radio.Group>
                 </Flex>
               </Col>
-  
+      
+              <Col span={24}>
+                <MySelect
+                  label="Username"
+                  name="username"
+                  required
+                  message="Please select user"
+                  placeholder="Select user"
+                />
+              </Col>
+
               <Col xs={24} sm={24} md={12}>
                 <MyInput
                   label="Business Title"

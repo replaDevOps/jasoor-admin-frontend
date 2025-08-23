@@ -7,10 +7,12 @@ import { ViewIdentity } from '../modals';
 import { UPDATE_USER } from '../../../graphql/mutation'
 import { USERS } from '../../../graphql/query/user';
 import { useQuery,useMutation } from '@apollo/client'
+import { usermanageData } from '../../../data';
+import { DownOutlined } from '@ant-design/icons';
 
 const { Text } = Typography
 
-const UserManagementTable = () => {
+const UserManagementTable = ({setVisible,setEditItem}) => {
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -19,7 +21,7 @@ const UserManagementTable = () => {
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
     const [searchText, setSearchText] = useState("");
-    const [ visible, setVisible ] = useState(false)
+    const [ viewmodal, setViewModal ] = useState(false)
     const [ viewstate, SetViewState ] = useState(null)
     const [messageApi, contextHolder] = message.useMessage();
     const usermanageColumn = [
@@ -98,12 +100,20 @@ const UserManagementTable = () => {
                         menu={{
                             items: [
                                 { 
-                                    label: <NavLink onClick={(e) => { e.preventDefault(); handleSetInactive(); }}>Inactive</NavLink>, 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); setVisible(true); setEditItem(row); }}>Edit</NavLink>, 
                                     key: '1' 
                                 },
                                 { 
-                                    label: <NavLink onClick={(e) => { e.preventDefault(); setVisible(true);SetViewState(row) }}>View Passport & National ID</NavLink>, 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); handleSetInactive(); }}>Inactive</NavLink>, 
                                     key: '2' 
+                                },
+                                { 
+                                    label: <NavLink onClick={(e) => { e.preventDefault();  }}>Delete</NavLink>, 
+                                    key: '3' 
+                                },
+                                { 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); setViewModal(true);SetViewState(row) }}>View Passport & National ID</NavLink>, 
+                                    key: '4' 
                                 },
                             ],
                         }}
@@ -265,18 +275,40 @@ const UserManagementTable = () => {
                                 />
                             </Col>
                             <Col span={14}>
-                                <Dropdown menu={{ items: districtItems, onClick: handleDistrictClick }}>
-                                    <Button>{selectedDistrict || "District"}</Button>
-                                </Dropdown>
-                                <Dropdown menu={{ items: districtItems, onClick: handleCityClick }}>
-                                    <Button>{selectedCity || "City"}</Button>
-                                </Dropdown>
-                                <Dropdown menu={{ items: typeItems, onClick: handleCategoryClick }}>
-                                    <Button>{selectedCategory || "Type"}</Button>
-                                </Dropdown>
-                                <Dropdown menu={{ items: statusItems, onClick: handleStatusClick }}>
-                                    <Button>{selectedStatus || "Status"}</Button>
-                                </Dropdown>
+                                <Flex gap={5} wrap>
+                                    <Dropdown menu={{ items: districtItems, onClick: handleDistrictClick }}>
+                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                            <Flex justify="space-between" align="center" gap={30}>
+                                                {selectedDistrict || "District"}
+                                                <DownOutlined />
+                                            </Flex>
+                                        </Button>
+                                    </Dropdown>
+                                    <Dropdown menu={{ items: districtItems, onClick: handleCityClick }}>
+                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                            <Flex justify="space-between" align="center" gap={30}>
+                                                {selectedCity || "City"}
+                                                <DownOutlined />
+                                            </Flex>
+                                        </Button>
+                                    </Dropdown>
+                                    <Dropdown menu={{ items: typeItems, onClick: handleCategoryClick }}>
+                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                            <Flex justify="space-between" align="center" gap={30}>
+                                                {selectedCategory || "Type"}
+                                                <DownOutlined />
+                                            </Flex>
+                                        </Button>
+                                    </Dropdown>
+                                    <Dropdown menu={{ items: statusItems, onClick: handleStatusClick }}>
+                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                            <Flex justify="space-between" align="center" gap={30}>
+                                                {selectedStatus || "Status"}
+                                                <DownOutlined />
+                                            </Flex>
+                                        </Button>
+                                    </Dropdown>
+                                </Flex>
                             </Col>
                         </Row>
                     </Form>
@@ -306,9 +338,9 @@ const UserManagementTable = () => {
             </Card>
 
             <ViewIdentity 
-                visible={visible}
+                visible={viewmodal}
                 viewstate={viewstate}
-                onClose={()=>{setVisible(false);SetViewState(null)}}
+                onClose={()=>{setViewModal(false);SetViewState(null)}}
             />
         </>
     );

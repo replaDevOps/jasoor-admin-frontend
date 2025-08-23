@@ -59,10 +59,10 @@ const BankAccountDetails = ({details}) => {
         <>
         {contextHolder}
         <Flex vertical gap={10}>
-            <Text className="fw-600 fs-14">Bank Account</Text>
+            <Text className="fw-600 text-medium-gray fs-13">Bank Account</Text>
             {buyerBanks.length > 0 ? (
                 buyerBanks.map((bank, index) => (
-                    <Card key={index} className="deals-status w-100 sky-lightest rounded-12">
+                    <div key={index} className="deals-status w-100 sky-lightest rounded-12">
                         <Flex vertical gap={6}>
                             <Text className="fs-15 fw-500 text-gray">
                                 {bank.bankName}
@@ -83,7 +83,7 @@ const BankAccountDetails = ({details}) => {
                                 {bank.isSend ? "Sent to Buyer" : "Send Account to Buyer"}
                             </Button>
                         </Flex>
-                    </Card>
+                    </div>
                 ))
             ) : (
                 <Text className="fs-13 text-gray">No bank accounts available</Text>

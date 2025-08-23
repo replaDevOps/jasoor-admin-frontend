@@ -50,7 +50,7 @@ const BusinessVisionStep = ({ data, setData }) => {
                 requiredMark={false}
                 onValuesChange={handleFormChange}
             >
-                <Card className='shadow-d radius-12 border-gray mb-3'>
+                <Card className='bg-transparent radius-12 border-gray mb-3'>
                     <Row gutter={24}>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
@@ -60,7 +60,7 @@ const BusinessVisionStep = ({ data, setData }) => {
                                 message="Please enter support duration"
                                 placeholder='Enter support duration'
                                 addonAfter={'Month'}
-                                className='w-100'
+                                className='w-100 transparent-addon'
                             />
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>

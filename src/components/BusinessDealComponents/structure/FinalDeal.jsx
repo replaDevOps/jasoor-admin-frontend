@@ -8,10 +8,10 @@ const FinalDeal = ({details}) => {
 
     return (
         <Row gutter={[16, 24]}>
-            <Col span={24}>
+            {/* <Col span={24}>
                 {
                     ['Commercial Registration (CR).png','Notarized Ownership Transfer Letter.png']?.map((items,index)=>
-                        <Card className='card-cs border-gray rounded-12 mb-3' key={index} >
+                        <Card className='card-cs border-gray rounded-12' key={index} >
                             <Flex justify='space-between' align='center'>
                                 <Flex gap={15}>
                                     <Image src={'/assets/icons/file.png'} preview={false} width={20} />
@@ -29,9 +29,9 @@ const FinalDeal = ({details}) => {
                         </Card>
                     )
                 }
-            </Col>
+            </Col> */}
             <Col span={24}>
-                <Flex vertical gap={10}>
+                <Flex vertical gap={15}>
                     <Flex gap={5} className='badge-cs success fs-12 fit-content' align='center'>
                         <CheckCircleOutlined className='fs-14' /> Buyer mark the deal as "Finalized".
                     </Flex>
@@ -39,7 +39,7 @@ const FinalDeal = ({details}) => {
                         <CheckCircleOutlined className='fs-14' /> Waiting for seller to mark the deal as "Finalized".
                     </Flex>
                     <Flex>
-                    <Button
+                        <Button
                             type="primary"
                             className="btnsave bg-brand"
                             disabled={details?.status !== "WAITING"} // ✅ enable only if status = WAITING

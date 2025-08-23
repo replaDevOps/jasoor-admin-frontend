@@ -1,7 +1,7 @@
 import { Row, Col, Tabs, Card } from 'antd'
 import { CompleteDealsTable, InprogressDealTable, ModuleTopHeading } from '../../components'
 
-const BusinessDealsPage = () => {
+const BusinessDealsPage = ({setCompleteDeal}) => {
 
     const tabs = [
         {
@@ -12,7 +12,7 @@ const BusinessDealsPage = () => {
         {
             key: '2',
             label: 'Completed Deals',
-            children: <CompleteDealsTable />,
+            children: <CompleteDealsTable setCompleteDeal={setCompleteDeal} />,
         },
     ]
     return (

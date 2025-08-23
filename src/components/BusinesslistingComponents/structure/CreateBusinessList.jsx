@@ -188,6 +188,7 @@ const CreateBusinessList = ({ addstep }) => {
             //     console.error(err);
             //     messageApi.error('Failed to create business listing');
             // }
+            setReviewModal(true);
     };
 
     return (

@@ -108,7 +108,7 @@ const UploadSupportDocStep = ({ data, setData }) => {
       </Flex>
 
       <Form layout="vertical" form={form} requiredMark={false}>
-        <Card className="shadow-d radius-12 border-gray mb-3">
+        <Card className="bg-transparent radius-12 border-gray mb-3">
           <Flex vertical gap={5} className="w-100">
             <Flex vertical>
               <Title level={5} className="m-0 fw-500">
@@ -131,7 +131,7 @@ const UploadSupportDocStep = ({ data, setData }) => {
           </Flex>
         </Card>
 
-        <Card className="shadow-d radius-12 border-gray mb-3">
+        <Card className="bg-transparent radius-12 border-gray mb-3">
           <Flex vertical gap={5} className="w-100">
             <Flex vertical>
               <Title level={5} className="m-0 fw-500">

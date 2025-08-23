@@ -144,37 +144,36 @@ const FinancialInfoStep = ({ data, setData }) => {
             </Flex>
             <Form layout="vertical" form={form} requiredMark={false} onValuesChange={handleFormChange}
             >
-                <Card className='shadow-d radius-12 border-gray mb-3'>
+                <Card className='bg-transparent radius-12 border-gray mb-3'>
                     <Row gutter={24}>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
                         <Form.Item label="Revenue" className="w-100">
                             <Flex gap={2} className="w-100">
-                            <Form.Item name="revenueTime" noStyle>
-                                <Select
-                                placeholder="Select period"
-                                className="addonselect fs-14"
-                                style={{ width: 180 }}
+                                <Form.Item name="revenueTime" noStyle>
+                                    <Select
+                                        placeholder="Select period"
+                                        className="addonselect fs-14"
+                                        style={{ width: 180 }}
+                                    >
+                                    {revenueLookups?.map((list, index) => (
+                                        <Select.Option value={list?.id} key={index}>
+                                        {list?.name}
+                                        </Select.Option>
+                                    ))}
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item
+                                    name="revenue"
+                                    rules={[{ required: true, message: "Please enter revenue" }]}
+                                    noStyle
                                 >
-                                {revenueLookups?.map((list, index) => (
-                                    <Select.Option value={list?.id} key={index}>
-                                    {list?.name}
-                                    </Select.Option>
-                                ))}
-                                </Select>
-                            </Form.Item>
-
-                            <Form.Item
-                                name="revenue"
-                                rules={[{ required: true, message: "Please enter revenue" }]}
-                                noStyle
-                            >
-                                <Input
-                                type='number'
-                                placeholder="Enter revenue"
-                                className="w-100 "
-                                prefix={<img src="/assets/icons/reyal-g.png" width={15} />}
-                                />
-                            </Form.Item>
+                                    <Input
+                                        type='number'
+                                        placeholder="Enter revenue"
+                                        className="w-100 add-p"
+                                        addonBefore={<img src="/assets/icons/reyal-g.png" width={15} />}
+                                    />
+                                </Form.Item>
                             </Flex>
                         </Form.Item>
                         </Col>
@@ -201,10 +200,10 @@ const FinancialInfoStep = ({ data, setData }) => {
                                     noStyle
                                 >
                                     <Input
-                                    type='number'
-                                    placeholder="Enter profit"
-                                    className="w-100"
-                                    prefix={<img src="/assets/icons/reyal-g.png" width={14} />}
+                                        type='number'
+                                        placeholder="Enter profit"
+                                        className="w-100 add-p"
+                                        addonBefore={<img src="/assets/icons/reyal-g.png" width={14} />}
                                     />
                                 </Form.Item>
                                 </Flex>
@@ -249,34 +248,9 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 className='w-100'
                             />
                         </Col>
-                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
-                            <MyInput
-                                label={<Flex align='center' gap={5}>
-                                    Multiples of Revenue & Profit <Image preview={false} src="/assets/icons/info-outline.png" width={15} alt="" />
-                                </Flex>}
-                                name='multiple'
-                                required
-                                className='w-100'
-                                readOnly
-                                value={data.multiple}
-                            />
-                        </Col>
-                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
-                            <MyInput
-                                label='Capital Recovery'
-                                name='capitalRecovery'
-                                required
-                                message="Please enter capital recovery"
-                                placeholder='Enter capital recovery'
-                                addonBefore={
-                                    <img src='/assets/icons/reyal-g.png' width={14} />
-                                }
-                                className='w-100'
-                            />
-                        </Col>
                     </Row>   
                 </Card> 
-                <Card className='shadow-d radius-12 border-gray mb-3'>
+                <Card className='bg-transparent radius-12 border-gray mb-3'>
                     <FormReplicate
                         dayKey="keyassets"
                         title="Key Assets (Optional)"
@@ -312,7 +286,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                         ]}
                     />
                 </Card>
-                <Card className='shadow-d radius-12 border-gray mb-3'>
+                <Card className='bg-transparent radius-12 border-gray mb-3'>
                     <FormReplicate
                         dayKey="liability"
                         title="Outstanding Liabilities / Debt (Optional)"
@@ -348,7 +322,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                         ]}
                     />
                 </Card> 
-                <Card className='shadow-d radius-12 border-gray mb-3'>
+                <Card className='bg-transparent radius-12 border-gray mb-3'>
                     <FormReplicate
                         dayKey="inventory"
                         title="Inventory (Optional)"

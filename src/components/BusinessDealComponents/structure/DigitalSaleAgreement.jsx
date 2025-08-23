@@ -87,29 +87,31 @@ const DigitalSaleAgreement = ({form,details}) => {
                 </Card>
             </Col>
             <Col span={24}>
-            <Flex vertical gap={3}>
-                        <Checkbox
-                            className='fit-content'
-                            checked={isCheckedDetails}
-                            onChange={e => setIsCheckedDetails(e.target.checked)}
-                        >
-                            I confirm the business details are correct.
-                        </Checkbox>
-                        <Checkbox
-                            className='fit-content'
-                            checked={isCheckedTerms}
-                            onChange={handleTermsChange} // only this triggers the mutation
-                        >
-                            I accept the terms of the agreement and agree to proceed.
-                        </Checkbox>
-                    </Flex>
+                <Flex vertical gap={3}>
+                    <Checkbox
+                        className='fit-content'
+                        checked={isCheckedDetails}
+                        onChange={e => setIsCheckedDetails(e.target.checked)}
+                    >
+                        I confirm the business details are correct.
+                    </Checkbox>
+                    <Checkbox
+                        className='fit-content'
+                        checked={isCheckedTerms}
+                        onChange={handleTermsChange} // only this triggers the mutation
+                    >
+                        I accept the terms of the agreement and agree to proceed.
+                    </Checkbox>
+                </Flex>
             </Col>
             <Col span={24}>
                 <Flex vertical gap={10}>
+                    {/* design for success agreement */}
                     <Flex gap={5} className='badge-cs success fs-12 fit-content' align='center'>
                         <CheckCircleOutlined className='fs-14' /> Seller accept the "Sale Agreement"
                     </Flex>
-                    {/* pending status (below badge) */}
+
+                    {/* design for pending agreement */}
                     <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
                         <CheckCircleOutlined className='fs-14' /> Waiting for seller to sign the sales agreement
                     </Flex>

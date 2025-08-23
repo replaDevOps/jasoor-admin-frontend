@@ -115,7 +115,7 @@ const FormReplicate = ({ dayKey, title, form, fieldsConfig = [] }) => {
         <Space direction="vertical" className="w-100">
           <Row gutter={[16, 16]} align="middle">
             <Col span={24}>
-              <ModuleTopHeading level={5} name={title} onClick={() => add()} />
+              <ModuleTopHeading level={5} name={title} onClick={() => add()} shape="round" />
             </Col>
             <Col span={24}>
               {fields.map(({ key, name }) => (

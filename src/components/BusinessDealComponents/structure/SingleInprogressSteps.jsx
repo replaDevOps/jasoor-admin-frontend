@@ -10,7 +10,7 @@ import { BusinessAmountReceiptBuyer } from './BusinessAmountReceiptBuyer';
 
 const { Title, Text } = Typography;
 
-const SingleInprogressSteps = ({ details }) => {
+const SingleInprogressSteps = ({ details, completedeal}) => {
     const [form] = Form.useForm();
     const [activeStep, setActiveStep] = useState(completedeal ? 5 : 0);
     const [openPanels, setOpenPanels] = useState(completedeal ? ['1', '2', '3', '4','5','6'] : ['1']);
@@ -35,7 +35,7 @@ const SingleInprogressSteps = ({ details }) => {
         {
             key: '3',
             label: 'Bank Account Details',
-            content: <BankAccountDetails details={details} />,
+            // content: <BankAccountDetails details={details} />,
             status: 'Signed',
             emptytitle: 'Bank Details Pending!',
             emptydesc: 'Waiting for the seller to choose the bank account.',
@@ -130,9 +130,10 @@ const SingleInprogressSteps = ({ details }) => {
     return (
         <Flex vertical gap={25} className='mt-3'>
             <Steps
-                className='mt-3'
+                className='mt-3 responsive-steps'
                 current={activeStep}
                 items={stepsProgress}
+                responsive={true}
                 progressDot={(dot, { index }) => (
                     <span className={`custom-dot ${activeStep > index ? 'completed' : ''} ${activeStep === index ? 'active' : ''}`}>
                         {activeStep > index ? <CheckOutlined /> : dot}

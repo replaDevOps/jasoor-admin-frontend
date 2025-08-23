@@ -114,7 +114,9 @@ const DocumentPaymentConfirmation = ({details}) => {
         );
     }
     const uploadDocs = [
-        { title: "Updated Commercial Registration (CR)" },
+        { 
+            title: "Updated Commercial Registration (CR)"
+        },
         { title: "Notarized Ownership Transfer Letter" },
     ];
 
@@ -139,7 +141,7 @@ const DocumentPaymentConfirmation = ({details}) => {
             {contextHolder}
             <Row gutter={[16, 24]}>
                 {/* Buyer Payment Receipt */}
-                <Col span={24}>
+                {/* <Col span={24}>
                     <Text className="fw-600 fs-14">Business Transaction Receipt</Text>
                     {sellerReceipt ? (
                         renderUploadedDoc({
@@ -166,10 +168,10 @@ const DocumentPaymentConfirmation = ({details}) => {
                             Confirm Payment
                         </Button>
                     </Flex>
-                </Col>
+                </Col> */}
 
                 {/* Upload Additional Docs */}
-                {uploadDocs.map((item, index) => (
+                {/* {uploadDocs.map((item, index) => (
                     <Col span={24} key={index}>
                         <Text className="fw-600 fs-14">{item.title}</Text>
                         {documents[item.title] ? (
@@ -183,6 +185,26 @@ const DocumentPaymentConfirmation = ({details}) => {
                                 <Button icon={<UploadOutlined />}>Upload {item.title}</Button>
                             </Upload>
                         )}
+                    </Col>
+                ))} */}
+
+                {upload.map((item, index) => (
+                    <Col span={24} key={index}>
+                        <Text className="fw-600 text-medium-gray fs-13">{item.title}</Text>
+                        <Card className="card-cs border-gray rounded-12 mt-2">
+                            <Flex justify="space-between" align="center">
+                                <Flex gap={15}>
+                                    <Image src={"/assets/icons/file.png"} preview={false} width={20} />
+                                    <Flex vertical>
+                                        <Text className="fs-13 text-gray">{item?.subtitle}</Text>
+                                        <Text className="fs-13 text-gray">5.3 MB</Text>
+                                    </Flex>
+                                </Flex>
+                                <a href={''} target="_blank" rel="noopener noreferrer">
+                                    <Image src={"/assets/icons/download.png"} preview={false} width={20} />
+                                </a>
+                            </Flex>
+                        </Card>
                     </Col>
                 ))}
 
