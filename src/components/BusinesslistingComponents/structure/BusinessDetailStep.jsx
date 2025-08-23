@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react'
 import { Card, Col, Flex, Form, Image, Radio, Row, Tooltip, Typography } from 'antd'
 import { MyDatepicker, MyInput, MySelect } from '../../Forms'
 import { teamsizeOp,district, cities  } from '../../../data'
-import { ModuleTopHeading } from '../../Pagecomponents'
+import { ModuleTopHeading } from '../../PageComponents'
 import { GET_CATEGORIES } from "../../../graphql/query/business";
 import { useQuery } from '@apollo/client';
 
@@ -67,7 +67,7 @@ const BusinessDetailStep = ({ data, setData }) => {
     <>
       <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
         <Flex vertical gap={1} >
-            <ModuleTopHeading level={4} name='Tell us about your business' />
+            <ModuleTopHeading level={4} name='Tell us about your business' onClick={()=>{}} />
             <Text className='text-gray'>Let’s start with the basic business information</Text>
         </Flex>
         <Flex className='pill-round' gap={8} align='center'>
