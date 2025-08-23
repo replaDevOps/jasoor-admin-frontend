@@ -106,14 +106,28 @@ const BusinessAmountReceiptBuyer = ({details}) => {
         });
     };
     const renderUploadedDoc = ({ fileName, fileSize, filePath }) => (
-        <Flex vertical gap={2} className="uploaded-doc">
-            <Text className="fs-14 fw-500">{fileName}</Text>
-            <Text className="text-gray fs-12">{fileSize}</Text>
-            {filePath && (
-                <a href={filePath} target="_blank" rel="noopener noreferrer">
-                    View Document
-                </a>
-            )}
+        <Flex vertical gap={6}>
+            <Text className="fw-600 text-medium-gray fs-13">Upload transaction receipt or screenshot</Text>
+            <Card className="card-cs border-gray rounded-12">
+                <Flex justify="space-between" align="center">
+                    <Flex gap={15}>
+                        <Image src={'/assets/icons/file.png'} preview={false} width={20} />
+                        <Flex vertical>
+                            <Text className="fs-13 text-gray">
+                                {fileName}
+                            </Text>
+                            <Text className='fs-13 text-gray'>
+                                {fileSize}
+                            </Text>
+                        </Flex>
+                    </Flex>
+                    {filePath && (
+                    <a href={filePath} target="_blank" rel="noopener noreferrer">
+                        <Image src={"/assets/icons/download.png"} preview={false} width={20} />
+                    </a>
+                    )}
+                </Flex>
+            </Card>
         </Flex>
     );
     if (updating || uploading) {
@@ -141,43 +155,24 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                 </Col>
 
                 <Col span={24}>
-                    <Flex vertical gap={6}>
-                        <Text className="fw-600 text-medium-gray fs-13">Upload transaction receipt or screenshot</Text>
-                        <Card className="card-cs border-gray rounded-12">
-                            <Flex justify="space-between" align="center">
-                                <Flex gap={15}>
-                                    <Image src={'/assets/icons/file.png'} preview={false} width={20} />
-                                    <Flex vertical>
-                                        <Text className="fs-13 text-gray">
-                                            Business Transaction Receipt .pdf
-                                        </Text>
-                                        <Text className='fs-13 text-gray'>
-                                            5.3 MB
-                                        </Text>
-                                    </Flex>
-                                </Flex>
-                                <a href={''} target="_blank" rel="noopener noreferrer">
-                                    <Image src={"/assets/icons/download.png"} preview={false} width={20} />
-                                </a>
-                            </Flex>
-                        </Card>
-                    </Flex>
                     {/* If receipt already exists, show it */}
-                    {sellerReceipt ? (
+                    {
+                        sellerReceipt && (
                         renderUploadedDoc({
-                            fileName: sellerReceipt?.fileName,
+                            fileName: sellerReceipt?.title,
                             fileSize: "5.3 MB",
                             filePath: sellerReceipt?.filePath,
                         })
-                    ) : (
-                        <Upload
-                            beforeUpload={(file) => handleSingleFileUpload(file, "Buyer Payment Receipt")}
-                            showUploadList={false}
-                            accept=".pdf,.jpg,.png"
-                        >
-                            <Button icon={<UploadOutlined />}>Upload Buyer Payment Receipt</Button>
-                        </Upload>
                     )}
+                    {/* : (
+                         <Upload
+                    //         beforeUpload={(file) => handleSingleFileUpload(file, "Buyer Payment Receipt")}
+                    //         showUploadList={false}
+                    //         accept=".pdf,.jpg,.png"
+                    //     >
+                    //         <Button icon={<UploadOutlined />}>Upload Buyer Payment Receipt</Button>
+                    //     </Upload>
+                    // )} */}
                     {/* <Flex className="mt-3">
                         <Button
                             type="primary"
@@ -191,18 +186,18 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                 </Col>
                 
 
-                {/* <Col span={24}>
+                <Col span={24}>
                     <Flex>
                         <Button
                             type="primary"
                             className="btnsave bg-brand"
                             onClick={handleMarkVerified}
-                            disabled={!documents && !paymentReceipt} // ✅ enable only if uploaded or already exists
+                            disabled={!documents && !paymentReceipt}
                         >
                             Mark as Verified
                         </Button>
                     </Flex>
-                </Col> */}
+                </Col>
             </Row>
         </>
     )

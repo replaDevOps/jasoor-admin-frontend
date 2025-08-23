@@ -69,7 +69,7 @@ const SingleviewBusinesslist = () => {
                         <Title level={4} className="fw-500 m-0">{data?.businessTitle}</Title>
                     </Flex>
                     <Button className="bg-transparent border0 p-0">
-                        <Image src='/assets/icons/edit.png' width={24} />        
+                        <Image src='/assets/icons/edit.png' width={24} preview={false}/>        
                     </Button>
                 </Flex>
                 <Flex justify='space-between' align='center' gap={5}>

@@ -101,12 +101,6 @@ const DocumentPaymentConfirmation = ({details}) => {
             </Flex>
         );
     }
-    const uploadDocs = [
-        { 
-            title: "Updated Commercial Registration (CR)"
-        },
-        { title: "Notarized Ownership Transfer Letter" },
-    ];
 
     const renderUploadedDoc = (doc) => (
         <Card className="card-cs border-gray rounded-12 mt-3">
@@ -129,60 +123,7 @@ const DocumentPaymentConfirmation = ({details}) => {
         <>
             {contextHolder}
             <Row gutter={[16, 24]}>
-                {/* Buyer Payment Receipt */}
-                {/* <Col span={24}>
-                    <Text className="fw-600 fs-14">Business Transaction Receipt</Text>
-                    {sellerReceipt ? (
-                        renderUploadedDoc({
-                            fileName: sellerReceipt?.fileName,
-                            fileSize: "5.3 MB",
-                            filePath: sellerReceipt?.filePath,
-                        })
-                    ) : (
-                        <Upload
-                            beforeUpload={(file) => handleSingleFileUpload(file, "Buyer Payment Receipt")}
-                            showUploadList={false}
-                            accept=".pdf,.jpg,.png"
-                        >
-                            <Button icon={<UploadOutlined />}>Upload Buyer Payment Receipt</Button>
-                        </Upload>
-                    )}
-                    <Flex className="mt-3">
-                        <Button
-                            type="primary"
-                            className="btnsave bg-brand"
-                            onClick={confirmPayment}
-                            disabled={!sellerReceipt || !documents["Buyer Payment Receipt"]}
-                        >
-                            Confirm Payment
-                        </Button>
-                    </Flex>
-                </Col> */}
-
-                {/* Upload Additional Docs */}
-                {/* {uploadDocs.map((item, index) => (
-                    <Col span={24} key={index}>
-                        <Text className="fw-600 fs-14">{item.title}</Text>
-                        {documents[item.title] ? (
-                            renderUploadedDoc({
-                                fileName: uploadDocs?.fileName,
-                                fileSize: "5.3 MB",
-                                filePath: uploadDocs?.filePath,
-                            })
-                        ) : (
-                            <Upload
-                                className='baseline'
-                                beforeUpload={(file) => handleSingleFileUpload(file, item.title)}
-                                showUploadList={false}
-                                accept=".pdf,.jpg,.png"
-                            >
-                                <Button icon={<UploadOutlined />}>Upload {item.title}</Button>
-                            </Upload>
-                        )}
-                    </Col>
-                ))} */}
-
-                {upload.map((item, index) => (
+                {uploadDocs.map((item, index) => (
                     <Col span={24} key={index}>
                         <Text className="fw-600 text-medium-gray fs-13">{item.title}</Text>
                         <Card className="card-cs border-gray rounded-12 mt-2">
@@ -190,7 +131,7 @@ const DocumentPaymentConfirmation = ({details}) => {
                                 <Flex gap={15}>
                                     <Image src={"/assets/icons/file.png"} preview={false} width={20} />
                                     <Flex vertical>
-                                        <Text className="fs-13 text-gray">{item?.subtitle}</Text>
+                                        <Text className="fs-13 text-gray">{item?.title}</Text>
                                         <Text className="fs-13 text-gray">5.3 MB</Text>
                                     </Flex>
                                 </Flex>
@@ -204,31 +145,31 @@ const DocumentPaymentConfirmation = ({details}) => {
 
                 {/* Seller final confirmation */}
                 <Col span={24}>
-                <Flex vertical gap={10}>
-                    {/* Dynamic Badge */}
-                    <Flex
-                    gap={5}
-                    className={details?.isPaymentVerifiedSeller ? "badge-cs success fs-12 fit-content" : "badge-cs pending fs-12 fit-content"}
-                    align="center"
-                    >
-                    <CheckCircleOutlined className="fs-14" />
-                    {details?.isPaymentVerifiedSeller
-                        ? 'Seller marked "Payment Received"'
-                        : '"Payment Received" Seller Confirmation pending'}
-                    </Flex>
+                    <Flex vertical gap={10}>
+                        {/* Dynamic Badge */}
+                        <Flex
+                            gap={5}
+                            className={details?.isPaymentVerifiedSeller ? "badge-cs success fs-12 fit-content" : "badge-cs pending fs-12 fit-content"}
+                            align="center"
+                        >
+                        <CheckCircleOutlined className="fs-14" />
+                            {details?.isPaymentVerifiedSeller
+                                ? 'Seller marked "Payment Received"'
+                                : '"Payment Received" Seller Confirmation pending'}
+                        </Flex>
 
-                    {/* Single Button */}
-                    <Flex>
-                    <Button
-                        type="primary"
-                        className="btnsave bg-brand"
-                        onClick={handleMarkVerified}
-                        disabled={!details?.isPaymentVerifiedSeller} // disable if already verified
-                    >
-                        Mark as Verified
-                    </Button>
+                        {/* Single Button */}
+                        <Flex>
+                            <Button
+                                type="primary"
+                                className="btnsave bg-brand"
+                                onClick={handleMarkVerified}
+                                disabled={!details?.isPaymentVerifiedSeller} // disable if already verified
+                            >
+                                Mark as Verified
+                            </Button>
+                        </Flex>
                     </Flex>
-                </Flex>
                 </Col>
             </Row>
         </>
