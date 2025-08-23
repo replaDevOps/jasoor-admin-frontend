@@ -69,7 +69,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                             filePath: result.fileUrl || result.url,
                             fileName: file.name,
                             fileType: file.type,
-                            businessId:details?.busines?.id
+                            // businessId:details?.busines?.id
                         },
                     },
                 });

@@ -45,7 +45,7 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
                     accountTitle: values.accountName,
                     iban: values.ibanNumber,
                 },
-                addAdminBankId: edititem?.id || null
+                // addAdminBankId: edititem?.id || null
             }
         });
     }

@@ -32,9 +32,6 @@ const ListingRevenueBar = () => {
             'SAR (500k+)',
             ],
             labels: {
-                style: {
-                    colors: '#000',
-                },
               style: { colors: '#000', fontSize: '11px' },
             },
           },
