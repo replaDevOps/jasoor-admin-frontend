@@ -5,10 +5,28 @@ import { useMutation } from '@apollo/client';
 
 const { Text } = Typography
 const FinalDeal = ({details}) => {
-
+const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
+        onCompleted: () => {
+            messageApi.success("Status changed successfully!");
+        },
+        onError: (err) => {
+            messageApi.error(err.message || "Something went wrong!");
+        },
+    });
+    const handleMarkVerified = async () => {
+        if (!details?.key) return;
+        await updateDeals({
+            variables: {
+                input: {
+                    id: details.key,
+                    status: "COMPLETED", 
+                },
+            },
+        });
+    };
     return (
         <Row gutter={[16, 24]}>
-            <Col span={24}>
+            {/* <Col span={24}>
                 {
                     ['Commercial Registration (CR).png','Notarized Ownership Transfer Letter.png']?.map((items,index)=>
                         <Card className='card-cs border-gray rounded-12 mb-3' key={index} >
@@ -29,20 +47,38 @@ const FinalDeal = ({details}) => {
                         </Card>
                     )
                 }
-            </Col>
+            </Col> */}
             <Col span={24}>
                 <Flex vertical gap={10}>
-                    <Flex gap={5} className='badge-cs success fs-12 fit-content' align='center'>
-                        <CheckCircleOutlined className='fs-14' /> Buyer mark the deal as "Finalized".
+                <Col span={24}>
+                    <Flex vertical gap={10}>
+                        {details?.isDocVedifiedSeller ? (
+                        <>
+                            <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
+                            <CheckCircleOutlined className="fs-14" /> Buyer marked the deal as "Finalized"
+                            </Flex>
+                            <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
+                            <CheckCircleOutlined className="fs-14" /> Waiting for admin to mark the deal as "Finalized"
+                            </Flex>
+                        </>
+                        ) : (
+                        <>
+                            <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
+                            <CheckCircleOutlined className="fs-14" /> Waiting for seller to mark the deal as "Finalized"
+                            </Flex>
+                            <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
+                            <CheckCircleOutlined className="fs-14" /> Waiting for admin to mark the deal as "Finalized"
+                            </Flex>
+                        </>
+                        )}
                     </Flex>
-                    <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
-                        <CheckCircleOutlined className='fs-14' /> Waiting for seller to mark the deal as "Finalized".
-                    </Flex>
+                    </Col>
                     <Flex>
                     <Button
                             type="primary"
                             className="btnsave bg-brand"
-                            disabled={details?.status !== "WAITING"} // ✅ enable only if status = WAITING
+                            disabled={!details?.isDocVedifiedAdmin}
+                            onClick={handleMarkVerified}
                         >
                             Mark Deal as Completed
                         </Button>

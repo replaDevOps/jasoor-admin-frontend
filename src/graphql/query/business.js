@@ -218,6 +218,17 @@ query GetCompletedDeals($limit: Int, $offset: Int, $filter: DealFilter) {
   }
 }
 `
+const SIMILER_BUSINESS_CATEGORY_GRAPH = gql`
+query SimilerBusinessAvgAnualProfit($similerBusinessAvgAnualProfitId: ID) {
+  similerBusinessAvgAnualProfit(id: $similerBusinessAvgAnualProfitId) {
+    totalProfit
+    graph {
+      profit
+      year
+    }
+  }
+}
+`
 export {
   GET_BUSINESS_STATS,
   GET_BUSINESS_STATS_GRAPH,
@@ -232,5 +243,6 @@ export {
   GET_COMPLETED_DEALS,
   GET_BUSINESSES_STATS_BY_ID,
   GET_BUSINESSES_ASSETS_BY_ID,
-  GET_BUSINESSES_DOCUMENT_ID
+  GET_BUSINESSES_DOCUMENT_ID,
+  SIMILER_BUSINESS_CATEGORY_GRAPH
 }

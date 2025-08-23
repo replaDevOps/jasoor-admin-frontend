@@ -86,6 +86,18 @@ const CommissionReceiptBuyer = ({ details }) => {
         });
     };
 
+    const renderUploadedDoc = ({ fileName, fileSize, filePath }) => (
+            <Flex vertical gap={2} className="uploaded-doc">
+                <Text className="fs-14 fw-500">{fileName}</Text>
+                <Text className="text-gray fs-12">{fileSize}</Text>
+                {filePath && (
+                    <a href={filePath} target="_blank" rel="noopener noreferrer">
+                        View Document
+                    </a>
+                )}
+            </Flex>
+        );
+
     if (updating || uploading) {
         return (
             <Flex justify="center" align="center" style={{ height: "200px" }}>
@@ -103,21 +115,11 @@ const CommissionReceiptBuyer = ({ details }) => {
                         Jasoor’s Commission bank statement or screenshot
                     </Text>
                     {jasoorDoc ? (
-                    <Card className="card-cs border-gray rounded-12">
-                        <Flex justify="space-between" align="center">
-                            <Flex gap={15}>
-                                <UploadOutlined style={{ fontSize: 20 }} />
-                                <Flex vertical>
-                                    <Text className="fs-13 text-gray">
-                                        {jasoorDoc.title}
-                                    </Text>
-                                </Flex>
-                            </Flex>
-                            <a href={jasoorDoc.filePath} target="_blank" rel="noopener noreferrer">
-                                <Image src={"/assets/icons/download.png"} preview={false} width={20} />
-                            </a>
-                        </Flex>
-                    </Card>
+                    renderUploadedDoc({
+                        fileName: jasoorDoc?.fileName,
+                        fileSize: "5.3 MB",
+                        filePath: jasoorDoc?.filePath,
+                    })
                 ) : (
                     <Upload
                         beforeUpload={handleSingleFileUpload}

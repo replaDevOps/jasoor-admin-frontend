@@ -10,18 +10,16 @@ const { Text } = Typography
 const DocumentPaymentConfirmation = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [documents, setDocuments] = useState({});
-    const sellerReceipt = details?.busines?.documents?.find(doc => doc.title === 'Buyer Payment Receipt');
-    const data = {title:'Business Transaction Receipt', subtitle: sellerReceipt?.title }
-    const upload =[
+    const uploadDocs = [
         {
-            title:'Updated Commercial Registration (CR)',
-            subtitle:'Commercial Registration (CR).png',
+            title: "Updated Commercial Registration (CR)",
+            ...details?.busines?.documents?.find(doc => doc.title === "Updated Commercial Registration (CR)")
         },
         {
-            title:'Notarized Ownership Transfer Letter',
-            subtitle:'Notarized Ownership Transfer Letter.png',
-        },
-    ]
+            title: "Notarized Ownership Transfer Letter",
+            ...details?.busines?.documents?.find(doc => doc.title === "Notarized Ownership Transfer Letter")
+        }
+    ];
     const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
         onCompleted: () => {
             messageApi.success("Status changed successfully!");
@@ -84,24 +82,14 @@ const DocumentPaymentConfirmation = ({details}) => {
             }
     };
 
-    const confirmPayment = async () => {
-        if (!details?.key) return;
-        await updateDeals({
-            variables: {
-                input: {
-                    id: details.key,
-                    status: "DOCUMENT_PAYMENT_CONFIRMATION", // Example status
-                },
-            },
-        });
-    };
     const handleMarkVerified = async () => {
         if (!details?.key) return;
         await updateDeals({
             variables: {
                 input: {
                     id: details.key,
-                    status: "WAITING", // Example status
+                    status: "WAITING", 
+                    isDocVedifiedAdmin: true, 
                 },
             },
         });
@@ -113,10 +101,10 @@ const DocumentPaymentConfirmation = ({details}) => {
             </Flex>
         );
     }
-    const uploadDocs = [
-        { title: "Updated Commercial Registration (CR)" },
-        { title: "Notarized Ownership Transfer Letter" },
-    ];
+    // const uploadDocs = [
+    //     { title: "Updated Commercial Registration (CR)" },
+    //     { title: "Notarized Ownership Transfer Letter" },
+    // ];
 
     const renderUploadedDoc = (doc) => (
         <Card className="card-cs border-gray rounded-12 mt-3">
@@ -134,12 +122,13 @@ const DocumentPaymentConfirmation = ({details}) => {
             </Flex>
         </Card>
     );
+
     return (
         <>
             {contextHolder}
             <Row gutter={[16, 24]}>
                 {/* Buyer Payment Receipt */}
-                <Col span={24}>
+                {/* <Col span={24}>
                     <Text className="fw-600 fs-14">Business Transaction Receipt</Text>
                     {sellerReceipt ? (
                         renderUploadedDoc({
@@ -161,21 +150,26 @@ const DocumentPaymentConfirmation = ({details}) => {
                             type="primary"
                             className="btnsave bg-brand"
                             onClick={confirmPayment}
-                            disabled={!sellerReceipt && !documents["Buyer Payment Receipt"]}
+                            disabled={!sellerReceipt || !documents["Buyer Payment Receipt"]}
                         >
                             Confirm Payment
                         </Button>
                     </Flex>
-                </Col>
+                </Col> */}
 
                 {/* Upload Additional Docs */}
                 {uploadDocs.map((item, index) => (
                     <Col span={24} key={index}>
                         <Text className="fw-600 fs-14">{item.title}</Text>
                         {documents[item.title] ? (
-                            renderUploadedDoc(documents[item.title])
+                            renderUploadedDoc({
+                                fileName: uploadDocs?.fileName,
+                                fileSize: "5.3 MB",
+                                filePath: uploadDocs?.filePath,
+                            })
                         ) : (
                             <Upload
+                                className='baseline'
                                 beforeUpload={(file) => handleSingleFileUpload(file, item.title)}
                                 showUploadList={false}
                                 accept=".pdf,.jpg,.png"
@@ -188,16 +182,31 @@ const DocumentPaymentConfirmation = ({details}) => {
 
                 {/* Seller final confirmation */}
                 <Col span={24}>
-                    <Flex vertical gap={10}>
-                        <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
-                            <CheckCircleOutlined className="fs-14" /> Seller marked "Payment Received"
-                        </Flex>
-                        <Flex>
-                            <Button type="primary" className="btnsave bg-brand" onClick={handleMarkVerified}>
-                                Mark as Verified
-                            </Button>
-                        </Flex>
+                <Flex vertical gap={10}>
+                    {/* Dynamic Badge */}
+                    <Flex
+                    gap={5}
+                    className={details?.isPaymentVerifiedSeller ? "badge-cs success fs-12 fit-content" : "badge-cs pending fs-12 fit-content"}
+                    align="center"
+                    >
+                    <CheckCircleOutlined className="fs-14" />
+                    {details?.isPaymentVerifiedSeller
+                        ? 'Seller marked "Payment Received"'
+                        : '"Payment Received" Seller Confirmation pending'}
                     </Flex>
+
+                    {/* Single Button */}
+                    <Flex>
+                    <Button
+                        type="primary"
+                        className="btnsave bg-brand"
+                        onClick={handleMarkVerified}
+                        disabled={!details?.isPaymentVerifiedSeller} // disable if already verified
+                    >
+                        Mark as Verified
+                    </Button>
+                    </Flex>
+                </Flex>
                 </Col>
             </Row>
         </>

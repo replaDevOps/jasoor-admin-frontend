@@ -7,6 +7,34 @@ import {GETDEAL} from '../../../graphql/query'
 import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
 
+const statusMap = {
+    COMMISSION_TRANSFER_FROM_BUYER_PENDING: 'Buyer Commission Transfer Pending',
+    COMMISSION_VERIFIED: 'Commission Verified by Admin',
+    DSA_FROM_SELLER_PENDING: 'Seller DSA Pending',
+    DSA_FROM_BUYER_PENDING: 'Buyer DSA Pending',
+    BANK_DETAILS_FROM_SELLER_PENDING: 'Bank Details Pending from Seller',
+    SELLER_PAYMENT_VERIFICATION_PENDING: 'Seller Payment Verification Pending',
+    PAYMENT_APPROVAL_FROM_SELLER_PENDING: 'Payment Approval Pending from Seller',
+    DOCUMENT_PAYMENT_CONFIRMATION: 'Document Payment Confirmation Pending',
+    WAITING: 'Waiting for Seller Document Upload',
+    PENDING: 'Pending Jasoor Verification',
+    BUYERCOMPLETED: 'Buyer Completed',
+    SELLERCOMPLETED: 'Seller Completed',
+    COMPLETED: 'Deal Completed by Admin',
+  };
+
+  const inProgressStatuses = [
+    'Buyer Commission Transfer Pending',
+    'Seller DSA Pending',
+    'Buyer DSA Pending',
+    'Bank Details Pending from Seller',
+    'Seller Payment Verification Pending',
+    'Payment Approval Pending from Seller',
+    'Document Payment Confirmation Pending',
+    'Waiting for Seller Document Upload',
+    'Pending Jasoor Verification'
+];
+
 const { Title, Text } = Typography
 const BusinessDealsDetails = () => {
     const [messageApi, contextHolder] = message.useMessage();
@@ -45,7 +73,7 @@ const BusinessDealsDetails = () => {
         },
         {
             title:'Status',
-            desc:details?.status
+            desc:statusMap[details?.status] || 'Unknown',
         },
     ]
     
@@ -81,23 +109,26 @@ const BusinessDealsDetails = () => {
                 <Flex vertical gap={40}>
                     <div className='deals-status'>
                         <Row gutter={[16, 16]}>
-                            {
-                                buyerdealsData?.map((list,index)=>
-                                    <Col xs={24} sm={12} md={6} lg={6} key={index}>
-                                        <Flex vertical gap={3}>
-                                            <Text className='text-gray fs-14'>{list?.title}</Text>
-                                            {
-                                            (list?.title === 'Status') ? (
-                                                list.desc === 'In-progress' ?
-                                                <Text className='brand-bg text-white fs-12 sm-pill'>{list?.desc}</Text>:
-                                                <Text className='bg-green fs-12 sm-pill'>{list?.desc}</Text>
-                                            ) : (
-                                                <Text className='fs-15 fw-500'>{list?.desc}</Text>
-                                            )}
-                                        </Flex>
-                                    </Col>
-                                )
-                            }
+                        {buyerdealsData?.map((list,index) => (
+                            <Col xs={24} sm={12} md={6} lg={6} key={index}>
+                                <Flex vertical gap={3}>
+                                    <Text className='text-gray fs-14'>{list?.title}</Text>
+                                    {list?.title === 'Status' ? (
+                                        <Text
+                                            className={
+                                                inProgressStatuses.includes(list.desc)
+                                                ? 'brand-bg text-white fs-12 sm-pill'
+                                                : 'bg-green text-white fs-12 sm-pill'
+                                            }
+                                        >
+                                            {list.desc}
+                                        </Text>
+                                    ) : (
+                                        <Text className='fs-15 fw-500'>{list.desc}</Text>
+                                    )}
+                                </Flex>
+                            </Col>
+                        ))}
                         </Row>
                     </div>
                     <SingleInprogressSteps details={details} />

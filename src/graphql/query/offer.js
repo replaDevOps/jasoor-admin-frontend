@@ -143,6 +143,11 @@ query GetDeal($getDealId: ID!) {
     id
     price
     status
+    isDsaSeller
+    isDsaBuyer
+    isPaymentVedifiedSeller
+    isDocVedifiedSeller
+    isDocVedifiedAdmin
     createdAt
     business {
       id
