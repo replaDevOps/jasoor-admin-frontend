@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "dependencies": {
+  "dependencies": { 
     "@ant-design/icons": "5.x",
     "@apollo/client": "^3.13.9", 
     "@rive-app/react-canvas": "^4.22.1",
