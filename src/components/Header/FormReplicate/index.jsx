@@ -95,7 +95,7 @@ import { Row, Col, Form, Space, Flex } from "antd";
 import { useEffect } from "react";
 import { MyInput, MySelect } from "../../Forms";
 import { MinusCircleFilled } from "@ant-design/icons";
-import { ModuleTopHeading } from "../../Pagecomponents";
+import { ModuleTopHeading } from "../../PageComponents";
 
 const FormReplicate = ({ dayKey, title, form, fieldsConfig = [] }) => {
   useEffect(() => {
