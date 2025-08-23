@@ -8,19 +8,39 @@ import { FinalDeal } from './FinalDeal';
 import { CommissionReceiptBuyer } from './CommissionReceiptBuyer';
 import { BusinessAmountReceiptBuyer } from './BusinessAmountReceiptBuyer';
 
+const statusToStepIndex = {
+    COMMISSION_TRANSFER_FROM_BUYER_PENDING: 0, // Step 1: Commission Receipt
+    COMMISSION_VERIFIED: 0, // still step 1
+    DSA_FROM_SELLER_PENDING: 1, // Step 2: Digital Sale Agreement
+    DSA_FROM_BUYER_PENDING: 1, // Step 2: Digital Sale Agreement
+    BANK_DETAILS_FROM_SELLER_PENDING: 2, // Step 3: Bank Account Details
+    SELLER_PAYMENT_VERIFICATION_PENDING: 3, // Step 4: Pay Business Amount
+    PAYMENT_APPROVAL_FROM_SELLER_PENDING: 3, // Step 4: Pay Business Amount
+    DOCUMENT_PAYMENT_CONFIRMATION: 4, // Step 5: Document & Payment Confirmation
+    WAITING: 4, // Step 5
+    BUYERCOMPLETED: 5, // Step 6: Finalize Deal
+    SELLERCOMPLETED: 5, // Step 6
+    COMPLETED: 5, // Step 6
+    PENDING: 0, // default first step
+};
+
+
 const { Title, Text } = Typography;
 
 const SingleInprogressSteps = ({ details, completedeal}) => {
     const [form] = Form.useForm();
-    const [activeStep, setActiveStep] = useState(completedeal ? 5 : 0);
-    const [openPanels, setOpenPanels] = useState(completedeal ? ['1', '2', '3', '4','5','6'] : ['1']);
-
+    const initialStep = details?.status ? statusToStepIndex[details.status] || 0 : 0;
+    const [activeStep, setActiveStep] = useState(initialStep);
+   
+    const found = details?.busines?.documents?.find(doc => doc.title === "Jasoor Commission");
+    const send = details?.banks?.find(b => b?.isSend === true);
+    const DSA = details?.status
     const allSteps = [
         {
             key: '1',
             label: 'Commission Receipt',
-            content: <CommissionReceiptBuyer />,
-            status: 'Jusoor verification pending',
+            content: <CommissionReceiptBuyer details={details} />,
+            status: found?.title ? 'Verified' : 'Jusoor verification pending',
             emptytitle: 'Commission Pending!',
             emptydesc: 'Waiting for the buyer to pay the platform commission.',
         },
@@ -28,43 +48,51 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
             key: '2',
             label: 'Digital Sale Agreement',
             content: <DigitalSaleAgreement form={form} details={details} />,
-            status: 'Pending',
+            status: 
+            DSA === 'DSA_FROM_SELLER_PENDING'
+                ? 'Seller DSA Pending'
+                : DSA === 'DSA_FROM_BUYER_PENDING'
+                ? 'Buyer DSA Pending'
+                : 'Verified',
             emptytitle: 'DSA Pending!',
             emptydesc: 'Waiting for the seller & buyer to sign the digital sale agreement.',
         },
         {
             key: '3',
             label: 'Bank Account Details',
-            // content: <BankAccountDetails details={details} />,
-            status: 'Signed',
+            content: <BankAccountDetails details={details} />,
+            status: send?.isSend ? 'Send' : 'Pending',
             emptytitle: 'Bank Details Pending!',
             emptydesc: 'Waiting for the seller to choose the bank account.',
         },
         {
             key: '4',
             label: 'Pay Business Amount',
-            content: <BusinessAmountReceiptBuyer />,
-            status: 'Pending',
+            content: <BusinessAmountReceiptBuyer details={details} />,
+            status: details?.isPaymentVedifiedSeller ? 'Verified': 'Pending',
             emptytitle: 'Business Amount Pending!',
             emptydesc: 'Waiting for the buyer to pay the seller business amount.',
         },
         {
             key: '5',
             label: 'Document & Payment Confirmation',
-            content: <DocumentPaymentConfirmation />,
-            status: 'Jusoor verification pending',
+            content: <DocumentPaymentConfirmation details={details} />,
+            status:  details?.isDocVedifiedSeller ? 'Jusoor verification pending': 'Seller verification pending',
             emptytitle: 'Payment Confirmation Pending!',
             emptydesc: 'Waiting for the seller to transfer the document & approve the payment.',
         },
         {
             key: '6',
             label: 'Finalize Deal',
-            content: <FinalDeal />,
-            status: 'Pending',
+            content: <FinalDeal details={details} />,
+            status: details?.isDocVedifiedAdmin ? "Verified" : 'Pending',
             emptytitle: 'Deal Pending!',
             emptydesc: 'Waiting for the buyer & seller to finalized the deal.',
         },
     ];
+    const [openPanels, setOpenPanels] = useState(
+        details ? allSteps.slice(0, initialStep + 1).map(step => step.key) : ['1']
+    );
 
     const getStepItems = (steps) =>
         steps.map((item) => ({

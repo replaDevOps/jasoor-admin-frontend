@@ -11,6 +11,7 @@ const DigitalSaleAgreement = ({form,details}) => {
     const checked = details?.status !== 'DSA_FROM_SELLER_PENDING' && details?.status !== 'DSA_FROM_BUYER_PENDING';
     const [isCheckedDetails, setIsCheckedDetails] = useState(false); // first checkbox
     const [isCheckedTerms, setIsCheckedTerms] = useState(false); // second checkbox
+    const DSA = details?.status
 
     const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
         onCompleted: () => {
@@ -87,39 +88,53 @@ const DigitalSaleAgreement = ({form,details}) => {
                 </Card>
             </Col>
             <Col span={24}>
-                <Flex vertical gap={3}>
-                    <Checkbox
-                        className='fit-content'
-                        checked={isCheckedDetails}
-                        onChange={e => setIsCheckedDetails(e.target.checked)}
-                    >
-                        I confirm the business details are correct.
-                    </Checkbox>
-                    <Checkbox
-                        className='fit-content'
-                        checked={isCheckedTerms}
-                        onChange={handleTermsChange} // only this triggers the mutation
-                    >
-                        I accept the terms of the agreement and agree to proceed.
-                    </Checkbox>
-                </Flex>
+            <Flex vertical gap={3}>
+                        <Checkbox
+                            className='fit-content'
+                            checked={isCheckedDetails}
+                            disabled={isCheckedDetails}
+                            onChange={e => setIsCheckedDetails(e.target.checked)}
+                        >
+                            I confirm the business details are correct.
+                        </Checkbox>
+                        <Checkbox
+                            className='fit-content'
+                            checked={isCheckedTerms}
+                            disabled={isCheckedTerms}
+                            onChange={handleTermsChange} // only this triggers the mutation
+                        >
+                            I accept the terms of the agreement and agree to proceed.
+                        </Checkbox>
+                    </Flex>
             </Col>
             <Col span={24}>
-                <Flex vertical gap={10}>
-                    {/* design for success agreement */}
-                    <Flex gap={5} className='badge-cs success fs-12 fit-content' align='center'>
-                        <CheckCircleOutlined className='fs-14' /> Seller accept the "Sale Agreement"
-                    </Flex>
+                {(DSA === 'DSA_FROM_SELLER_PENDING' || DSA === 'DSA_FROM_BUYER_PENDING') && (
+                    <Flex vertical gap={10}>
+                    {DSA === 'DSA_FROM_SELLER_PENDING' && (
+                        <>
+                        <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
+                            <CheckCircleOutlined className='fs-14' /> Waiting for seller to sign the sales agreement
+                        </Flex>
+                        <Flex gap={5} className='badge-cs success fs-12 fit-content' align='center'>
+                            <CheckCircleOutlined className='fs-14' /> Buyer accepted the "Sale Agreement"
+                        </Flex>
+                        </>
+                    )}
 
-                    {/* design for pending agreement */}
-                    <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
-                        <CheckCircleOutlined className='fs-14' /> Waiting for seller to sign the sales agreement
+                    {DSA === 'DSA_FROM_BUYER_PENDING' && (
+                        <>
+                        <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
+                            <CheckCircleOutlined className='fs-14' /> Waiting for buyer to sign the sales agreement
+                        </Flex>
+                        <Flex gap={5} className='badge-cs success fs-12 fit-content' align='center'>
+                            <CheckCircleOutlined className='fs-14' /> Seller accepted the "Sale Agreement"
+                        </Flex>
+                        </>
+                    )}
                     </Flex>
-                    <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
-                        <CheckCircleOutlined className='fs-14' /> Waiting for buyer to sign the sales agreement
-                    </Flex>
-                </Flex> 
-            </Col>
+                )}
+                </Col>
+
             {/* <>
                 {
                     !completedeal && (

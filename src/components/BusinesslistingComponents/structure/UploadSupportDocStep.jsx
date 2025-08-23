@@ -13,7 +13,6 @@ const UploadSupportDocStep = ({ data, setData }) => {
     console.log("get file file",file)
     setUploading(true);
     try {
-        console.log("file",file)
       let compressedFile = file;
 
       if (file.type.startsWith('image/')) {
@@ -52,7 +51,6 @@ const UploadSupportDocStep = ({ data, setData }) => {
 
   // Single file upload handler for Commercial Registration (CR)
   const handleSingleFileUpload = async (file) => {
-    console.log("get file file",file)
     try {
       const fileInfo = await uploadFileToServer(file);
       const updatedDocs = [...data.documents];

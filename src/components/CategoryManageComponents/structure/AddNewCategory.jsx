@@ -53,27 +53,28 @@ const AddNewCategory = () => {
 
     // load data from server into state when editing
     useEffect(() => {
-    if (editdata?.growthRecords) {
-        const mappedData = editdata.growthRecords.map((record, idx) => {
-        const yearValues = record.years.reduce((acc, y) => {
-            acc[`value${y.year}`] = y.localBusinessGrowth || 0;
-            return acc;
-        }, {});
-
-        return {
-            key: idx + 1,
-            regionname: record.regionName,
-            localbusinessgrowth: record.years?.[0]?.localBusinessGrowth ?? 0,
-            populationdensity: record.populationDensity,
-            industrydemand: record.industryDemand,
-            ...yearValues,
-        };
-        });
-
-        setCategoryProfData(mappedData);
-    }
-    }, [editdata]);
-
+        if (id && editdata?.growthRecords) {
+            // Editing: map server data
+            const mappedData = editdata.growthRecords.map((record, idx) => {
+                const yearValues = record.years.reduce((acc, y) => {
+                    acc[`value${y.year}`] = y.localBusinessGrowth || 0;
+                    return acc;
+                }, {});
+                return {
+                    key: idx + 1,
+                    regionname: record.regionName,
+                    localbusinessgrowth: record.years?.[0]?.localBusinessGrowth ?? 0,
+                    populationdensity: record.populationDensity,
+                    industrydemand: record.industryDemand,
+                    ...yearValues,
+                };
+            });
+            setCategoryProfData(mappedData);
+        } else {
+            // Creating: show dummy data
+            setCategoryProfData(categorystatsProfData);
+        }
+    }, [id, editdata]);
     const [documents, setDocuments] = useState( { title: "Category Icon", fileName: "", fileType: "", filePath: "" }, );
     const [createCategory, { loading: createLoading }] = useMutation(CREATE_CATEGORY, {
         onCompleted: (data) => {

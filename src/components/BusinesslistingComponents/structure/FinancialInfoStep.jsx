@@ -112,23 +112,29 @@ const FinancialInfoStep = ({ data, setData }) => {
             : '';
 
         const annualProfit = profitPeriod === 1 ? adjustedProfit * 2 : adjustedProfit;
-        const recoveryTime = annualProfit
-            ? (price / annualProfit).toFixed(2)
-            : '';
+        const recoveryTime = annualProfit ? (price / annualProfit).toFixed(2) : '';
+        const capitalRecovery = avgMonthlyProfit ? (price / avgMonthlyProfit).toFixed(2) : '';
 
         setData(prev => ({
             ...prev,
             multiple: scaledMultiple,
             profitMargen: profitMargin,
             recoveryTime,
+            capitalRecovery
         }));
 
         form.setFieldsValue({
             multiple: scaledMultiple,
             profitMargin,
             recoveryTime,
+            capitalRecovery
         });
-    }, [form]);
+    }, [form,
+        form.getFieldValue('revenue'),
+        form.getFieldValue('profit'),
+        form.getFieldValue('businessPrice'),
+        form.getFieldValue('profittime'),
+        form.getFieldValue('revenueTime')]);
 
     return (
         <>
@@ -226,26 +232,46 @@ const FinancialInfoStep = ({ data, setData }) => {
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
-                                label="Profit Margin"
-                                name="profitMargin"
+                                label='Business Price'
+                                name='businessPrice'
                                 required
-                                readOnly
-                                placeholder='Enter profit margin'
-                                suffix = '%'
+                                message="Please enter business price"
+                                placeholder='Enter Business Price'
+                                addonBefore={
+                                    <img src='/assets/icons/reyal-g.png' width={14} />
+                                }
+                                className='w-100'
                             />
                         </Col>
                         
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
-                                label='Business Price'
-                                name='businessPrice'
-                                required
-                                message="Please enter business price"
-                                placeholder='Enter business price'
+                                label='Capital Recovery'
+                                name='capitalRecovery'
+                                readOnly
                                 addonBefore={
                                     <img src='/assets/icons/reyal-g.png' width={14} />
                                 }
                                 className='w-100'
+                            />
+                        </Col>
+                        <Col  xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
+                            <MyInput
+                                label={<Flex align='center' gap={5}>
+                                    Multiples of Revenue & Profit <Image preview={false} src="/assets/icons/info-outline.png" width={15} alt="" />
+                                </Flex>}
+                                name='multiple'
+                                className='w-100'
+                                readOnly
+                                value={data.multiple}
+                            />
+                        </Col>
+                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
+                            <MyInput
+                                label="Profit Margin"
+                                name="profitMargin"
+                                readOnly
+                                suffix = '%'
                             />
                         </Col>
                     </Row>   

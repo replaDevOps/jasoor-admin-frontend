@@ -7,6 +7,34 @@ import {GETDEAL} from '../../../graphql/query'
 import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
 
+const statusMap = {
+    COMMISSION_TRANSFER_FROM_BUYER_PENDING: 'Buyer Commission Transfer Pending',
+    COMMISSION_VERIFIED: 'Commission Verified by Admin',
+    DSA_FROM_SELLER_PENDING: 'Seller DSA Pending',
+    DSA_FROM_BUYER_PENDING: 'Buyer DSA Pending',
+    BANK_DETAILS_FROM_SELLER_PENDING: 'Bank Details Pending from Seller',
+    SELLER_PAYMENT_VERIFICATION_PENDING: 'Seller Payment Verification Pending',
+    PAYMENT_APPROVAL_FROM_SELLER_PENDING: 'Payment Approval Pending from Seller',
+    DOCUMENT_PAYMENT_CONFIRMATION: 'Document Payment Confirmation Pending',
+    WAITING: 'Waiting for Seller Document Upload',
+    PENDING: 'Pending Jasoor Verification',
+    BUYERCOMPLETED: 'Buyer Completed',
+    SELLERCOMPLETED: 'Seller Completed',
+    COMPLETED: 'Deal Completed by Admin',
+  };
+
+  const inProgressStatuses = [
+    'Buyer Commission Transfer Pending',
+    'Seller DSA Pending',
+    'Buyer DSA Pending',
+    'Bank Details Pending from Seller',
+    'Seller Payment Verification Pending',
+    'Payment Approval Pending from Seller',
+    'Document Payment Confirmation Pending',
+    'Waiting for Seller Document Upload',
+    'Pending Jasoor Verification'
+];
+
 const { Title, Text } = Typography
 const BusinessDealsDetails = ({completedeal}) => {
     const [messageApi, contextHolder] = message.useMessage();
@@ -45,7 +73,7 @@ const BusinessDealsDetails = ({completedeal}) => {
         },
         {
             title:'Status',
-            desc:details?.status
+            desc:statusMap[details?.status] || 'Unknown',
         },
     ]
     

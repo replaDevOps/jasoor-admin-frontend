@@ -86,6 +86,18 @@ const CommissionReceiptBuyer = ({ details }) => {
         });
     };
 
+    const renderUploadedDoc = ({ fileName, fileSize, filePath }) => (
+            <Flex vertical gap={2} className="uploaded-doc">
+                <Text className="fs-14 fw-500">{fileName}</Text>
+                <Text className="text-gray fs-12">{fileSize}</Text>
+                {filePath && (
+                    <a href={filePath} target="_blank" rel="noopener noreferrer">
+                        View Document
+                    </a>
+                )}
+            </Flex>
+        );
+
     if (updating || uploading) {
         return (
             <Flex justify="center" align="center" style={{ height: "200px" }}>
