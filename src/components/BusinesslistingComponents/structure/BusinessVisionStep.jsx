@@ -36,7 +36,7 @@ const BusinessVisionStep = ({ data, setData }) => {
         <>
             <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
                 <Flex vertical gap={1} >
-                    <ModuleTopHeading level={4} name='Business Vision & Exit Plans' />
+                    <ModuleTopHeading level={4} name='Business Vision & Exit Plans' onClick={()=>{}} />
                     <Text className='text-gray'>Help buyers understand the future potential and your exit strategy</Text>
                 </Flex>
                 <Flex className='pill-round' gap={8} align='center'>
