@@ -1,7 +1,6 @@
 
-import React, { useEffect, useState } from 'react'
-import { Button, Card, Dropdown, Flex, Image, Space, Typography,message } from 'antd'
-import { SwitchAccount } from './SwitchAccount';
+import React, { useState } from 'react'
+import { Button, Card, Dropdown, Flex, Spin, Space, Typography,message } from 'antd'
 import { useNavigate } from 'react-router-dom';
 import { useMutation,useQuery } from '@apollo/client';
 import { LOGOUT } from '../../../graphql/mutation/login';
@@ -83,7 +82,15 @@ const UserDropdown = ()=> {
         </Button>
       </Space>
     </Card>
-);
+  );
+
+  if (isLoading || loading) {
+    return (
+        <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Spin size="large" />
+        </Flex>
+    );
+  }
   return (
     <>
     {contextHolder}
