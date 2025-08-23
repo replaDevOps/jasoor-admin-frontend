@@ -88,24 +88,24 @@ const DigitalSaleAgreement = ({form,details}) => {
                 </Card>
             </Col>
             <Col span={24}>
-            <Flex vertical gap={3}>
-                        <Checkbox
-                            className='fit-content'
-                            checked={isCheckedDetails}
-                            disabled={isCheckedDetails}
-                            onChange={e => setIsCheckedDetails(e.target.checked)}
-                        >
-                            I confirm the business details are correct.
-                        </Checkbox>
-                        <Checkbox
-                            className='fit-content'
-                            checked={isCheckedTerms}
-                            disabled={isCheckedTerms}
-                            onChange={handleTermsChange} // only this triggers the mutation
-                        >
-                            I accept the terms of the agreement and agree to proceed.
-                        </Checkbox>
-                    </Flex>
+                <Flex vertical gap={3}>
+                    <Checkbox
+                        className='fit-content'
+                        checked={isCheckedDetails}
+                        disabled={isCheckedDetails}
+                        onChange={e => setIsCheckedDetails(e.target.checked)}
+                    >
+                        I confirm the business details are correct.
+                    </Checkbox>
+                    <Checkbox
+                        className='fit-content'
+                        checked={isCheckedTerms}
+                        disabled={isCheckedTerms}
+                        onChange={handleTermsChange} // only this triggers the mutation
+                    >
+                        I accept the terms of the agreement and agree to proceed.
+                    </Checkbox>
+                </Flex>
             </Col>
             <Col span={24}>
                 {(DSA === 'DSA_FROM_SELLER_PENDING' || DSA === 'DSA_FROM_BUYER_PENDING') && (
@@ -134,33 +134,7 @@ const DigitalSaleAgreement = ({form,details}) => {
                     </Flex>
                 )}
                 </Col>
-
-            {/* <>
-                {
-                    !completedeal && (
-                        <>
-                            <Col span={24}>
-                                <Flex vertical gap={3}>
-                                    <Checkbox>
-                                        I have read and agree to the terms of the sale agreement.
-                                    </Checkbox>
-                                    <Checkbox>
-                                        I agree to pay the Jusoor platform commission.
-                                    </Checkbox>
-                                </Flex>
-                            </Col>
-                            <Col span={24}>
-                                <Flex>
-                                    <Button type="primary" className='btn bg-brand'>
-                                        Mark as Accepted
-                                    </Button>
-                                </Flex>
-                            </Col>
-                        </>
-                    )
-                }
-            </> */}
-        </Row>
+            </Row>
         </>
         
     )

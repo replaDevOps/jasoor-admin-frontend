@@ -1,6 +1,5 @@
 import React,{useState} from 'react'
 import { Button, Card, Col, Flex, Image, Row, Typography,Upload } from 'antd'
-import { UploadOutlined } from '@ant-design/icons';
 import { UPDATE_DEAL,UPLOAD_DOCUMENT} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
 import { message,Spin } from "antd";
@@ -88,13 +87,26 @@ const CommissionReceiptBuyer = ({ details }) => {
 
     const renderUploadedDoc = ({ fileName, fileSize, filePath }) => (
             <Flex vertical gap={2} className="uploaded-doc">
-                <Text className="fs-14 fw-500">{fileName}</Text>
-                <Text className="text-gray fs-12">{fileSize}</Text>
-                {filePath && (
-                    <a href={filePath} target="_blank" rel="noopener noreferrer">
-                        View Document
-                    </a>
-                )}
+                <Card className="card-cs border-gray rounded-12">
+                    <Flex justify="space-between" align="center">
+                        <Flex gap={15}>
+                            <Image src={'/assets/icons/file.png'} preview={false} width={20} />
+                            <Flex vertical>
+                                <Text className="fs-13 text-gray">
+                                    {fileName}
+                                </Text>
+                                <Text className='fs-13 text-gray'>
+                                    {fileSize}
+                                </Text>
+                            </Flex>
+                        </Flex>
+                        {filePath && (
+                            <a href={filePath} target="_blank" rel="noopener noreferrer">
+                                <Image src={"/assets/icons/download.png"} preview={false} width={20} />
+                            </a>
+                        )}
+                    </Flex>
+                </Card>
             </Flex>
         );
 
@@ -112,68 +124,42 @@ const CommissionReceiptBuyer = ({ details }) => {
             <Row gutter={[16, 24]}>
                 <Col span={24}>
                     <Flex vertical gap={6}>
-                    <Text className="fw-600 text-medium-gray fs-13">
-                        Jasoor’s Commission bank statement or screenshot
-                    </Text>
-                    <Card className="card-cs border-gray rounded-12">
-                        <Flex justify="space-between" align="center">
-                            <Flex gap={15}>
-                                <Image src={'/assets/icons/file.png'} preview={false} width={20} />
-                                <Flex vertical>
-                                    <Text className="fs-13 text-gray">
-                                        Business Transaction Receipt .pdf
-                                    </Text>
-                                    <Text className='fs-13 text-gray'>
-                                        5.3 MB
-                                    </Text>
-                                </Flex>
-                            </Flex>
-                            <a href={''} target="_blank" rel="noopener noreferrer">
-                                <Image src={"/assets/icons/download.png"} preview={false} width={20} />
-                            </a>
-                        </Flex>
-                    </Card>
-                    {/* {jasoorDoc ? (
-                    <Card className="card-cs border-gray rounded-12">
-                        <Flex justify="space-between" align="center">
-                            <Flex gap={15}>
-                                <Image src={'/assets/icons/file.png'} preview={false} width={20} />
-                                <Flex vertical>
-                                    <Text className="fs-13 text-gray">
-                                        {jasoorDoc.title}
-                                    </Text>
-                                </Flex>
-                            </Flex>
-                            <a href={jasoorDoc.filePath} target="_blank" rel="noopener noreferrer">
-                                <Image src={"/assets/icons/download.png"} preview={false} width={20} />
-                            </a>
-                        </Flex>
-                    </Card>
-                    
-                ) : (
-                    <Upload
-                        beforeUpload={handleSingleFileUpload}
-                        showUploadList={false}
-                        accept=".pdf,.jpg,.png"
-                    >
-                        <Card className="card-cs border-gray rounded-12" style={{ cursor: "pointer" }}>
-                            <Flex justify="space-between" align="center">
-                                <Flex gap={15}>
-                                    <UploadOutlined style={{ fontSize: 20 }} />
-                                    <Flex vertical>
-                                        <Text className="fs-13 text-gray">
-                                            {documents?.fileName || "Upload Business Transaction Receipt.pdf"}
-                                        </Text>
-                                        <Text className="fs-13 text-gray">
-                                            {documents?.fileSize || "—"}
-                                        </Text>
+                        <Text className="fw-600 text-medium-gray fs-13">
+                            Jasoor’s Commission bank statement or screenshot
+                        </Text>
+                        {
+                            jasoorDoc && (
+                                renderUploadedDoc({
+                                    fileName: jasoorDoc?.title,
+                                    fileSize: "5.3 MB",
+                                    filePath: jasoorDoc?.filePath,
+                                })
+                            )
+                        }
+                        {/* (
+                        <Upload
+                            beforeUpload={handleSingleFileUpload}
+                            showUploadList={false}
+                            accept=".pdf,.jpg,.png"
+                        >
+                            <Card className="card-cs border-gray rounded-12" style={{ cursor: "pointer" }}>
+                                <Flex justify="space-between" align="center">
+                                    <Flex gap={15}>
+                                        <UploadOutlined style={{ fontSize: 20 }} />
+                                        <Flex vertical>
+                                            <Text className="fs-13 text-gray">
+                                                {documents?.fileName || "Upload Business Transaction Receipt.pdf"}
+                                            </Text>
+                                            <Text className="fs-13 text-gray">
+                                                {documents?.fileSize || "—"}
+                                            </Text>
+                                        </Flex>
                                     </Flex>
+                                    <Image src={"/assets/icons/download.png"} preview={false} width={20} />
                                 </Flex>
-                                <Image src={"/assets/icons/download.png"} preview={false} width={20} />
-                            </Flex>
-                        </Card>
-                    </Upload>
-                )} */}
+                            </Card>
+                        </Upload>
+                    )} */}
                 </Flex>
                 </Col>
                 <Col span={24}>

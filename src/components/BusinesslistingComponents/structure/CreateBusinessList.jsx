@@ -265,74 +265,35 @@ const CreateBusinessList = ({ addstep }) => {
                     </div> */}
                     <div className="step-content">{steps[current].content}</div>
 
-                    {/* <Flex justify={
-                        (isPreview) 
-                            ? 'space-between' 
-                            : 'end'
-                        } gap={5} align='center'>
-                        {
-                            current === steps.length - 1 && isPreview && (
-                            <Button type="button" className='btn bg-black'>
-                                Edit Listing
-                            </Button>
-                            )
-                        }
-                        <Flex gap={10} justify='end'>
-                            <Button
-                                className='btn text-black border-gray'
-                                onClick={prev}
-                            >
-                                {current === 0 ? 'Cancel' : 'Previous'}
-                            </Button>
-
-                            {current < steps.length - 1 && (
-                                <Button type="primary" className='btn bg-brand' onClick={next}>
-                                    Next
-                                </Button>
-                            )}
-
-                            {current === steps.length - 1 && !isPreview && (
-                                <Button type="primary" className='btn bg-brand' onClick={() => setIsPreview(true)}>
-                                    Preview
-                                </Button>
-                            )}
-
-                            {current === steps.length - 1 && (
-                                <Button type="primary" className='btn bg-brand' onClick={handleCreateListing}>
-                                    Publish
-                                </Button>
-                            )}
-                        </Flex>
-                    </Flex> */}
                     <Flex justify={'space-between'} gap={5} align='center'>
                         {current === 0 ? (
-                                <Button type="button" className='btn border-gray text-black' onClick={()=>setIsCancel(true)}>
+                                <Button type="button" className='btncancel text-black border-gray' onClick={()=>setIsCancel(true)}>
                                     Cancel
                                 </Button>
                             )
                             :
                             (
-                                <Button type="button" className='btn border-gray text-black' onClick={prev}>
+                                <Button type="button" className='btncancel text-black border-gray' onClick={prev}>
                                     Previous
                                 </Button>
                             )  
                         }
                         <Flex gap={10} justify='end'>
                             <Button
-                                className='btn text-black border-gray'
+                                className='btncancel text-black border-gray'
                                 onClick={handleSaveDraft}
                             >
                                 Save as Draft
                             </Button>
 
                             {current < steps.length - 1 && (
-                                <Button type="primary" className='btn bg-brand' onClick={next}>
+                                <Button type="primary" className='btnsave border0 text-white brand-bg' onClick={next}>
                                     Next
                                 </Button>
                             )}
 
                             {current === steps.length - 1 && (
-                                <Button type="primary" className='btn bg-brand' onClick={handleCreateListing}>
+                                <Button type="primary" className='btnsave border0 text-white brand-bg' onClick={handleCreateListing}>
                                     Publish
                                 </Button>
                             )}

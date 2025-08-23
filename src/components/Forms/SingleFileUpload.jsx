@@ -78,7 +78,7 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, lab
         {fileList.length > 0 && (
           <div className="w-100">
             {fileList.map(file => (
-              <Flex key={file.uid} justify='space-between' className="w-100 p-2 mt-1" style={{ border: '1px solid #d9d9d9', borderRadius: 4 }}>
+              <Flex key={file.uid} justify='space-between' className="w-100 p-2 mt-2" gap={4} style={{ border: '1px solid #d9d9d9', borderRadius: 4 }}>
                 <Flex align='flex-start' gap={10} className='w-100'>
                   <img src="/assets/icons/file.png" alt="file-icon" width={24} className='pt-1' />
                   <Flex vertical align='flex-start'>
