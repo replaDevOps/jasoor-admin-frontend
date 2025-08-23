@@ -15,9 +15,9 @@ export const ModuleTopHeading=({name, onClick,level})=>{
                         <Button 
                         className="my-0"
                             type="primary" 
-                            shape="circle" 
+                            shape={'circle'} 
                             size='small' 
-                            style={{color:'var(--white-text)',backgroundColor:'var(--black-color)'}}
+                            style={{color:'var(--white-text)',backgroundColor: 'var(--brand-color)'}}
                             icon={<PlusOutlined/>}
                             onClick={onClick}
                         />

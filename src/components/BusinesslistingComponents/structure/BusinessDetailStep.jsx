@@ -170,8 +170,7 @@ const BusinessDetailStep = ({ data, setData }) => {
                 required
                 message="Choose team size"
                 options={teamsizeOp}
-                placeholder="Enter team size"
-                
+                placeholder="Enter team size"       
               />
             </Col>
 

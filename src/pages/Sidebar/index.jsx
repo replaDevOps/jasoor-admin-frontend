@@ -32,6 +32,7 @@ const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [currentTab, setCurrentTab] = useState('1');
   const [openKeys, setOpenKeys] = useState(['']);
+  const [ completedeal, setCompleteDeal ] = useState(null)
   
 
   function getItem(label, key, icon, children) {
@@ -232,8 +233,8 @@ const Sidebar = () => {
             <Route path="/addnewcategory/detail/:id" element={<AddNewCategory />} />
             <Route path="/usermanagement" element={<UserManagement />} />
             <Route path="/meetingrequest" element={<MeetingRequestPage />} />
-            <Route path="/businessdeal" element={<BusinessDealsPage />} />
-            <Route path="/businessdeal/details/:id" element={<BusinessDealsDetails />} />
+            <Route path="/businessdeal" element={<BusinessDealsPage setCompleteDeal={setCompleteDeal} />} />
+            <Route path="/businessdeal/details/:id" element={<BusinessDealsDetails completedeal={completedeal} />} />
             <Route path="/rolepermission" element={<RolePermission />} />
             <Route path="/staffmembers" element={<StaffMembersPage />} />
             <Route path="/webtrafficanalysis" element={<WebsiteTraficAnalysisPage />} />

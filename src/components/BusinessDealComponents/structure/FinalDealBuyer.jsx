@@ -30,6 +30,12 @@ const FinalDealBuyer = () => {
             </Col>
             <Col span={24}>
                 <Flex vertical gap={10}>
+                    {/* design for success status */}
+                    <Flex gap={5} className='badge-cs success fs-12 fit-content' align='center'>
+                        <CheckCircleOutlined className='fs-14' /> Seller marked the deal as "Finalized".
+                    </Flex>
+
+                    {/* design for pending state */}
                     <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
                         <CheckCircleOutlined className='fs-14' /> Waiting for seller to mark the deal as "Finalized".
                     </Flex>

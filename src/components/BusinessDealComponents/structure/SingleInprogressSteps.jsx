@@ -27,7 +27,7 @@ const statusToStepIndex = {
 
 const { Title, Text } = Typography;
 
-const SingleInprogressSteps = ({ details }) => {
+const SingleInprogressSteps = ({ details, completedeal}) => {
     const [form] = Form.useForm();
     const initialStep = details?.status ? statusToStepIndex[details.status] || 0 : 0;
     const [activeStep, setActiveStep] = useState(initialStep);
@@ -158,9 +158,10 @@ const SingleInprogressSteps = ({ details }) => {
     return (
         <Flex vertical gap={25} className='mt-3'>
             <Steps
-                className='mt-3'
+                className='mt-3 responsive-steps'
                 current={activeStep}
                 items={stepsProgress}
+                responsive={true}
                 progressDot={(dot, { index }) => (
                     <span className={`custom-dot ${activeStep > index ? 'completed' : ''} ${activeStep === index ? 'active' : ''}`}>
                         {activeStep > index ? <CheckOutlined /> : dot}

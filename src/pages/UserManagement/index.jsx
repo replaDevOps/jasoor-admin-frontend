@@ -1,18 +1,34 @@
-import { Row, Col } from 'antd'
-import { ModuleTopHeading, UserManagementTable } from '../../components'
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Row, Col, Flex, Button } from 'antd'
+import { AddUser, ModuleTopHeading, UserManagementTable } from '../../components'
+import { PlusOutlined } from '@ant-design/icons';
+
 
 const UserManagement = () => {
+    
+    const [ visible, setVisible ] = useState(false)
+    const [ edititem, setEditItem ] = useState(null)
     return (
         <>
             <Row gutter={[24,24]}>
                 <Col span={24}>
-                    <ModuleTopHeading level={4} name='User Management' />
+                    <Flex justify='space-between'>
+                        <ModuleTopHeading level={4} name='User Management' />
+                        <Button type='primary' className='btnsave' onClick={()=>setVisible(true)}> 
+                            <PlusOutlined /> Add New User
+                        </Button>
+                    </Flex>
                 </Col>
                 <Col span={24}>
-                    <UserManagementTable />
+                    <UserManagementTable {...{setVisible,setEditItem}} />
                 </Col>
             </Row>
+
+            <AddUser 
+                visible={visible}
+                edititem={edititem}
+                onClose={()=>{setVisible(false);setEditItem(null)}}
+            />
         </>
     )
 }

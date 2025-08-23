@@ -11,21 +11,22 @@ const BusinesslistingReviewModal = ({visible,onClose,onCreate}) => {
         open={visible}
         onCancel={onClose}
         closeIcon={false}
+        centered
         footer={
             <Flex justify='center' gap={5}>
-                <Button type='button' className='btn text-black border-gray' onClick={()=>{onClose();navigate('/')}}>
+                <Button type='button' className='btncancel text-black border-gray' onClick={()=>{onClose();navigate('/')}}>
                     Back to Home
                 </Button>
-                <Button type="primary" className='btn bg-brand' onClick={()=>{onClose();navigate('/sellbusinesscreate')}}>
+                <Button type="primary" className='btnsave border0 text-white brand-bg' onClick={()=>{onClose();navigate('/sellbusinesscreate')}}>
                     Create new list
                 </Button>
             </Flex>
         }
       > 
 
-        <Flex vertical align='center' className='text-center' gap={6}>
+        <Flex vertical align='center' className='text-center my-3' gap={10}>
             <img src='/assets/icons/complete.png' width={50} />
-            <Title level={4} className='m-0'>
+            <Title level={4} className='mb-0 mt-2'>
                 Business Listing Under Review
             </Title>
             <Text>

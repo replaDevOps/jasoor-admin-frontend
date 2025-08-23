@@ -29,7 +29,7 @@ const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
             {/* <Col span={24}>
                 {
                     ['Commercial Registration (CR).png','Notarized Ownership Transfer Letter.png']?.map((items,index)=>
-                        <Card className='card-cs border-gray rounded-12 mb-3' key={index} >
+                        <Card className='card-cs border-gray rounded-12' key={index} >
                             <Flex justify='space-between' align='center'>
                                 <Flex gap={15}>
                                     <Image src={'/assets/icons/file.png'} preview={false} width={20} />
@@ -49,6 +49,13 @@ const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
                 }
             </Col> */}
             <Col span={24}>
+
+                <Flex vertical gap={15}>
+                    <Flex gap={5} className='badge-cs success fs-12 fit-content' align='center'>
+                        <CheckCircleOutlined className='fs-14' /> Buyer mark the deal as "Finalized".
+                    </Flex>
+                    <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
+                        <CheckCircleOutlined className='fs-14' /> Waiting for seller to mark the deal as "Finalized".
                 <Flex vertical gap={10}>
                 <Col span={24}>
                     <Flex vertical gap={10}>
@@ -74,7 +81,7 @@ const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
                     </Flex>
                     </Col>
                     <Flex>
-                    <Button
+                        <Button
                             type="primary"
                             className="btnsave bg-brand"
                             disabled={!details?.isDocVedifiedAdmin}

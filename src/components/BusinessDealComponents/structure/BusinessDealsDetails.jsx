@@ -36,7 +36,7 @@ const statusMap = {
 ];
 
 const { Title, Text } = Typography
-const BusinessDealsDetails = () => {
+const BusinessDealsDetails = ({completedeal}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const {id} = useParams();
     const navigate = useNavigate()
@@ -109,29 +109,26 @@ const BusinessDealsDetails = () => {
                 <Flex vertical gap={40}>
                     <div className='deals-status'>
                         <Row gutter={[16, 16]}>
-                        {buyerdealsData?.map((list,index) => (
-                            <Col xs={24} sm={12} md={6} lg={6} key={index}>
-                                <Flex vertical gap={3}>
-                                    <Text className='text-gray fs-14'>{list?.title}</Text>
-                                    {list?.title === 'Status' ? (
-                                        <Text
-                                            className={
-                                                inProgressStatuses.includes(list.desc)
-                                                ? 'brand-bg text-white fs-12 sm-pill'
-                                                : 'bg-green text-white fs-12 sm-pill'
-                                            }
-                                        >
-                                            {list.desc}
-                                        </Text>
-                                    ) : (
-                                        <Text className='fs-15 fw-500'>{list.desc}</Text>
-                                    )}
-                                </Flex>
-                            </Col>
-                        ))}
+                            {
+                                buyerdealsData?.map((list,index)=>
+                                    <Col xs={24} sm={12} md={6} lg={6} key={index}>
+                                        <Flex vertical gap={3}>
+                                            <Text className='text-gray fs-14'>{list?.title}</Text>
+                                            {
+                                            (list?.title === 'Status') ? (
+                                                list.desc === 'In-progress' ?
+                                                <Text className='brand-bg text-white fs-12 sm-pill'>{list?.desc}</Text>:
+                                                <Text className='bg-green text-white fs-12 sm-pill'>{list?.desc}</Text>
+                                            ) : (
+                                                <Text className='fs-12 fw-500'>{list?.desc}</Text>
+                                            )}
+                                        </Flex>
+                                    </Col>
+                                )
+                            }
                         </Row>
                     </div>
-                    <SingleInprogressSteps details={details} />
+                    <SingleInprogressSteps details={details} completedeal={completedeal} />
                 </Flex>
             </Card>
         </Flex>

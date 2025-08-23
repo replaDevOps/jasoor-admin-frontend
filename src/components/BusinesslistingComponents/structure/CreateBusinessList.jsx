@@ -208,7 +208,6 @@ const CreateBusinessList = ({ addstep }) => {
             messageApi.error('Failed to create business listing');
         }
     };
-
     const handleSaveDraft = () => {
         const draft = JSON.stringify(businessData);
         localStorage.setItem(LOCAL_STORAGE_KEY, draft);

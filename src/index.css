@@ -50,11 +50,18 @@
     --bg-violet-light: #EEE1FE;
     --light-brand-2: #BED5FA;
     --subtitle-color: #353945;
+    --vivid-bg: #FFE1EA;
+    --vivid-color: #FF3470;
+    --gray: #E6E8EC;
 }   
 
 .success{
     background-color: var(--light-green) !important;
     color: var(--green) !important;
+}
+
+.bg-gray-2{
+    background-color: var(--gray) !important;
 }
 
 .pending{
@@ -223,6 +230,12 @@
 }
 .mb-2{
     margin-bottom: 1rem !important;
+}
+.mb-0{
+    margin-bottom: 0px !important;
+}
+.mt-3{
+    margin-top: 1rem !important;
 }
 .mt-2{margin-top: .5rem !important;}
 .m-0{margin: 0 !important}
@@ -1030,6 +1043,11 @@
     color: var(--dark-orange) !important;
 }
 
+.paybusinessamount{
+    background-color: var(--vivid-bg) !important;
+    color: var(--vivid-color) !important;
+}
+
 .fit-content{
     width: fit-content !important;
 }
@@ -1065,7 +1083,7 @@
 
 
 .deals-status{
-    padding: 12px 20px;
+    padding: 12px 20px !important;
     border-radius: 8px;
     background-color: var(--sky-light);
 }
@@ -1184,7 +1202,7 @@
 
 /* steps css  */
 .custom-step-title {
-    font-size: 14px;
+    font-size: 13px;
     text-align: center;
     display: block;
     color: var(--black-color);
@@ -1264,7 +1282,47 @@
     overflow: hidden;
 }
 
+.text-sky{
+    color: var(--sky-blue) !important;
+}
 
+.addonselect{
+    height: 40px !important;
+}
+
+.add-p input{
+    padding: 8px  !important;
+}
+
+.text-red{
+    color: var(--red-color) !important;
+}
+
+.transparent-addon .ant-input-group-addon{
+    background: transparent !important;
+}
+
+
+
+
+/* smaller font on mobile */
+@media (min-width: 575px) and (max-width: 1120px) {
+  .responsive-steps .custom-step-title {
+    font-size: 12px;
+  }
+  .responsive-steps {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 8px;
+    padding-top: 12px;
+}
+
+
+.responsive-steps .ant-steps-item {
+  min-width: 200px; /* keeps step labels readable */
+}
+
+}
 
 @media (max-width: 575px){
     .steps-create.ant-steps-dot .ant-steps-item-tail::after{
