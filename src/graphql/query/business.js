@@ -47,24 +47,28 @@ query GetCountByEachCategory {
 }
 `
 const GET_BUSINESSES = gql`
-query GetAllBusinesses($limit: Int, $offSet: Int, $search: String,$filter: BusinessFilterInput) {
-  getAllBusinesses(limit: $limit, offSet: $offSet, search: $search, filter: $filter) {
-    totalActiveCount
-    totalCount
-    totalPendingCount
+    query GetAllBusinesses($limit: Int, $offSet: Int, $filter: BusinessFilterInput, $sort: BusinessSortInput) {
+    getAllBusinesses(limit: $limit, offSet: $offSet, filter: $filter, sort: $sort) {
     businesses {
+      isByTakbeer
+      isSaved
       id
-      businessTitle
-      seller {
-        name
-      }
       category {
         name
       }
-      price
       createdAt
       businessStatus
+      businessTitle
+      description
+      revenue
+      profit
+      price
+      recoveryTime
+      savedBy {
+        id
+      }
     }
+    totalCount
   }
 }
 `

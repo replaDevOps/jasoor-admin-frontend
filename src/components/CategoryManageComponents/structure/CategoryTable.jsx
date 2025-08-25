@@ -1,13 +1,14 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table,Input,Image,Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Dropdown, Form,Image,Typography,Flex,Card,Row,Col,Input,Table } from 'antd';
+import { CustomPagination } from '../../Ui';
 import { DownOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';;
 import { useNavigate } from 'react-router-dom';
-import { CustomPagination, DeleteModal } from '../../Ui';
-import { DELETE_BUSINESS } from '../../../graphql/mutation'
+import { DELETE_CATEGORY,UPDATE_CATEGORY } from '../../../graphql/mutation'
 import { GET_CATEGORIES } from '../../../graphql/query/business'
 import { useQuery,useMutation } from '@apollo/client'
 import { message,Spin } from "antd";
 import { NavLink } from "react-router-dom";
+import {DeleteModal} from '../../../components/Ui'
 
 const { Text } = Typography
 
@@ -39,7 +40,7 @@ const CategoryTable = () => {
                     ) : status === 'INACTIVE' ? (
                         <Text className='btnpill fs-12 inactive'>Inactive</Text>
                     ) : status === 'ACTIVE' ? (
-                        <Text className='btnpill fs-12 success'>Completed</Text>
+                        <Text className='btnpill fs-12 success'>Active</Text>
                     ) : null
                 );
             }
@@ -49,21 +50,89 @@ const CategoryTable = () => {
             key: "action",
             fixed: "right",
             width: 100,
-            render: (_,row) => (
-                <Dropdown
-                    menu={{
-                        items: [
-                            { label: <NavLink onClick={(e) => {e.preventDefault(); navigate('/addnewcategory/detail/'+row?.key)}}>Edit</NavLink>, key: '1' },
-                            { label: <NavLink onClick={() => {setSelectedCategoryId(row.key); setDeleteItem(true) }}>Delete</NavLink>, key: '2' },
-                        ],
-                    }}
-                    trigger={['click']}
-                >
-                    <Button className="bg-transparent border0 p-0">
-                        <img src="/assets/icons/dots.png" alt="" width={16} />
-                    </Button>
-                </Dropdown>
-            ),
+            render: (_, row) => {
+                const items = [
+                    { 
+                        label: (
+                            <NavLink 
+                                onClick={(e) => { 
+                                    e.preventDefault(); 
+                                    navigate('/addnewcategory/detail/' + row?.key) 
+                                }}
+                            >
+                                Edit
+                            </NavLink>
+                        ), 
+                        key: '1' 
+                    },
+                    { 
+                        label: (
+                            <NavLink 
+                                onClick={() => { 
+                                    setSelectedCategoryId(row.key); 
+                                    setDeleteItem(true); 
+                                }}
+                            >
+                                Delete
+                            </NavLink>
+                        ), 
+                        key: '2' 
+                    },
+                ];
+            
+                if (row.state !== 'UNDER_REVIEW') {
+                    items.push({
+                        label: (
+                            <NavLink 
+                                onClick={() => {
+                                    // send status ACTIVE
+                                    updateCategory({
+                                        variables:{
+                                            input:{
+                                            id:row.key,
+                                            status:'ACTIVE'
+                                        }
+                                    }
+                                });
+                                }}
+                            >
+                                Active
+                            </NavLink>
+                        ),
+                        key: '3',
+                    });
+                } else {
+                    items.push({
+                        label: (
+                            <NavLink 
+                                onClick={() => {
+                                    // send status INACTIVE
+                                    updateCategory({variables:{
+                                        input:{
+                                        id:row.key,
+                                        status:'INACTIVE'
+                                        }
+                                    }});
+                                }}
+                            >
+                                InActive
+                            </NavLink>
+                        ),
+                        key: '4',
+                    });
+                }
+            
+                return (
+                    <Dropdown
+                        menu={{ items }}
+                        trigger={['click']}
+                    >
+                        <Button className="bg-transparent border0 p-0">
+                            <img src="/assets/icons/dots.png" alt="" width={16} />
+                        </Button>
+                    </Dropdown>
+                );
+            }
         },
     ];
     // State for filters
@@ -172,7 +241,19 @@ const CategoryTable = () => {
         });
     }, [searchName, selectedCategory, selectedStatus, pageSize, current]);
 
-    const [deleteBusiness, { loading: deleting }] = useMutation(DELETE_BUSINESS, {
+    const [deleteBusiness, { loading: deleting }] = useMutation(DELETE_CATEGORY, {
+        refetchQueries: [{ query: GET_CATEGORIES },],
+        awaitRefetchQueries: true,
+        onCompleted: () => {
+          message.success("Category deleted successfully");
+          setDeleteItem(false);
+        },
+        onError: (err) => {
+          message.error(err.message || "Something went wrong");
+        }
+    });
+
+    const [updateCategory, { loading: updating }] = useMutation(UPDATE_CATEGORY, {
         refetchQueries: [{ query: GET_CATEGORIES },],
         awaitRefetchQueries: true,
         onCompleted: () => {

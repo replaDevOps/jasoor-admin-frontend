@@ -9,6 +9,7 @@ const DocumentTab = ({businessId}) => {
     });
 
     const data = business?.getBusinessById?.documents;
+
     return (
         <Card className='radius-12 border-gray'>
             <Row gutter={[24,24]}>
@@ -33,7 +34,9 @@ const DocumentTab = ({businessId}) => {
                                             </Text>
                                         </Flex>
                                     </Flex>
-                                    <Image src={'/assets/icons/download.png'} preview={false} width={16} />
+                                    <a href={items?.filePath} target="_blank" rel="noopener noreferrer">
+                                        <Image src={"/assets/icons/download.png"} preview={false} width={20} />
+                                    </a>
                                 </Flex>
                             </Card>
                         </Col>
