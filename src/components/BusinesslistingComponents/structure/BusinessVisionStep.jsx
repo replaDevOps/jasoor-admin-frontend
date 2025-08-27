@@ -6,6 +6,7 @@ import { ModuleTopHeading } from '../../PageComponents'
 const { Text } = Typography
 const BusinessVisionStep = ({ data, setData }) => {
     const handleFormChange = (_, allValues) => {
+
         const { supportDuration, noSession, growthOpportunities, reasonSelling } = allValues;
 
         setData((prev) => {
@@ -44,7 +45,7 @@ const BusinessVisionStep = ({ data, setData }) => {
                     <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
                 </Flex>
             </Flex>
-            <Form
+            <Form 
                 layout="vertical"
                 form={form}
                 requiredMark={false}
