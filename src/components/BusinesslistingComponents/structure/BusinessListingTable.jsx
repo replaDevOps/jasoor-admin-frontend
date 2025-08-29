@@ -26,7 +26,6 @@ const BusinessListingTable = ({
     const [selectedStatus, setSelectedStatus] = useState('Status');
     const [selectedCategory, setSelectedCategory] = useState('Category');
     const [dateRange, setDateRange] = useState(null);
-    const [current, setCurrent] = useState(1);
     const navigate = useNavigate();
   
     const handleStatusClick = ({ key }) => {
@@ -208,9 +207,11 @@ const BusinessListingTable = ({
                 />
                 <CustomPagination 
                     total={totalCount}
-                    current={current}
+                    current={page}
                     pageSize={pageSize}
-                    onPageChange={onPageChange}
+                    onPageChange={(newPage) => {
+                        onPageChange(newPage); // notify parent
+                    }}
                 />
             </Flex>
         </Card>

@@ -8,7 +8,7 @@ const DocumentTab = ({businessId}) => {
         variables: { getBusinessByIdId: businessId },
     });
 
-    const data = business?.getBusinessById?.documents;
+    const data = business?.getBusinessById?.business?.documents;
 
     return (
         <Card className='radius-12 border-gray'>

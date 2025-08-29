@@ -1,4 +1,4 @@
-import { Button, Col, Dropdown, Flex, Form, Row, Table } from 'antd';
+import { Button, Col, Dropdown, Flex, Form, Row, Table ,Typography} from 'antd';
 import { SearchInput } from '../../Forms';
 import { inprogressdealColumn, inprogressdealData } from '../../../data';
 import { useState } from 'react';
@@ -9,6 +9,8 @@ import { CustomPagination } from '../../Ui';
 import { GETDEALS } from '../../../graphql/query/meeting'
 import { useQuery } from '@apollo/client'
 import { message,Spin } from "antd";
+
+const { Text } = Typography
 
 const InprogressDealTable = () => {
     const [form] = Form.useForm();
@@ -81,6 +83,71 @@ const InprogressDealTable = () => {
         setSearchValue(value);
         refetch({ status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null, search: value });
     };
+
+    const inprogressdealColumn = [
+        {
+            title: 'Business Title',
+            dataIndex: 'businessTitle',
+        },
+        {
+            title: 'Buyer Name',
+            dataIndex: 'buyerName',
+        },
+        {
+            title: 'Seller Name',
+            dataIndex: 'sellerName',
+        },
+        {
+            title: 'Finalized Offer',
+            dataIndex: 'finalizedOffer',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            render: (status) => {
+                return (
+                    status === 'COMMISSION_TRANSFER_FROM_BUYER_PENDING' ? (
+                        <Text className='btnpill fs-12 branded'>Commission Pending</Text>
+                    ) : 
+                    status === 'COMMISSION_VERIFIED' ? (
+                        <Text className='btnpill fs-12 pending'>DSA pending</Text>
+                    )
+                    :
+                    status === 'DSA_FROM_SELLER_PENDING' ? (
+                        <Text className='btnpill fs-12 sellerpendingstatus'>DSA Seller Pending</Text>
+                    )
+                    :
+                    status === 'DSA_FROM_BUYER_PENDING' ? (
+                        <Text className='btnpill fs-12 paybusinessamount'>DSA Buyer Pending</Text>
+                    )
+                    :
+                    status === 'BANK_DETAILS_FROM_SELLER_PENDING' ? (
+                        <Text className='btnpill fs-12 paymentapprovalpending'>Buyer Bank Dtails Pending</Text>
+                    )
+                    :
+                    status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? (
+                        <Text className='btnpill fs-12 paymentapprovalpending'>Payment Confirmation Pending</Text>
+                    )
+                    :
+                    status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? (
+                        <Text className='btnpill fs-12 paymentapprovalpending'>Document Confirmation Pending</Text>
+                    )
+                    :
+                    status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? (
+                        <Text className='btnpill fs-12 paymentapprovalpending'>Admin Verification Pending</Text>
+                    )
+                    :
+                    (
+                        <Text className='btnpill fs-12 commissiontransferbuyer'>Finalize Deal</Text>
+                    )
+                )
+            }
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+        },
+    ];
 
     return (
         <>

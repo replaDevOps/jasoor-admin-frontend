@@ -19,7 +19,7 @@ const SingleviewBusinesslist = () => {
         skip: !id, // skip if no id
     });
     
-    const data = business?.getBusinessById;
+    const data = business?.getBusinessById?.business;
     const [updateBusiness,{ loading: updating }] = useMutation(UPDATE_BUSINESS, {
         refetchQueries: [
           {

@@ -11,9 +11,10 @@ const BusinesslIstingPage = () => {
     const [page, setPage] = useState(1); // current page
     const [search, setSearch] = useState(""); // search string
     const [status, setStatus] = useState(null); // filter status (e.g., SOLD)
+    const [current, setCurrent] = useState(1);
     const navigate = useNavigate()
     const limit = 10;
-    const offSet = (page - 1) * limit;
+    const offSet = page;
   
     const { data, loading, error, refetch } = useQuery(GET_BUSINESSES, {
       variables: {
@@ -62,14 +63,9 @@ const BusinesslIstingPage = () => {
         setPage(newPage);
         refetch({
           limit,
-          offset: (newPage - 1) * limit,
-          search: search || null,
-          filter: {
-            categoryId: null,
-            startDate: null,
-            endDate: null,
-            status: status || null
-          }
+          offset: newPage, // page number directly
+          search,
+          filter: { categoryId: null, startDate: null, endDate: null, status }
         });
       };
 
