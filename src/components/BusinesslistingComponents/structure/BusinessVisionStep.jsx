@@ -31,7 +31,7 @@ const BusinessVisionStep = ({ data, setData }) => {
             businessPrice: data.price,
             reasonSelling: data.reason,
         });
-    }, [data]);
+    }, [data]); 
     const [form] = Form.useForm();    
     return (
         <>
