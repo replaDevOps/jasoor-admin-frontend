@@ -6,7 +6,6 @@ import { ModuleTopHeading } from '../../PageComponents'
 const { Text } = Typography
 const BusinessVisionStep = ({ data, setData }) => {
     const handleFormChange = (_, allValues) => {
-
         const { supportDuration, noSession, growthOpportunities, reasonSelling } = allValues;
 
         setData((prev) => {
