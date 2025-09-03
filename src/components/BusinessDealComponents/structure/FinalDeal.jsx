@@ -21,14 +21,14 @@ const FinalDeal = ({details}) => {
             variables: {
                 input: {
                     id: details.key,
-                    status: "COMPLETED", 
+                    status: "PENDING", 
                 },
             },
         });
     };
     return (
         <>
-            <contextHolder />
+            {contextHolder}
             <Row gutter={[16, 16]}>
                 {
                     ['Commercial Registration (CR).png','Notarized Ownership Transfer Letter.png']?.map((items,index)=>

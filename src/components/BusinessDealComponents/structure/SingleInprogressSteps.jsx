@@ -24,7 +24,6 @@ const statusToStepIndex = {
     PENDING: 0, // default first step
 };
 
-
 const { Title, Text } = Typography;
 
 const SingleInprogressSteps = ({ details, completedeal}) => {

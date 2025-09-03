@@ -133,7 +133,7 @@ const DigitalSaleAgreement = ({form,details}) => {
                     )}
                     </Flex>
                 )}
-                </Col>
+            </Col>
             </Row>
         </>
         

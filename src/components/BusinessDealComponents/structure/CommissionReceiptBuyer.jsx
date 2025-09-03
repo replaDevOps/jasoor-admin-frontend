@@ -9,8 +9,7 @@ const CommissionReceiptBuyer = ({ details }) => {
     const commission = details?.busines
     const jasoorDoc = commission?.documents?.find(doc => doc.title === 'Jasoor Commission');
     const [messageApi, contextHolder] = message.useMessage();
-    const [documents, setDocuments] = useState(null); // State to store uploaded file info
-
+    const isDisable = details.status === 'COMMISSION_VERIFICATION_PENDING'
     const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
         onCompleted: () => {
             messageApi.success("Status changed successfully!");
@@ -19,59 +18,6 @@ const CommissionReceiptBuyer = ({ details }) => {
             messageApi.error(err.message || "Something went wrong!");
         },
     });
-
-    const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
-        onCompleted: () => {
-            messageApi.success("Document uploaded successfully!");
-        },
-        onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
-        },
-    });
-
-    const handleSingleFileUpload = async (file) => {
-        try {
-            const formData = new FormData();
-            formData.append("file", file);
-
-            const response = await fetch("https://220.152.66.148.host.secureserver.net/upload", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (!response.ok) throw new Error("Upload failed");
-
-            const result = await response.json();
-
-            // Set the uploaded file info to state
-            setDocuments({
-                fileName: file.name,
-                fileType: file.type,
-                filePath: result.fileUrl || result.url,
-                fileSize: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
-            });
-
-            // Call GraphQL mutation to save file info in backend
-            await uploadDocument({
-                variables: {
-                    input: {
-                        title:'Jasoor Commission',
-                        businessId: details?.businessId,
-                        filePath: result.fileUrl || result.url,
-                        fileName: file.name,
-                        fileType: file.type,
-                        // businessId:details?.busines?.id
-                    },
-                },
-            });
-
-            return false; // Prevent default upload behavior
-        } catch (error) {
-            console.error("Error uploading file:", error);
-            messageApi.error(error.message || "Upload failed!");
-            return false;
-        }
-    };
 
     const handleMarkVerified = async () => {
         if (!details?.key) return;
@@ -110,7 +56,7 @@ const CommissionReceiptBuyer = ({ details }) => {
             </Flex>
         );
 
-    if (updating || uploading) {
+    if (updating) {
         return (
             <Flex justify="center" align="center" style={{ height: "200px" }}>
                 <Spin size="large" />
@@ -168,7 +114,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                             type="primary"
                             className="btnsave bg-brand"
                             onClick={handleMarkVerified}
-                            disabled={!documents} // enable only after upload
+                            disabled={!isDisable} // enable only after upload
                         >
                             Mark as Verified
                         </Button>
