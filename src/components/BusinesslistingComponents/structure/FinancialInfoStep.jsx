@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Card, Col, Flex, Form, Row, Select, Typography,Input, Image } from 'antd'
 import { MyInput } from '../../Forms'
-import { ModuleTopHeading } from '../../Pagecomponents'
+import { ModuleTopHeading } from '../../PageComponents'
 import { FormReplicate } from '../../Header'
 import { revenueLookups } from '../../../shared'
 

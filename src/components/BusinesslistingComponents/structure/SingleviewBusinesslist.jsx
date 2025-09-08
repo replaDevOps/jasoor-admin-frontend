@@ -19,7 +19,7 @@ const SingleviewBusinesslist = () => {
         skip: !id, // skip if no id
     });
     
-    const data = business?.getBusinessById;
+    const data = business?.getBusinessById?.business;
     const [updateBusiness,{ loading: updating }] = useMutation(UPDATE_BUSINESS, {
         refetchQueries: [
           {
@@ -76,6 +76,7 @@ const SingleviewBusinesslist = () => {
                 <Title level={5} className="m-0">
                     Business Verification
                 </Title>
+                
                 {data?.businessStatus === 'UNDER_REVIEW' ? (
                 <Flex gap={10}>
                     <Button
@@ -84,7 +85,7 @@ const SingleviewBusinesslist = () => {
                         onClick={() =>
                             updateBusiness({
                                 variables: {
-                                    input: { id, businessStatus: 'REJECTED' },
+                                    input: { id, businessStatus: 'REJECT' },
                                 },
                             })
                         }

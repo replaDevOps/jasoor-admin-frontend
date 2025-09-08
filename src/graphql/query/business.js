@@ -47,31 +47,39 @@ query GetCountByEachCategory {
 }
 `
 const GET_BUSINESSES = gql`
-query GetAllBusinesses($limit: Int, $offSet: Int, $search: String,$filter: BusinessFilterInput) {
-  getAllBusinesses(limit: $limit, offSet: $offSet, search: $search, filter: $filter) {
-    totalActiveCount
-    totalCount
-    totalPendingCount
+    query GetAllBusinesses($limit: Int, $offSet: Int, $filter: BusinessFilterInput, $sort: BusinessSortInput, $search: String) {
+  getAllBusinesses(limit: $limit, offSet: $offSet, filter: $filter, sort: $sort, search: $search) {
     businesses {
       id
+      isByTakbeer
+      isSaved
+      createdAt
+      businessStatus
       businessTitle
-      seller {
-        name
-      }
+      description
+      revenue
+      profit
+      price
+      recoveryTime
       category {
         name
       }
-      price
-      createdAt
-      businessStatus
+      savedBy {
+        id
+      }
     }
+    totalCount
   }
 }
 `
 const GET_BUSINESSES_STATS_BY_ID = gql`
 query GetBusinessById($getBusinessByIdId: ID!) {
   getBusinessById(id: $getBusinessByIdId) {
-    id
+    numberOfFavorites
+    numberOfOffers
+    totalViews
+    business {
+      id
     businessTitle
     description
     price
@@ -98,13 +106,18 @@ query GetBusinessById($getBusinessByIdId: ID!) {
     id
       name
     }
+    }
   }
 }
 `
 const GET_BUSINESSES_ASSETS_BY_ID = gql`
 query GetBusinessById($getBusinessByIdId: ID!) {
   getBusinessById(id: $getBusinessByIdId) {
-    id
+    numberOfFavorites
+    numberOfOffers
+    totalViews
+    business {
+      id
     assets {
       id
       isActive
@@ -129,18 +142,24 @@ query GetBusinessById($getBusinessByIdId: ID!) {
       purchaseYear
       quantity
     }
+    }
   }
 }
 `
 const GET_BUSINESSES_DOCUMENT_ID = gql`
 query GetBusinessById($getBusinessByIdId: ID!) {
   getBusinessById(id: $getBusinessByIdId) {
-    id
-    documents {
+    numberOfFavorites
+    numberOfOffers
+    totalViews
+    business {
+      id
+      documents {
       id
       title
       fileName
       filePath
+    }
     }
   }
 }
