@@ -62,7 +62,7 @@ const ForgotPassword = () => {
 
     return (
         <Row className="signup-page">
-            <Col xs={24} sm={24} md={14} lg={16} className="signup-form-container">
+            <Col xs={24} sm={24} md={12} lg={16} className="signup-form-container">
                 <div className="form-inner">
                     <NavLink to={'/'}>
                       <div className="logo">
@@ -202,7 +202,7 @@ const ForgotPassword = () => {
             <Col
                 xs={0}
                 sm={0}
-                md={10}
+                md={12}
                 lg={8}
                 className="signup-visual-container"
             >
