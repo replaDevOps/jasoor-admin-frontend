@@ -12,7 +12,7 @@ const FinalDealBuyer = () => {
                         <Card className='card-cs border-gray rounded-12 mb-3' key={index} >
                             <Flex justify='space-between' align='center'>
                                 <Flex gap={15}>
-                                    <Image src={'/assets/icons/file.png'} preview={false} width={20} />
+                                    <Image src={'/assets/icons/file.png'} alt='file-image' preview={false} width={20} />
                                     <Flex vertical>
                                         <Text className='fs-13 text-gray'>
                                             {items}
@@ -22,7 +22,7 @@ const FinalDealBuyer = () => {
                                         </Text>
                                     </Flex>
                                 </Flex>
-                                <Image src={'/assets/icons/download.png'} preview={false} width={20} />
+                                <Image src={'/assets/icons/download.png'} alt='download-icon' preview={false} width={20} />
                             </Flex>
                         </Card>
                     )
@@ -43,7 +43,7 @@ const FinalDealBuyer = () => {
                         <CheckCircleOutlined className='fs-14' /> Waiting for seller to mark the deal as "Finalized".
                     </Flex>
                     <Flex>
-                        <Button type="button" className='btnsave bg-gray border0 text-white'>
+                        <Button type="button" className='btnsave bg-gray border0 text-white' aria-labelledby='Mark Deal as Completed'>
                             Mark Deal as Completed
                         </Button>
                     </Flex>

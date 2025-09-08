@@ -211,7 +211,7 @@ const AddNewCategory = () => {
                 />
                 <Flex gap={10} justify='space-between' align="center">
                     <Flex gap={10} align="center">
-                        <Button className="border0 p-0 bg-transparent" onClick={() => navigate("/categorymanagement")}>
+                        <Button aria-labelledby='Arrow left' className="border0 p-0 bg-transparent" onClick={() => navigate("/categorymanagement")}>
                             <ArrowLeftOutlined />
                         </Button>
                         <Title level={4} className="fw-500 m-0">
@@ -219,10 +219,10 @@ const AddNewCategory = () => {
                         </Title>
                     </Flex>
                     <Flex gap={10}>
-                        <Button className="btncancel" onClick={() => navigate("/categorymanagement")}>
+                        <Button aria-labelledby='Cancel' className="btncancel" onClick={() => navigate("/categorymanagement")}>
                             Cancel      
                         </Button>
-                        <Button className="btnsave brand-bg border0 text-white" onClick={()=>form.submit()}>
+                        <Button aria-labelledby='submit button' className="btnsave brand-bg border0 text-white" onClick={()=>form.submit()}>
                             {    id ? 'Update' : 'Save'    }
                         </Button>
                     </Flex>

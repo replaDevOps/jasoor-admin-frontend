@@ -119,7 +119,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                         }}
                         trigger={['click']}
                     >
-                        <Button className="bg-transparent border0 p-0">
+                        <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                             <img src="/assets/icons/dots.png" alt="" width={16} />
                         </Button>
                     </Dropdown>
@@ -277,7 +277,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                             <Col span={14}>
                                 <Flex gap={5} wrap>
                                     <Dropdown menu={{ items: districtItems, onClick: handleDistrictClick }}>
-                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                        <Button aria-labelledby='filter district'  className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify="space-between" align="center" gap={30}>
                                                 {selectedDistrict || "District"}
                                                 <DownOutlined />
@@ -285,7 +285,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                         </Button>
                                     </Dropdown>
                                     <Dropdown menu={{ items: districtItems, onClick: handleCityClick }}>
-                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                        <Button aria-labelledby='filter city' className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify="space-between" align="center" gap={30}>
                                                 {selectedCity || "City"}
                                                 <DownOutlined />
@@ -293,7 +293,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                         </Button>
                                     </Dropdown>
                                     <Dropdown menu={{ items: typeItems, onClick: handleCategoryClick }}>
-                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                        <Button aria-labelledby='filter type' className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify="space-between" align="center" gap={30}>
                                                 {selectedCategory || "Type"}
                                                 <DownOutlined />
@@ -301,7 +301,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                         </Button>
                                     </Dropdown>
                                     <Dropdown menu={{ items: statusItems, onClick: handleStatusClick }}>
-                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                        <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify="space-between" align="center" gap={30}>
                                                 {selectedStatus || "Status"}
                                                 <DownOutlined />

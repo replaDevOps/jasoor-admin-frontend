@@ -40,10 +40,10 @@ const AddUser = ({visible,onClose,edititem}) => {
             centered
             footer={
                 <Flex justify='end' gap={5}>
-                    <Button type='button' onClick={onClose} className='btncancel text-black border-gray'>
+                    <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
                         Cancel
                     </Button>
-                    <Button className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
+                    <Button aria-labelledby='submit button' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
                         {edititem? 'Update':'Save'}
                     </Button>
                 </Flex>
@@ -58,7 +58,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                             edititem ? 'Update user' : 'Add new user'
                         }
                     </Title>
-                    <Button type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
+                    <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />
                     </Button>
                 </Flex> 
@@ -171,7 +171,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                         maxCount={1} 
                                                         // onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
                                                     >
-                                                        <Button className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
+                                                        <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
                                                     </Upload>
                                                 </Col>
                                             </Row>
@@ -195,7 +195,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                         maxCount={1} 
                                                         // onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
                                                     >
-                                                        <Button className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
+                                                        <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
                                                     </Upload>
                                                 </Col>
                                             </Row>
@@ -221,7 +221,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                     maxCount={1} 
                                                     // onChange={(info) => handleUpload({ file: info.file, title: 'passport' })}
                                                 >
-                                                    <Button className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
+                                                    <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
                                                 </Upload>
                                             </Col>
                                         </Row>

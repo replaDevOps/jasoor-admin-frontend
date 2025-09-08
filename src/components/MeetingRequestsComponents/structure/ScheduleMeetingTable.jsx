@@ -113,7 +113,7 @@ const ScheduleMeetingTable = () => {
                                 } catch (err) {
                                     console.error(err);
                                 }
-                            }}>Finalized deal</NavLink>, key: '1' },
+                            }}>Open Deal</NavLink>, key: '1' },
                             { label: <NavLink onClick={async (e) => {
                                 e.preventDefault(); 
                                 setDeleteItem(true) 
@@ -130,12 +130,12 @@ const ScheduleMeetingTable = () => {
                                 } catch (err) {
                                     console.error(err);
                                 }
-                            }}>No Deal</NavLink>, key: '2' },
+                            }}>Schedule New Meeting</NavLink>, key: '2' },
                         ],
                     }}
                     trigger={['click']}
                 >
-                    <Button className="bg-transparent border0 p-0">
+                    <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                         <img src="/assets/icons/dots.png" alt="" width={16} />
                     </Button>
                 </Dropdown>
@@ -236,7 +236,7 @@ const ScheduleMeetingTable = () => {
                                     }} 
                                     trigger={['click']}
                                 >
-                                    <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                    <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                                         <Flex justify='space-between' align='center' gap={30}>
                                             {selectedStatus}
                                             <DownOutlined />

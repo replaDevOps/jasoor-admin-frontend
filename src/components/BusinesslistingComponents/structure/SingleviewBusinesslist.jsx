@@ -63,13 +63,13 @@ const SingleviewBusinesslist = () => {
                 />
                 <Flex gap={10} align="center">
                     <Flex gap={10} align="center">
-                        <Button className="border0 p-0 bg-transparent" onClick={() => navigate("/businesslist")}>
+                        <Button aria-labelledby='Arrow left' className="border0 p-0 bg-transparent" onClick={() => navigate("/businesslist")}>
                             <ArrowLeftOutlined />
                         </Button>
                         <Title level={4} className="fw-500 m-0">{data?.businessTitle}</Title>
                     </Flex>
-                    <Button className="bg-transparent border0 p-0">
-                        <Image src='/assets/icons/edit.png' width={24} preview={false}/>        
+                    <Button aria-labelledby='edit button' className="bg-transparent border0 p-0">
+                        <Image src='/assets/icons/edit.png' alt='edit-icon' width={24} preview={false}/>        
                     </Button>
                 </Flex>
                 <Flex justify='space-between' align='center' gap={5}>
@@ -89,6 +89,7 @@ const SingleviewBusinesslist = () => {
                                 },
                             })
                         }
+                        aria-labelledby='Reject'
                     >
                         Reject
                     </Button>
@@ -102,6 +103,7 @@ const SingleviewBusinesslist = () => {
                                 },
                             })
                         }
+                        aria-labelledby='Accept'
                     >
                         Accept
                     </Button>
@@ -117,6 +119,7 @@ const SingleviewBusinesslist = () => {
                                 },
                             })
                         }
+                        aria-labelledby='Inactivate'
                     >
                         Inactivate
                     </Button>
@@ -131,6 +134,7 @@ const SingleviewBusinesslist = () => {
                                 },
                             })
                         }
+                        aria-labelledby='Activate'
                     >
                         Activate
                     </Button>
@@ -151,7 +155,7 @@ const SingleviewBusinesslist = () => {
                                             {/* TODO: implemnt verification tag data?.businessStatus */}
                                         </Title>
                                         <Flex gap={5} align='center'>
-                                            <Image src='/assets/icons/reyal-b.png' preview={false} width={20} />
+                                            <Image src='/assets/icons/reyal-b.png' alt='currency-icon' preview={false} width={20} />
                                             <Title level={3} className='m-0 text-brand'>
                                                 {data?.price}
                                             </Title>
@@ -159,7 +163,7 @@ const SingleviewBusinesslist = () => {
                                     </Flex>
                                 </Flex>
                                 <Flex gap={5} align='center'>
-                                    <Image preview={false} src="/assets/icons/loc.svg" width={10} alt="" />
+                                    <Image preview={false} src="/assets/icons/loc.svg" width={10} alt="location-icon" />
                                     <Text className='fs-10 text-gray pt-1x'>{data?.district}</Text>
                                 </Flex>
                                 <Flex vertical gap={10}>

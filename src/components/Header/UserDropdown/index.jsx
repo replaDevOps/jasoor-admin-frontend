@@ -77,7 +77,9 @@ const UserDropdown = ()=> {
         <Button className='btnsave w-100'
           type='primary' 
           loading={loading}
-          onClick={logout}>
+          onClick={logout}
+          aria-labelledby='logout'
+          >
             Logout
         </Button>
       </Space>

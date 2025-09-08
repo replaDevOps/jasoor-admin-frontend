@@ -11,10 +11,10 @@ const DeleteModal = ({visible,onClose,title,subtitle,type,onConfirm}) => {
         centered
         footer={
             <Flex justify='center' gap={5}>
-                <Button type='button' onClick={onClose} className='btncancel text-black border-gray' >
+                <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray' >
                     Cancel
                 </Button>
-                <Button className={`btnsave border0 text-white ${type==='danger'? 'bg-red':'bg-brand'}`} onClick={onConfirm} >
+                <Button aria-labelledby='Confirm' className={`btnsave border0 text-white ${type==='danger'? 'bg-red':'bg-brand'}`} onClick={onConfirm} >
                     Confirm
                 </Button>
             </Flex>

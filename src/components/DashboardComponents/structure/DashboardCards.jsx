@@ -73,7 +73,7 @@ const DashboardCards = () => {
                                 <Card className={`shadow-d radius-12 h-100 border-gray`}>
                                     <Flex gap={8} vertical>
                                         <div>
-                                            <img src={"/assets/icons/"+item?.icon} width={45} alt="" />
+                                            <img src={"/assets/icons/"+item?.icon} width={45}  alt="stats icon" />
                                         </div>
                                         <Text className='fs-14 text-gray'>{item?.subtitle}</Text>
                                         <Title level={5} className='fw-600 text-black m-0'>{item?.title}</Title>

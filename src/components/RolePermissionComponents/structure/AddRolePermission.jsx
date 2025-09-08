@@ -169,6 +169,7 @@ return (
           <Button
             className="border0 p-0 bg-transparent"
             onClick={() => navigate("/rolepermission")}
+            aria-labelledby='Arrow left'
           >
             <ArrowLeftOutlined />
           </Button>
@@ -177,12 +178,13 @@ return (
           </Title>
         </Flex>
         <Flex gap={10}>
-          <Button className="btncancel" onClick={() => navigate("/rolepermission")}>
+          <Button aria-labelledby='Cancel' className="btncancel" onClick={() => navigate("/rolepermission")}>
             Cancel
           </Button>
           <Button
             className="btnsave brand-bg border0 text-white"
             onClick={() => form.submit()}
+            aria-labelledby='submit button'
           >
             {id ? "Update" : "Save"}
           </Button>

@@ -30,7 +30,7 @@ const BankAccountCard = ({banks,settingId}) => {
                     <Title level={5} className='m-0'>
                         Bank Account
                     </Title>
-                    <Button className="btnsave brand-bg border0 text-white" onClick={()=>setVisible(true)}>
+                    <Button aria-labelledby='Add Bank Detail' className="btnsave brand-bg border0 text-white" onClick={()=>setVisible(true)}>
                         Add Bank Detail
                     </Button>
                 </Flex>
@@ -55,7 +55,7 @@ const BankAccountCard = ({banks,settingId}) => {
                                                     <Radio value={items.id}>{items.title}</Radio>
                                                     <Divider className='bg-gray' style={{height: 20}} type='vertical' />
                                                     <Flex gap={12} align='center'> 
-                                                        <Image src='/assets/icons/bank-ic.svg' width={20} preview={false} />
+                                                        <Image src='/assets/icons/bank-ic.svg' width={20} preview={false} alt='bank-icon' />
                                                         <Flex vertical gap={0}>
                                                             <Text className='fs-14'>{items.bankname}</Text>
                                                             <MaskedAccount iban={items.ibanNo} className={'fs-13 text-gray'} />
@@ -71,7 +71,7 @@ const BankAccountCard = ({banks,settingId}) => {
                                                     }}
                                                     trigger={['click']}
                                                 >
-                                                    <Button className="bg-transparent border0 p-0">
+                                                    <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                                                         <img src="/assets/icons/dots.png" alt="" width={16} />
                                                     </Button>
                                                 </Dropdown>

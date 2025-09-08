@@ -11,7 +11,7 @@ const CategoriesManagement = () => {
                 <Col span={24}>
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='Categories Management' />
-                        <Button type='primary' className='btnsave' onClick={()=>navigate('/addnewcategory')}> 
+                        <Button aria-labelledby='Add New Category' type='primary' className='btnsave' onClick={()=>navigate('/addnewcategory')}> 
                             <PlusOutlined /> Add New Category
                         </Button>
                     </Flex>

@@ -50,7 +50,7 @@ const AddArticle = () => {
             </Flex>
             <Flex justify='space-between' align='center'>
                 <Flex gap={15} align='center'>
-                    <Button className='border0 p-0 bg-transparent' onClick={() => navigate('/articles')}>
+                    <Button aria-labelledby='Arrow left' className='border0 p-0 bg-transparent' onClick={() => navigate('/articles')}>
                         <ArrowLeftOutlined />
                     </Button>
                     <Title level={4} className='m-0'>
@@ -58,10 +58,10 @@ const AddArticle = () => {
                     </Title>
                 </Flex>
                 <Flex gap={5} align='center'>
-                    <Button type='button' className='btncancel text-black border-gray'>
+                    <Button aria-labelledby='Cancel' type='button' className='btncancel text-black border-gray'>
                         Cancel
                     </Button>
-                    <Button type='button' className='btnsave border0 text-white brand-bg'>
+                    <Button aria-labelledby='submit button' type='button' className='btnsave border0 text-white brand-bg'>
                         {detail? 'Update':'Save'}
                     </Button>
                 </Flex>
@@ -108,6 +108,7 @@ const AddArticle = () => {
                                             }}
                                             onClick={() => setShowImage(false)}
                                             className='text-white'
+                                            aria-labelledby='Close'
                                         >
                                             ×
                                         </Button>

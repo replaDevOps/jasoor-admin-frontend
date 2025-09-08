@@ -26,7 +26,7 @@ const SwitchAccount = ({visible , onClose})=> {
         >
             <Flex align='center' justify='space-between' className='header-modal'>
                 <Text strong>Switch Account</Text>
-                <Button className='bg-transparent border0 p-0 ' onClick={onClose}>
+                <Button aria-labelledby='Close' className='bg-transparent border0 p-0 ' onClick={onClose}>
                     <CloseOutlined  className='text-gray'/>
                 </Button>
             </Flex>
@@ -51,6 +51,7 @@ const SwitchAccount = ({visible , onClose})=> {
                             <Button 
                                 className='pad-x fs-13 border-gray text-black h-40 margintop-5' 
                                 onClick={addAccount}
+                                aria-labelledby='Add Account'
                             >
                                 Add Account
                             </Button>

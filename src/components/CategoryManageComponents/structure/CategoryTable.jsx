@@ -20,7 +20,7 @@ const CategoryTable = () => {
         {
             title: 'Category Icon',
             dataIndex: 'categoryicon',
-            render:(categoryicon)=> <Image src={categoryicon} preview={false} width={25} />
+            render:(categoryicon)=> <Image src={categoryicon} preview={false} width={25} alt='category-icon' />
         },
         {
             title: 'Category Name',
@@ -127,8 +127,8 @@ const CategoryTable = () => {
                         menu={{ items }}
                         trigger={['click']}
                     >
-                        <Button className="bg-transparent border0 p-0">
-                            <img src="/assets/icons/dots.png" alt="" width={16} />
+                        <Button aria-labelledby='action dropdown' className="bg-transparent border0 p-0">
+                            <img src="/assets/icons/dots.png" alt="dots icon" width={16} />
                         </Button>
                     </Dropdown>
                 );
@@ -305,7 +305,7 @@ const CategoryTable = () => {
                                             }}
                                             trigger={['click']}
                                             >
-                                            <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                            <Button aria-labelledby='filter category' className="btncancel px-3 filter-bg fs-13 text-black">
                                                 <Flex justify="space-between" align="center" gap={30}>
                                                 {typeItems.find((i) => i.key === selectedCategory)?.label || "Business Type"}
                                                 <DownOutlined />
@@ -322,7 +322,7 @@ const CategoryTable = () => {
                                             }}
                                             trigger={['click']}
                                         >
-                                            <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                            <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                                                 <Flex justify="space-between" align="center" gap={30}>
                                                     {statusItems.find((i) => i.key === selectedStatus)?.label || "Status"}
                                                     <DownOutlined />

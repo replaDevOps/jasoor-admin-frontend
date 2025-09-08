@@ -48,6 +48,7 @@ const NotificationsDrawer= ({visible, onClose})=>{
                     className="btnsave py-2"
                     type="primary"
                     onClick={handleClearAll}
+                    aria-labelledby='Clear all'
                 >
                     Clear All
                 </Button>
@@ -63,6 +64,7 @@ const NotificationsDrawer= ({visible, onClose})=>{
                     type="text"
                     icon={<DeleteOutlined />}
                     onClick={() => handleMarkAsRead(item.id)}
+                    aria-labelledby='Delete button'
                   />,
                 ]}
               >

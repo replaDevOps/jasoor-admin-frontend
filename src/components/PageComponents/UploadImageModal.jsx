@@ -42,6 +42,7 @@ const UploadImageModal = ({ visible, onClose }) => {
             type="primary"
             htmlType="submit"
             loading={loading}
+            aria-labelledby='Save image'
           >
             Save Images
           </Button>

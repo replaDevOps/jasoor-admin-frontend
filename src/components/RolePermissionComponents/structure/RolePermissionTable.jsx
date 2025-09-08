@@ -99,7 +99,7 @@ const RolePermissionTable = () => {
             }}
             trigger={["click"]}
           >
-            <Button className="bg-transparent border0 p-0">
+            <Button aria-labelledby='action dropdown' className="bg-transparent border0 p-0">
               <img src="/assets/icons/dots.png" alt="" width={16} />
             </Button>
           </Dropdown>
@@ -221,7 +221,7 @@ const RolePermissionTable = () => {
                                         }} 
                                         trigger={['click']}
                                     >
-                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                        <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify='space-between' align='center' gap={30}>
                                                 {selectedStatus}
                                                 <DownOutlined />

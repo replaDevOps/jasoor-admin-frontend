@@ -73,7 +73,7 @@ console.log("error",error)
         <>
             {contextHolder}
             <Row className="signup-page" align={"middle"}>
-                <Col xs={24} sm={24} md={14} lg={16} className="signup-form-container">
+                <Col xs={24} sm={24} md={12} lg={16} className="signup-form-container">
                     <div className="form-inner">
                         <NavLink to={"/"}>
                             <div className="logo">
@@ -83,7 +83,7 @@ console.log("error",error)
 
                         <Title level={3} className="mb-1">Welcome Back, Admin</Title>
                         <Paragraph>
-                            Please Sign in to access your admin dashboard and manage platform activities.
+                            Please Sign In to access your admin dashboard and manage platform activities.
                         </Paragraph>
                         <Divider />
 
@@ -109,19 +109,20 @@ console.log("error",error)
                                     Forget Password?
                                 </NavLink>
                             </Flex>
-                            <Button htmlType="submit" type="primary" className="btnsave bg-dark-blue fs-16" block 
+                            <Button aria-labelledby='Sign In' htmlType="submit" type="primary" className="btnsave bg-dark-blue fs-16" block 
                                 // loading={loading}
                             >
-                                Signin
+                                Sign In
                             </Button>
                         </Form>
                     </div>
                 </Col>
-                <Col xs={0} md={10} lg={8} className="signup-visual-container">
+                <Col xs={0} md={12} lg={8} className="signup-visual-container">
                     <Dropdown menu={{ items: lang }} trigger={["click"]} className="lang-dropdown">
                         <Button
                             onClick={(e) => e.preventDefault()}
                             className="bg-transparent btn-outline btn p-2 border-white"
+                            aria-labelledby='language'
                         >
                             <Space align="center">
                                 <Image
@@ -137,7 +138,7 @@ console.log("error",error)
                     </Dropdown>
                     <Flex vertical justify="space-between" className="h-100">
                         <Flex vertical justify="center" align="center" className="logo-sp">
-                            <Image src="/assets/images/logo.png" width={200} preview={false} />
+                            <Image src="/assets/images/logo.png" alt='jusoor-logo' width={200} preview={false} />
                             <Title level={5} className="m-0 text-white text-center">
                                 Shorten the path
                             </Title>

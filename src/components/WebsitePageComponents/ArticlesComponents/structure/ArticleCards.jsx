@@ -55,7 +55,7 @@ const ArticleCards = ({setDeleteItem}) => {
                                                     }}
                                                     trigger={['click']}
                                                 >
-                                                    <Button className="bg-transparent border0 p-0">
+                                                    <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                                                         <img src="/assets/icons/dots.png" alt="" width={16} />
                                                     </Button>
                                                 </Dropdown>

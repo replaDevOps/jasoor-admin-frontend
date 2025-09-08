@@ -60,10 +60,10 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
             width={600}
             footer={
                 <Flex justify='end' gap={5}>
-                    <Button type='button' onClick={onClose} className='btncancel text-black border-gray'>
+                    <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
                         Cancel
                     </Button>
-                    <Button className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
+                    <Button aria-labelledby='submit button' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
                         {edititem ? 'Update':'Save Account'}
                     </Button>
                 </Flex>
@@ -78,7 +78,7 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
                                 edititem? 'Edit Bank Account':'Add New Bank Account'
                             }
                         </Title>
-                        <Button type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
+                        <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                             <CloseOutlined className='fs-18' />
                         </Button>
                     </Flex>                
@@ -140,7 +140,7 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
                         <Col span={24}>
                             <Card className='bg-brand-light border0 card-cs'>
                                 <Flex align='center' gap={10}>
-                                    <Image src='/assets/icons/brand-info.png' width={20} />
+                                    <Image src='/assets/icons/brand-info.png' alt='info-icon' width={20} />
                                     <Text className='text-brand fs-13'>
                                         Your banking details are encrypted and used only for secure payouts through Jusoor.
                                     </Text>

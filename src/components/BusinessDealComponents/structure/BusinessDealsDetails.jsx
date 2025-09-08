@@ -82,14 +82,14 @@ const BusinessDealsDetails = ({completedeal}) => {
             </Flex>
             <Flex justify='space-between' align='center'>
                 <Flex gap={15} align='center'>
-                    <Button className='border0 p-0 bg-transparent' onClick={() => navigate('/businessdeal')}>
+                    <Button aria-labelledby='Arrow left' className='border0 p-0 bg-transparent' onClick={() => navigate('/businessdeal')}>
                         <ArrowLeftOutlined />
                     </Button>
                     <Title level={4} className='m-0'>
                         {details?.businessTitle}
                     </Title>
                 </Flex>
-                <Button type='button' className='btnsave border0 text-white bg-red'>
+                <Button aria-labelledby='Cancel Deal' type='button' className='btnsave border0 text-white bg-red'>
                     Cancel Deal
                 </Button>
             </Flex>

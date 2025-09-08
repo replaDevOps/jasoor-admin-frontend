@@ -20,6 +20,7 @@ export const ModuleTopHeading=({name, onClick,level})=>{
                             style={{color:'var(--white-text)',backgroundColor: 'var(--brand-color)'}}
                             icon={<PlusOutlined/>}
                             onClick={onClick}
+                            aria-labelledby='plus button'
                         />
                         :<></>
                     }

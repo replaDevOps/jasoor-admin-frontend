@@ -120,7 +120,7 @@ const PushNotificationTable = ({setVisible, setViewNotify, setEditItem, setDelet
                                         }} 
                                         trigger={['click']}
                                     >
-                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                        <Button aria-labelledby='filter category' className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify='space-between' align='center' gap={30}>
                                                 {selectedCategory}
                                                 <DownOutlined />
@@ -134,7 +134,7 @@ const PushNotificationTable = ({setVisible, setViewNotify, setEditItem, setDelet
                                         }} 
                                         trigger={['click']}
                                     >
-                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                        <Button aria-labelledby='filter district' className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify='space-between' align='center' gap={30}>
                                                 {selectedDistrict}
                                                 <DownOutlined />
@@ -148,7 +148,7 @@ const PushNotificationTable = ({setVisible, setViewNotify, setEditItem, setDelet
                                         }} 
                                         trigger={['click']}
                                     >
-                                        <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                        <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify='space-between' align='center' gap={30}>
                                                 {selectedStatus}
                                                 <DownOutlined />
