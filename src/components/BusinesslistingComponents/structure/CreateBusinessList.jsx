@@ -267,13 +267,13 @@ const CreateBusinessList = ({ addstep }) => {
 
                     <Flex justify={'space-between'} gap={5} align='center'>
                         {current === 0 ? (
-                                <Button type="button" className='btncancel text-black border-gray' onClick={()=>setIsCancel(true)}>
+                                <Button aria-labelledby='Cancel' type="button" className='btncancel text-black border-gray' onClick={()=>setIsCancel(true)}>
                                     Cancel
                                 </Button>
                             )
                             :
                             (
-                                <Button type="button" className='btncancel text-black border-gray' onClick={prev}>
+                                <Button aria-labelledby='Previous' type="button" className='btncancel text-black border-gray' onClick={prev}>
                                     Previous
                                 </Button>
                             )  
@@ -282,18 +282,19 @@ const CreateBusinessList = ({ addstep }) => {
                             <Button
                                 className='btncancel text-black border-gray'
                                 onClick={handleSaveDraft}
+                                aria-labelledby='Save as Draft'
                             >
                                 Save as Draft
                             </Button>
 
                             {current < steps.length - 1 && (
-                                <Button type="primary" className='btnsave border0 text-white brand-bg' onClick={next}>
+                                <Button aria-labelledby='Next' type="primary" className='btnsave border0 text-white brand-bg' onClick={next}>
                                     Next
                                 </Button>
                             )}
 
                             {current === steps.length - 1 && (
-                                <Button type="primary" className='btnsave border0 text-white brand-bg' onClick={handleCreateListing}>
+                                <Button aria-labelledby='Publish' type="primary" className='btnsave border0 text-white brand-bg' onClick={handleCreateListing}>
                                     Publish
                                 </Button>
                             )}

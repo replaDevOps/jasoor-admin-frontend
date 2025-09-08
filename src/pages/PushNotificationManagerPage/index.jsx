@@ -15,7 +15,7 @@ const PushNotificationManagerPage = () => {
                 <Col span={24}>
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='Campaign Manager' />
-                        <Button type='primary' className='btnsave' onClick={()=>setVisible(true)}> 
+                        <Button aria-labelledby='Add Campaign' type='primary' className='btnsave' onClick={()=>setVisible(true)}> 
                             <PlusOutlined /> Add Campaign
                         </Button>
                     </Flex>

@@ -47,6 +47,7 @@ const UserProfileDrawer= ({visible, onClose})=>{
                     className="w-100 btnsave"
                     loading={loading}
                     // onClick={logout}
+                    aria-labelledby='logout'
                 >
                     Logout
                 </Button>

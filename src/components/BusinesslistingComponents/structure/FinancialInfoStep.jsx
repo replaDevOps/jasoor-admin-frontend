@@ -144,7 +144,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                     <Text className='text-gray'>These numbers help buyers understand your business value.</Text>
                 </Flex>
                 <Flex className='pill-round' gap={8} align='center'>
-                    <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="" />
+                    <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="info-icon" />
                     <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
                 </Flex>
             </Flex>

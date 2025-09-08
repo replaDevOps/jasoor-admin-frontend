@@ -43,7 +43,7 @@ const PasswordManager = () => {
         <Card className='radius-12 border-gray'
             actions={[
                 <Flex justify='end' className='px-3'>
-                    <Button type='button' className='btncancel text-black border-gray'  onClick={() => form.submit()}>
+                    <Button aria-labelledby='Save Changes' type='button' className='btncancel text-black border-gray'  onClick={() => form.submit()}>
                         Save Changes
                     </Button>
                 </Flex>

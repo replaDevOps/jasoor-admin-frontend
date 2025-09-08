@@ -17,7 +17,7 @@ const ArticlePage = () => {
                 <Col span={24}>
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='Articles' />
-                        <Button type='primary' className='btnsave' onClick={()=>navigate('/articles/add')}> 
+                        <Button aria-labelledby='Add New Article' type='primary' className='btnsave' onClick={()=>navigate('/articles/add')}> 
                             <PlusOutlined /> Add New Article
                         </Button>
                     </Flex>

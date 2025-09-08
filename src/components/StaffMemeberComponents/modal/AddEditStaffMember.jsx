@@ -82,10 +82,10 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
             centered
             footer={
                 <Flex justify='end' gap={5}>
-                    <Button type='button' onClick={onClose} className='btncancel text-black border-gray'>
+                    <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
                         Cancel
                     </Button>
-                    <Button className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
+                    <Button aria-labelledby='Save' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
                         Save
                     </Button>
                 </Flex>
@@ -97,7 +97,7 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
                     <Title level={5} className='m-0'>
                         {edititem ? 'Edit Staff Member' : 'Add Staff Member'}
                     </Title>
-                    <Button type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
+                    <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />
                     </Button>
                 </Flex> 

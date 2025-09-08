@@ -14,7 +14,7 @@ const UserManagement = () => {
                 <Col span={24}>
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='User Management' />
-                        <Button type='primary' className='btnsave' onClick={()=>setVisible(true)}> 
+                        <Button aria-labelledby='Add New User' type='primary' className='btnsave' onClick={()=>setVisible(true)}> 
                             <PlusOutlined /> Add New User
                         </Button>
                     </Flex>

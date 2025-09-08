@@ -79,6 +79,7 @@ const BankAccountDetails = ({details}) => {
                                 className="btnsave bg-brand mt-2"
                                 onClick={() => handleSendAccount(bank)}
                                 disabled={bank.isSend} 
+                                aria-labelledby='send button'
                             >
                                 {bank.isSend ? "Sent to Buyer" : "Send Account to Buyer"}
                             </Button>

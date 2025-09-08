@@ -14,10 +14,10 @@ const BusinesslistingReviewModal = ({visible,onClose,onCreate}) => {
         centered
         footer={
             <Flex justify='center' gap={5}>
-                <Button type='button' className='btncancel text-black border-gray' onClick={()=>{onClose();navigate('/')}}>
+                <Button aria-labelledby='Back to Home' type='button' className='btncancel text-black border-gray' onClick={()=>{onClose();navigate('/')}}>
                     Back to Home
                 </Button>
-                <Button type="primary" className='btnsave border0 text-white brand-bg' onClick={()=>{onClose();navigate('/sellbusinesscreate')}}>
+                <Button aria-labelledby='Create new list' type="primary" className='btnsave border0 text-white brand-bg' onClick={()=>{onClose();navigate('/sellbusinesscreate')}}>
                     Create new list
                 </Button>
             </Flex>

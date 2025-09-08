@@ -3,9 +3,9 @@ import { Card, Flex, Typography, Dropdown, Button } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import ReactApexChart from 'react-apexcharts';
 import { yearOp } from '../../../shared';
-import { ModuleTopHeading } from '../../PageComponents';
 import {GET_FINANCE_GRAPH} from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
+import { ModuleTopHeading } from '../../Pagecomponents';
 
 const { Title } = Typography;
 
@@ -69,7 +69,7 @@ const FinanceAreaChart = () => {
                     }}
                     trigger={['click']}
                 >
-                    <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                    <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                         <Flex justify='space-between' align='center' gap={30}>
                             {selectedStatus}
                             <DownOutlined />

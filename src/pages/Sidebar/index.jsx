@@ -172,7 +172,7 @@ const Sidebar = () => {
             style={{ width: collapsed ? "100%" : '130px' }}
             height={'auto'}
             src="/assets/images/logo.png"
-            alt='Jusoor Admin Panel'
+            alt='jusoor logo'
             preview={false}
           />
         </div>
@@ -203,6 +203,7 @@ const Sidebar = () => {
               <Image src='/assets/icons/collapse.png' 
                 width={'35px'} preview={false} 
                 style={{transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)'}}  
+                alt='collapse-icon'
               />
             </div>
             <Space size={30} align='center'>

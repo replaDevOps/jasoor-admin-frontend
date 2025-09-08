@@ -22,7 +22,7 @@ const ViewIdentity = ({visible,onClose,viewstate}) => {
                     <Title level={5} className='m-0'>
                         View Passport & National Identity
                     </Title>
-                    <Button type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
+                    <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />
                     </Button>
                 </Flex> 
@@ -31,7 +31,7 @@ const ViewIdentity = ({visible,onClose,viewstate}) => {
                         // if you want to show dynamic data then you can add (viewstate) state before map method
                         ['idcardback.png','idcardback.png']?.map((img,index)=>
                             <div className='viewimg'>
-                                <Image key={index} src={'/assets/images/'+img} width={100} height={80} className='object-cover' />
+                                <Image key={index} src={'/assets/images/'+img} alt='image' width={100} height={80} className='object-cover' />
                             </div>
                         )
                     }   

@@ -41,12 +41,12 @@ export const Notifications = () => {
         <>
             <div>
                 <Badge count={count} overflowCount={count} className="">
-                    <Button shape='circle' size='large' className='bg-transparent border-0 p-0' onClick={()=> setVisible(true)}>
+                    <Button aria-labelledby='notification button' shape='circle' size='large' className='bg-transparent border-0 p-0' onClick={()=> setVisible(true)}>
                         <Image 
                             src='/assets/icons/notify.png' 
                             width={'20px'} 
                             preview={false}
-                            alt="jusoor" 
+                            alt="notification-icon" 
                             className="up"
                         />
                     </Button>

@@ -16,7 +16,7 @@ const EndaTermPage = () => {
         <Flex vertical gap={20}>
             <Flex justify='space-between' align='center'>
                 <ModuleTopHeading level={4}  name='E-NDA Terms' />
-                <Button type='button' className='btnsave border0 text-white brand-bg'>
+                <Button aria-labelledby='Save' type='button' className='btnsave border0 text-white brand-bg'>
                     Save
                 </Button>
             </Flex>

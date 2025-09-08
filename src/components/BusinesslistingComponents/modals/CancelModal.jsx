@@ -11,10 +11,10 @@ const CancelModal = ({visible,onClose}) => {
         centered
         footer={
             <Flex justify='center' gap={5}>
-                <Button type='button' className='btncancel text-black border-gray' onClick={onClose}>
+                <Button aria-labelledby='Cancel' type='button' className='btncancel text-black border-gray' onClick={onClose}>
                     Cancel
                 </Button>
-                <Button type="primary" className='btnsave border0 text-white brand-bg'>
+                <Button aria-labelledby='Confirm' type="primary" className='btnsave border0 text-white brand-bg'>
                     Confirm
                 </Button>
             </Flex>

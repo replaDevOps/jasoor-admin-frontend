@@ -146,7 +146,7 @@ const BusinessListingTable = ({
                                     }} 
                                     trigger={['click']}
                                 >
-                                    <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                    <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                                         <Flex justify='space-between' align='center' gap={30}>
                                             {selectedStatus}
                                             <DownOutlined />
@@ -160,7 +160,7 @@ const BusinessListingTable = ({
                                     }} 
                                     trigger={['click']}
                                 >
-                                    <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                    <Button aria-labelledby='filter category' className="btncancel px-3 filter-bg fs-13 text-black">
                                         <Flex justify='space-between' align='center' gap={30}>
                                             {selectedCategory}
                                             <DownOutlined />

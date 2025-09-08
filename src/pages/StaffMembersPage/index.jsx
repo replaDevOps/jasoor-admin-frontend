@@ -15,7 +15,7 @@ const StaffMembersPage = () => {
                 <Col span={24}>
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='Staff Member' />
-                        <Button type='primary' className='btnsave' onClick={()=>setVisible(true)}> 
+                        <Button aria-labelledby='Add Staff Member' type='primary' className='btnsave' onClick={()=>setVisible(true)}> 
                             <PlusOutlined /> Add Staff Member
                         </Button>
                     </Flex>

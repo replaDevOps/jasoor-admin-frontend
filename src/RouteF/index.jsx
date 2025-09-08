@@ -9,7 +9,7 @@ import { ForgotPassword, LoginPage } from '../pages'
 const Fallback = () => (
   <div className='center' style={{ height: '100vh', width: '100%' }}>
     <Space direction='vertical' align='center' style={{ justifyContent: 'center', height: '100%', width: '100%' }}>
-      <Image style={{ width: '200px' }} src='/assets/images/logo.png' alt='jusoor Admin Panel' preview={false} />
+      <Image style={{ width: '200px' }} src='/assets/images/logo.png' alt='jusoor-logo' preview={false} />
       <SyncOutlined spin style={{ color: 'var(--second-color)', fontSize: '35px' }} />
     </Space>
   </div>

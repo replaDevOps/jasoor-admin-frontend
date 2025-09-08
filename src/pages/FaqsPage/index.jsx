@@ -14,7 +14,7 @@ const FaqsPage = () => {
                 <Col span={24}>
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='FAQs'/>
-                        <Button type='primary' className='btnsave' onClick={() => setVisible(true)}>
+                        <Button aria-labelledby='Add a Question' type='primary' className='btnsave' onClick={() => setVisible(true)}>
                             <PlusOutlined /> Add A Question
                         </Button>
                     </Flex>

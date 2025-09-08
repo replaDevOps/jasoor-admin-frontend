@@ -215,7 +215,7 @@ const categoryColumn = ( setDeleteItem, navigate ) =>  [
     {
         title: 'Category Icon',
         dataIndex: 'categoryicon',
-        render:(categoryicon)=> <Image src={categoryicon} preview={false} width={25} />
+        render:(categoryicon)=> <Image src={categoryicon} preview={false} width={25} alt='category-icon' />
     },
     {
         title: 'Category Name',
@@ -255,7 +255,7 @@ const categoryColumn = ( setDeleteItem, navigate ) =>  [
                 }}
                 trigger={['click']}
             >
-                <Button className="bg-transparent border0 p-0">
+                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                     <img src="/assets/icons/dots.png" alt="" width={16} />
                 </Button>
             </Dropdown>
@@ -430,7 +430,7 @@ const usermanageColumn = ( setVisible,SetViewState ) =>  [
                 }}
                 trigger={['click']}
             >
-                <Button className="bg-transparent border0 p-0">
+                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                     <img src="/assets/icons/dots.png" alt="" width={16} />
                 </Button>
             </Dropdown>
@@ -507,7 +507,7 @@ const meetingreqColumn = ( setVisible, setDeleteItem ) =>  [
                 }}
                 trigger={['click']}
             >
-                <Button className="bg-transparent border0 p-0">
+                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                     <img src="/assets/icons/dots.png" alt="" width={16} />
                 </Button>
             </Dropdown>
@@ -576,7 +576,7 @@ const schedulemeetingColumn = ( setVisible, setDeleteItem ) =>  [
                 }}
                 trigger={['click']}
             >
-                <Button className="bg-transparent border0 p-0">
+                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                     <img src="/assets/icons/dots.png" alt="" width={16} />
                 </Button>
             </Dropdown>
@@ -726,7 +726,7 @@ const rolepermissionColumn = (setDeleteItem, navigate) => [
           }}
           trigger={["click"]}
         >
-          <Button className="bg-transparent border0 p-0">
+          <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
             <img src="/assets/icons/dots.png" alt="" width={16} />
           </Button>
         </Dropdown>
@@ -781,7 +781,7 @@ const staffmemberColumn = (setVisible,setDeleteItem,setEditItem) =>  [
                 }}
                 trigger={['click']}
             >
-                <Button className="bg-transparent border0 p-0">
+                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                     <img src="/assets/icons/dots.png" alt="" width={16} />
                 </Button>
             </Dropdown>
@@ -847,7 +847,7 @@ const contactrequestColumn = (setVisible,setSendView,setViewItem) =>  [
                 }}
                 trigger={['click']}
             >
-                <Button className="bg-transparent border0 p-0">
+                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                     <img src="/assets/icons/dots.png" alt="" width={16} />
                 </Button>
             </Dropdown>
@@ -947,7 +947,7 @@ const pushnotifyColumn = ({setVisible,setViewNotify ,setEditItem,setDeleteItem})
                 }}
                 trigger={['click']}
             >
-                <Button className="bg-transparent border0 p-0">
+                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                     <img src="/assets/icons/dots.png" alt="" width={16} />
                 </Button>
             </Dropdown>
@@ -975,7 +975,7 @@ const faqsColumn = ( setVisible, setEditItem, setDeleteItem ) =>  [
                 }}
                 trigger={['click']}
             >
-                <Button className="bg-transparent border0 p-0">
+                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
                     <img src="/assets/icons/dots.png" alt="" width={16} />
                 </Button>
             </Dropdown>

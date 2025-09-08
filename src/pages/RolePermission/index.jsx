@@ -11,7 +11,7 @@ const RolePermission = () => {
         <Col span={24}>
           <Flex justify='space-between'>
             <ModuleTopHeading level={4} name='Role & Permissions' />
-            <Button type='primary' className='btnsave' onClick={() => navigate('/addrolepermission')}>
+            <Button aria-labelledby='Add New Role' type='primary' className='btnsave' onClick={() => navigate('/addrolepermission')}>
               <PlusOutlined /> Add New Role
             </Button>
           </Flex>

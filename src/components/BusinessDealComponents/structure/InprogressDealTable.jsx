@@ -103,7 +103,7 @@ const InprogressDealTable = () => {
                                     }} 
                                     trigger={['click']}
                                 >
-                                    <Button className="btncancel px-3 filter-bg fs-13 text-black">
+                                    <Button className="btncancel px-3 filter-bg fs-13 text-black" aria-labelledby='filter status'>
                                         <Flex justify='space-between' align='center' gap={30}>
                                             {selectedStatus}
                                             <DownOutlined />

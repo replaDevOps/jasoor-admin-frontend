@@ -41,13 +41,14 @@ const ScheduleMeeting = ({visible,onClose,meetingId, updateMeeting}) => {
         centered
         footer={
             <Flex justify='end' gap={5}>
-                <Button type='button' onClick={onClose} className='btncancel text-black border-gray'>
+                <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
                     Cancel
                 </Button>
                 <Button
                     className='btnsave border0 text-white brand-bg'
                     onClick={handleSendInvitation}
                     // loading={loading}
+                    aria-labelledby='Send Meeting Invitation'
                 >
                     Send Meeting Invitation
                 </Button>
@@ -60,7 +61,7 @@ const ScheduleMeeting = ({visible,onClose,meetingId, updateMeeting}) => {
                     <Title level={5} className='m-0'>
                         Schedule Virtual Meeting
                     </Title>
-                    <Button type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
+                    <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />
                     </Button>
                 </Flex>                

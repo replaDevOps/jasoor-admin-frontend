@@ -90,7 +90,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                 <Card className="card-cs border-gray rounded-12">
                     <Flex justify="space-between" align="center">
                         <Flex gap={15}>
-                            <Image src={'/assets/icons/file.png'} preview={false} width={20} />
+                            <Image src={'/assets/icons/file.png'} alt='file-image' preview={false} width={20} />
                             <Flex vertical>
                                 <Text className="fs-13 text-gray">
                                     {fileName}
@@ -102,7 +102,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                         </Flex>
                         {filePath && (
                             <a href={filePath} target="_blank" rel="noopener noreferrer">
-                                <Image src={"/assets/icons/download.png"} preview={false} width={20} />
+                                <Image src={"/assets/icons/download.png"} alt='download-icon' preview={false} width={20} />
                             </a>
                         )}
                     </Flex>
@@ -169,6 +169,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                             className="btnsave bg-brand"
                             onClick={handleMarkVerified}
                             disabled={!documents} // enable only after upload
+                            aria-labelledby='Mark as Verified'
                         >
                             Mark as Verified
                         </Button>
