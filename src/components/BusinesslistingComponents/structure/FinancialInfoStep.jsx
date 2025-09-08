@@ -283,7 +283,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                             },
                             {
                                 name: "price",
-                                label: "Price",
+                                label: "Total Price",
                                 placeholder: "Enter price",
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" width={14} />,
@@ -319,7 +319,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                             },
                             {
                                 name: "liabilityPrice",
-                                label: "Price",
+                                label: "Total Price",
                                 placeholder: "Enter price",
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" width={14} />,
@@ -355,7 +355,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                             },
                             {
                                 name: "inventoryPrice",
-                                label: "Price",
+                                label: "Total Price",
                                 placeholder: "Enter price",
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" width={14} />,

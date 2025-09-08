@@ -113,7 +113,7 @@ const ScheduleMeetingTable = () => {
                                 } catch (err) {
                                     console.error(err);
                                 }
-                            }}>Finalized deal</NavLink>, key: '1' },
+                            }}>Open Deal</NavLink>, key: '1' },
                             { label: <NavLink onClick={async (e) => {
                                 e.preventDefault(); 
                                 setDeleteItem(true) 
@@ -130,7 +130,7 @@ const ScheduleMeetingTable = () => {
                                 } catch (err) {
                                     console.error(err);
                                 }
-                            }}>No Deal</NavLink>, key: '2' },
+                            }}>Schedule New Meeting</NavLink>, key: '2' },
                         ],
                     }}
                     trigger={['click']}
