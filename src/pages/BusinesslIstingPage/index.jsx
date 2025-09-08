@@ -2,73 +2,76 @@ import { Row, Col, Flex, Button,Spin,message } from 'antd'
 import { BusinesslistCards, BusinessListingTable, ModuleTopHeading } from '../../components'
 import { PlusOutlined } from '@ant-design/icons';
 import { GET_BUSINESSES } from '../../graphql/query/business'
-import { useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import moment from 'moment';
 import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const BusinesslIstingPage = () => {
     const [page, setPage] = useState(1); // current page
+    const [pageSize, setPageSize] = useState(10); // current page size (limit)
     const [search, setSearch] = useState(""); // search string
     const [status, setStatus] = useState(null); // filter status (e.g., SOLD)
-    const [current, setCurrent] = useState(1);
     const navigate = useNavigate()
-    const limit = 10;
-    const offSet = page;
+    const offSet = (page - 1) * pageSize;
   
-    const { data, loading, error, refetch } = useQuery(GET_BUSINESSES, {
-      variables: {
-        limit,
-        offSet,
-        search: search || null,
-        filter: {
-          categoryId: null,
-          startDate: null,
-          endDate: null,
-          status: status || null
-        }
-      },
-      fetchPolicy: "network-only"
-    });
+console.log(offSet, "lu")
+const [loadBusinesses, { data, loading, error }] = useLazyQuery(GET_BUSINESSES, {
+  fetchPolicy: 'network-only',
+});
 
-    if (loading) {
-      return (
-        <Flex justify="center" align="center" style={{ height: '200px' }}>
-          <Spin size="large" />
-        </Flex>
-      );
+useEffect(() => {
+  loadBusinesses({
+    variables: {
+      limit: pageSize,
+      offSet,
+      search: search || null,
+      filter: { categoryId: null, startDate: null, endDate: null, status: status || null }
     }
+  });
+}, [ page, pageSize, search, status ]);
+
+    // if (loading) {
+    //   return (
+    //     <Flex justify="center" align="center" style={{ height: '200px' }}>
+    //       <Spin size="large" />
+    //     </Flex>
+    //   );
+    // }
   
     const totalActiveCount = data?.getAllBusinesses?.totalActiveCount
     const totalCount = data?.getAllBusinesses?.totalCount
     const totalPendingCount = data?.getAllBusinesses?.totalPendingCount
 
     const handleFiltersChange = (filters) => {
-        // Reset to page 1 when filters change
-        setPage(1);
-        refetch({
-          limit,
-          offset: 0,
-          search: filters.search || null,
-          filter: {
-            categoryId: filters.categoryId || null,
-            startDate: filters.startDate || null,
-            endDate: filters.endDate || null,
-            status: filters.status || null
-          }
-        });
-      };
-    
-      const handlePageChange = (newPage) => {
-        setPage(newPage);
-        refetch({
-          limit,
-          offset: newPage, // page number directly
-          search,
-          filter: { categoryId: null, startDate: null, endDate: null, status }
-        });
-      };
+      // Reset to page 1 when filters change (do NOT call refetch here)
+      setPage(1);
 
+      // merge category/start/end or whatever partial filters you get
+      setFilters(prev => ({
+        ...prev,
+        ...filters
+      }));
+
+      // do NOT call refetch here — the useEffect below will run once and load
+    };
+
+    const handlePageChange = (newPage, newPageSize) => {
+      const effectivePageSize = newPageSize || pageSize;
+      const effectivePage = newPage || 1;
+
+      // if page size changed, reset to page 1 and update pageSize
+      if (effectivePageSize !== pageSize) {
+        setPage(1);
+        setPageSize(effectivePageSize);
+        return; // let useEffect do the load
+      }
+
+      // normal page navigation
+      setPage(effectivePage);
+    };
+
+    
       
     return (
         <>
@@ -90,12 +93,18 @@ const BusinesslIstingPage = () => {
                     totalCount={totalCount}
                     loading={loading}
                     page={page}
-                    pageSize={limit}
+                    pageSize={pageSize}
                     onPageChange={handlePageChange}
                     onFiltersChange={handleFiltersChange}
                     search={search}
-                    setSearch={setSearch}
-                    setStatus={setStatus}
+                    setSearch={(val) => {
+                      setPage(1);
+                      setSearch(val);
+                    }}
+                    setStatus={(val) => {
+                      setPage(1);
+                      setStatus(val);
+                    }}
                   />
                 </Col>
             </Row>

@@ -3,7 +3,7 @@ import { MyDatepicker, SearchInput } from '../../Forms';
 import { useState,useMemo } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { CustomPagination } from '../../Ui';
+import { CustomPagination, TableLoader } from '../../Ui';
 import { GET_CATEGORIES } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
 import dayjs from 'dayjs';
@@ -50,13 +50,13 @@ const BusinessListingTable = ({
         }));
     }, [data]);
 
-    if (isLoading) {
-          return (
-            <Flex justify="center" align="center" style={{ height: '200px' }}>
-              <Spin size="large" />
-            </Flex>
-          );
-        }
+    // if (isLoading) {
+    //       return (
+    //         <Flex justify="center" align="center" style={{ height: '200px' }}>
+    //           <Spin size="large" />
+    //         </Flex>
+    //       );
+    //     }
     
     const handleCategoryClick = ({ key }) => {
         const selectedItem = categoryItems.find(item => item.key === key);
@@ -198,20 +198,20 @@ const BusinessListingTable = ({
                         onClick: () => navigate('/businesslisting/details/'+record?.id)
                     })}
                     pagination={false}
-                    // loading={
-                    //     {
-                    //         ...TableLoader,
-                    //         spinning: loading
-                    //     }
-                    // }
+                    loading={
+                        {
+                            ...TableLoader,
+                            spinning: loading
+                        }
+                    }
                 />
                 <CustomPagination 
                     total={totalCount}
                     current={page}
                     pageSize={pageSize}
-                    onPageChange={(newPage) => {
-                        onPageChange(newPage); // notify parent
-                    }}
+                    onPageChange={(newPage, newPageSize) => {
+                        onPageChange(newPage, newPageSize);
+                      }}            
                 />
             </Flex>
         </Card>

@@ -5,7 +5,7 @@ const CustomPagination = ({
   pageSize,
   current,
   onPageChange,
-  pageSizeOptions = [10, 20, 50, 100],
+  pageSizeOptions = [10, 20, 30, 50], // includes 30 per your request
 }) => {
   if (!total || total <= pageSize) return null;
 
@@ -15,8 +15,11 @@ const CustomPagination = ({
         <span className="text-gray-500">Rows per page:</span>
         <Select
           value={pageSize}
-          onChange={(value) => onPageChange(1, value)}
-          style={{ width: 80 }}
+          onChange={(value) => {
+            // when page size changes -> reset to page 1 with new pageSize
+            onPageChange(1, value);
+          }}
+          style={{ width: 90 }}
           options={pageSizeOptions.map((size) => ({
             value: size,
             label: size.toString(),
@@ -28,7 +31,8 @@ const CustomPagination = ({
         current={current}
         pageSize={pageSize}
         total={total}
-        onChange={onPageChange}
+        // AntD Pagination onChange signature is (page, pageSize)
+        onChange={(page, newPageSize) => onPageChange(page, newPageSize)}
         showLessItems
         className="pagination"
       />

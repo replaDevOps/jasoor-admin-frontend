@@ -1,13 +1,35 @@
-import React from 'react'
+import React,{ useState } from 'react'
 import { Button, Card, Flex, Typography } from 'antd'
 import { MaskedAccount } from '../../Ui/MaskedAccount'
 import { SEND_BANK, UPDATE_DEAL} from '../../../graphql/mutation/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
+import {GETUSERBANK } from '../../../graphql/query';
+
 
 const { Text } = Typography
 const BankAccountDetails = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
+    const { loading, error, data:bankData } = useQuery(GETUSERBANK,{
+        variables: {
+            getUserBankId:details?.busines?.seller?.id
+        }
+    });
+    const inactiveAccountRaw = (bankData?.getUserBanks || []).find(
+        bank => bank?.isActive === false
+      );
+
+      const data = inactiveAccountRaw
+      ? {
+          id: inactiveAccountRaw.id,
+          bankname: inactiveAccountRaw.bankName,
+          title: inactiveAccountRaw.accountTitle || 'N/A',
+          accountnumber: inactiveAccountRaw.accountNumber,
+          iban: inactiveAccountRaw.iban,
+          expirydate: inactiveAccountRaw.createdAt,
+          isActive: inactiveAccountRaw.isActive,
+        }
+      : null;
     const [sendBank, { loading: sending }] = useMutation(SEND_BANK, {
         onCompleted: () => {
             messageApi.success("Status changed successfully!");
@@ -17,16 +39,15 @@ const BankAccountDetails = ({details}) => {
         },
     });
     const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
-            onCompleted: () => {
-                messageApi.success("Status changed successfully!");
-            },
-            onError: (err) => {
-                messageApi.error(err.message || "Something went wrong!");
-            },
-        });
+        onCompleted: () => {
+            messageApi.success("Status changed successfully!");
+        },
+        onError: (err) => {
+            messageApi.error(err.message || "Something went wrong!");
+        },
+    });
     
     const buyerBanks = details?.banks;
-
     const handleSendAccount = async (bank) => {
         try {
             await sendBank({

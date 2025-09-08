@@ -221,17 +221,6 @@ query GetActiveAdminBank {
   }
 }
 `
-const GETUSERBANK = gql`
-query GetUserBanks {
-  getUserBanks {
-    id
-    bankName
-    accountNumber
-    createdAt
-    accountTitle
-  }
-}
-`
 const GETROLES = gql`
 query GetRoles($limit: Int, $offset: Int, $search: String, $isActive: Boolean) {
   getRoles(limit: $limit, offset: $offset, search: $search, isActive: $isActive) {
@@ -387,6 +376,19 @@ query Notifications($userId: ID) {
       name
       createdAt
     }
+  }
+}
+`
+const GETUSERBANK = gql`
+query GetUserBanks($getUserBankId: ID) {
+  getUserBanks(id: $getUserBankId) {
+    id
+    accountTitle
+    bankName
+    iban
+    accountNumber
+    createdAt
+    isActive
   }
 }
 `

@@ -9,7 +9,7 @@ const CommissionReceiptBuyer = ({ details }) => {
     const commission = details?.busines
     const jasoorDoc = commission?.documents?.find(doc => doc.title === 'Jasoor Commission');
     const [messageApi, contextHolder] = message.useMessage();
-    const isDisable = details.status === 'COMMISSION_VERIFICATION_PENDING'
+    const isDisable = details?.status === 'COMMISSION_VERIFICATION_PENDING'
     const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
         onCompleted: () => {
             messageApi.success("Status changed successfully!");
