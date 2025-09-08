@@ -23,18 +23,6 @@ const statusMap = {
     COMPLETED: 'Deal Completed by Admin',
   };
 
-  const inProgressStatuses = [
-    'Buyer Commission Transfer Pending',
-    'Seller DSA Pending',
-    'Buyer DSA Pending',
-    'Bank Details Pending from Seller',
-    'Seller Payment Verification Pending',
-    'Payment Approval Pending from Seller',
-    'Document Payment Confirmation Pending',
-    'Waiting for Seller Document Upload',
-    'Pending Jasoor Verification'
-];
-
 const { Title, Text } = Typography
 const BusinessDealsDetails = ({completedeal}) => {
     const [messageApi, contextHolder] = message.useMessage();

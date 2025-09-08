@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Card, Flex, Typography } from 'antd'
-import { MaskedAccount } from '../../Ui'
+import { MaskedAccount } from '../../Ui/MaskedAccount'
 import { SEND_BANK, UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
 import { message,Spin } from "antd";

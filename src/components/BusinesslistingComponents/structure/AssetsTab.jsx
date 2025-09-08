@@ -135,7 +135,7 @@ const inventoryColumn = [
         variables: { getBusinessByIdId: businessId },
       });
 
-      const outstandliabilitiesData = business?.getBusinessById?.liabilities.map(libility=>({
+      const outstandliabilitiesData = business?.getBusinessById?.business?.liabilities.map(libility=>({
         key:libility?.id,
         liabilitiesname:libility?.name,
         noitems:libility?.quantity,
@@ -143,7 +143,7 @@ const inventoryColumn = [
         price:libility?.price,
         verify:libility?.isActive,
       }));
-      const keyassetData = business?.getBusinessById?.assets.map(asset=>({
+      const keyassetData = business?.getBusinessById?.business?.assets.map(asset=>({
         key:asset?.id,
         assetname:asset?.name,
         noitems:asset?.quantity,
@@ -151,7 +151,7 @@ const inventoryColumn = [
         price:asset?.price,
         verify:asset?.isActive,
       }));
-      const inventoryData = business?.getBusinessById?.inventoryItems.map(inventory=>({
+      const inventoryData = business?.getBusinessById?.business?.inventoryItems.map(inventory=>({
         key:inventory?.id,
         inventoryname:inventory?.name,
         noitems:inventory?.quantity,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Card, Flex, Form, Image, Tooltip, Typography } from 'antd'
-import { ModuleTopHeading } from '../../Pagecomponents'
+import { ModuleTopHeading } from '../../PageComponents'
 import { SingleFileUpload } from '../../Forms';
 import imageCompression from 'browser-image-compression';
 

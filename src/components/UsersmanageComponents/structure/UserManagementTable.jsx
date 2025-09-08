@@ -141,7 +141,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
         variables: {
             limit: pageSize,
             offset: (current - 1) * pageSize,
-            filter
+            filter: null
         },
         fetchPolicy: "network-only"
     });
@@ -233,7 +233,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
         });
     };
 
-    const users = data?.getUsers?.users?.map((user, index) => ({
+    const usermanageData = data?.getUsers?.users?.map((user, index) => ({
         key: user.id,
         fullname: user.name,
         email: user.email,

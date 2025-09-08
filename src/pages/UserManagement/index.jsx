@@ -3,7 +3,6 @@ import { Row, Col, Flex, Button } from 'antd'
 import { AddUser, ModuleTopHeading, UserManagementTable } from '../../components'
 import { PlusOutlined } from '@ant-design/icons';
 
-
 const UserManagement = () => {
     
     const [ visible, setVisible ] = useState(false)

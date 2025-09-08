@@ -36,7 +36,7 @@ mutation UpdateBusiness($input: UpdateBusinessInput!) {
   }
 }
 `
-const DELETE_BUSINESS = gql `
+const DELETE_CATEGORY = gql `
 mutation DeleteCategory($deleteCategoryId: ID!) {
   deleteCategory(id: $deleteCategoryId)
 }
@@ -187,7 +187,7 @@ export {
   UPDATE_INVENTORY,
   UPDATE_LIABILITY,
   UPDATE_CATEGORY,
-  DELETE_BUSINESS,
+  DELETE_CATEGORY,
   UPDATE_USER,
   UPDATE_BUSINESS_MEETING,
   UPDATE_CONTACT_US,

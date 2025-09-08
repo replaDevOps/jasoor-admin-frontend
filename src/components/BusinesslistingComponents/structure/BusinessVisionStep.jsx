@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Card, Col, Flex, Form, Image, Row, Typography } from 'antd'
 import { MyInput } from '../../Forms'
-import { ModuleTopHeading } from '../../Pagecomponents'
+import { ModuleTopHeading } from '../../PageComponents'
 
 const { Text } = Typography
 const BusinessVisionStep = ({ data, setData }) => {
@@ -30,13 +30,13 @@ const BusinessVisionStep = ({ data, setData }) => {
             businessPrice: data.price,
             reasonSelling: data.reason,
         });
-    }, [data]);
+    }, [data]); 
     const [form] = Form.useForm();    
     return (
         <>
             <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
                 <Flex vertical gap={1} >
-                    <ModuleTopHeading level={4} name='Business Vision & Exit Plans' />
+                    <ModuleTopHeading level={4} name='Business Vision & Exit Plans' onClick={()=>{}} />
                     <Text className='text-gray'>Help buyers understand the future potential and your exit strategy</Text>
                 </Flex>
                 <Flex className='pill-round' gap={8} align='center'>
@@ -44,7 +44,7 @@ const BusinessVisionStep = ({ data, setData }) => {
                     <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
                 </Flex>
             </Flex>
-            <Form
+            <Form 
                 layout="vertical"
                 form={form}
                 requiredMark={false}
