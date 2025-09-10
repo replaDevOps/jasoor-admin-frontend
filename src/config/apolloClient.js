@@ -4,7 +4,7 @@ import { onError } from "@apollo/client/link/error";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 
-const API_URL = "https://220.152.66.148.host.secureserver.net/graphql";
+const API_URL = "https://verify.jusoor-sa.co/graphql";
 
 // HTTP Link
 const httpLink = createHttpLink({
