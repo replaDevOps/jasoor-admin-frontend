@@ -1,25 +1,53 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Typography } from 'antd';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Typography,Spin,message } from 'antd';
 import { SearchInput } from '../../../Forms';
-import { articleData, pushnotifyData } from '../../../../data';
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import { CustomPagination } from '../../../Ui';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import {GETARTICLES} from '../../../../graphql/query/queries'
+import { useQuery } from "@apollo/client";
 
 const { Paragraph, Text } = Typography
-const ArticleCards = ({setDeleteItem}) => {
+const ArticleCards = ({setDeleteItem, onDelete}) => {
     const [form] = Form.useForm();
+    const [messageApi, contextHolder] = message.useMessage();
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
-
-    const total = pushnotifyData.length;
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
     };
-    
+    const  {data, loading , error,refetch} = useQuery(GETARTICLES,{
+        variables: { search: "" },
+    });
+
+    const total = data?.getArticles?.totalCount || 0;
+    const articleData = data?.getArticles?.articles || [];
+    const searchTimeout = useRef(null);
+
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+
+        if (searchTimeout.current) {
+            clearTimeout(searchTimeout.current);
+        }
+
+        searchTimeout.current = setTimeout(() => {
+            refetch({ search: value });
+            setCurrent(1); // reset pagination
+        }, 500); // 500ms delay
+    };
+
+    if (loading) {
+        return (
+            <Flex justify="center" align="center" style={{ height: "200px" }}>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
 
     return (
         <>
+        {contextHolder}
             <Card className='radius-12 border-gray'>
                 <Flex vertical gap={20}>
                     <Form form={form} layout="vertical">
@@ -31,6 +59,7 @@ const ArticleCards = ({setDeleteItem}) => {
                                         placeholder='Search'
                                         prefix={<img src='/assets/icons/search.png' width={14} />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
+                                        onChange={handleSearchChange} 
                                     />
                                 </Flex>
                             </Col>
@@ -50,7 +79,7 @@ const ArticleCards = ({setDeleteItem}) => {
                                                     menu={{
                                                         items: [
                                                             { label: <NavLink to={'/articles/add/'+art?.id}>Edit</NavLink>, key: '1' },
-                                                            { label: <NavLink onClick={(e) => {e.preventDefault();setDeleteItem(true)}}>Delete</NavLink>, key: '2' },
+                                                            { label: <NavLink onClick={(e) => {e.preventDefault();setDeleteItem(art?.id)}}>Delete</NavLink>, key: '2' },
                                                         ]
                                                     }}
                                                     trigger={['click']}
@@ -84,7 +113,7 @@ const ArticleCards = ({setDeleteItem}) => {
                                                     }}
                                                     className='fs-14 text-gray'
                                                 >
-                                                    {art?.description}
+                                                     <span dangerouslySetInnerHTML={{ __html: art?.body }} />
                                                 </Paragraph>
                                             </div>
                                         </Flex>

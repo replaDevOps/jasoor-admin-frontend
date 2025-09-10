@@ -25,7 +25,7 @@ const authLink = setContext((_, { headers }) => {
 
 // WebSocket link for subscriptions
 const wsLink = new WebSocketLink({
-  uri: "wss://220.152.66.148.host.secureserver.net/subscriptions",
+  uri: "wss://verify.jusoor-sa.co/subscriptions",
   options: {
     reconnect: true,
     connectionParams: {
