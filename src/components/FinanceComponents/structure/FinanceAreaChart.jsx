@@ -5,7 +5,7 @@ import ReactApexChart from 'react-apexcharts';
 import { yearOp } from '../../../shared';
 import {GET_FINANCE_GRAPH} from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
-import { ModuleTopHeading } from '../../Pagecomponents';
+import { ModuleTopHeading } from '../../PageComponents';
 
 const { Title } = Typography;
 
