@@ -26,7 +26,7 @@ const UploadSupportDocStep = ({ data, setData }) => {
       const formData = new FormData();
       formData.append('file', compressedFile);
 
-      const res = await fetch('https://220.152.66.148.host.secureserver.net/upload', {
+      const res = await fetch("https://verify.jusoor-sa.co/upload", {
         method: 'POST',
         body: formData,
       });
@@ -135,7 +135,7 @@ const UploadSupportDocStep = ({ data, setData }) => {
               <Title level={5} className="m-0 fw-500">
                 Upload Other Supporting Documents{' '}
                 <Tooltip title="Info">
-                  <img src="/assets/icons/info-outline.png"  width={14} alt="info icon" />
+                  <img src="/assets/icons/info-outline.png" width={14} alt="" fetchpriority="high" />
                 </Tooltip>
               </Title>
               <Text className="text-gray">

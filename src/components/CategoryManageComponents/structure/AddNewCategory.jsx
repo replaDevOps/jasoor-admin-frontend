@@ -156,7 +156,7 @@ const AddNewCategory = () => {
           formData.append("file", processedFile);
       
           // Upload to server
-          const response = await fetch("https://220.152.66.148.host.secureserver.net/upload", {
+          const response = await fetch("https://verify.jusoor-sa.co/upload", {
             method: "POST",
             body: formData,
           });
@@ -283,6 +283,7 @@ const AddNewCategory = () => {
                                 src={editdata?.icon}
                                 alt="Category Icon"
                                 style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8 }}
+                                fetchpriority="high"
                             />
                             )}
 

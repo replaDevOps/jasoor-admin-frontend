@@ -28,7 +28,6 @@ const CREATE_BUSINESS = gql `
     }
   } 
 `
-
 const UPDATE_BUSINESS = gql `
 mutation UpdateBusiness($input: UpdateBusinessInput!) {
   updateBusiness(input: $input) {
@@ -168,6 +167,63 @@ mutation SendBankToBuyer($sendBankToBuyerId: ID) {
   }
 }
 `
+const CREATE_ARTICLE = gql`
+mutation CreateArticle($title: String!, $image: String!, $body: JSON!) {
+  createArticle(title: $title, image: $image, body: $body) {
+    id
+  }
+}
+`
+const UPDATE_ARTICLE = gql`
+mutation UpdateArticle($updateArticleId: ID!, $title: String, $image: String, $body: JSON) {
+  updateArticle(id: $updateArticleId, title: $title, image: $image, body: $body) {
+    id
+  }
+}
+`
+const DELETE_ARTICLE = gql`
+mutation DeleteArticle($deleteArticleId: ID!) {
+  deleteArticle(id: $deleteArticleId)
+}
+`
+const CREATE_FAQ = gql`
+mutation CreateFAQ($question: String!, $answer: String!) {
+  createFAQ(question: $question, answer: $answer) {
+    id
+  }
+}
+`
+const UPDATE_FAQ = gql`
+mutation UpdateFAQ($updateFaqId: ID!, $question: String, $answer: String) {
+  updateFAQ(id: $updateFaqId, question: $question, answer: $answer) {
+    id
+  }
+}
+`
+const DELETE_FAQ = gql`
+mutation DeleteFAQ($deleteFaqId: ID!) {
+  deleteFAQ(id: $deleteFaqId)
+}
+`
+const CREATE_TERMS = gql`
+mutation CreateTerms($term: JSON, $ndaTerm: JSON, $policy: JSON) {
+  createTerms(term: $term, ndaTerm: $ndaTerm, policy: $policy) {
+    id
+  }
+}
+`
+const UPDATE_TERMS = gql`
+mutation UpdateTerms($updateTermsId: ID!, $term: JSON, $ndaTerm: JSON, $policy: JSON) {
+  updateTerms(id: $updateTermsId, term: $term, ndaTerm: $ndaTerm, policy: $policy) {
+    id
+  }
+}
+`
+const DELETE_TERMS = gql`
+mutation DeleteTerms($deleteTermsId: ID!) {
+  deleteTerms(id: $deleteTermsId)
+}
+`
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -193,5 +249,14 @@ export {
   UPDATE_CONTACT_US,
   UPDATE_DEAL,
   UPLOAD_DOCUMENT,
-  SEND_BANK
+  SEND_BANK,
+  CREATE_ARTICLE,
+  UPDATE_ARTICLE,
+  CREATE_FAQ,
+  CREATE_TERMS,
+  UPDATE_FAQ,
+  UPDATE_TERMS,
+  DELETE_ARTICLE,
+  DELETE_FAQ,
+  DELETE_TERMS
 }

@@ -1,23 +1,58 @@
 import { useState } from 'react'
-import { Button, Card, Flex, Form, Typography } from 'antd'
+import { Button, Card, Flex, Form,Spin,message } from 'antd'
 import { EditorDescription, ModuleTopHeading } from '../../components';
+import { useMutation } from "@apollo/client";
+import { CREATE_TERMS } from '../../graphql/mutation/mutations';
 
-const { Title } = Typography
 const PrivacyPolicyPage = () => {
-
     const [form] = Form.useForm();
     const [ descriptionData, setDescriptionData ] = useState('')
+    const [messageApi, contextHolder] = message.useMessage();
+    const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);
 
-    const handleDescriptionChange = () =>{
-        setDescriptionData()
+    const handleDescriptionChange = (value) =>{
+        setDescriptionData(value)
     }
 
+    const onFinish = async () => {
+        try {
+          if (!descriptionData) {
+            messageApi.error("Please add policy content");
+            return;
+          }
+    
+          await createTerms({
+            variables: {
+              term: null,   // ✅ now valid JSON,   // sending only term for now
+              ndaTerm: null,
+              policy: { content: descriptionData },
+            },
+          });
+    
+          messageApi.success("Policy created successfully!");
+          form.resetFields();
+          setDescriptionData("");
+        } catch (err) {
+          console.error(err);
+          messageApi.error("Failed to save Policy");
+        }
+      };
 
+    if (creating) {
+        return (
+            <Flex justify="center" align="center" style={{ height: "200px" }}>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
     return (
+
+        <>
+        {contextHolder}
         <Flex vertical gap={20}>
             <Flex justify='space-between' align='center'>
                 <ModuleTopHeading level={4}  name='Privacy Policy' />
-                <Button aria-labelledby='Save' type='button' className='btnsave border0 text-white brand-bg'>
+                <Button onClick={onFinish} aria-labelledby='Save' type='button' className='btnsave border0 text-white brand-bg'>
                     Save
                 </Button>
             </Flex>
@@ -36,6 +71,7 @@ const PrivacyPolicyPage = () => {
                 </Form>
             </Card>
         </Flex>
+        </>
     )
 }
 

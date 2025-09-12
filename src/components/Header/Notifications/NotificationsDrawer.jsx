@@ -13,13 +13,16 @@ const { useToken } = theme;
 const { Text } = Typography
 const NotificationsDrawer= ({visible, onClose})=>{
     const userId = localStorage.getItem("userId"); 
-    const { data, loading, refetch } = useQuery(GET_NOTIFICATIONS, {
+    const { data, loading } = useQuery(GET_NOTIFICATIONS, {
         variables: { userId },
         skip: !userId,
         fetchPolicy: "network-only",
     });
     
-    const [markAsRead] = useMutation(MARK_AS_READ, refetch() );
+    const [markAsRead] = useMutation(MARK_AS_READ, {
+      refetchQueries: [{ query: GET_NOTIFICATIONS, variables: { userId } }],
+      awaitRefetchQueries: true,
+    } );
     
       // Mark single notification as read
       const handleMarkAsRead = (id) => {

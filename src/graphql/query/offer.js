@@ -169,7 +169,6 @@ query GetDeal($getDealId: ID!) {
         bankName
         iban
         accountTitle
-        isSend
       }
     }
     offer {

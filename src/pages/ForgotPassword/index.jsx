@@ -66,7 +66,7 @@ const ForgotPassword = () => {
                 <div className="form-inner">
                     <NavLink to={'/'}>
                       <div className="logo">
-                        <img src="/assets/images/logo-1.png" alt='jusoor logo' style={{ height: "70px" }} />
+                        <img src="/assets/images/logo-1.png" style={{ height: "70px" }} fetchpriority="high"/>
                       </div>
                     </NavLink>
                     <div>
@@ -230,7 +230,7 @@ const ForgotPassword = () => {
                         <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
                     </Flex>
                     <div className="bg-shade">
-                        <img src="/assets/images/login.gif" alt="signup gif" style={{ width: "100%",opacity:.7 }} />
+                        <img src="/assets/images/login.gif" alt="Signup Visual" style={{ width: "100%",opacity:.7 }} fetchpriority="high" />
                     </div>
                 </Flex>
             </Col>

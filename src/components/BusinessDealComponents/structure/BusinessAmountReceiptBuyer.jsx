@@ -11,7 +11,8 @@ const BusinessAmountReceiptBuyer = ({details}) => {
     
     // const paymentReceipt = details?.busines?.documents?.find(doc => doc.title === 'Buyer Payment Receipt');
     const sellerReceipt = details?.busines?.documents?.find(doc => doc.title === 'Buyer Payment Receipt');
-    const sellerBank = details?.banks?.find(doc => doc.isSend === true);
+    console.log("details?.banks",details)
+    const sellerBank = details?.banks?.find(doc => doc.isActive === true);
     const businessamountrecpData = [
         {title:'Seller’s Bank Name', desc: sellerBank?.bankName },
         {title:'Seller’s IBAN', desc:sellerBank?.iban },
@@ -42,7 +43,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                 const formData = new FormData();
                 formData.append("file", file);
     
-                const response = await fetch("https://220.152.66.148.host.secureserver.net/upload", {
+                const response = await fetch("https://verify.jusoor-sa.co/upload", {
                     method: "POST",
                     body: formData,
                 });
@@ -104,6 +105,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
             },
         });
     };
+    const  isCompleted = details.status === 'COMPLETED'
     const renderUploadedDoc = ({ fileName, fileSize, filePath }) => (
         <Flex vertical gap={6}>
             <Text className="fw-600 text-medium-gray fs-13">Upload transaction receipt or screenshot</Text>
@@ -191,8 +193,8 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                             type="primary"
                             className="btnsave bg-brand"
                             onClick={handleMarkVerified}
-                            disabled={!documents && !paymentReceipt}
                             aria-labelledby="Mark as Verified"
+                            disabled={!documents && !paymentReceipt || isCompleted}
                         >
                             Mark as Verified
                         </Button>

@@ -4,8 +4,7 @@ import { onError } from "@apollo/client/link/error";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 
-// const API_URL = "https://220.152.66.148.host.secureserver.net/graphql";
-const API_URL = "https://verify.jusoor-sa.co/graphql"
+const API_URL = "https://verify.jusoor-sa.co/graphql";
 
 // HTTP Link
 const httpLink = createHttpLink({
@@ -26,8 +25,7 @@ const authLink = setContext((_, { headers }) => {
 
 // WebSocket link for subscriptions
 const wsLink = new WebSocketLink({
-  // uri: "wss://220.152.66.148.host.secureserver.net/subscriptions",
-  url: "https://verify.jusoor-sa.co/subscriptions",
+  uri: "wss://verify.jusoor-sa.co/subscriptions",
   options: {
     reconnect: true,
     connectionParams: {

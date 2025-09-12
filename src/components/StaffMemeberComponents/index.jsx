@@ -1,2 +1,2 @@
 export * from './structure'
-export * from './modal' 
+export * from './modal'

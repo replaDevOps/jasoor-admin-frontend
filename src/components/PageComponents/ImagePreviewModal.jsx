@@ -10,7 +10,7 @@ const ImagePreviewModal = ({ visible, imageSrc, onClose }) => {
       onCancel={onClose}
       centered
     >
-      <img alt="preview" style={{ width: '100%' }} src={imageSrc} />
+      <img alt="preview" style={{ width: '100%' }} src={imageSrc} fetchpriority="high"/>
     </Modal>
   )
 }

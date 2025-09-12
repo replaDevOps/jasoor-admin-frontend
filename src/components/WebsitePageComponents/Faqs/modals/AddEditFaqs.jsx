@@ -1,11 +1,17 @@
-import { Button, Flex, Typography, Form, Modal, Row, Col } from 'antd'
+import { Button, Flex, Typography, Form, Modal, Row, Col,message } from 'antd'
 import { CloseOutlined } from '@ant-design/icons';
 import { MyInput } from '../../../Forms';
 import { useEffect } from 'react';
+import { useMutation } from "@apollo/client";
+import { CREATE_FAQ, UPDATE_FAQ } from '../../../../graphql/mutation/mutations';
 
 const { Text, Title } = Typography;
 const AddEditFaqs = ({ visible, onClose, edititem }) => {
     const [form] = Form.useForm();
+    const [messageApi, contextHolder] = message.useMessage();
+    
+    const [createFAQ, { loading: creating }] = useMutation(CREATE_FAQ);
+    const [updateFAQ, { loading: updating }] = useMutation(UPDATE_FAQ);
 
     useEffect(()=>{
         if(visible,edititem){
@@ -18,8 +24,47 @@ const AddEditFaqs = ({ visible, onClose, edititem }) => {
             form.resetFields()
         }
     },[visible,edititem])
+    const onFinish = async (values) => {
+        const { question, answer } = values;
+    
+        if (!question || !answer) {
+          messageApi.error('Please fill in both question and answer');
+          return;
+        }
+    
+        try {
+          if (edititem) {
+            // Update FAQ
+            await updateFAQ({
+              variables: {
+                updateFaqId: edititem.id,
+                question,
+                answer,
+              },
+            });
+            messageApi.success('FAQ updated successfully');
+          } else {
+            // Create FAQ
+            await createFAQ({
+              variables: {
+                question,
+                answer,
+              },
+            });
+            messageApi.success('FAQ added successfully');
+          }
+    
+          onClose(); // Close modal
+          form.resetFields();
+        } catch (err) {
+          console.error(err);
+          messageApi.error('Failed to save FAQ');
+        }
+    };
 
     return (
+        <>
+        {contextHolder}
         <Modal
             title={null}
             open={visible}
@@ -32,7 +77,12 @@ const AddEditFaqs = ({ visible, onClose, edititem }) => {
                     <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
                         Cancel
                     </Button>
-                    <Button aria-labelledby='submit button' type='button' className={`btnsave border0 text-white brand-bg`}>
+                    <Button 
+                    onClick={() => form.submit()} 
+                    loading={creating || updating}
+                    aria-labelledby='submit button' 
+                    type='button' 
+                    className={`btnsave border0 text-white brand-bg`}>
                         {
                             edititem? 'Update':'Add Question'
                         }
@@ -59,7 +109,7 @@ const AddEditFaqs = ({ visible, onClose, edititem }) => {
                     }
                 </Text>
             </Flex>
-            <Form form={form} layout='vertical'>
+            <Form form={form} layout='vertical' onFinish={onFinish}>
                 <Row>
                     <Col span={24}>
                         <MyInput
@@ -84,6 +134,7 @@ const AddEditFaqs = ({ visible, onClose, edititem }) => {
                 </Row>
             </Form>
         </Modal>
+        </>
     )
 }
 

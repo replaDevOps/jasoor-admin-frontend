@@ -90,7 +90,7 @@ const BusinessDetailStep = ({ data, setData }) => {
                     <Flex gap={3} align="center">
                       Sell business by Acquiring 
                       <Tooltip title='Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities'>
-                        <img src="/assets/icons/info.png" width={20} alt="info icon" />
+                        <img src="/assets/icons/info.png" width={20} alt="" fetchpriority="high" />
                       </Tooltip>
                     </Flex>
                   </Radio>
@@ -98,7 +98,7 @@ const BusinessDetailStep = ({ data, setData }) => {
                     <Flex gap={3} align="center">
                       Sell business by Takbeel
                       <Tooltip title='Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.'>
-                        <img src="/assets/icons/info.png" width={20} alt="info icon" />
+                        <img src="/assets/icons/info.png" width={20} alt="" fetchpriority="high" />
                       </Tooltip>
                     </Flex>
                   </Radio>

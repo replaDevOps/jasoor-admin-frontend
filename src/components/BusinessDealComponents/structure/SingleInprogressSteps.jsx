@@ -32,7 +32,6 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
     const [activeStep, setActiveStep] = useState(initialStep);
    
     const found = details?.busines?.documents?.find(doc => doc.title === "Jasoor Commission");
-    const send = details?.banks?.find(b => b?.isSend === true);
     const DSA = details?.status
     const allSteps = [
         {
@@ -60,7 +59,7 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
             key: '3',
             label: 'Bank Account Details',
             content: <BankAccountDetails details={details} />,
-            status: send?.isSend ? 'Send' : 'Pending',
+            status:  'Send',
             emptytitle: 'Bank Details Pending!',
             emptydesc: 'Waiting for the seller to choose the bank account.',
         },

@@ -42,6 +42,9 @@ const BusinessDealsDetails = ({completedeal}) => {
         date: data.getDeal.createdAt ? new Date(data.getDeal.createdAt).toLocaleDateString() : '-',
         busines: data.getDeal.business || '-',
         banks: data.getDeal.buyer?.banks || '-',
+        isDocVedifiedSeller: data.getDeal.isDocVedifiedSeller || '-',
+        isDocVedifiedAdmin: data.getDeal.isDocVedifiedAdmin || '-',
+        isPaymentVedifiedSeller: data.getDeal.isPaymentVedifiedSeller || '-',
     }
     : null;
     const buyerdealsData = [

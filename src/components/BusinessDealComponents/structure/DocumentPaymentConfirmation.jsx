@@ -41,7 +41,7 @@ const DocumentPaymentConfirmation = ({details}) => {
                 const formData = new FormData();
                 formData.append("file", file);
     
-                const response = await fetch("https://220.152.66.148.host.secureserver.net/upload", {
+                const response = await fetch("https://verify.jusoor-sa.co/upload", {
                     method: "POST",
                     body: formData,
                 });
@@ -147,11 +147,11 @@ const DocumentPaymentConfirmation = ({details}) => {
                         {/* Dynamic Badge */}
                         <Flex
                             gap={5}
-                            className={details?.isPaymentVerifiedSeller ? "badge-cs success fs-12 fit-content" : "badge-cs pending fs-12 fit-content"}
+                            className={details?.isDocVedifiedSeller ? "badge-cs success fs-12 fit-content" : "badge-cs pending fs-12 fit-content"}
                             align="center"
                         >
                         <CheckCircleOutlined className="fs-14" />
-                            {details?.isPaymentVerifiedSeller
+                            {details?.isDocVedifiedSeller
                                 ? 'Seller marked "Payment Received"'
                                 : '"Payment Received" Seller Confirmation pending'}
                         </Flex>

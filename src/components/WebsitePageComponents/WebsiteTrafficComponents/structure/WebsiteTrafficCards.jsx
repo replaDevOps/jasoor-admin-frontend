@@ -47,7 +47,7 @@ const WebsiteTrafficCards = () => {
                                 <Card className={`shadow-d radius-12 h-100 border-gray`}>
                                     <Flex gap={8} vertical>
                                         <div>
-                                            <img src={"/assets/icons/"+data?.icon}  width={45} alt="icons" />
+                                            <img src={"/assets/icons/"+data?.icon} width={45} alt="" fetchpriority="high"/>
                                         </div>
                                         <Text className='fs-14 text-gray'>{data?.subtitle}</Text>
                                         <Title level={5} className='fw-600 text-black m-0'>{data?.title}</Title>
@@ -62,7 +62,7 @@ const WebsiteTrafficCards = () => {
                 <Card className={`shadow-d radius-12 h-100 border-gray`}>
                     <Flex gap={8} vertical>
                         <div>
-                            <img src={"/assets/icons/mobileuser.png"} width={45} alt="mobile user icon" />
+                            <img src={"/assets/icons/mobileuser.png"} width={45} alt="" fetchpriority="high"/>
                         </div>
                         <Text className='fs-14 text-gray'>Mobile Users</Text>
                         <Title level={5} className='fw-600 text-black m-0'>44%</Title>
