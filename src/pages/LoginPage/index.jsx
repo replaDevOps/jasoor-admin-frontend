@@ -77,7 +77,7 @@ console.log("error",error)
                     <div className="form-inner">
                         <NavLink to={"/"}>
                             <div className="logo">
-                                <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
+                                <img src="/assets/images/logo-1.png" style={{ height: "70px" }} fetchpriority="high" />
                             </div>
                         </NavLink>
 
@@ -144,7 +144,7 @@ console.log("error",error)
                             </Title>
                         </Flex>
                         <div className="bg-shade">
-                            <img src="/assets/images/login.gif" alt="Signup Visual" style={{ width: "100%", opacity: 0.7 }} />
+                            <img src="/assets/images/login.gif" alt="Signup Visual" style={{ width: "100%", opacity: 0.7 }} fetchpriority="high" />
                         </div>
                     </Flex>
                 </Col>

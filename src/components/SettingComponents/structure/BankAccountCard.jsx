@@ -72,7 +72,7 @@ const BankAccountCard = ({banks,settingId}) => {
                                                     trigger={['click']}
                                                 >
                                                     <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                                                        <img src="/assets/icons/dots.png" alt="" width={16} />
+                                                        <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
                                                     </Button>
                                                 </Dropdown>
                                             </Flex>

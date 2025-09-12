@@ -233,6 +233,7 @@ const AddArticle = () => {
                         src={imageUrl}
                         className='radius-12 object-cover object-top'
                         style={{ width: '100%', height: 400 }}
+                        fetchpriority="high"
                       />
                       <Button
                         size='small'

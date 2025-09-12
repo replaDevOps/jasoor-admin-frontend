@@ -29,11 +29,33 @@ const ProtectedRoute = ({ children }) => {
 const RouteF = () => {
   const [auth, setAuth] = useState(isLoggedIn())
 
+  // useEffect(() => {
+  //   const onAuth = () => setAuth(isLoggedIn())
+  //   window.addEventListener('authChanged', onAuth)
+  //   return () => window.removeEventListener('authChanged', onAuth)
+  // }, [])
   useEffect(() => {
-    const onAuth = () => setAuth(isLoggedIn())
-    window.addEventListener('authChanged', onAuth)
-    return () => window.removeEventListener('authChanged', onAuth)
-  }, [])
+    // Create WebSocket connection
+    const socket = new WebSocket(url)
+    setWs(socket)
+
+    // Optional: listen to messages
+    socket.onmessage = (event) => {
+      console.log('Message received:', event.data)
+    }
+
+    // Clean up on unmount or page unload
+    const handleUnload = () => {
+      socket.close()
+    }
+
+    window.addEventListener('beforeunload', handleUnload)
+
+    return () => {
+      socket.close()
+      window.removeEventListener('beforeunload', handleUnload)
+    }
+  }, [url])
 
   return (
     <Suspense fallback={<Fallback />}>

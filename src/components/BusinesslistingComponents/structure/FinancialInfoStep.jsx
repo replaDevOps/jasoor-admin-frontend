@@ -177,7 +177,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                         type='number'
                                         placeholder="Enter revenue"
                                         className="w-100 add-p"
-                                        addonBefore={<img src="/assets/icons/reyal-g.png" width={15} />}
+                                        addonBefore={<img src="/assets/icons/reyal-g.png" width={15} fetchpriority="high" />}
                                     />
                                 </Form.Item>
                             </Flex>
@@ -209,7 +209,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                         type='number'
                                         placeholder="Enter profit"
                                         className="w-100 add-p"
-                                        addonBefore={<img src="/assets/icons/reyal-g.png" width={14} />}
+                                        addonBefore={<img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high" />}
                                     />
                                 </Form.Item>
                                 </Flex>
@@ -249,7 +249,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 message="Please enter business price"
                                 placeholder='Enter business price'
                                 addonBefore={
-                                    <img src='/assets/icons/reyal-g.png' width={14} />
+                                    <img src='/assets/icons/reyal-g.png' width={14} fetchpriority="high" />
                                 }
                                 className='w-100'
                             />
@@ -286,7 +286,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 label: "Total Price",
                                 placeholder: "Enter price",
                                 type: "input",
-                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} />,
+                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high"/>,
                                 className: "w-100 bg-white",
                             },
                         ]}
@@ -322,7 +322,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 label: "Total Price",
                                 placeholder: "Enter price",
                                 type: "input",
-                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} />,
+                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high" />,
                                 className: "w-100 bg-white",
                             },
                         ]}
@@ -358,7 +358,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 label: "Total Price",
                                 placeholder: "Enter price",
                                 type: "input",
-                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} />,
+                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high" />,
                                 className: "w-100 bg-white",
                             },
                         ]}

@@ -128,7 +128,7 @@ const CategoryTable = () => {
                         trigger={['click']}
                     >
                         <Button aria-labelledby='action dropdown' className="bg-transparent border0 p-0">
-                            <img src="/assets/icons/dots.png" alt="dots icon" width={16} />
+                            <img src="/assets/icons/dots.png" alt="dots icon" width={16} fetchpriority="high"/>
                         </Button>
                     </Dropdown>
                 );
@@ -285,7 +285,7 @@ const CategoryTable = () => {
                                     <Input
                                     name="name"
                                     placeholder="Search"
-                                    prefix={<img src="/assets/icons/search.png" width={14} />}
+                                    prefix={<img src="/assets/icons/search.png" width={14} fetchpriority="high" />}
                                     allowClear
                                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
                                     onChange={(e) => handleSearch(e.target.value.trim())}

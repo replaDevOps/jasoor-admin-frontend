@@ -140,7 +140,7 @@ const StaffMemberTable = ({setVisible,setEditItem,setRefetchStaff}) => {
                   trigger={["click"]}
                 >
                   <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} />
+                    <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
                   </Button>
                 </Dropdown>
               );
@@ -260,7 +260,7 @@ const StaffMemberTable = ({setVisible,setEditItem,setRefetchStaff}) => {
                                     <SearchInput
                                         name='name'
                                         placeholder='Search'
-                                        prefix={<img src='/assets/icons/search.png' width={14} />}
+                                        prefix={<img src='/assets/icons/search.png' width={14} fetchpriority="high" />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                         onChange={(e) => handleSearch(e.target.value.trim())}
                                     />

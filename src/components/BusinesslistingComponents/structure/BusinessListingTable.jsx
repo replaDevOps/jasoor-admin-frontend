@@ -135,7 +135,7 @@ const BusinessListingTable = ({
                                     onChange={(e) => {
                                         setSearch(e.target.value);
                                     }}
-                                    prefix={<img src='/assets/icons/search.png' width={14} />}
+                                    prefix={<img src='/assets/icons/search.png' width={14} fetchpriority="high"/>}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                 />
                                 <Dropdown 
