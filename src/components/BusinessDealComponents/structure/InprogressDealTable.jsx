@@ -1,6 +1,5 @@
 import { Button, Col, Dropdown, Flex, Form, Row, Table ,Typography} from 'antd';
 import { SearchInput } from '../../Forms';
-import { inprogressdealColumn, inprogressdealData } from '../../../data';
 import { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { businessdealItems } from '../../../shared';
@@ -8,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { CustomPagination } from '../../Ui';
 import { GETDEALS } from '../../../graphql/query/meeting'
 import { useQuery } from '@apollo/client'
-import { message,Spin } from "antd";
 
 const { Text } = Typography
 
@@ -159,7 +157,7 @@ const InprogressDealTable = () => {
                                 <SearchInput
                                     name='name'
                                     placeholder='Search'
-                                    prefix={<img src='/assets/icons/search.png' width={14} />}
+                                    prefix={<img src='/assets/icons/search.png' alt='search icon' width={14} />}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                     onChange={(e) => handleSearch(e.target.value)}
                                 />

@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
-import { Breadcrumb, Button, Card, Col, Flex, Form, Image, Row, Typography } from 'antd'
+import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { MyInput, SingleFileUpload } from '../../../Forms'
 import { useEffect, useState } from 'react'
@@ -94,6 +94,7 @@ const AddArticle = () => {
                                             src={detail?.img} 
                                             className='radius-12 object-cover object-top'
                                             style={{ width: '100%', height:400 }}
+                                            alt='profile image'
                                         />
                                         <Button 
                                             size='small'

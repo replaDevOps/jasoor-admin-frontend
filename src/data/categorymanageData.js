@@ -1,19 +1,4 @@
-const categoryData = [
-    {
-        key:1,
-        categoryicon:'/assets/icons/hotel-smb.png',
-        categoryname:'Restaurants & Cafes',
-        businesstype:'Physical Business',
-        status:0,
-    },
-    {
-        key:2,
-        categoryicon:'/assets/icons/briefcase.png',
-        categoryname:'Digital Businesses',
-        businesstype:'Online Business',
-        status:1,
-    },
-]
+
 
 const categorystatsProfData = [
     {
@@ -161,4 +146,4 @@ const categorystatsProfData = [
     },
 ]
 
-export { categoryData, categorystatsProfData };
+export { categorystatsProfData };

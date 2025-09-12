@@ -1,7 +1,6 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Typography} from 'antd';
+import { Button, Col, Dropdown, Flex, Form, Row, Table ,Typography} from 'antd';
 import { NavLink } from "react-router-dom";
 import { SearchInput } from '../../Forms';
-import { meetingreqColumn } from '../../../data';
 import { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { meetingItems } from '../../../shared';
@@ -105,7 +104,7 @@ const MeetingRequestTable = () => {
                         trigger={['click']}
                     >
                         <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                            <img src="/assets/icons/dots.png" alt="" width={16} />
+                            <img src="/assets/icons/dots.png" alt="dots icon" width={16} />
                         </Button>
                     </Dropdown>
                 );
@@ -200,7 +199,7 @@ const MeetingRequestTable = () => {
                                 <SearchInput
                                     name='name'
                                     placeholder='Search'
-                                    prefix={<img src='/assets/icons/search.png' width={14} />}
+                                    prefix={<img src='/assets/icons/search.png' alt='search icon' width={14} />}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                     onChange={(e) => handleSearch(e.target.value)}
                                 />

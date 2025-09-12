@@ -1,6 +1,6 @@
 import { Button, Card, Col, Dropdown, Flex, Form, Row, Table } from 'antd';
 import { SearchInput } from '../../Forms';
-import { pushnotifyColumn, pushnotifyData } from '../../../data';
+import { pushnotifyColumn } from '../../../data';
 import { useState,useEffect } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { districtItems, groupItems, pushstatusItem } from '../../../shared';
@@ -109,7 +109,7 @@ const PushNotificationTable = ({setVisible, setViewNotify, setEditItem, setDelet
                                     <SearchInput
                                         name='name'
                                         placeholder='Search'
-                                        prefix={<img src='/assets/icons/search.png' width={14} />}
+                                        prefix={<img src='/assets/icons/search.png' alt='search icon' width={14} />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                         onChange={(e) => setSearchValue(e.target.value)}
                                     />

@@ -1,50 +1,9 @@
-import { Button, Dropdown, Flex, Image, Space, Switch, Tooltip, Typography } from "antd";
+import { Button, Dropdown, Flex, Space, Tooltip, Typography } from "antd";
 import { NavLink } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
 import { priorityItems } from "../shared";
 
 const { Text } = Typography
-
-const businesslistmaincolumn= [
-    {
-        title: 'Business Title',
-        dataIndex: 'title',
-    },
-    {
-        title: 'Seller Name',
-        dataIndex: 'sellername',
-    },
-    {
-        title: 'Category',
-        dataIndex: 'category',
-        render:(category)=> <Text className='fs-12 badge-cs border-gray'>{category}</Text>
-    },
-    {
-        title: 'Business Price',
-        dataIndex: 'businessprice',
-    },
-    {
-        title: 'Status',
-        dataIndex: 'status',
-        render: (status) => {
-            return (
-                status === 0 ? (
-                    <Space align='center'>
-                        <Text className='btnpill fs-12 pending'>Pending</Text>
-                    </Space>
-                ) : status === 1 ? (
-                    <Text className='btnpill fs-12 inactive'>Inactive</Text>
-                ) : status === 2 ? (
-                    <Text className='btnpill fs-12 success'>Completed</Text>
-                ) : null
-            );
-        }
-    },
-    {
-        title: 'Date',
-        dataIndex: 'date',
-    },
-];
 
 const postsaleColumn = [
     {
@@ -57,98 +16,6 @@ const postsaleColumn = [
     },
 ]
 
-const outstandliabColumn = [
-    {
-        title: 'Liabilities name',
-        dataIndex: 'liabilitiesname',
-    },
-    {
-        title: 'Number of Items',
-        dataIndex: 'noitems',
-    },
-    {
-        title: 'Purchase Year',
-        dataIndex: 'purchaseyear',
-    },
-    {
-        title: 'Price',
-        dataIndex: 'price',
-    },
-    {
-        title: 'Verify',
-        dataIndex: 'verify',
-        render:(_,row)=>{
-            return(
-                <Switch 
-                    checked={row.verify === 1 ? true : false}
-                    size="small"
-                />
-            )
-        }
-    },
-]
-
-const keyassetColumn = [
-    {
-        title: 'Asset Name',
-        dataIndex: 'assetname',
-    },
-    {
-        title: 'Number of Items',
-        dataIndex: 'noitems',
-    },
-    {
-        title: 'Purchase Year',
-        dataIndex: 'purchaseyear',
-    },
-    {
-        title: 'Price',
-        dataIndex: 'price',
-    },
-    {
-        title: 'Verify',
-        dataIndex: 'verify',
-        render:(_,row)=>{
-            return(
-                <Switch 
-                    checked={row.verify === 1 ? true : false}
-                    size="small"
-                />
-            )
-        }
-    },
-]
-
-const inventoryColumn = [
-    {
-        title: 'Inventory Name',
-        dataIndex: 'inventoryname',
-    },
-    {
-        title: 'Number of Items',
-        dataIndex: 'noitems',
-    },
-    {
-        title: 'Purchase Year',
-        dataIndex: 'purchaseyear',
-    },
-    {
-        title: 'Price',
-        dataIndex: 'price',
-    },
-    {
-        title: 'Verify',
-        dataIndex: 'verify',
-        render:(_,row)=>{
-            return(
-                <Switch 
-                    checked={row.verify === 1 ? true : false}
-                    size="small"
-                />
-            )
-        }
-    },
-]
 
 const offertableColumn = [
     {
@@ -211,58 +78,6 @@ const offertableColumn = [
     },
 ]
 
-const categoryColumn = ( setDeleteItem, navigate ) =>  [
-    {
-        title: 'Category Icon',
-        dataIndex: 'categoryicon',
-        render:(categoryicon)=> <Image src={categoryicon} preview={false} width={25} alt='category-icon' />
-    },
-    {
-        title: 'Category Name',
-        dataIndex: 'categoryname',
-    },
-    {
-        title: 'Business Type',
-        dataIndex: 'businesstype',
-    },
-    {
-        title: 'Status',
-        dataIndex: 'status',
-        render: (status) => {
-            return (
-                status === 'UNDER_REVIEW' ? (
-                    <Text className='btnpill fs-12 pending'>Pending</Text>
-                ) : status === 'INACTIVE' ? (
-                    <Text className='btnpill fs-12 inactive'>Inactive</Text>
-                ) : status === 'ACTIVE' ? (
-                    <Text className='btnpill fs-12 success'>Completed</Text>
-                ) : null
-            );
-        }
-    },
-    {
-        title: 'Action',
-        key: "action",
-        fixed: "right",
-        width: 100,
-        render: (_,row) => (
-            <Dropdown
-                menu={{
-                    items: [
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); navigate('/addnewcategory/detail/'+row?.key)}}>Edit</NavLink>, key: '1' },
-                        { label: <NavLink onClick={() => { setDeleteItem(true) }}>Delete</NavLink>, key: '2' },
-                    ],
-                }}
-                trigger={['click']}
-            >
-                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} />
-                </Button>
-            </Dropdown>
-        ),
-    },
-];
-
 const categoryStatsProfColumn = (handleInputChange) => [
     {
         title: 'Region Name',
@@ -277,7 +92,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
                 placeholder="Enter avg profit"
                 value={value}
                 onChange={(e) => handleInputChange(e.target.value, index, 'value2024')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} />}
+                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' />}
                 className="w-100"
             />
         ),
@@ -291,7 +106,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
                 placeholder="Enter avg profit"
                 value={value}
                 onChange={(e) => handleInputChange(e.target.value, index, 'value2023')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} />}
+                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' />}
                 className="w-100"
             />
         ),
@@ -305,7 +120,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
                 placeholder="Enter avg profit"
                 value={value}
                 onChange={(e) => handleInputChange(e.target.value, index, 'value2022')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} />}
+                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' />}
                 className="w-100"
             />
         ),
@@ -319,7 +134,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
                 placeholder="Enter avg profit"
                 value={value}
                 onChange={(e) => handleInputChange(e.target.value, index, 'value2021')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} />}
+                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' />}
                 className="w-100"
             />
         )
@@ -333,7 +148,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
                 placeholder="Enter avg profit"
                 value={value}
                 onChange={(e) => handleInputChange(e.target.value, index, 'localbusinessgrowth')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} />}
+                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' />}
                 className="w-100"
             />
         )
@@ -366,276 +181,6 @@ const categoryStatsProfColumn = (handleInputChange) => [
     },
 ]
 
-const usermanageColumn = ( setVisible,SetViewState ) =>  [
-    {
-        title: 'Full Name',
-        dataIndex: 'fullname',
-    },
-    {
-        title: 'Email',
-        dataIndex: 'email',
-    },
-    {
-        title: 'District',
-        dataIndex: 'district',
-    },
-    {
-        title: 'City',
-        dataIndex: 'city',
-    },
-    {
-        title: 'Mobile Number',
-        dataIndex: 'mobileno',
-    },
-    {
-        title: 'Type',
-        dataIndex: 'type',
-         render: (type) => {
-            return (
-                type === 'New' ? (
-                    <Text className='btnpill fs-12 branded'>New</Text>
-                ) : (
-                    <Text className='btnpill fs-12 pending'>Old</Text>
-                ) 
-            )
-        }
-    },
-    {
-        title: 'Status',
-        dataIndex: 'status',
-        render: (status) => {
-            return (
-                status === 1 ? (
-                    <Space align='center'>
-                        <Text className='btnpill fs-12 success'>Active</Text>
-                    </Space>
-                ) : (
-                    <Text className='btnpill fs-12 inactive'>Inactive</Text>
-                )
-            )
-        }
-    },
-    {
-        title: 'Action',
-        key: "action",
-        fixed: "right",
-        width: 100,
-        render: (_,row) => (
-            <Dropdown
-                menu={{
-                    items: [
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); }}>Inactive</NavLink>, key: '1' },
-                        { label: <NavLink onClick={(e) => {e.preventDefault();setVisible(true),SetViewState(row) }}>View Passport & National ID</NavLink>, key: '2' },
-                    ],
-                }}
-                trigger={['click']}
-            >
-                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} />
-                </Button>
-            </Dropdown>
-        ),
-    },
-];
-
-const meetingreqColumn = ( setVisible, setDeleteItem ) =>  [
-    {
-        title: 'Business Title',
-        dataIndex: 'businessTitle',
-    },
-    {
-        title: 'Buyer Name',
-        dataIndex: 'buyerName',
-    },
-    {
-        title: 'Email',
-        dataIndex: 'email',
-    },
-    {
-        title: 'Phone Number',
-        dataIndex: 'phoneNumber',
-    },
-    {
-        title: 'Seller Name',
-        dataIndex: 'sellerName',
-    },
-    {
-        title: 'Email',
-        dataIndex: 'sellerEmail',
-    },
-    {
-        title: 'Phone Number',
-        dataIndex: 'sellerPhoneNumber',
-    },
-    {
-        title: 'Preferred Date & Time',
-        dataIndex: 'scheduleDateTime',
-    },
-    {
-        title: 'Business Price',
-        dataIndex: 'businessPrice',
-    },
-    {
-        title: 'Offer Price',
-        dataIndex: 'offerPrice',
-    },
-    {
-        title: 'Status',
-        dataIndex: 'status',
-        render: (status) => {
-            return (
-                status === 'REQUESTED' ? (
-                    <Text className='btnpill fs-12 pending'>Pending</Text>
-                ) : (
-                    <Text className='btnpill fs-12 inactive'>Cancel Meeting</Text>
-                )
-            )
-        }
-    },
-    {
-        title: 'Action',
-        key: "action",
-        fixed: "right",
-        width: 100,
-        render: (_,row) => (
-            <Dropdown
-                menu={{
-                    items: [
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); setVisible(true) }}>Schedule Meeting</NavLink>, key: '1' },
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); setDeleteItem(true) }}>Cancel</NavLink>, key: '2' },
-                    ],
-                }}
-                trigger={['click']}
-            >
-                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} />
-                </Button>
-            </Dropdown>
-        ),
-    },
-];
-
-const schedulemeetingColumn = ( setVisible, setDeleteItem ) =>  [
-    {
-        title: 'Business Title',
-        dataIndex: 'businessTitle',
-    },
-    {
-        title: 'Buyer Name',
-        dataIndex: 'buyerName',
-    },
-    {
-        title: 'Email',
-        dataIndex: 'email',
-    },
-    {
-        title: 'Phone Number',
-        dataIndex: 'phoneNumber',
-    },
-    {
-        title: 'Seller Name',
-        dataIndex: 'sellerName',
-    },
-    {
-        title: 'Email',
-        dataIndex: 'sellerEmail',
-    },
-    {
-        title: 'Phone Number',
-        dataIndex: 'sellerPhoneNumber',
-    },
-    {
-        title: 'Schedule Date & Time',
-        dataIndex: 'scheduleDateTime',
-    },
-    {
-        title: 'Business Price',
-        dataIndex: 'businessPrice',
-    },
-    {
-        title: 'Offer Price',
-        dataIndex: 'offerPrice',
-    },
-    {
-        title: 'Meet Link',
-        dataIndex: 'meetLink',
-        render: (meetLink) => <NavLink to={meetLink}>{meetLink}</NavLink>
-    },
-    {
-        title: 'Action',
-        key: "action",
-        fixed: "right",
-        width: 100,
-        render: (_,row) => (
-            <Dropdown
-                menu={{
-                    items: [
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); setVisible(true) }}>Finalized deal</NavLink>, key: '1' },
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); setDeleteItem(true) }}>No Deal</NavLink>, key: '2' },
-                    ],
-                }}
-                trigger={['click']}
-            >
-                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} />
-                </Button>
-            </Dropdown>
-        ),
-    },
-];
-
-const inprogressdealColumn = [
-    {
-        title: 'Business Title',
-        dataIndex: 'businessTitle',
-    },
-    {
-        title: 'Buyer Name',
-        dataIndex: 'buyerName',
-    },
-    {
-        title: 'Seller Name',
-        dataIndex: 'sellerName',
-    },
-    {
-        title: 'Finalized Offer',
-        dataIndex: 'finalizedOffer',
-    },
-    {
-        title: 'Status',
-        dataIndex: 'status',
-        render: (status) => {
-            return (
-                status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? (
-                    <Text className='btnpill fs-12 branded'>Commission Receipt</Text>
-                ) : 
-                status === 'COMMISSION_VERIFICATION_PENDING' ? (
-                    <Text className='btnpill fs-12 pending'>Digital Sale Aggrement</Text>
-                )
-                :
-                status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? (
-                    <Text className='btnpill fs-12 sellerpendingstatus'>Bank Account Details</Text>
-                )
-                :
-                status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? (
-                    <Text className='btnpill fs-12 paybusinessamount'>Pay Business Amount</Text>
-                )
-                :
-                status === 'BANK_DETAILS_FROM_SELLER_PENDING' ? (
-                    <Text className='btnpill fs-12 paymentapprovalpending'>Payment Confirmation & Document</Text>
-                )
-                :
-                (
-                    <Text className='btnpill fs-12 commissiontransferbuyer'>Finalize Deal</Text>
-                )
-            )
-        }
-    },
-    {
-        title: 'Date',
-        dataIndex: 'date',
-    },
-];
 
 const completedealColumn = [
     {
@@ -659,201 +204,6 @@ const completedealColumn = [
         dataIndex: 'date',
     },
 ]
-
-const rolepermissionColumn = (setDeleteItem, navigate) => [
-    {
-      title: "Role Name",
-      dataIndex: "rolename",
-    },
-    {
-      title: "Status",
-      dataIndex: "isActive",
-      render: (isActive) => {
-        return 1 ? (
-          <Text className="btnpill fs-12 success">Active</Text>
-        ) : (
-          <Text className="btnpill fs-12 inactive">Inactive</Text>
-        );
-      },
-    },
-    {
-      title: "Action",
-      key: "action",
-      fixed: "right",
-      width: 100,
-      render: (_, row) => (
-        <Dropdown
-          menu={{
-            items: [
-              {
-                label: (
-                  <NavLink
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate("/addrolepermission/" + row.id);
-                    }}
-                  >
-                    Edit
-                  </NavLink>
-                ),
-                key: "1",
-              },
-              {
-                label: (
-                  <NavLink
-                    onClick={() => {
-                      setDeleteItem(true);
-                    }}
-                  >
-                    Delete
-                  </NavLink>
-                ),
-                key: "2",
-              },
-              {
-                label: (
-                  <NavLink
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                  >
-                    {row.isActive ? "Deactivate" : "Activate"}
-                  </NavLink>
-                ),
-                key: "3",
-              },
-            ],
-          }}
-          trigger={["click"]}
-        >
-          <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-            <img src="/assets/icons/dots.png" alt="" width={16} />
-          </Button>
-        </Dropdown>
-      ),
-    },
-  ];
-  
-
-const staffmemberColumn = (setVisible,setDeleteItem,setEditItem) =>  [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-    },
-    {
-        title: 'Email',
-        dataIndex: 'email',
-    },
-    {
-        title: 'Phone',
-        dataIndex: 'phone',
-    },
-    {
-        title: 'Role',
-        dataIndex: 'role',
-    },
-    {
-        title: 'Status',
-        dataIndex: 'status',
-        render: (status) => {
-            return (
-                status === 1 ? (
-                    <Text className='btnpill fs-12 success'>Active</Text>
-                ) : (
-                    <Text className='btnpill fs-12 inactive'>Inactive</Text>
-                )
-            )
-        }
-    },
-    {
-        title: 'Action',
-        key: "action",
-        fixed: "right",
-        width: 100,
-        render: (_,row) => (
-            <Dropdown
-                menu={{
-                    items: [
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); setVisible(true); setEditItem(row) }}>Edit</NavLink>, key: '1' },
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); }}>Inactive</NavLink>, key: '2' },
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); setDeleteItem(true) }}>Delete</NavLink>, key: '3' },
-                    ],
-                }}
-                trigger={['click']}
-            >
-                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} />
-                </Button>
-            </Dropdown>
-        ),
-    },
-];
-
-const contactrequestColumn = (setVisible,setSendView,setViewItem) =>  [
-    {
-        title: 'Full Name',
-        dataIndex: 'name',
-    },
-    {
-        title: 'Email',
-        dataIndex: 'email',
-    },
-    {
-        title: 'Massage Preview',
-        dataIndex: 'msgPreview',
-        render: (msgPreview) => {
-            const words = msgPreview?.split(' ') || [];
-            const previewText = words.slice(0, 5).join(' ');
-            const showEllipsis = words.length > 5;
-
-            return (
-                <Tooltip title={msgPreview}>
-                    <Text>
-                        {previewText}{showEllipsis ? '...' : ''}
-                    </Text>
-                </Tooltip>
-            );
-        }
-    },
-    {
-        title: 'Date',
-        dataIndex: 'date',
-    },
-    {
-        title: 'Reply Status',
-        dataIndex: 'status',
-        render: (status) => {
-            return (
-                status === 1 ? (
-                    <Text className='btnpill fs-12 success'>Sent</Text>
-                ) : (
-                    <Text className='btnpill fs-12 inactive'>Pending</Text>
-                )
-            )
-        }
-    },
-    {
-        title: 'Action',
-        key: "action",
-        fixed: "right",
-        width: 100,
-        render: (_,row) => (
-            <Dropdown
-                menu={{
-                    items: [
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); setVisible(true); setViewItem(row)}}>Sent View</NavLink>, key: '1' },
-                        { label: <NavLink onClick={(e) => {e.preventDefault(); setVisible(true); setSendView(true); setViewItem(row) }}>Pending View</NavLink>, key: '1' },
-                    ],
-                }}
-                trigger={['click']}
-            >
-                <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} />
-                </Button>
-            </Dropdown>
-        ),
-    },
-];
 
 const pushnotifyColumn = ({setVisible,setViewNotify ,setEditItem,setDeleteItem}) =>  [
     {
@@ -948,7 +298,7 @@ const pushnotifyColumn = ({setVisible,setViewNotify ,setEditItem,setDeleteItem})
                 trigger={['click']}
             >
                 <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} />
+                    <img src="/assets/icons/dots.png" alt="dots icon" width={16} />
                 </Button>
             </Dropdown>
         ),
@@ -976,7 +326,7 @@ const faqsColumn = ( setVisible, setEditItem, setDeleteItem ) =>  [
                 trigger={['click']}
             >
                 <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} />
+                    <img src="/assets/icons/dots.png" alt="dots icon" width={16} />
                 </Button>
             </Dropdown>
         ),
@@ -1013,22 +363,10 @@ const financeColumn =  [
 
 
 export {
-    businesslistmaincolumn,
     postsaleColumn,
-    outstandliabColumn,
-    keyassetColumn,
-    inventoryColumn,
     offertableColumn,
-    categoryColumn,
     categoryStatsProfColumn,
-    usermanageColumn,
-    meetingreqColumn,
-    schedulemeetingColumn,
-    inprogressdealColumn,
     completedealColumn,
-    rolepermissionColumn,
-    staffmemberColumn,
-    contactrequestColumn,
     pushnotifyColumn,
     faqsColumn,
     financeColumn,

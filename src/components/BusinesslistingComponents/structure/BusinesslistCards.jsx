@@ -32,7 +32,7 @@ const BusinesslistCards = ({totalActiveCount,totalCount,totalPendingCount}) => {
                         <Card className={`shadow-d radius-12 h-100 border-gray`}>
                             <Flex gap={8} vertical>
                                 <div>
-                                    <img src={"/assets/icons/"+data?.icon} width={45} alt="" />
+                                    <img src={"/assets/icons/"+data?.icon} width={45} alt="stats icon" />
                                 </div>
                                 <Text className='fs-14 text-gray'>{data?.subtitle}</Text>
                                 <Title level={4} className='fw-600 text-black m-0'>{data?.title}</Title>

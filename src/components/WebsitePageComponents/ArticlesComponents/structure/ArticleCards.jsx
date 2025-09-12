@@ -3,7 +3,7 @@ import { SearchInput } from '../../../Forms';
 import { articleData, pushnotifyData } from '../../../../data';
 import { useState } from 'react';
 import { CustomPagination } from '../../../Ui';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const { Paragraph, Text } = Typography
 const ArticleCards = ({setDeleteItem}) => {
@@ -29,7 +29,7 @@ const ArticleCards = ({setDeleteItem}) => {
                                     <SearchInput
                                         name='name'
                                         placeholder='Search'
-                                        prefix={<img src='/assets/icons/search.png' width={14} />}
+                                        prefix={<img src='/assets/icons/search.png' alt='search icon' width={14} />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                     />
                                 </Flex>
@@ -56,7 +56,7 @@ const ArticleCards = ({setDeleteItem}) => {
                                                     trigger={['click']}
                                                 >
                                                     <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                                                        <img src="/assets/icons/dots.png" alt="" width={16} />
+                                                        <img src="/assets/icons/dots.png" alt="dots icon" width={16} />
                                                     </Button>
                                                 </Dropdown>
                                             </Flex>
@@ -65,7 +65,7 @@ const ArticleCards = ({setDeleteItem}) => {
                                         <Flex vertical gap={20}>
                                             <div>
                                                 <div className='w-100 card-img-2 mb-2 radius-12'>
-                                                    <img src={art?.img} width={'100%'} height={'100%'} className='object-cover object-top radius-12' alt="" />
+                                                    <img src={art?.img} width={'100%'} height={'100%'} className='object-cover object-top radius-12' alt="article image" />
                                                 </div>
                                                 <Paragraph 
                                                     ellipsis={{

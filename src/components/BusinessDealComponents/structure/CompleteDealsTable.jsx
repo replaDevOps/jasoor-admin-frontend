@@ -1,6 +1,6 @@
 import { Flex, Form, Table } from 'antd';
 import { SearchInput } from '../../Forms';
-import { completedealColumn, completedealData} from '../../../data';
+import { completedealColumn } from '../../../data';
 import { CustomPagination } from '../../Ui';
 import { useState } from 'react';
 import { GETDEALS } from '../../../graphql/query/meeting'
@@ -53,7 +53,7 @@ const CompleteDealsTable = ({setCompleteDeal}) => {
                         <SearchInput
                             name='name'
                             placeholder='Search'
-                            prefix={<img src='/assets/icons/search.png' width={14} />}
+                            prefix={<img src='/assets/icons/search.png' alt='search icon' width={14} />}
                             className='border-light-gray pad-x ps-0 radius-8 fs-13'
                             onChange={(e) => handleSearch(e.target.value)}
                         />

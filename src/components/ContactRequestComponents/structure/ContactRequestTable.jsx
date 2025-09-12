@@ -4,9 +4,9 @@ import { useState,useEffect } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { CustomPagination } from '../../Ui';
 import { GET_ALL_CONTACT_US } from '../../../graphql/query/user';
-import { useQuery,useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const ContactRequestTable = ({setVisible,setSendView,setViewItem,setRefetch}) => {
     const [messageApi, contextHolder] = message.useMessage();
@@ -158,7 +158,7 @@ const ContactRequestTable = ({setVisible,setSendView,setViewItem,setRefetch}) =>
                                     <SearchInput
                                         name='name'
                                         placeholder='Search'
-                                        prefix={<img src='/assets/icons/search.png' width={14} />}
+                                        prefix={<img src='/assets/icons/search.png' alt='search icon' width={14} />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                         onChange={(e) => handleSearch(e.target.value)}
                                     />

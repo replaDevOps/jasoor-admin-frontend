@@ -1,7 +1,7 @@
-import { Button, Card, Col, Flex, Form, Row, Table } from 'antd';
+import { Card, Col, Flex, Form, Row, Table } from 'antd';
 import { MyDatepicker, SearchInput } from '../../Forms';
-import { financeColumn, financeData } from '../../../data';
-import { useEffect, useState } from 'react';
+import { financeColumn } from '../../../data';
+import { useState } from 'react';
 import { CustomPagination } from '../../Ui';
 import moment from 'moment';
 import dayjs from 'dayjs';
@@ -51,7 +51,7 @@ const FinanceTable = () => {
                                 <SearchInput
                                     name='name'
                                     placeholder='Search'
-                                    prefix={<img src='/assets/icons/search.png' width={14} />}
+                                    prefix={<img src='/assets/icons/search.png' alt='search icon' width={14} />}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                 />
                             </Col>

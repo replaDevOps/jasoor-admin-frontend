@@ -4,7 +4,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../PageComponents';
 import { GET_BUSINESS_CATEGORY_COUNT } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
-import { message,Spin } from "antd";
+import { Spin } from "antd";
 
 const { Text } = Typography
 const BusinessCategoryDonut = () => {
@@ -132,7 +132,7 @@ const BusinessCategoryDonut = () => {
               <Col lg={{span: 12}} md={{span: 12}} xs={{span: 24}} sm={{span: 24}}>
                 {data.slice(0, 5).map((item, index) => (
                   <Flex gap={5} align='center' className='mb-3' key={index}>
-                    <img src={"/assets/icons/categoryicons/" + item.icon} width={24} alt="" />
+                    <img src={"/assets/icons/categoryicons/" + item.icon} width={24} alt="category icon" />
                     <Text className='fs-16 fw-500'>{item.title}</Text>
                   </Flex>
                 ))}
@@ -140,7 +140,7 @@ const BusinessCategoryDonut = () => {
               <Col lg={{span: 12}} md={{span: 12}} xs={{span: 24}} sm={{span: 24}}>
                 {data.slice(5).map((item, index) => (
                   <Flex gap={5} align='center' className='mb-3' key={index}>
-                    <img src={"/assets/icons/categoryicons/" + item.icon} width={24} alt="" />
+                    <img src={"/assets/icons/categoryicons/" + item.icon} width={24} alt="category icon" />
                     <Text className='fs-16 fw-500'>{item.title}</Text>
                   </Flex>
                 ))}

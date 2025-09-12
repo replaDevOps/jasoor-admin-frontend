@@ -1,15 +1,12 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Typography } from 'antd';
+import { Card,  Flex, Form, Table } from 'antd';
 import { SearchInput } from '../../../Forms';
 import { faqsData, faqsColumn } from '../../../../data';
 import { useState } from 'react';
-import { DownOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
 import { CustomPagination, DeleteModal } from '../../../Ui';
 
 
 const FaqsTable = ({setVisible,setEditItem}) => {
     const [form] = Form.useForm();
-    const navigate = useNavigate();
     const [deleteItem, setDeleteItem] = useState(false);
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
@@ -29,7 +26,7 @@ const FaqsTable = ({setVisible,setEditItem}) => {
                             <SearchInput
                                 name='name'
                                 placeholder='Search'
-                                prefix={<img src='/assets/icons/search.png' width={14} />}
+                                prefix={<img src='/assets/icons/search.png' alt='search icon' width={14} />}
                                 className='border-light-gray pad-x ps-0 radius-8 fs-13'
                             />
                         </Flex>
