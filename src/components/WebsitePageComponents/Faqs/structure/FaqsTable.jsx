@@ -1,4 +1,4 @@
-import { Button, Card, Dropdown, Flex, Form, Table, Typography,message,Spin } from 'antd';
+import { Button, Card, Dropdown, Flex, Form, Table,message,Spin } from 'antd';
 import { SearchInput } from '../../../Forms';
 import { useState,useRef } from 'react';
 import { CustomPagination, DeleteModal } from '../../../Ui';
