@@ -4,7 +4,7 @@ import { TableContent } from './TableContent'
 import { UPDATE_BUSINESS } from '../../../graphql/mutation'
 import { useMutation,useQuery } from '@apollo/client';
 import {GET_BUSINESSES_STATS_BY_ID} from '../../../graphql/query'
-import { message,Spin } from "antd";
+import { message } from "antd";
 
 const { Title,Text } = Typography
 const BusinessStatsTab = ({status}) => {

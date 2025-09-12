@@ -4,11 +4,11 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { MyInput } from '../../Forms';
-import { permissionsData, rolepermissionData } from '../../../data';
+import { permissionsData } from '../../../data';
 import { CREATE_ROLE,UPDATE_ROLE } from '../../../graphql/mutation/login';
 import {GETROLE} from '../../../graphql/query'
 import { useMutation,useQuery } from '@apollo/client';
-import { message,Spin } from "antd";
+import { message } from "antd";
 
 const { Text, Title } = Typography;
 

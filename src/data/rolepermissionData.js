@@ -1,30 +1,4 @@
-const rolepermissionData = [
-    {
-        key:1,
-        rolename:'Super Admin',
-        status:0
-    },
-    {
-        key:2,
-        rolename:'Content Manager',
-        status:1
-    },
-    {
-        key:3,
-        rolename:'Super Admin',
-        status:0
-    },
-    {
-        key:4,
-        rolename:'Listing Moderator',
-        status:0
-    },
-    {
-        key:5,
-        rolename:'Sales Agent',
-        status:0
-    }
-]
+
 
  const permissionsData = [
         {
@@ -79,4 +53,4 @@ const rolepermissionData = [
         }
     ];
 
-export {rolepermissionData,permissionsData}
+export {permissionsData}

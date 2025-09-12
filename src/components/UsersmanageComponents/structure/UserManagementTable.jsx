@@ -7,7 +7,6 @@ import { ViewIdentity } from '../modals';
 import { UPDATE_USER } from '../../../graphql/mutation'
 import { USERS } from '../../../graphql/query/user';
 import { useQuery,useMutation } from '@apollo/client'
-import { usermanageData } from '../../../data';
 import { DownOutlined } from '@ant-design/icons';
 
 const { Text } = Typography

@@ -1,6 +1,5 @@
 import React,{useState} from 'react'
-import { UploadOutlined } from '@ant-design/icons';
-import { Button, Card,  Col, Flex, Image, Row, Typography,Upload } from 'antd'
+import { Button, Card,  Col, Flex, Image, Row, Typography } from 'antd'
 import { UPDATE_DEAL,UPLOAD_DOCUMENT} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
 import { message,Spin } from "antd";

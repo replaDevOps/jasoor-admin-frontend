@@ -4,7 +4,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../PageComponents';
 import { GET_BUSINESS_CATEGORY_COUNT } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
-import { message,Spin } from "antd";
+import { Spin } from "antd";
 
 const { Text } = Typography
 const BusinessCategoryDonut = () => {

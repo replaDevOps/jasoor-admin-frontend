@@ -2,10 +2,9 @@ import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { SingleInprogressSteps } from './SingleInprogressSteps'
-import { UPDATE_DEAL } from '../../../graphql/mutation/mutations';
 import {GETDEAL} from '../../../graphql/query'
-import { useMutation,useQuery } from '@apollo/client';
-import { message,Spin } from "antd";
+import { useQuery } from '@apollo/client';
+import { message } from "antd";
 
 const statusMap = {
     COMMISSION_TRANSFER_FROM_BUYER_PENDING: 'Buyer Commission Transfer Pending',
@@ -28,7 +27,6 @@ const BusinessDealsDetails = ({completedeal}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const {id} = useParams();
     const navigate = useNavigate()
-    // const details = inprogressdealData?.find((item) => item.key == id);
     const { loading, error, data } = useQuery(GETDEAL, {
         variables: { getDealId: id },
         skip: !id, // skip if no id

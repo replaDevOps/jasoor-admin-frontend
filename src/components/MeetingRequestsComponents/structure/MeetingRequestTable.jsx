@@ -1,7 +1,6 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Typography} from 'antd';
+import { Button, Col, Dropdown, Flex, Form, Row, Table ,Typography} from 'antd';
 import { NavLink } from "react-router-dom";
 import { SearchInput } from '../../Forms';
-import { meetingreqColumn } from '../../../data';
 import { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { meetingItems } from '../../../shared';

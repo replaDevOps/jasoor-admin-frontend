@@ -1,50 +1,9 @@
-import { Button, Dropdown, Flex, Image, Space, Switch, Tooltip, Typography } from "antd";
+import { Button, Dropdown, Flex, Space, Tooltip, Typography } from "antd";
 import { NavLink } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
 import { priorityItems } from "../shared";
 
 const { Text } = Typography
-
-const businesslistmaincolumn= [
-    {
-        title: 'Business Title',
-        dataIndex: 'title',
-    },
-    {
-        title: 'Seller Name',
-        dataIndex: 'sellername',
-    },
-    {
-        title: 'Category',
-        dataIndex: 'category',
-        render:(category)=> <Text className='fs-12 badge-cs border-gray'>{category}</Text>
-    },
-    {
-        title: 'Business Price',
-        dataIndex: 'businessprice',
-    },
-    {
-        title: 'Status',
-        dataIndex: 'status',
-        render: (status) => {
-            return (
-                status === 0 ? (
-                    <Space align='center'>
-                        <Text className='btnpill fs-12 pending'>Pending</Text>
-                    </Space>
-                ) : status === 1 ? (
-                    <Text className='btnpill fs-12 inactive'>Inactive</Text>
-                ) : status === 2 ? (
-                    <Text className='btnpill fs-12 success'>Completed</Text>
-                ) : null
-            );
-        }
-    },
-    {
-        title: 'Date',
-        dataIndex: 'date',
-    },
-];
 
 const postsaleColumn = [
     {
@@ -57,98 +16,6 @@ const postsaleColumn = [
     },
 ]
 
-const outstandliabColumn = [
-    {
-        title: 'Liabilities name',
-        dataIndex: 'liabilitiesname',
-    },
-    {
-        title: 'Number of Items',
-        dataIndex: 'noitems',
-    },
-    {
-        title: 'Purchase Year',
-        dataIndex: 'purchaseyear',
-    },
-    {
-        title: 'Price',
-        dataIndex: 'price',
-    },
-    {
-        title: 'Verify',
-        dataIndex: 'verify',
-        render:(_,row)=>{
-            return(
-                <Switch 
-                    checked={row.verify === 1 ? true : false}
-                    size="small"
-                />
-            )
-        }
-    },
-]
-
-const keyassetColumn = [
-    {
-        title: 'Asset Name',
-        dataIndex: 'assetname',
-    },
-    {
-        title: 'Number of Items',
-        dataIndex: 'noitems',
-    },
-    {
-        title: 'Purchase Year',
-        dataIndex: 'purchaseyear',
-    },
-    {
-        title: 'Price',
-        dataIndex: 'price',
-    },
-    {
-        title: 'Verify',
-        dataIndex: 'verify',
-        render:(_,row)=>{
-            return(
-                <Switch 
-                    checked={row.verify === 1 ? true : false}
-                    size="small"
-                />
-            )
-        }
-    },
-]
-
-const inventoryColumn = [
-    {
-        title: 'Inventory Name',
-        dataIndex: 'inventoryname',
-    },
-    {
-        title: 'Number of Items',
-        dataIndex: 'noitems',
-    },
-    {
-        title: 'Purchase Year',
-        dataIndex: 'purchaseyear',
-    },
-    {
-        title: 'Price',
-        dataIndex: 'price',
-    },
-    {
-        title: 'Verify',
-        dataIndex: 'verify',
-        render:(_,row)=>{
-            return(
-                <Switch 
-                    checked={row.verify === 1 ? true : false}
-                    size="small"
-                />
-            )
-        }
-    },
-]
 
 const offertableColumn = [
     {
@@ -1013,22 +880,10 @@ const financeColumn =  [
 
 
 export {
-    businesslistmaincolumn,
     postsaleColumn,
-    outstandliabColumn,
-    keyassetColumn,
-    inventoryColumn,
     offertableColumn,
-    categoryColumn,
     categoryStatsProfColumn,
-    usermanageColumn,
-    meetingreqColumn,
-    schedulemeetingColumn,
-    inprogressdealColumn,
     completedealColumn,
-    rolepermissionColumn,
-    staffmemberColumn,
-    contactrequestColumn,
     pushnotifyColumn,
     faqsColumn,
     financeColumn,
