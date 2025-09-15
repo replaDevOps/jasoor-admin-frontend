@@ -36,6 +36,7 @@ const RouteF = () => {
   // }, [])
   useEffect(() => {
     // Create WebSocket connection
+    const url = "wss://backend.jusoor-sa.co/graphql"; 
     const socket = new WebSocket(url)
     setWs(socket)
 
