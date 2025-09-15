@@ -55,7 +55,7 @@ const RouteF = () => {
       socket.close()
       window.removeEventListener('beforeunload', handleUnload)
     }
-  }, [url])
+  }, [])
 
   return (
     <Suspense fallback={<Fallback />}>
