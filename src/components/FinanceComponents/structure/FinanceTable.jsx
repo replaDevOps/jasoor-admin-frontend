@@ -1,7 +1,7 @@
-import { Button, Card, Col, Flex, Form, Row, Table } from 'antd';
+import { Card, Col, Flex, Form, Row, Table } from 'antd';
 import { MyDatepicker, SearchInput } from '../../Forms';
-import { financeColumn, financeData } from '../../../data';
-import { useEffect, useState } from 'react';
+import { financeColumn } from '../../../data';
+import { useState } from 'react';
 import { CustomPagination } from '../../Ui';
 import moment from 'moment';
 import dayjs from 'dayjs';

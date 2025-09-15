@@ -3,7 +3,7 @@ import { TableContent } from './TableContent'
 import { UPDATE_ASSET ,UPDATE_INVENTORY,UPDATE_LIABILITY} from '../../../graphql/mutation'
 import { useMutation,useQuery } from '@apollo/client';
 import {GET_BUSINESSES_ASSETS_BY_ID} from '../../../graphql/query'
-import { message,Spin } from "antd";
+import { message } from "antd";
 
 const { Title } = Typography
 const AssetsTab = ({businessId}) => {

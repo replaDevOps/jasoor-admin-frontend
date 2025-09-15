@@ -1,6 +1,6 @@
 import { Button, Card, Col, Dropdown, Flex, Form, Row, Table } from 'antd';
 import { SearchInput } from '../../Forms';
-import { pushnotifyColumn, pushnotifyData } from '../../../data';
+import { pushnotifyColumn } from '../../../data';
 import { useState,useEffect } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { districtItems, groupItems, pushstatusItem } from '../../../shared';

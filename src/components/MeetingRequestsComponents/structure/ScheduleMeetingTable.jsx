@@ -8,7 +8,7 @@ import { CustomPagination } from '../../Ui';
 import { UPDATE_BUSINESS_MEETING,UPDATE_OFFER } from '../../../graphql/mutation'
 import { GETADMINSCHEDULEMEETINGS } from '../../../graphql/query/meeting'
 import { useQuery,useMutation } from '@apollo/client'
-import { message,Spin } from "antd";
+import { Spin } from "antd";
 
 const { Text } = Typography
 

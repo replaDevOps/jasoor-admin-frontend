@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { MyInput, MySelect, SingleFileUpload } from '../../Forms';
 import { categoriesItems } from '../../../shared';
-import { categoryData, categoryStatsProfColumn, categorystatsProfData } from '../../../data';
+import { categoryStatsProfColumn, categorystatsProfData } from '../../../data';
 import { useEffect, useState } from 'react';
 import { TableContent } from '../../BusinesslistingComponents';
 import { UPDATE_CATEGORY, CREATE_CATEGORY} from '../../../graphql/mutation/mutations';

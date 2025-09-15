@@ -1,6 +1,6 @@
 import { Flex, Form, Table } from 'antd';
 import { SearchInput } from '../../Forms';
-import { completedealColumn, completedealData} from '../../../data';
+import { completedealColumn } from '../../../data';
 import { CustomPagination } from '../../Ui';
 import { useState } from 'react';
 import { GETDEALS } from '../../../graphql/query/meeting'

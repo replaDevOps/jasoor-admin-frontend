@@ -155,7 +155,7 @@ const SingleviewBusinesslist = () => {
                                             {/* TODO: implemnt verification tag data?.businessStatus */}
                                         </Title>
                                         <Flex gap={5} align='center'>
-                                            <Image src='/assets/icons/reyal-b.png' alt='currency-icon' preview={false} width={20} />
+                                            <Image src='/assets/icons/reyal-b.png' alt='currency symbol' preview={false} width={20} />
                                             <Title level={3} className='m-0 text-brand'>
                                                 {data?.price}
                                             </Title>
