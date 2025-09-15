@@ -140,7 +140,7 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
                         <Col span={24}>
                             <Card className='bg-brand-light border0 card-cs'>
                                 <Flex align='center' gap={10}>
-                                    <Image src='/assets/icons/brand-info.png' alt='info-icon' width={20} />
+                                    <Image src='/assets/icons/brand-info.png' fetchPriority="high" alt='info-icon' width={20} />
                                     <Text className='text-brand fs-13'>
                                         Your banking details are encrypted and used only for secure payouts through Jusoor.
                                     </Text>

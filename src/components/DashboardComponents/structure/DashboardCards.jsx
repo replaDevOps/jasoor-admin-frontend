@@ -73,7 +73,7 @@ const DashboardCards = () => {
                                 <Card className={`shadow-d radius-12 h-100 border-gray`}>
                                     <Flex gap={8} vertical>
                                         <div>
-                                            <img src={"/assets/icons/"+item?.icon} width={45}  alt="stats icon" fetchpriority="high" />
+                                            <img src={"/assets/icons/"+item?.icon} width={45}  alt="stats icon" fetchPriority="high" />
                                         </div>
                                         <Text className='fs-14 text-gray'>{item?.subtitle}</Text>
                                         <Title level={5} className='fw-600 text-black m-0'>{item?.title}</Title>
@@ -88,7 +88,7 @@ const DashboardCards = () => {
                 <Card className={`shadow-d radius-12 h-100 border-gray`}>
                     <Flex gap={8} vertical>
                         <div>
-                            <img src={"/assets/icons/dc-5.png"} width={45} alt="" fetchpriority="high"/>
+                            <img src={"/assets/icons/dc-5.png"} width={45} alt="icon" fetchPriority="high"/>
                         </div>
                         <Text className='fs-14 text-gray'>Today's Meeting</Text>
                         <Title level={5} className='fw-600 text-black m-0'>{stats.todaysMeetings || 0}</Title>

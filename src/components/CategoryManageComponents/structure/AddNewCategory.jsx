@@ -283,7 +283,7 @@ const AddNewCategory = () => {
                                 src={editdata?.icon}
                                 alt="Category Icon"
                                 style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8 }}
-                                fetchpriority="high"
+                                fetchPriority="high"
                             />
                             )}
 
