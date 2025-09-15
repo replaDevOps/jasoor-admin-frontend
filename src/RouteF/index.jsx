@@ -36,7 +36,6 @@ const RouteF = () => {
   // }, [])
   useEffect(() => {
     // Create WebSocket connection
-    const url = "wss://backend.jusoor-sa.co/graphql"; 
     const socket = new WebSocket(url)
     setWs(socket)
 
@@ -56,7 +55,7 @@ const RouteF = () => {
       socket.close()
       window.removeEventListener('beforeunload', handleUnload)
     }
-  }, [])
+  }, [url])
 
   return (
     <Suspense fallback={<Fallback />}>
