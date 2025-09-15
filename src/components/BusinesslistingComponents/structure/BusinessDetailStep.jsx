@@ -71,7 +71,7 @@ const BusinessDetailStep = ({ data, setData }) => {
             <Text className='text-gray'>Let’s start with the basic business information</Text>
         </Flex>
         <Flex className='pill-round' gap={8} align='center'>
-            <Image src="/assets/icons/info-b.png"  preview={false} width={16} alt="info-icon" />
+            <Image src="/assets/icons/info-b.png" fetchPriority="high"  preview={false} width={16} alt="info-icon" />
             <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
         </Flex>
       </Flex>
@@ -90,7 +90,7 @@ const BusinessDetailStep = ({ data, setData }) => {
                     <Flex gap={3} align="center">
                       Sell business by Acquiring 
                       <Tooltip title='Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities'>
-                        <img src="/assets/icons/info.png" width={20} alt="" fetchpriority="high" />
+                        <img src="/assets/icons/info.png" width={20} alt="info icon" fetchPriority="high" />
                       </Tooltip>
                     </Flex>
                   </Radio>
@@ -98,7 +98,7 @@ const BusinessDetailStep = ({ data, setData }) => {
                     <Flex gap={3} align="center">
                       Sell business by Takbeel
                       <Tooltip title='Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.'>
-                        <img src="/assets/icons/info.png" width={20} alt="" fetchpriority="high" />
+                        <img src="/assets/icons/info.png" width={20} alt="info icon" fetchPriority="high" />
                       </Tooltip>
                     </Flex>
                   </Radio>

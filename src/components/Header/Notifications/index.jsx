@@ -48,6 +48,7 @@ export const Notifications = () => {
                             preview={false}
                             alt="notification-icon" 
                             className="up"
+                            fetchPriority="high"
                         />
                     </Button>
                 </Badge>

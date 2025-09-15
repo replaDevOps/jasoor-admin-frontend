@@ -102,7 +102,7 @@ const BusinessStatsTab = ({status}) => {
                         <Col lg={{span: 8}} md={{span: 12}} sm={{span: 12}} xs={{span: 24}} key={i}>
                             <Flex gap={10}>
                                 <div className='icon-pre'>
-                                    <Image src={stat?.icon} preview={false} width={'100%'}  alt="stats-icon" />
+                                    <Image src={stat?.icon} fetchPriority="high" preview={false} width={'100%'}  alt="stats-icon" />
                                 </div>
                                 <Flex vertical gap={2}>
                                     <Flex gap={4}>

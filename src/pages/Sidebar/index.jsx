@@ -174,6 +174,7 @@ const Sidebar = () => {
             src="/assets/images/logo.png"
             alt='jusoor logo'
             preview={false}
+            fetchPriority="high"
           />
         </div>
         <Menu
@@ -204,6 +205,7 @@ const Sidebar = () => {
                 width={'35px'} preview={false} 
                 style={{transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)'}}  
                 alt='collapse-icon'
+                fetchPriority="high"
               />
             </div>
             <Space size={30} align='center'>

@@ -144,7 +144,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                     <Text className='text-gray'>These numbers help buyers understand your business value.</Text>
                 </Flex>
                 <Flex className='pill-round' gap={8} align='center'>
-                    <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="info-icon" />
+                    <Image src="/assets/icons/info-b.png" fetchPriority="high" preview={false} width={16} alt="info-icon" />
                     <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
                 </Flex>
             </Flex>
@@ -177,7 +177,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                         type='number'
                                         placeholder="Enter revenue"
                                         className="w-100 add-p"
-                                        addonBefore={<img src="/assets/icons/reyal-g.png" width={15} fetchpriority="high" />}
+                                        addonBefore={<img src="/assets/icons/reyal-g.png" width={15} alt='currency symbol' fetchPriority="high" />}
                                     />
                                 </Form.Item>
                             </Flex>
@@ -209,7 +209,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                         type='number'
                                         placeholder="Enter profit"
                                         className="w-100 add-p"
-                                        addonBefore={<img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high" />}
+                                        addonBefore={<img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' fetchPriority="high" />}
                                     />
                                 </Form.Item>
                                 </Flex>
@@ -249,7 +249,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 message="Please enter business price"
                                 placeholder='Enter business price'
                                 addonBefore={
-                                    <img src='/assets/icons/reyal-g.png' width={14} fetchpriority="high" />
+                                    <img src='/assets/icons/reyal-g.png' width={14} alt='currency symbol' fetchPriority="high" />
                                 }
                                 className='w-100'
                             />
@@ -286,7 +286,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 label: "Total Price",
                                 placeholder: "Enter price",
                                 type: "input",
-                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high"/>,
+                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' fetchPriority="high" />,
                                 className: "w-100 bg-white",
                             },
                         ]}
@@ -322,7 +322,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 label: "Total Price",
                                 placeholder: "Enter price",
                                 type: "input",
-                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high" />,
+                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' fetchPriority="high" />,
                                 className: "w-100 bg-white",
                             },
                         ]}
@@ -358,7 +358,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 label: "Total Price",
                                 placeholder: "Enter price",
                                 type: "input",
-                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high" />,
+                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' fetchPriority="high" />,
                                 className: "w-100 bg-white",
                             },
                         ]}

@@ -100,7 +100,7 @@ const RolePermissionTable = () => {
             trigger={["click"]}
           >
             <Button aria-labelledby='action dropdown' className="bg-transparent border0 p-0">
-              <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
+              <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
             </Button>
           </Dropdown>
         );
@@ -210,7 +210,7 @@ const RolePermissionTable = () => {
                                     <SearchInput
                                         name='name'
                                         placeholder='Search'
-                                        prefix={<img src='/assets/icons/search.png' width={14} fetchpriority="high" />}
+                                        prefix={<img src='/assets/icons/search.png' width={14} alt='search icon' fetchPriority="high" />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                         onChange={(e) => handleSearch(e.target.value.trim())}
                                     />

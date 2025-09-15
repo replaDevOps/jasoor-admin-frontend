@@ -36,7 +36,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                 <Card className="card-cs border-gray rounded-12">
                     <Flex justify="space-between" align="center">
                         <Flex gap={15}>
-                            <Image src={'/assets/icons/file.png'} alt='file-image' preview={false} width={20} />
+                            <Image src={'/assets/icons/file.png'} alt='file-image' fetchPriority="high" preview={false} width={20} />
                             <Flex vertical>
                                 <Text className="fs-13 text-gray">
                                     {fileName}
@@ -48,7 +48,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                         </Flex>
                         {filePath && (
                             <a href={filePath} target="_blank" rel="noopener noreferrer">
-                                <Image src={"/assets/icons/download.png"} alt='download-icon' preview={false} width={20} />
+                                <Image src={"/assets/icons/download.png"} fetchPriority="high" alt='download-icon' preview={false} width={20} />
                             </a>
                         )}
                     </Flex>

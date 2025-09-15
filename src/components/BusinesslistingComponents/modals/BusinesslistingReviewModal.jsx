@@ -25,7 +25,7 @@ const BusinesslistingReviewModal = ({visible,onClose,onCreate}) => {
       > 
 
         <Flex vertical align='center' className='text-center my-3' gap={10}>
-            <img src='/assets/icons/complete.png' width={50} fetchpriority="high" />
+            <img src='/assets/icons/complete.png' width={50} alt='complete icon' fetchPriority="high" />
             <Title level={4} className='mb-0 mt-2'>
                 Business Listing Under Review
             </Title>

@@ -55,7 +55,7 @@ const BankAccountCard = ({banks,settingId}) => {
                                                     <Radio value={items.id}>{items.title}</Radio>
                                                     <Divider className='bg-gray' style={{height: 20}} type='vertical' />
                                                     <Flex gap={12} align='center'> 
-                                                        <Image src='/assets/icons/bank-ic.svg' width={20} preview={false} alt='bank-icon' />
+                                                        <Image src='/assets/icons/bank-ic.svg' width={20} preview={false} fetchPriority="high" alt='bank-icon' />
                                                         <Flex vertical gap={0}>
                                                             <Text className='fs-14'>{items.bankname}</Text>
                                                             <MaskedAccount iban={items.ibanNo} className={'fs-13 text-gray'} />
@@ -72,7 +72,7 @@ const BankAccountCard = ({banks,settingId}) => {
                                                     trigger={['click']}
                                                 >
                                                     <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                                                        <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
+                                                        <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
                                                     </Button>
                                                 </Dropdown>
                                             </Flex>

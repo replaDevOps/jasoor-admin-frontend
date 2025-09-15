@@ -82,7 +82,7 @@ const categoryColumn = ( setDeleteItem, navigate ) =>  [
     {
         title: 'Category Icon',
         dataIndex: 'categoryicon',
-        render:(categoryicon)=> <Image src={categoryicon} preview={false} width={25} alt='category-icon' />
+        render:(categoryicon)=> <Image src={categoryicon} preview={false} width={25} alt='category-icon' fetchPriority="high" />
     },
     {
         title: 'Category Name',
@@ -123,7 +123,7 @@ const categoryColumn = ( setDeleteItem, navigate ) =>  [
                 trigger={['click']}
             >
                 <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high"/>
+                    <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high"/>
                 </Button>
             </Dropdown>
         ),
@@ -144,7 +144,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
                 placeholder="Enter avg profit"
                 value={value}
                 onChange={(e) => handleInputChange(e.target.value, index, 'value2024')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high"/>}
+                addonBefore={<img src="/assets/icons/reyal-g.png" alt="currency symbol" width={14} fetchPriority="high"/>}
                 className="w-100"
             />
         ),
@@ -158,7 +158,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
                 placeholder="Enter avg profit"
                 value={value}
                 onChange={(e) => handleInputChange(e.target.value, index, 'value2023')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high" />}
+                addonBefore={<img src="/assets/icons/reyal-g.png" alt="currency symbol" width={14} fetchPriority="high" />}
                 className="w-100"
             />
         ),
@@ -172,7 +172,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
                 placeholder="Enter avg profit"
                 value={value}
                 onChange={(e) => handleInputChange(e.target.value, index, 'value2022')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high" />}
+                addonBefore={<img src="/assets/icons/reyal-g.png" alt="currency symbol" width={14} fetchPriority="high" />}
                 className="w-100"
             />
         ),
@@ -186,7 +186,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
                 placeholder="Enter avg profit"
                 value={value}
                 onChange={(e) => handleInputChange(e.target.value, index, 'value2021')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high" />}
+                addonBefore={<img src="/assets/icons/reyal-g.png" alt="currency symbol" width={14} fetchPriority="high" />}
                 className="w-100"
             />
         )
@@ -200,7 +200,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
                 placeholder="Enter avg profit"
                 value={value}
                 onChange={(e) => handleInputChange(e.target.value, index, 'localbusinessgrowth')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" width={14} fetchpriority="high" />}
+                addonBefore={<img src="/assets/icons/reyal-g.png" alt="currency symbol" width={14} fetchPriority="high" />}
                 className="w-100"
             />
         )
@@ -298,7 +298,7 @@ const usermanageColumn = ( setVisible,SetViewState ) =>  [
                 trigger={['click']}
             >
                 <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
+                    <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
                 </Button>
             </Dropdown>
         ),
@@ -375,7 +375,7 @@ const meetingreqColumn = ( setVisible, setDeleteItem ) =>  [
                 trigger={['click']}
             >
                 <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
+                    <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
                 </Button>
             </Dropdown>
         ),
@@ -444,7 +444,7 @@ const schedulemeetingColumn = ( setVisible, setDeleteItem ) =>  [
                 trigger={['click']}
             >
                 <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
+                    <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
                 </Button>
             </Dropdown>
         ),
@@ -594,7 +594,7 @@ const rolepermissionColumn = (setDeleteItem, navigate) => [
           trigger={["click"]}
         >
           <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-            <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
+            <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
           </Button>
         </Dropdown>
       ),
@@ -649,7 +649,7 @@ const staffmemberColumn = (setVisible,setDeleteItem,setEditItem) =>  [
                 trigger={['click']}
             >
                 <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
+                    <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
                 </Button>
             </Dropdown>
         ),
@@ -715,7 +715,7 @@ const contactrequestColumn = (setVisible,setSendView,setViewItem) =>  [
                 trigger={['click']}
             >
                 <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
+                    <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
                 </Button>
             </Dropdown>
         ),
@@ -815,7 +815,7 @@ const pushnotifyColumn = ({setVisible,setViewNotify ,setEditItem,setDeleteItem})
                 trigger={['click']}
             >
                 <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
+                    <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
                 </Button>
             </Dropdown>
         ),
@@ -843,7 +843,7 @@ const faqsColumn = ( setVisible, setEditItem, setDeleteItem ) =>  [
                 trigger={['click']}
             >
                 <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                    <img src="/assets/icons/dots.png" alt="" width={16} fetchpriority="high" />
+                    <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
                 </Button>
             </Dropdown>
         ),

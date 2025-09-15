@@ -49,7 +49,7 @@ console.log("error",error)
               key: "1",
               label: (
                 <Space>
-                  <Image src="assets/icons/en.png" width={20} alt="English" preview={false} />
+                  <Image src="assets/icons/en.png" width={20} alt="English" fetchPriority="high" preview={false} />
                   <Text className='fs-13'>EN</Text>
                 </Space>
               ),
@@ -60,7 +60,7 @@ console.log("error",error)
               key: "2",
               label: (
                 <Space>
-                  <Image src="assets/icons/ar.png" width={20} alt="Arabic" preview={false} />
+                  <Image src="assets/icons/ar.png" width={20} alt="Arabic" fetchPriority="high" preview={false} />
                   <Text className='fs-13'>AR</Text>
                 </Space>
               ),
@@ -77,7 +77,7 @@ console.log("error",error)
                     <div className="form-inner">
                         <NavLink to={"/"}>
                             <div className="logo">
-                                <img src="/assets/images/logo-1.png" style={{ height: "70px" }} fetchpriority="high" />
+                                <img src="/assets/images/logo-1.png" alt="jusoor logo" style={{ height: "70px" }} fetchPriority="high" />
                             </div>
                         </NavLink>
 
@@ -130,6 +130,7 @@ console.log("error",error)
                                     width={20}
                                     alt={selectedLang.label}
                                     preview={false}
+                                    fetchPriority="high"
                                 />
                                 <Text className="text-white fs-13">{selectedLang.label}</Text>
                                 <DownOutlined className="text-white" />
@@ -138,13 +139,13 @@ console.log("error",error)
                     </Dropdown>
                     <Flex vertical justify="space-between" className="h-100">
                         <Flex vertical justify="center" align="center" className="logo-sp">
-                            <Image src="/assets/images/logo.png" alt='jusoor-logo' width={200} preview={false} />
+                            <Image src="/assets/images/logo.png" alt='jusoor-logo' fetchPriority="high" width={200} preview={false} />
                             <Title level={5} className="m-0 text-white text-center">
                                 Shorten the path
                             </Title>
                         </Flex>
                         <div className="bg-shade">
-                            <img src="/assets/images/login.gif" alt="Signup Visual" style={{ width: "100%", opacity: 0.7 }} fetchpriority="high" />
+                            <img src="/assets/images/login.gif" alt="signin gif" style={{ width: "100%", opacity: 0.7 }} fetchPriority="high" />
                         </div>
                     </Flex>
                 </Col>

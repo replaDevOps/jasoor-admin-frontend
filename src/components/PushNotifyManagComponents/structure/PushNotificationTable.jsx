@@ -109,7 +109,7 @@ const PushNotificationTable = ({setVisible, setViewNotify, setEditItem, setDelet
                                     <SearchInput
                                         name='name'
                                         placeholder='Search'
-                                        prefix={<img src='/assets/icons/search.png' width={14} fetchpriority="high"/>}
+                                        prefix={<img src='/assets/icons/search.png' width={14} alt='search icon' fetchPriority="high"/>}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                         onChange={(e) => setSearchValue(e.target.value)}
                                     />

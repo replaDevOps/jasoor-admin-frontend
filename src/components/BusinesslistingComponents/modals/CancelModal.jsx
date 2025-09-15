@@ -22,7 +22,7 @@ const CancelModal = ({visible,onClose}) => {
       > 
 
         <Flex vertical align='center' gap={6}>
-            <img src='/assets/icons/cancel-ic.png' width={50} fetchpriority="high" />
+            <img src='/assets/icons/cancel-ic.png' width={50} alt='cancel icon' fetchPriority="high" />
             <Title level={4} className='mb-0 mt-2'>
                 Cancel Listing?
             </Title>
