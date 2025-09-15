@@ -28,12 +28,15 @@ const ProtectedRoute = ({ children }) => {
 
 const RouteF = () => {
   const [auth, setAuth] = useState(isLoggedIn())
+  const [ws, setWs] = useState(null)
 
   // useEffect(() => {
   //   const onAuth = () => setAuth(isLoggedIn())
   //   window.addEventListener('authChanged', onAuth)
   //   return () => window.removeEventListener('authChanged', onAuth)
   // }, [])
+
+  const url = import.meta.env.VITE_WS_URL
   useEffect(() => {
     // Create WebSocket connection
     const socket = new WebSocket(url)
