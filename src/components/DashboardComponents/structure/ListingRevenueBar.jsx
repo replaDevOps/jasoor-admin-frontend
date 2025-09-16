@@ -55,12 +55,16 @@ const ListingRevenueBar = () => {
         <Flex align='center' wrap gap={10}>
             <ModuleTopHeading level={4} name='Listings by Revenue' />
         </Flex>
-        <ReactApexChart
+        <div className='w-100' style={{height:300}}>
+          <ReactApexChart
             options={chartData.options}
             series={chartData.series}
             type="bar"
-            height={300}
-        />
+            height={'100%'}
+            width={'100%'}
+            className='bar-width'
+          />
+        </div>
       </Card>
   );
 };

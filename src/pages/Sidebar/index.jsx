@@ -171,7 +171,7 @@ const Sidebar = () => {
           <Image
             style={{ width: collapsed ? "100%" : '130px' }}
             height={'auto'}
-            src="/assets/images/logo.png"
+            src="/assets/images/logo.webp"
             alt='jusoor logo'
             preview={false}
             fetchPriority="high"
@@ -201,7 +201,7 @@ const Sidebar = () => {
         >
           <div style={{ width: '98%', display: 'flex', justifyContent: 'space-between',alignItems:'center',position:'relative',gap:5}}>
             <div onClick={() => setCollapsed(!collapsed)}>
-              <Image src='/assets/icons/collapse.png' 
+              <Image src='/assets/icons/collapse.webp' 
                 width={'35px'} preview={false} 
                 style={{transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)'}}  
                 alt='collapse-icon'

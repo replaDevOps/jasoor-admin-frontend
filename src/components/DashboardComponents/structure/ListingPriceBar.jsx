@@ -22,7 +22,7 @@ const ListingPriceBar = () => {
         series: [
         { name: 'Business Price', data:counts  }],
         options: {plotOptions: { bar: { columnWidth: '60%', dataLabels: { position: 'top', }, } },
-        chart: { type: 'bar', toolbar:{ show: false,  } },
+        chart: { type: 'bar', toolbar:{ show: false,  },  },
         dataLabels: {  enabled: false, },
         stroke: { curve: 'smooth',  width: 2, },
         xaxis: {
@@ -77,12 +77,16 @@ const ListingPriceBar = () => {
         <Flex align='center' wrap gap={10}>
             <ModuleTopHeading level={4} name='Listings by Price Tier' />
         </Flex>
-        <ReactApexChart
+        <div className='w-100' style={{height:300}}>
+          <ReactApexChart
             options={chartData.options}
             series={chartData.series}
             type="bar"
-            height={300}
-        />
+            height={'100%'}
+            width={'100%'}
+            className='bar-width'
+          />
+        </div>
       </Card>
   );
 };
