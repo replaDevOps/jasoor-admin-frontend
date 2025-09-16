@@ -137,7 +137,7 @@ console.log("error",error)
                             </Space>
                         </Button>
                     </Dropdown>
-                    <Flex vertical justify="space-between" className="h-100">
+                    <Flex vertical justify="space-between" className="h-100" style={{minHeight:'100vh'}}>
                         <Flex vertical justify="center" align="center" className="logo-sp">
                             <Image src="/assets/images/logo.webp" alt='jusoor-logo' fetchPriority="high" width={200} preview={false} />
                             <Title level={5} className="m-0 text-white text-center">
