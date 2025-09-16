@@ -80,7 +80,7 @@ const ContactRequestTable = ({setVisible,setSendView,setViewItem,setRefetch}) =>
                     </Button>
                   );
                 }
-                return null; // show nothing if already sent
+                return <img src="/assets/icons/rejected.png" width={20} /> // show nothing if already sent
             },
         },
     ];

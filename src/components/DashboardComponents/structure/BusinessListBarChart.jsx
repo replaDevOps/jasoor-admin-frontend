@@ -98,12 +98,16 @@ const BusinessListBarChart = () => {
             />
             </Flex>
         </Flex>
-        <ReactApexChart
+        <div className='w-100' style={{height:300}}>
+          <ReactApexChart
             options={chartData.options}
             series={chartData.series}
             type="bar"
-            height={300}
-        />
+            height={'100%'}
+            width={'100%'}
+            className='bar-width'
+          />
+        </div>
       </Card>
   );
 };
