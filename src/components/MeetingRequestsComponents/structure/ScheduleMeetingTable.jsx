@@ -20,6 +20,12 @@ const ScheduleMeetingTable = () => {
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
     const [searchValue, setSearchValue] = useState('');
+    const [updateMeeting,{ loading: updating }] = useMutation(UPDATE_BUSINESS_MEETING);
+
+    const [updateOffer,{ loading: onUpdating }] = useMutation(UPDATE_OFFER,
+        { refetchQueries: [ { query: GETADMINSCHEDULEMEETINGS} ], 
+        awaitRefetchQueries: true, }
+    );
     const schedulemeetingColumn = ( setVisible, setDeleteItem ) =>  [
         {
             title: 'Business Title',
@@ -89,6 +95,7 @@ const ScheduleMeetingTable = () => {
                 <Dropdown
                     menu={{
                         items: [
+                            
                             { label: <NavLink onClick={async (e) => {
                                 e.preventDefault(); 
                                 setVisible(true) 
@@ -101,14 +108,16 @@ const ScheduleMeetingTable = () => {
                                             }
                                         }
                                     });
-                                    await updateOffer({
-                                        variables: {
-                                            input:{
-                                                id: row.offerId,
-                                                status: 'ACCEPTED'
-                                            }
-                                        }
-                                    });
+                                    if (row.offerId) {
+                                        await updateOffer({
+                                          variables: {
+                                            input: {
+                                              id: row.offerId,
+                                              status: 'ACCEPTED',
+                                            },
+                                          },
+                                        });
+                                    }                                      
                                     await refetch();
                                 } catch (err) {
                                     console.error(err);
@@ -199,13 +208,6 @@ const ScheduleMeetingTable = () => {
         setSearchValue(value);
         refetch({ status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null, search: value });
     };
-
-    const [updateMeeting,{ loading: updating }] = useMutation(UPDATE_BUSINESS_MEETING);
-
-    const [updateOffer,{ loading: onUpdating }] = useMutation(UPDATE_OFFER,
-        { refetchQueries: [ { query: GETADMINSCHEDULEMEETINGS} ], 
-        awaitRefetchQueries: true, }
-    );
 
     if (loading || updating || onUpdating) {
         return (
