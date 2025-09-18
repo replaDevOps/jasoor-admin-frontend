@@ -33,7 +33,7 @@ const BusinessListingTable = ({
       if (selectedItem) {
         setSelectedStatus(selectedItem.label);
         if (key === '1') {
-            setStatus(null); // Reset status if 'All' is selected
+            setStatus(null);
         }
         else{
         setStatus(selectedItem.key);
@@ -43,26 +43,16 @@ const BusinessListingTable = ({
 
     const categoryItems = useMemo(() => {
         if (!data?.getAllCategories) return [];
-        // Map API categories to Antd dropdown items
         return data.getAllCategories.map(cat => ({
-            key: cat.id,       // send this key to API filter
+            key: cat.id, 
             label: cat.name
         }));
     }, [data]);
-
-    // if (isLoading) {
-    //       return (
-    //         <Flex justify="center" align="center" style={{ height: '200px' }}>
-    //           <Spin size="large" />
-    //         </Flex>
-    //       );
-    //     }
     
     const handleCategoryClick = ({ key }) => {
         const selectedItem = categoryItems.find(item => item.key === key);
         if (selectedItem) {
             setSelectedCategory(selectedItem.label);
-            // Send selected category id to parent to filter API
             onFiltersChange({ categoryId: selectedItem.key });
         }
     };
