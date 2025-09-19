@@ -343,6 +343,7 @@ query GetCampaigns($filter: CampaignFilter) {
       district
       group
       description
+      status
     }
   }
 }

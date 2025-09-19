@@ -1,12 +1,13 @@
 import { Button, Col, Dropdown, Flex, Form, Row, Table ,Typography} from 'antd';
 import { SearchInput } from '../../Forms';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { businessdealItems } from '../../../shared';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination } from '../../Ui';
 import { GETDEALS } from '../../../graphql/query/meeting'
-import { useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
+import { TableLoader } from '../../Ui/TableLoader';
 
 const { Text } = Typography
 
@@ -18,16 +19,23 @@ const InprogressDealTable = () => {
     const [current, setCurrent] = useState(1);
     const [searchValue, setSearchValue] = useState('');
 
-    const { data, loading, refetch } = useQuery(GETDEALS, {
-        variables: {
-            search: searchValue,
-            status: selectedStatus !== 'Status' ? selectedStatus : null,
-            isCompleted: false
-        },
+    const [getDeals, { data, loading }] = useLazyQuery(GETDEALS, {
         fetchPolicy: 'network-only'
     });
 
-    const inprogressdealData = (data?.getDeals?.deals || []).map((item, index) => ({
+    useEffect(() => {
+        getDeals({
+            variables: {
+                limit: pageSize,
+                offset: (current - 1) * pageSize,
+                search: searchValue,
+                status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null,
+                isCompleted: false
+            }
+        });
+    }, [searchValue, selectedStatus, current, pageSize, getDeals]);
+
+    const inprogressdealData = (data?.getDeals?.deals || []).map((item) => ({
         key:item?.id,
         businessTitle:item?.business?.businessTitle || '-',
         buyerName: item?.buyer?.name || '-',
@@ -38,6 +46,7 @@ const InprogressDealTable = () => {
     }));
 
     const total = data?.getDeals?.totalCount || 0;
+
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
@@ -47,39 +56,11 @@ const InprogressDealTable = () => {
         const selectedItem = businessdealItems.find(item => item.key === key);
         if (selectedItem) {
             setSelectedStatus(selectedItem.label);
-            if( selectedItem.label === 'Document & Payment Confirmation' ){
-                refetch({ status: 'DOCUMENT_PAYMENT_CONFIRMATION', isCompleted: false });
-            }
-            else if (selectedItem.label === 'Commission Verification Pending' ){
-                refetch({ status: 'COMMISSION_VERIFICATION_PENDING', isCompleted: false });
-            }
-            else if (selectedItem.label === 'Seller Payment Verification Pending' ){
-                refetch({ status: 'SELLER_PAYMENT_VERIFICATION_PENDING', isCompleted: false });
-            }
-            else if (selectedItem.label === 'Closed Deal Verification Pending' ){
-                refetch({ status: 'PAYMENT_APPROVAL_FROM_SELLER_PENDING', isCompleted: false });
-            }
-            else if (selectedItem.label === 'Payment Approval From Seller Pending' ){
-                refetch({ status: 'BANK_DETAILS_FROM_SELLER_PENDING', isCompleted: false });
-            }
-            else if (selectedItem.label === 'Bank Details  From Seller Pending' ){
-                refetch({ status: 'COMMISSION_TRANSFER_FROM_BUYER_PENDING', isCompleted: false });
-            }
-            else if (selectedItem.label === 'DSA From Seller Pendin' ){
-                refetch({ status: 'DSA_FROM_SELLER_PENDING', isCompleted: false });
-            }
-            else if (selectedItem.label === 'DSA From Buyer Pending' ){
-                refetch({ status: 'DSA_FROM_BUYER_PENDING', isCompleted: false });
-            }
-            else if (selectedItem.label === 'All') {
-                refetch({ status: null });
-            }
         }
     };
 
     const handleSearch = (value) => {
         setSearchValue(value);
-        refetch({ status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null, search: value });
     };
 
     const inprogressdealColumn = [
@@ -191,12 +172,10 @@ const InprogressDealTable = () => {
                         onClick: () => navigate('/businessdeal/details/'+record?.key)
                     })}
                     pagination={true}
-                    // loading={
-                    //     {
-                    //         ...TableLoader,
-                    //         spinning: loading
-                    //     }
-                    // }
+                    loading={{
+                        ...TableLoader,
+                        spinning: loading
+                    }}
                 />
                 <CustomPagination 
                     total={total}

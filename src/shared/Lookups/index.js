@@ -11,12 +11,12 @@ const priorityItems = [
 ] 
 
 const groupselectItem = [
-    { id: 1, name: 'Inactive Users' },
-    { id: 2, name: 'Active Buyers' },
-    { id: 3, name: 'Closed Buyers' },
-    { id: 4, name: 'Draft Sellers' },
-    { id: 5, name: 'Active Sellers' },
-    { id: 6, name: 'Closed Sellers' },
+    { id: 1, name: 'Old' },
+    { id: 2, name: 'New' },
+    { id: 3, name: 'Both' },
+    // { id: 4, name: 'Draft Sellers' },
+    // { id: 5, name: 'Active Sellers' },
+    // { id: 6, name: 'Closed Sellers' },
 ]
 
 const districtselectItems = [
