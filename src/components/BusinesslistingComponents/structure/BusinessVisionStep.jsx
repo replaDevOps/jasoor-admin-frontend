@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Card, Col, Flex, Form, Image, Row, Typography } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../PageComponents'

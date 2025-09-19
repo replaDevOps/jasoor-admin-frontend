@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import {useState} from 'react'
 import { Button, Card,  Col, Flex, Image, Row, Typography } from 'antd'
 import { UPDATE_DEAL,UPLOAD_DOCUMENT} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
@@ -133,7 +133,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
     );
     if (updating || uploading) {
         return (
-            <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
             </Flex>
         );

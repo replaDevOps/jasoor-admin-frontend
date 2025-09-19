@@ -10,7 +10,6 @@ import { useQuery,useMutation } from '@apollo/client';
 import { message,Spin } from "antd";
 
 const { Text } = Typography
-
 const StaffMemberTable = ({setVisible,setEditItem,setRefetchStaff}) => {
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
@@ -243,7 +242,7 @@ const StaffMemberTable = ({setVisible,setEditItem,setRefetchStaff}) => {
     });
     if (loading || updating || deleting) {
         return (
-          <Flex justify="center" align="center" style={{ height: '200px' }}>
+          <Flex justify="center" align="center"className='h-200'>
             <Spin size="large" />
           </Flex>
         );

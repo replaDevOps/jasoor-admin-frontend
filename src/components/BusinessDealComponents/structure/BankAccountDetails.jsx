@@ -1,5 +1,4 @@
-import React,{ useState } from 'react'
-import { Button, Card, Flex, Typography } from 'antd'
+import { Button, Flex, Typography } from 'antd'
 import { MaskedAccount } from '../../Ui/MaskedAccount'
 import { SEND_BANK, UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation,useQuery } from '@apollo/client';
@@ -70,7 +69,7 @@ const BankAccountDetails = ({details}) => {
 
     if (updating || sending) {
         return (
-            <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
             </Flex>
         );

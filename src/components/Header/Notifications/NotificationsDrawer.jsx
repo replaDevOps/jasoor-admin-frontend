@@ -1,15 +1,11 @@
-import React, { useState } from "react"
-import { Drawer, Button, Avatar, List, theme, Typography, message,Spin} from "antd"
-import "./index.css"
+import { Drawer, Button, Avatar, List, Typography } from "antd"
 import {
     DeleteOutlined
 } from '@ant-design/icons'
-
 import { MARK_AS_READ } from '../../../graphql/mutation';
 import {GET_NOTIFICATIONS} from '../../../graphql/query'
 import { useMutation,useQuery } from '@apollo/client';
 
-const { useToken } = theme;
 const { Text } = Typography
 const NotificationsDrawer= ({visible, onClose})=>{
     const userId = localStorage.getItem("userId"); 

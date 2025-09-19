@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, Flex, Typography, Dropdown, Button } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import ReactApexChart from 'react-apexcharts';

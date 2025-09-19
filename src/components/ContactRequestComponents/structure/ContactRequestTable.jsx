@@ -9,7 +9,6 @@ import { message,Spin } from "antd";
 const { Text } = Typography;
 
 const ContactRequestTable = ({setVisible,setSendView,setViewItem,setRefetch}) => {
-    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState('Status');
     const [searchValue, setSearchValue] = useState('');
@@ -141,14 +140,13 @@ const ContactRequestTable = ({setVisible,setSendView,setViewItem,setRefetch}) =>
     ];
     if (loading) {
         return (
-          <Flex justify="center" align="center" style={{ height: '200px' }}>
+          <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
           </Flex>
         );
     }
     return (
         <>
-        {contextHolder}
             <Card className='radius-12 border-gray'>
                 <Flex vertical gap={20}>
                     <Form form={form} layout="vertical">

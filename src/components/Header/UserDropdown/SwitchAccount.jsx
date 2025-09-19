@@ -1,6 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons'
 import { Button, Col, Flex, Form, Modal, Row, Space, Typography } from 'antd'
-import React from 'react'
 import { MyInput } from '../../Forms'
 
 

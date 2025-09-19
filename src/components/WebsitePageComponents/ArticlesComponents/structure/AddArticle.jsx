@@ -2,7 +2,7 @@ import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Col, Flex, Form, message, Row, Typography,Spin } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { MyInput, SingleFileUpload } from '../../../Forms'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { EditorDescription } from '../../../Ui'
 import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_ARTICLE, UPDATE_ARTICLE } from '../../../../graphql/mutation/mutations';
@@ -133,7 +133,7 @@ const AddArticle = () => {
 
     if (loading) {
         return (
-            <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
             </Flex>
         );
@@ -228,11 +228,10 @@ const AddArticle = () => {
       
                 <Col span={24}>
                   {imageUrl && showImage ? (
-                    <div className='position-relative' style={{ display: 'inline-block', width: '100%' }}>
+                    <div className='position-relative w-100 inline-block'>
                       <img
                         src={imageUrl}
-                        className='radius-12 object-cover object-top'
-                        style={{ width: '100%', height: 400 }}
+                        className='radius-12 object-cover object-top w-100 h-400'
                         fetchPriority="high"
                         alt='image'
                       />
@@ -240,15 +239,8 @@ const AddArticle = () => {
                         size='small'
                         shape='circle'
                         danger
-                        style={{
-                          position: 'absolute',
-                          top: 8,
-                          right: 8,
-                          background: 'var(--red-color)',
-                          border: '1px solid #ccc',
-                        }}
                         onClick={() => setShowImage(false)}
-                        className='text-white'
+                        className='text-white cross-position'
                         aria-labelledby='Close'
                       >
                         ×

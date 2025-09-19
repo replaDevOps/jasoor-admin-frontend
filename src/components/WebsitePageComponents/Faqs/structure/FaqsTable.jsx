@@ -90,7 +90,7 @@ const FaqsTable = ({setVisible,setEditItem}) => {
     };
     if (loading || deleting) {
         return (
-            <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Flex justify="center" align="center"  className='h-200'>
                 <Spin size="large" />
             </Flex>
         );

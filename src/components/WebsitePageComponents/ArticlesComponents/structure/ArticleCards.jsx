@@ -7,7 +7,7 @@ import {GETARTICLES} from '../../../../graphql/query/queries'
 import { useQuery } from "@apollo/client";
 
 const { Paragraph, Text } = Typography
-const ArticleCards = ({setDeleteItem, onDelete}) => {
+const ArticleCards = ({setDeleteItem}) => {
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
     const [pageSize, setPageSize] = useState(10);
@@ -39,7 +39,7 @@ const ArticleCards = ({setDeleteItem, onDelete}) => {
 
     if (loading) {
         return (
-            <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
             </Flex>
         );
@@ -100,8 +100,7 @@ const ArticleCards = ({setDeleteItem, onDelete}) => {
                                                     ellipsis={{
                                                         rows: 2
                                                     }}
-                                                    className='fs-16 fw-500'
-                                                    style={{height: 50}}
+                                                    className='fs-16 fw-500 h-50'
                                                 >
                                                     {art?.title}
                                                 </Paragraph>

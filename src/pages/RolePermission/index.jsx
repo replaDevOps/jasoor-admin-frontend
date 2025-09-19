@@ -1,8 +1,8 @@
-import React from 'react'
 import { Row, Col, Flex, Button } from 'antd';
 import { ModuleTopHeading, RolePermissionTable } from '../../components';
 import { PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+
 const RolePermission = () => {
   const navigate = useNavigate();
   return (

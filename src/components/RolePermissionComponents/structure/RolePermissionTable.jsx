@@ -8,9 +8,9 @@ import { CustomPagination, DeleteModal } from '../../Ui';
 import { GETROLES } from '../../../graphql/query/user';
 import { UPDATE_ROLE,DELETE_ROLE } from '../../../graphql/mutation'
 import { useQuery,useMutation } from '@apollo/client'
-import { message,Spin } from "antd";
-const { Text } = Typography
+import { Spin } from "antd";
 
+const { Text } = Typography
 const RolePermissionTable = () => {
     const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState("Status");
@@ -193,7 +193,7 @@ const RolePermissionTable = () => {
 
     if (loading || onDeleteing ||updating) {
         return (
-        <Flex justify="center" align="center" style={{ height: '200px' }}>
+        <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
         </Flex>
         );

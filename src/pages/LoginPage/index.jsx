@@ -1,5 +1,5 @@
 import { Form, Button, Typography, Row, Col, Divider, Checkbox, Flex, Image, Space, Dropdown } from "antd";
-import { NavLink,useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { message } from "antd";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../../graphql/mutation/login";
@@ -9,11 +9,8 @@ import { useState } from "react";
 import { DownOutlined } from "@ant-design/icons";
 
 const { Title, Text, Paragraph } = Typography;
-
 const LoginPage = () => {
     const navigate = useNavigate()
-    const location = useLocation()
-
     const [messageApi, contextHolder] = message.useMessage();
     const [loginUser, { loading, error }] = useMutation(LOGIN);
     const [form] = Form.useForm();
@@ -77,7 +74,7 @@ console.log("error",error)
                     <div className="form-inner">
                         <NavLink to={"/"}>
                             <div className="logo">
-                                <img src="/assets/images/logo-1.png" alt="jusoor logo" style={{ height: "70px" }} fetchPriority="high" />
+                                <img src="/assets/images/logo-1.png" alt="jusoor logo" width={70} fetchPriority="high" />
                             </div>
                         </NavLink>
 
@@ -137,7 +134,7 @@ console.log("error",error)
                             </Space>
                         </Button>
                     </Dropdown>
-                    <Flex vertical justify="space-between" className="h-100" style={{minHeight:'100vh'}}>
+                    <Flex vertical justify="space-between" className="h-100 minheight-100vh">
                         <Flex vertical justify="center" align="center" className="logo-sp">
                             <Image src="/assets/images/logo.webp" alt='jusoor-logo' fetchPriority="high" width={200} preview={false} />
                             <Title level={5} className="m-0 text-white text-center">
@@ -145,7 +142,7 @@ console.log("error",error)
                             </Title>
                         </Flex>
                         <div className="bg-shade">
-                            <img src="/assets/images/login.gif" alt="signin gif" style={{ width: "100%", opacity: 0.7 }} fetchPriority="high" />
+                            <img src="/assets/images/login.gif" alt="signin gif" className="w-100 opacity-7" fetchPriority="high" />
                         </div>
                     </Flex>
                 </Col>

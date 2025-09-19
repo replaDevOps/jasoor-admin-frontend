@@ -19,12 +19,11 @@ const CustomPagination = ({
             // when page size changes -> reset to page 1 with new pageSize
             onPageChange(1, value);
           }}
-          style={{ width: 90 }}
           options={pageSizeOptions.map((size) => ({
             value: size,
             label: size.toString(),
           }))}
-          className="filter-pag"
+          className="filter-pag w-90"
         />
       </Flex>
       <Pagination

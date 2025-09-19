@@ -4,9 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { MyInput, MySelect, SingleFileUpload } from '../../Forms';
 import { categoriesItems } from '../../../shared';
-import { categoryStatsProfColumn, categorystatsProfData } from '../../../data';
+import { categorystatsProfData } from '../../../data';
 import { useEffect, useState } from 'react';
-import { TableContent } from '../../BusinesslistingComponents';
 import { UPDATE_CATEGORY, CREATE_CATEGORY} from '../../../graphql/mutation/mutations';
 import {GET_CATEGORIES_BY_ID} from '../../../graphql/query'
 import { useMutation,useQuery } from '@apollo/client';
@@ -183,7 +182,7 @@ const AddNewCategory = () => {
       };
     if (loading || updating) {
         return (
-          <Flex justify="center" align="center" style={{ height: '200px' }}>
+          <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
           </Flex>
         );
@@ -282,7 +281,7 @@ const AddNewCategory = () => {
                             <img
                                 src={editdata?.icon}
                                 alt="Category Icon"
-                                style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8 }}
+                                className='w-80 h-80 object-cover radius-8'
                                 fetchPriority="high"
                             />
                             )}
@@ -291,14 +290,14 @@ const AddNewCategory = () => {
                         </Row>
                     </Form>
                 </Card>
-                <Card className='radius-12 border-gray'>
+                {/* <Card className='radius-12 border-gray'>
                     <Flex vertical gap={10} className='alignStart'>
                         <Title level={5} className="m-0">
                             Category Stats & Profitability
                         </Title>
                         <TableContent x={2000} data={categoryProfData} columns={categoryStatsProfColumn(handleInputChange)} />
                     </Flex>
-                </Card>
+                </Card> */}
             </Flex>
         </>
     );

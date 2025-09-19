@@ -1,9 +1,8 @@
 import { Button, Card, Col, Flex, Form, Row, Typography,Input } from 'antd'
 import { MyInput } from '../../Forms'
-import React from 'react'
 import { CHANGE_ADMIN_PASSWORD } from '../../../graphql/mutation'
 import { useMutation } from '@apollo/client'
-import { message,Spin } from "antd";
+import { message } from "antd";
 
 const { Title } = Typography
 const PasswordManager = () => {

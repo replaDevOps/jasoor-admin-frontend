@@ -1,12 +1,11 @@
-
-import React,{useState,useEffect} from 'react'
-import { Button, Card, Checkbox, Col, Flex, Image, Row, Typography, message,Spin } from 'antd'
+import {useState,useEffect} from 'react'
+import { Card, Checkbox, Col, Flex, Image, Row, Typography, message,Spin } from 'antd'
 import { CheckCircleOutlined } from '@ant-design/icons'
 import { UPDATE_DEAL,} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
 
 const { Text } = Typography
-const DigitalSaleAgreement = ({form,details}) => {
+const DigitalSaleAgreement = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const checked = details?.status !== 'DSA_FROM_SELLER_PENDING' && details?.status !== 'DSA_FROM_BUYER_PENDING';
     const [isCheckedDetails, setIsCheckedDetails] = useState(false); // first checkbox
@@ -54,7 +53,7 @@ const DigitalSaleAgreement = ({form,details}) => {
     };
     if (updating) {
         return (
-          <Flex justify="center" align="center" style={{ height: '200px' }}>
+          <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
           </Flex>
         );

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Card, Col, Flex, Row, Typography } from 'antd'
 import { ModuleTopHeading } from '../../../PageComponents'
 

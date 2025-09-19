@@ -1,7 +1,6 @@
 import { Card, Row, Col, Flex, Typography } from 'antd'
 import { GETMEETINGSCOUNT } from '../../../graphql/query/meeting'
 import { useQuery } from '@apollo/client'
-import { message,Spin } from "antd";
 
 const { Title, Text } = Typography
 const MeetingReqCards = () => {

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Row, Col, Flex, Card, Typography } from 'antd'
 import { ModuleTopHeading } from '../../components'
 import {GET_ALERTS} from '../../graphql/query'
@@ -23,7 +22,7 @@ const Alerts = () => {
       };
     if (loading) {
             return (
-                <Flex justify="center" align="center" style={{ height: "200px" }}>
+                <Flex justify="center" align="center"  className='h-200'>
                     <Spin size="large" />
                 </Flex>
             );
@@ -54,7 +53,7 @@ const Alerts = () => {
                             <Text>{alert?.date}</Text>
                             {
                                     alert?.alertsdetails.map((details, i) => (
-                                        <Flex vertical className='mt-2' gap={4} style={{marginLeft: 15}} key={i}>
+                                        <Flex vertical className='mt-2 ml-15' gap={4} key={i}>
                                             <Flex  justify='space-between' >
                                                 <Title level={5} className='m-0 fw-500'> {details?.title}</Title>
                                                 <Text className='text-gray fs-12'> {details?.time}</Text>

@@ -117,7 +117,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                 addonBefore={
                                     <Select
                                         defaultValue="SA"
-                                        style={{ width: 80 }}
+                                        className='w-80'
                                         onChange={(value) => form.setFieldsValue({ countryCode: value })}
                                     >
                                         <Select.Option value="sa">SA</Select.Option>

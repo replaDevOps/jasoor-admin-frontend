@@ -3,7 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../PageComponents';
 import { GET_BUSINESS_REVENUE_TIER } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
-import { message,Spin } from "antd";
+import { Spin } from "antd";
 
 const ListingRevenueBar = () => {
 
@@ -45,7 +45,7 @@ const ListingRevenueBar = () => {
 
     if (loading) {
         return (
-          <Flex justify="center" align="center" style={{ height: 200 }}>
+          <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
           </Flex>
        );
@@ -55,7 +55,7 @@ const ListingRevenueBar = () => {
         <Flex align='center' wrap gap={10}>
             <ModuleTopHeading level={4} name='Listings by Revenue' />
         </Flex>
-        <div className='w-100' style={{height:300}}>
+        <div className='w-100 h-300'>
           <ReactApexChart
             options={chartData.options}
             series={chartData.series}

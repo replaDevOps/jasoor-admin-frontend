@@ -1,6 +1,6 @@
 import { Form, Button, Typography, Row, Col, Image, Flex, Dropdown, Space } from "antd";
 import { MyInput } from "../../components";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
 import { useState } from "react";
 
@@ -9,7 +9,6 @@ const { Title, Text, Paragraph } = Typography;
 const ForgotPassword = () => {
     const [form] = Form.useForm();
     const [ requestState, setRequestState ] = useState('request')
-    const navigate = useNavigate()
     const [selectedLang, setSelectedLang] = useState({
         key: "1",
         label: "EN",
@@ -66,7 +65,7 @@ const ForgotPassword = () => {
                 <div className="form-inner">
                     <NavLink to={'/'}>
                       <div className="logo">
-                        <img src="/assets/images/logo-1.png" alt="jusoor logo" style={{ height: "70px" }} fetchPriority="high"/>
+                        <img src="/assets/images/logo-1.png" alt="jusoor logo" width={70} fetchPriority="high"/>
                       </div>
                     </NavLink>
                     <div>
@@ -231,7 +230,7 @@ const ForgotPassword = () => {
                         <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
                     </Flex>
                     <div className="bg-shade">
-                        <img src="/assets/images/login.gif" alt="signup gif" style={{ width: "100%",opacity:.7 }} fetchPriority="high" />
+                        <img src="/assets/images/login.gif" alt="signup gif" className="w-100 opacity-7" fetchPriority="high" />
                     </div>
                 </Flex>
             </Col>

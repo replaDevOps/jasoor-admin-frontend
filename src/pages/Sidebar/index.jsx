@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Route, Routes, useLocation } from 'react-router-dom';
 import './index.css';
 import { Layout, Menu, Image, Space, Divider } from 'antd';
@@ -161,20 +161,21 @@ const Sidebar = () => {
     // localStorage.setItem('openKeys', JSON.stringify(keys));
   };
   return (
-    <Layout style={{ height: '100vh' }}>
+    <Layout className='h-100vh'>
       <Sider breakpoint="md"
         collapsedWidth="0"
         onBreakpoint={(broken) => {
           setCollapsed(broken)
-        }} trigger={null} collapsible collapsed={collapsed} className={collapsed ? 'addclass overflowstyle' :'overflowstyle'} style={{ height: '100vh', overflowY: 'auto',borderRight:'1px solid #E3E3E3'}}>
-        <div className="logo" style={{ display: 'flex', justifyContent: 'center' }}>
+        }} trigger={null} collapsible collapsed={collapsed} className={`h-100vh overflow-y border-right-side ${collapsed ? 'addclass overflowstyle' :'overflowstyle'}`} >
+        <div className="logo justify-center">
           <Image
-            style={{ width: collapsed ? "100%" : '130px' }}
+            width={collapsed ? '100%':130}
             height={'auto'}
             src="/assets/images/logo.webp"
             alt='jusoor logo'
             preview={false}
             fetchPriority="high"
+            className='m-0'
           />
         </div>
         <Menu
@@ -190,16 +191,8 @@ const Sidebar = () => {
         />
       </Sider>
       <Layout className="site-layout">
-        <Header
-          className="site-layout-background header-mbl-cs"
-          style={{
-            padding: 0,
-            display: 'flex',
-            paddingLeft:0,
-            justifyContent: 'center'
-          }}
-        >
-          <div style={{ width: '98%', display: 'flex', justifyContent: 'space-between',alignItems:'center',position:'relative',gap:5}}>
+        <Header className="site-layout-background header-mbl-cs justify-center p-0">
+          <div className='header-cs-structure'>
             <div onClick={() => setCollapsed(!collapsed)}>
               <Image src='/assets/icons/collapse.webp' 
                 width={'35px'} preview={false} 
@@ -216,15 +209,7 @@ const Sidebar = () => {
         </Header>
         <Divider className='border-gray mt-0' />
         <Content
-          className="scroll-bar"
-          style={{
-            margin: '24px 10px',
-            marginTop: '0',
-            padding: '0 15px',
-            minHeight: 280,
-            overflowY: 'auto',
-            paddingTop: 24,
-          }}
+          className="scroll-bar structure-content-area-cs"
         >
           <Routes>
             <Route path="/" element={<Dashboard />} />

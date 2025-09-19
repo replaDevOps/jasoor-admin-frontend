@@ -1,10 +1,10 @@
 import { Button, Col, Divider, Flex, Form, Modal, Row, Typography } from 'antd'
-import { MyInput, MySelect } from '../../Forms'
+import { MyInput } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
 import { useEffect } from 'react'
 import { UPDATE_CONTACT_US } from '../../../graphql/mutation';
-import { useQuery,useMutation } from '@apollo/client';
-import { message,Spin } from "antd";
+import { useMutation } from '@apollo/client';
+import { message } from "antd";
 
 const { Title } = Typography
 const ContactFormSentPending = ({visible,onClose,sendview,viewitem,refetchTable}) => {

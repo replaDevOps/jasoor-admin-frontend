@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import { useState,useEffect } from 'react'
 import { Card, Col, Flex, Form, Image, Radio, Row, Tooltip, Typography } from 'antd'
 import { MyDatepicker, MyInput, MySelect } from '../../Forms'
 import { teamsizeOp,district, cities  } from '../../../data'
@@ -6,7 +6,7 @@ import { ModuleTopHeading } from '../../PageComponents'
 import { GET_CATEGORIES } from "../../../graphql/query/business";
 import { useQuery } from '@apollo/client';
 
-const { Title, Text } = Typography
+const {Text } = Typography
 const BusinessDetailStep = ({ data, setData }) => {
   const { data: categoryData } = useQuery(GET_CATEGORIES);
   const [form] = Form.useForm();

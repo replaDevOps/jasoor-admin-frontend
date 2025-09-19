@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { Badge, Button, Image } from "antd"
 import NotificationsDrawer from "./NotificationsDrawer"
 import {GET_NOTIFICATIONS} from '../../../graphql/query'

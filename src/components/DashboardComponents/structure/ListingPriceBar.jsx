@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-import { Card, Flex, Typography} from 'antd';
+import { Card, Flex } from 'antd';
 import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../PageComponents';
 import { GET_BUSINESS_PRICE_TIER } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
-import { message,Spin } from "antd";
+import { Spin } from "antd";
 
-const { Title } = Typography
 const ListingPriceBar = () => {
     const { data, loading, error } = useQuery(GET_BUSINESS_PRICE_TIER);
   
@@ -66,7 +64,7 @@ const ListingPriceBar = () => {
 
     if (loading) {
         return (
-          <Flex justify="center" align="center" style={{ height: 200 }}>
+          <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
           </Flex>
        );
@@ -77,7 +75,7 @@ const ListingPriceBar = () => {
         <Flex align='center' wrap gap={10}>
             <ModuleTopHeading level={4} name='Listings by Price Tier' />
         </Flex>
-        <div className='w-100' style={{height:300}}>
+        <div className='w-100 h-300'>
           <ReactApexChart
             options={chartData.options}
             series={chartData.series}

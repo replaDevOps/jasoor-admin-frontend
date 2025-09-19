@@ -1,11 +1,11 @@
-import React, { useState,useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import { Card, Flex, Typography} from 'antd';
 import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../PageComponents';
 import { MyDatepicker } from '../../Forms';
 import { GET_BUSINESS_STATS_GRAPH } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
-import { message,Spin } from "antd";
+import { Spin } from "antd";
 import moment from 'moment';
 
 const { Title } = Typography
@@ -74,7 +74,7 @@ const BusinessListBarChart = () => {
 
       if (loading) {
         return (
-          <Flex justify="center" align="center" style={{ height: 200 }}>
+          <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
           </Flex>
         );
@@ -98,7 +98,7 @@ const BusinessListBarChart = () => {
             />
             </Flex>
         </Flex>
-        <div className='w-100' style={{height:300}}>
+        <div className='w-100 h-300'>
           <ReactApexChart
             options={chartData.options}
             series={chartData.series}

@@ -1,6 +1,5 @@
-
-import React, { useState } from 'react'
-import { Button, Card, Dropdown, Flex, Spin, Space, Typography,message } from 'antd'
+import { useState } from 'react'
+import { Button, Card, Dropdown, Flex, Spin, Space, Typography,message, Avatar } from 'antd'
 import { useNavigate } from 'react-router-dom';
 import { useMutation,useQuery } from '@apollo/client';
 import { LOGOUT } from '../../../graphql/mutation/login';
@@ -52,25 +51,11 @@ const UserDropdown = ()=> {
     <Card className='radius-12 shadow-c card-cs'>
       <Space direction='vertical'> 
         <Flex align='center' gap={10}>
-        <div
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            backgroundColor: '#4F46E5',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontWeight: 'bold',
-            fontSize: '16px',
-            textTransform: 'uppercase',
-          }}
-        >
-          {data?.getUser?.name?.charAt(0)}
-        </div>
+          <Avatar size={40} className='fs-16 text-white fw-bold brand-bg textuppercase'>
+            {data?.getUser?.name?.charAt(0).toUpperCase()}
+          </Avatar>
           <Flex vertical gap={1}>
-            <Typography.Text strong className='fs-13'>{data?.getUser?.name}</Typography.Text>
+            <Typography.Text strong className='fs-13'>{data?.getUser?.name.charAt(0).toUpperCase()+data?.getUser?.name.slice(1)}</Typography.Text>
             <Typography.Text className='text-gray fs-13'>{data?.getUser?.email}</Typography.Text>
           </Flex>
         </Flex>
@@ -88,7 +73,7 @@ const UserDropdown = ()=> {
 
   if (isLoading || loading) {
     return (
-        <Flex justify="center" align="center" style={{ height: "200px" }}>
+        <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
         </Flex>
     );
@@ -104,26 +89,12 @@ const UserDropdown = ()=> {
       >
         <Flex align='center' gap={5}>
           <Flex vertical gap={0} align='end'>
-            <Typography.Text strong className='fs-12'>{data?.getUser?.name}</Typography.Text>
+            <Typography.Text strong className='fs-12'>{data?.getUser?.name.charAt(0).toUpperCase()+data?.getUser?.name.slice(1)}</Typography.Text>
             <Typography.Text className='text-gray fs-12'>{data?.getUser?.role?.name}</Typography.Text>
           </Flex>
-          <div
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            backgroundColor: '#4F46E5',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontWeight: 'bold',
-            fontSize: '16px',
-            textTransform: 'uppercase',
-          }}
-        >
-          {data?.getUser?.name?.charAt(0)}
-        </div>
+          <Avatar size={40} className='fs-16 text-white fw-bold brand-bg textuppercase'>
+            {data?.getUser?.name?.charAt(0).toUpperCase()}
+          </Avatar>
         </Flex>
       </Dropdown>
       {/* <SwitchAccount 

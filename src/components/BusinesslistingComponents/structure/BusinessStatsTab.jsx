@@ -2,7 +2,7 @@ import { Card, Col, Flex, Image, Row, Switch, Typography } from 'antd'
 import { postsaleColumn } from '../../../data'
 import { TableContent } from './TableContent'
 import { UPDATE_BUSINESS } from '../../../graphql/mutation'
-import { useMutation,useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import {GET_BUSINESSES_STATS_BY_ID} from '../../../graphql/query'
 import { message } from "antd";
 
