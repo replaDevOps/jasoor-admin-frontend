@@ -47,7 +47,7 @@ query GetCountByEachCategory {
 }
 `
 const GET_BUSINESSES = gql`
-    query GetAllBusinesses($limit: Int, $offSet: Int, $filter: BusinessFilterInput, $sort: BusinessSortInput, $search: String) {
+  query GetAllBusinesses($limit: Int, $offSet: Int, $filter: BusinessFilterInput, $sort: BusinessSortInput, $search: String) {
   getAllBusinesses(limit: $limit, offSet: $offSet, filter: $filter, sort: $sort, search: $search) {
     businesses {
       id
@@ -69,6 +69,8 @@ const GET_BUSINESSES = gql`
       }
     }
     totalCount
+    totalActiveCount
+    totalPendingCount
   }
 }
 `

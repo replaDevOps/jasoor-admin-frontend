@@ -61,7 +61,10 @@ const MeetingRequestTable = () => {
         {
             title: 'Status',
             dataIndex: 'status',
-            render: (status) => { return ( status === 'REQUESTED' ? ( <Text className='btnpill fs-12 pending'>Pending</Text> ) : ( <Text className='btnpill fs-12 inactive'>Cancel Meeting</Text> ) ) }
+            render: 
+            (status) => { return ( status === 'ACCEPTED' ? 
+                ( <Text className='btnpill fs-12 pending'>Pending</Text> ) : 
+                ( <Text className='btnpill fs-12 inactive'>Cancel Meeting</Text> ) ) }
         },
         {
             title: 'Action',
@@ -69,7 +72,7 @@ const MeetingRequestTable = () => {
             fixed: "right",
             width: 100,
             render: (_, row) => {
-                if (row.status !== 'REQUESTED') return null; // only show dropdown for REQUESTED
+                if (row.status !== 'ACCEPTED') return null; // only show dropdown for REQUESTED
         
                 return (
                     <Dropdown
@@ -129,9 +132,9 @@ const MeetingRequestTable = () => {
     const mainmeetingreqData = (data?.getAdminPendingMeetings?.items || []).map((item, index) => ({
         key: item.id,
         businessTitle: item.business?.businessTitle || '-',
-        buyerName: item.requestedBy?.name || '-',
-        email: item.requestedBy?.email || '-',
-        phoneNumber: item.requestedBy?.phone || '-',
+        buyerName: item.requestedTo?.name || '-',
+        email: item.requestedTo?.email || '-',
+        phoneNumber: item.requestedTo?.phone || '-',
         sellerName: item.business?.seller?.name || '-',
         sellerEmail: item.business?.seller?.email || '-',
         sellerPhoneNumber: item.business?.seller?.phone || '-',

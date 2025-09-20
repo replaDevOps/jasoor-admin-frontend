@@ -1,12 +1,12 @@
 import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Input,Typography,Space,message,Spin} from 'antd';
 import { NavLink } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { districtItems, statusItems, typeItems } from '../../../shared';
 import { CustomPagination } from '../../Ui';
 import { ViewIdentity } from '../modals';
 import { UPDATE_USER } from '../../../graphql/mutation'
 import { USERS } from '../../../graphql/query/user';
-import { useQuery,useMutation } from '@apollo/client'
+import { useLazyQuery,useMutation } from '@apollo/client'
 import { DownOutlined } from '@ant-design/icons';
 
 const { Text } = Typography
@@ -19,9 +19,54 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
     const [searchText, setSearchText] = useState("");
-    const [ viewmodal, setViewModal ] = useState(false)
-    const [ viewstate, SetViewState ] = useState(null)
+    const [viewmodal, setViewModal] = useState(false)
+    const [viewstate, SetViewState] = useState(null)
     const [messageApi, contextHolder] = message.useMessage();
+
+    const [loadUsers, { data, loading }] = useLazyQuery(USERS, {
+        fetchPolicy: "network-only"
+    });
+
+    const filter = useMemo(() => {
+        let createdType = null;
+        if (selectedCategory === 'Old') createdType = 'old';
+        if (selectedCategory === 'New') createdType = 'new';
+
+        let isActive = null;
+        if (selectedStatus === 'Active') isActive = true;
+        if (selectedStatus === 'Inactive') isActive = false;
+
+        return {
+            city: selectedCity || null,
+            district: selectedDistrict || null,
+            isActive,
+            name: searchText || null,
+            createdType
+        };
+    }, [selectedCity, selectedDistrict, selectedStatus, selectedCategory, searchText]);
+
+    useEffect(() => {
+        loadUsers({
+            variables: {
+                limit: pageSize,
+                offset: (current - 1) * pageSize,
+                filter
+            }
+        });
+    }, [pageSize, current, filter, loadUsers]);
+
+    const [updateUser,{ loading: updating }] = useMutation(UPDATE_USER, {
+        onCompleted: () => {
+            loadUsers({
+                variables: {
+                    limit: pageSize,
+                    offset: (current - 1) * pageSize,
+                    filter
+                }
+            });
+        }
+    });
+
     const usermanageColumn = [
         {
             title: 'Full Name',
@@ -46,30 +91,20 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
         {
             title: 'Type',
             dataIndex: 'type',
-             render: (type) => {
-                return (
-                    type === 'New' ? (
-                        <Text className='btnpill fs-12 branded'>New</Text>
-                    ) : (
-                        <Text className='btnpill fs-12 pending'>Old</Text>
-                    ) 
-                )
-            }
+            render: (type) => (
+                type === 'New'
+                    ? <Text className='btnpill fs-12 branded'>New</Text>
+                    : <Text className='btnpill fs-12 pending'>Old</Text>
+            )
         },
         {
             title: 'Status',
             dataIndex: 'status',
-            render: (status) => {
-                return (
-                    status === 1 ? (
-                        <Space align='center'>
-                            <Text className='btnpill fs-12 success'>Active</Text>
-                        </Space>
-                    ) : (
-                        <Text className='btnpill fs-12 inactive'>Inactive</Text>
-                    )
-                )
-            }
+            render: (status) => (
+                status === 1
+                    ? <Text className='btnpill fs-12 success'>Active</Text>
+                    : <Text className='btnpill fs-12 inactive'>Inactive</Text>
+            )
         },
         {
             title: 'Action',
@@ -83,7 +118,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                             variables: {
                                 input: {
                                     id: row.key, 
-                                    isActive: row.status === 1, // send null as requested
+                                    isActive: row.status === 1, 
                                 }
                             }
                         });
@@ -106,7 +141,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                     key: '2' 
                                 },
                                 { 
-                                    label: <NavLink onClick={(e) => { e.preventDefault();  }}>Delete</NavLink>, 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); }}>Delete</NavLink>, 
                                     key: '3' 
                                 },
                                 { 
@@ -125,128 +160,52 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
             }
         },
     ];
-    
 
-    // Prepare filter object for API
-    const filter = {
-        city: selectedCity || null,
-        district: selectedDistrict || null,
-        isActive: selectedStatus === "Status" ? null : selectedStatus,
-        name: searchText || null,
-    };
-
-    const { loading, data, refetch } = useQuery(USERS, {
-        variables: {
-            limit: pageSize,
-            offset: (current - 1) * pageSize,
-            filter: null
-        },
-        fetchPolicy: "network-only"
-    });
-
+    // ----------------- Handlers -----------------
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
-        refetch({
-            limit: size,
-            offset: (page - 1) * size,
-            filter
-        });
     };
 
     const handleStatusClick = ({ key }) => {
-        // Find the selected status item
         const selectedItem = statusItems.find(item => String(item.key) === String(key));
-        if (selectedItem) {
-            const isActive = selectedItem.key === '2' ? true 
-                            : selectedItem.key === '3' ? false 
-                            : null;
-
-            setSelectedStatus(selectedItem.label); // store label for UI
-    
-            refetch({
-                limit: pageSize,
-                offset: (current - 1) * pageSize,
-                filter: { ...filter, isActive } // send boolean/null to API
-            });
-        }
+        if (selectedItem) setSelectedStatus(selectedItem.label);
     };
-    
+
     const handleCategoryClick = ({ key }) => {
         const selectedItem = typeItems.find(item => String(item.key) === String(key));
-        if (!selectedItem) return;
-        setSelectedCategory(selectedItem.label); // store label for UI
-
-        let createdType = null;
-        if (selectedItem.key === '1') createdType = null;
-        if (selectedItem.key === '2') createdType = 'old';
-        if (selectedItem.key === '3') createdType = 'new';
-    
-        const newFilter = {
-            city: selectedCity || null,
-            district: selectedDistrict || null,
-            isActive: selectedStatus === "Status" ? null : selectedStatus,
-            name: searchText || null,
-            createdType // will be null / 'old' / 'new'
-        };
-    
-        refetch({
-            limit: pageSize,
-            offset: (current - 1) * pageSize,
-            filter: newFilter
-        });
+        if (selectedItem) setSelectedCategory(selectedItem.label);
     };
 
     const handleDistrictClick = ({ key }) => {
         const selectedItem = districtItems.find(item => String(item.key) === String(key));
-        if (selectedItem) {
-            setSelectedDistrict(selectedItem.label); // store name/label
-            refetch({
-                limit: pageSize,
-                offset: (current - 1) * pageSize,
-                filter: { ...filter, district: selectedItem.label } // send name
-            });
-        }
-    
+        if (selectedItem) setSelectedDistrict(selectedItem.label);
     };
 
     const handleCityClick = ({ key }) => {
         const selectedItem = districtItems.find(item => String(item.key) === String(key));
-        if (selectedItem) {
-            setSelectedCity(selectedItem.label);
-            refetch({
-                limit: pageSize,
-                offset: (current - 1) * pageSize,
-                filter: { ...filter, city: selectedItem.label }
-            });
-        }
+        if (selectedItem) setSelectedCity(selectedItem.label);
     };    
 
     const handleSearch = (value) => {
         setSearchText(value);
-        refetch({
-            limit: pageSize,
-            offset: 0,
-            filter: { ...filter, name: value }
-        });
+        setCurrent(1); // reset to first page when searching
     };
 
-    const usermanageData = data?.getUsers?.users?.map((user, index) => ({
+    // ----------------- Data Mapping -----------------
+    const usermanageData = data?.getUsers?.users?.map((user) => ({
         key: user.id,
         fullname: user.name,
         email: user.email,
         district: user.district,
         city: user.city,
         mobileno: user.phone,
-        type: user.type, // or derive from createdAt if backend sends it
+        type: user.type,
         status: user.isActive ? 1 : 0,
     })) || [];
-    const total = data?.getUsers?.totalCount; // Or return total count from backend if available
 
-    const [updateUser,{ loading: updating }] = useMutation(UPDATE_USER, {
-        refetchQueries: [  { query: USERS } ],
-        awaitRefetchQueries: true,
-    });
+    const total = data?.getUsers?.totalCount;
+
     if (loading || updating) {
         return (
           <Flex justify="center" align="center" className='h-200'>
@@ -313,18 +272,12 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                     <Table
                         size='large'
                         columns={usermanageColumn}
-                        dataSource={usermanageData.slice((current - 1) * pageSize, current * pageSize)}
+                        dataSource={usermanageData}
                         className='pagination table-cs table'
                         showSorterTooltip={false}
                         scroll={{ x: 1000 }}
                         rowHoverable={false}
                         pagination={false}
-                        // loading={
-                        //     {
-                        //         ...TableLoader,
-                        //         spinning: loading
-                        //     }
-                        // }
                     />
                     <CustomPagination 
                         total={total}

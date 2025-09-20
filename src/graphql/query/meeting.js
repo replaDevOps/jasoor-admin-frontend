@@ -24,7 +24,7 @@ query GetAdminPendingMeetings($search: String, $status: MeetingFilterType) {
           phone
         }
       }
-      requestedBy {
+      requestedTo {
         name
         email
         phone
@@ -55,7 +55,7 @@ query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType) {
           phone
         }
       }
-      requestedBy {
+      requestedTo {
         id
         name
         email
