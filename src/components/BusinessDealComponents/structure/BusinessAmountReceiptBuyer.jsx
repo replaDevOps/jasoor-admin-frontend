@@ -1,8 +1,9 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { Button, Card,  Col, Flex, Image, Row, Typography } from 'antd'
 import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
 import { message,Spin } from "antd";
+import { GETDEAL } from '../../../graphql/query';
 
 const { Text } = Typography
 const BusinessAmountReceiptBuyer = ({details}) => {
@@ -16,22 +17,29 @@ const BusinessAmountReceiptBuyer = ({details}) => {
         {title:'Amount to Pay', desc:details?.finalizedOffer },
     ]
 
-    const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
-        onCompleted: () => {
-            messageApi.success("Status changed successfully!");
-        },
-        onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
-        },
+    const [updateDeals, { loading: updating, data, error }] = useMutation(UPDATE_DEAL, {
+        refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
+        awaitRefetchQueries: true,
     });
+    useEffect(() => {
+        if (data?.updateDeal?.id) {
+            messageApi.success("Buyer payment receipt verified successfully!");
+        }
+    }, [data?.updateDeal?.id]);
 
+    useEffect(() => {
+        if (error) {
+            messageApi.error(error.message || "Something went wrong!");
+        }
+    }, [error]);
+    
     const handleMarkVerified = async () => {
         if (!details?.key) return;
         await updateDeals({
             variables: {
                 input: {
                     id: details.key,
-                    isPaymentVedifiedAdmin: true, // Example status
+                    isPaymentVedifiedAdmin: true,
                 },
             },
         });
@@ -86,7 +94,6 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                 </Col>
 
                 <Col span={24}>
-                    {/* If receipt already exists, show it */}
                     {
                         sellerReceipt && (
                         renderUploadedDoc({

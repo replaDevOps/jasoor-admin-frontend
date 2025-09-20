@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Card, Col, Flex, Image, Row, Typography, message,Spin  } from 'antd'
 import { CheckCircleOutlined } from '@ant-design/icons'
 import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
+import { GETDEAL } from '../../../graphql/query';
 
 const { Text } = Typography
 const DocumentPaymentConfirmation = ({details}) => {
@@ -17,14 +18,23 @@ const DocumentPaymentConfirmation = ({details}) => {
             ...details?.busines?.documents?.find(doc => doc.title === "Notarized Ownership Transfer Letter")
         }
     ];
-    const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
-        onCompleted: () => {
-            messageApi.success("Status changed successfully!");
-        },
-        onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
-        },
+    const [updateDeals, { loading: updating, data, error }] = useMutation(UPDATE_DEAL, {
+        refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
+        awaitRefetchQueries: true,
     });
+
+    useEffect(() => {
+        if (data?.updateDeal?.id) {
+            messageApi.success("Commission verified successfully!");
+        }
+    }, [data?.updateDeal?.id]);
+
+    useEffect(() => {
+        if (error) {
+            messageApi.error(error.message || "Something went wrong!");
+        }
+    }, [error]);
+    
 
     const handleMarkVerified = async () => {
         if (!details?.key) return;
@@ -38,6 +48,7 @@ const DocumentPaymentConfirmation = ({details}) => {
             },
         });
     };
+
     if (updating) {
         return (
             <Flex justify="center" align="center" className='h-200'>

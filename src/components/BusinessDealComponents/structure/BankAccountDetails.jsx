@@ -1,15 +1,14 @@
-import { Button, Flex, Typography } from 'antd'
+import { Flex, Typography } from 'antd'
 import { MaskedAccount } from '../../Ui/MaskedAccount'
-import { SEND_BANK, UPDATE_DEAL} from '../../../graphql/mutation/mutations';
-import { useMutation,useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
-import {GETUSERBANK,ME } from '../../../graphql/query';
+import { ME } from '../../../graphql/query';
 
 
 const { Text } = Typography
 const BankAccountDetails = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
-    const { data:bankData, loading, error } = useQuery(ME, {
+    const { data:bankData, loading } = useQuery(ME, {
         variables: { 
             getUserId:details?.busines?.seller?.id
         },

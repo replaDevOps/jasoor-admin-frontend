@@ -2,26 +2,29 @@ import { Button, Col, Flex, Row, Typography, message } from 'antd'
 import { CheckCircleOutlined } from '@ant-design/icons'
 import { UPDATE_DEAL,UPDATE_BUSINESS} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
+import { GETDEAL } from '../../../graphql/query';
+import { useEffect } from 'react';
 
 const { Text } = Typography
 const FinalDeal = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
-    const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
-        onCompleted: () => {
-            messageApi.success("Deal Closed successfully!");
-        },
-        onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
-        },
+    const [updateDeals, { loading, data, error }] = useMutation(UPDATE_DEAL, {
+      refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
+      awaitRefetchQueries: true,
     });
-    const [updateBusiness, { loading }] = useMutation(UPDATE_BUSINESS, {
-      onCompleted: () => {
-          messageApi.success("Business Sold!");
-      },
-      onError: (err) => {
-          messageApi.error(err.message || "Something went wrong!");
-      },
-  });
+    const [updateBusiness] = useMutation(UPDATE_BUSINESS);
+
+    useEffect(() => {
+        if (data?.updateDeal?.id) {
+            messageApi.success("Deal marked as completed successfully!");
+        }
+    }, [data?.updateDeal?.id]);
+
+    useEffect(() => {
+        if (error) {
+            messageApi.error(error.message || "Something went wrong!");
+        }
+    }, [error]);
 
     const handleMarkVerified = async () => {
         if (!details?.key) return;
@@ -45,6 +48,7 @@ const FinalDeal = ({details}) => {
 
   const isFinal = details.status === 'PENDING'
   const isCompleted = details.status === 'COMPLETED'
+    console.log( "check this" , details?.isDocVedifiedBuyer, details?.isDocVedifiedSeller, isCompleted, isFinal )
 
   return (
     <>
@@ -107,9 +111,10 @@ const FinalDeal = ({details}) => {
             </Col>
                 <Flex>
                     <Button
+                      loading={loading}
                         type="primary"
                         className="btnsave bg-brand"
-                        disabled={isCompleted}
+                        disabled={isCompleted || loading}
                         onClick={handleMarkVerified}
                         aria-labelledby='Mark Deal as Completed'
                     >

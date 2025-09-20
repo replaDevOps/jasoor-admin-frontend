@@ -1,32 +1,34 @@
-import React from 'react'
 import { Button, Card, Col, Flex, Image, Row, Typography,message,Spin } from 'antd'
 import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
+import { GETDEAL } from '../../../graphql/query';
+import { useEffect } from 'react';
 
 const { Text } = Typography
 const CommissionReceiptBuyer = ({ details }) => {
     const commission = details?.busines
     const jasoorDoc = commission?.documents?.find(doc => doc.title === 'Jasoor Commission');
     const [messageApi, contextHolder] = message.useMessage();
-    console.log("details", details);
-    const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
-        onCompleted: () => {
-            messageApi.success("Status changed successfully!");
-        },
-        onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
-        },
+    const [updateDeals, { loading: updating, data, error }] = useMutation(UPDATE_DEAL, {
+        refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
+        awaitRefetchQueries: true,
     });
+    useEffect(() => {
+        if (data?.updateDeal?.id) {
+            messageApi.success("Commission verified successfully!");
+        }
+    }, [data?.updateDeal?.id]);
+
+    useEffect(() => {
+        if (error) {
+            messageApi.error(error.message || "Something went wrong!");
+        }
+    }, [error]);
 
     const handleMarkVerified = async () => {
         if (!details?.key) return;
         await updateDeals({
-            variables: {
-                input: {
-                    id: details.key,
-                    isPaymentVedifiedAdmin: true,
-                },
-            },
+            variables: { input: { id: details.key, isCommissionVerified: true } },
         });
     };
 
@@ -62,7 +64,6 @@ const CommissionReceiptBuyer = ({ details }) => {
             </Flex>
         );
     }
-
     return (
         <>
             {contextHolder}
@@ -90,7 +91,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                             className="btnsave bg-brand"
                             onClick={handleMarkVerified}
                             aria-labelledby='Mark as Verified'
-                            disabled={!commission?.isCommissionVerified}
+                            disabled={details?.isCommissionVerified}
                         >
                             Mark as Verified
                         </Button>
