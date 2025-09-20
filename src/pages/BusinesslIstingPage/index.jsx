@@ -3,7 +3,7 @@ import { BusinesslistCards, BusinessListingTable, ModuleTopHeading } from '../..
 import { PlusOutlined } from '@ant-design/icons';
 import { GET_BUSINESSES } from '../../graphql/query/business'
 import { useLazyQuery } from '@apollo/client'
-import { useState,useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const BusinesslIstingPage = () => {
@@ -52,7 +52,6 @@ const BusinesslIstingPage = () => {
     }
     setPage(effectivePage);
   };
-console.log("business data",data)
   return (
       <>
           <Row gutter={[24,24]}>

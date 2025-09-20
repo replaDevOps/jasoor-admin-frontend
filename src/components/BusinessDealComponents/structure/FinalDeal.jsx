@@ -1,6 +1,6 @@
 import { Button, Col, Flex, Row, Typography, message } from 'antd'
 import { CheckCircleOutlined } from '@ant-design/icons'
-import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
+import { UPDATE_DEAL,UPDATE_BUSINESS} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
 
 const { Text } = Typography
@@ -8,12 +8,21 @@ const FinalDeal = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
         onCompleted: () => {
-            messageApi.success("Status changed successfully!");
+            messageApi.success("Deal Closed successfully!");
         },
         onError: (err) => {
             messageApi.error(err.message || "Something went wrong!");
         },
     });
+    const [updateBusiness, { loading }] = useMutation(UPDATE_BUSINESS, {
+      onCompleted: () => {
+          messageApi.success("Business Sold!");
+      },
+      onError: (err) => {
+          messageApi.error(err.message || "Something went wrong!");
+      },
+  });
+
     const handleMarkVerified = async () => {
         if (!details?.key) return;
         await updateDeals({
@@ -24,6 +33,14 @@ const FinalDeal = ({details}) => {
                 },
             },
         });
+        await updateBusiness({
+          variables: {
+              input: {
+                  id: details?.busines?.id,
+                  isSold: true, 
+              },
+          },
+      });
     };
 
   const isFinal = details.status === 'PENDING'

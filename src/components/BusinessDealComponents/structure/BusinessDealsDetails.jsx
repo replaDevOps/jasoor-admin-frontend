@@ -31,7 +31,7 @@ const BusinessDealsDetails = ({completedeal}) => {
         variables: { getDealId: id },
         skip: !id, // skip if no id
     });
-    console.log("deal data", data);
+    console.log("deal data", data?.getDeal?.business?.isSold    );
     const details = data?.getDeal
     ? {
         key: data.getDeal.id, // use actual id from API
@@ -68,7 +68,8 @@ const BusinessDealsDetails = ({completedeal}) => {
             desc:statusMap[details?.status] || 'Unknown',
         },
     ]
-    
+    console.log(typeof data?.getDeal?.business?.isSold, data?.getDeal?.business?.isSold);
+
     return (
         <Flex vertical gap={20}>
             <Flex vertical gap={25}>
@@ -93,7 +94,12 @@ const BusinessDealsDetails = ({completedeal}) => {
                         {details?.businessTitle}
                     </Title>
                 </Flex>
-                <Button aria-labelledby='Cancel Deal' type='button' className='btnsave border0 text-white bg-red'>
+                <Button 
+                aria-labelledby='Cancel Deal' 
+                type="primary"
+                className='btnsave border0 text-white bg-red'
+                disabled={data?.getDeal?.business?.isSold}
+                >
                     Cancel Deal
                 </Button>
             </Flex>

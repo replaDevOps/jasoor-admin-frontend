@@ -155,6 +155,7 @@ query GetDeal($getDealId: ID!) {
     business {
       id
       businessTitle
+      isSold
       seller {
         id
         name
