@@ -19,6 +19,7 @@ const ME = gql`
       iban
       cardNumber
       cardType
+      isActive
     }
     role{
       id

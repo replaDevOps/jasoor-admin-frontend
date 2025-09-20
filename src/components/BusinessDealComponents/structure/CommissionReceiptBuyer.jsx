@@ -1,14 +1,14 @@
-import { Button, Card, Col, Flex, Image, Row, Typography } from 'antd'
+import React from 'react'
+import { Button, Card, Col, Flex, Image, Row, Typography,message,Spin } from 'antd'
 import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
-import { message,Spin } from "antd";
 
 const { Text } = Typography
 const CommissionReceiptBuyer = ({ details }) => {
     const commission = details?.busines
     const jasoorDoc = commission?.documents?.find(doc => doc.title === 'Jasoor Commission');
     const [messageApi, contextHolder] = message.useMessage();
-    const isDisable = details?.status === 'COMMISSION_VERIFICATION_PENDING'
+    console.log("details", details);
     const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
         onCompleted: () => {
             messageApi.success("Status changed successfully!");
@@ -24,7 +24,7 @@ const CommissionReceiptBuyer = ({ details }) => {
             variables: {
                 input: {
                     id: details.key,
-                    status: "DSA_FROM_BUYER_PENDING", // Example status
+                    isPaymentVedifiedAdmin: true,
                 },
             },
         });
@@ -81,30 +81,6 @@ const CommissionReceiptBuyer = ({ details }) => {
                                 })
                             )
                         }
-                        {/* (
-                        <Upload
-                            beforeUpload={handleSingleFileUpload}
-                            showUploadList={false}
-                            accept=".pdf,.jpg,.png"
-                        >
-                            <Card className="card-cs border-gray rounded-12" style={{ cursor: "pointer" }}>
-                                <Flex justify="space-between" align="center">
-                                    <Flex gap={15}>
-                                        <UploadOutlined style={{ fontSize: 20 }} />
-                                        <Flex vertical>
-                                            <Text className="fs-13 text-gray">
-                                                {documents?.fileName || "Upload Business Transaction Receipt.pdf"}
-                                            </Text>
-                                            <Text className="fs-13 text-gray">
-                                                {documents?.fileSize || "—"}
-                                            </Text>
-                                        </Flex>
-                                    </Flex>
-                                    <Image src={"/assets/icons/download.png"} preview={false} width={20} />
-                                </Flex>
-                            </Card>
-                        </Upload>
-                    )} */}
                 </Flex>
                 </Col>
                 <Col span={24}>
@@ -114,7 +90,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                             className="btnsave bg-brand"
                             onClick={handleMarkVerified}
                             aria-labelledby='Mark as Verified'
-                            disabled={!isDisable}
+                            disabled={!commission?.isCommissionVerified}
                         >
                             Mark as Verified
                         </Button>

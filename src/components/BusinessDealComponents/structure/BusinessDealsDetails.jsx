@@ -31,6 +31,7 @@ const BusinessDealsDetails = ({completedeal}) => {
         variables: { getDealId: id },
         skip: !id, // skip if no id
     });
+    console.log("deal data", data);
     const details = data?.getDeal
     ? {
         key: data.getDeal.id, // use actual id from API
@@ -42,9 +43,11 @@ const BusinessDealsDetails = ({completedeal}) => {
         date: data.getDeal.createdAt ? new Date(data.getDeal.createdAt).toLocaleDateString() : '-',
         busines: data.getDeal.business || '-',
         banks: data.getDeal.buyer?.banks || '-',
-        isDocVedifiedSeller: data.getDeal.isDocVedifiedSeller || '-',
-        isDocVedifiedAdmin: data.getDeal.isDocVedifiedAdmin || '-',
-        isPaymentVedifiedSeller: data.getDeal.isPaymentVedifiedSeller || '-',
+        isCommissionVerified: data.getDeal.isCommissionVerified,
+        isDocVedifiedSeller: data.getDeal.isDocVedifiedSeller,
+        isDocVedifiedAdmin: data.getDeal.isDocVedifiedAdmin,
+        isPaymentVedifiedSeller: data.getDeal.isPaymentVedifiedSeller,
+        isPaymentVedifiedAdmin: data.getDeal.isPaymentVedifiedAdmin,
     }
     : null;
     const buyerdealsData = [
