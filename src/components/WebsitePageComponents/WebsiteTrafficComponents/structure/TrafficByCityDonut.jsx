@@ -1,4 +1,3 @@
-import React from 'react';
 import { Avatar, Card, Col, Flex, Row, Typography } from 'antd';
 import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../../PageComponents';

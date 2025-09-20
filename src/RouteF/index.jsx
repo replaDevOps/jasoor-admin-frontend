@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect } from 'react'
+import {Suspense, useState, useEffect } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { SyncOutlined } from '@ant-design/icons'
 import { Image, Space } from 'antd'
@@ -7,10 +7,10 @@ import {Sidebar} from '../pages/Sidebar';
 import { ForgotPassword, LoginPage } from '../pages'
 
 const Fallback = () => (
-  <div className='center' style={{ height: '100vh', width: '100%' }}>
-    <Space direction='vertical' align='center' style={{ justifyContent: 'center', height: '100%', width: '100%' }}>
-      <Image style={{ width: '200px' }} src='/assets/images/logo.webp' alt='jusoor-logo' fetchPriority="high" preview={false} />
-      <SyncOutlined spin style={{ color: 'var(--second-color)', fontSize: '35px' }} />
+  <div className='center h-100vh w-100'>
+    <Space direction='vertical' align='center' className='justify-center w-100 h-100'>
+      <Image width={200} src='/assets/images/logo.webp' alt='jusoor-logo' fetchPriority="high" preview={false} />
+      <SyncOutlined spin className='text-secondary fs-35'/>
     </Space>
   </div>
 )

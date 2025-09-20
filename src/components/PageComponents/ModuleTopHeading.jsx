@@ -1,10 +1,10 @@
 import { PlusOutlined } from "@ant-design/icons"
-import {Row, Col, Space, Button, Typography, Image} from "antd"
+import {Row, Col, Space, Button, Typography} from "antd"
 export const ModuleTopHeading=({name, onClick,level})=>{
     return (
         <Row>
             <Col span={24}>
-                <Space  style={{alignItems:'center'}}>
+                <Space  className="align-center">
                     <Typography.Title level={level} className="my-0 fw-500">
                         {
                             name
@@ -17,7 +17,7 @@ export const ModuleTopHeading=({name, onClick,level})=>{
                             type="primary" 
                             shape={'circle'} 
                             size='small' 
-                            style={{color:'var(--white-text)',backgroundColor: 'var(--brand-color)'}}
+                            classNames={'brand-bg text-white'}
                             icon={<PlusOutlined/>}
                             onClick={onClick}
                             aria-labelledby='plus button'

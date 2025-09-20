@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, Flex, Typography} from 'antd';
 import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../../PageComponents';

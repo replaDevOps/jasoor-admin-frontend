@@ -10,7 +10,6 @@ import { useLazyQuery,useMutation } from '@apollo/client'
 import { DownOutlined } from '@ant-design/icons';
 
 const { Text } = Typography
-
 const UserManagementTable = ({setVisible,setEditItem}) => {
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState(null);
@@ -209,7 +208,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
 
     if (loading || updating) {
         return (
-          <Flex justify="center" align="center" style={{ height: '200px' }}>
+          <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
           </Flex>
         );

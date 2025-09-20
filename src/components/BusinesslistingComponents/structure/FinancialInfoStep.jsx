@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Card, Col, Flex, Form, Row, Select, Typography,Input, Image } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../PageComponents'
@@ -158,8 +158,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 <Form.Item name="revenueTime" noStyle>
                                     <Select
                                         placeholder="Select period"
-                                        className="addonselect fs-14"
-                                        style={{ width: 180 }}
+                                        className="addonselect fs-14 w-180px"
                                     >
                                     {revenueLookups?.map((list, index) => (
                                         <Select.Option value={list?.id} key={index}>
@@ -189,8 +188,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 <Form.Item name="profittime" noStyle>
                                     <Select
                                     placeholder="Select period"
-                                    className="addonselect fs-14"
-                                    style={{ width: 180 }}
+                                    className="addonselect fs-14 w-180px"
                                     >
                                     {revenueLookups?.map((list, index) => (
                                         <Select.Option value={list?.id} key={index}>

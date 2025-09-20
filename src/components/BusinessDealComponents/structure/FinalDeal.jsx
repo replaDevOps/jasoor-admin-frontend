@@ -1,4 +1,4 @@
-import { Button, Card, Col, Flex, Image, Row, Typography, message,Spin } from 'antd'
+import { Button, Col, Flex, Row, Typography, message } from 'antd'
 import { CheckCircleOutlined } from '@ant-design/icons'
 import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';

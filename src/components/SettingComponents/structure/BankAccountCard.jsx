@@ -53,7 +53,7 @@ const BankAccountCard = ({banks,settingId}) => {
                                             <Flex justify='space-between' className='w-100' align='center' gap={10}>
                                                 <Flex gap={10} align='center'>
                                                     <Radio value={items.id}>{items.title}</Radio>
-                                                    <Divider className='bg-gray' style={{height: 20}} type='vertical' />
+                                                    <Divider className='bg-gray h-20' type='vertical' />
                                                     <Flex gap={12} align='center'> 
                                                         <Image src='/assets/icons/bank-ic.svg' width={20} preview={false} fetchPriority="high" alt='bank-icon' />
                                                         <Flex vertical gap={0}>

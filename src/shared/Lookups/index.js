@@ -37,59 +37,6 @@ const districtselectItems = [
 ]
 
 
-// dropdown lookups
-const maincategoriesItem = [
-    {
-        key: 1,
-        label: 'Restaurants & Cafes',
-    },
-    {
-        key: 2,
-        label: 'Retail Stores',
-    },
-    {
-        key: 3,
-        label: 'Salons & Beauty Centers',
-    },
-    {
-        key: 4,
-        label: 'E-commerce Stores',
-    },
-    {
-        key: 5,
-        label: 'Gyms & Fitness Centers',
-    },
-    {
-        key: 6,
-        label: 'Automotive Services',
-    },
-    {
-        key: 7,
-        label: 'Bakeries & Sweet Shops',
-    },
-    {
-        key: 8,
-        label: 'Tech & Software Startups',
-    },
-    {
-        key: 9,
-        label: 'Educational Centers',
-    },
-    {
-        key: 10,
-        label: 'Pharmacies & Clinics',
-    },
-    {
-        key: 11,
-        label: 'Printing & Stationery Shops',
-    },
-    {
-        key: 12,
-        label: 'Pet Shops & Services',
-    },
-]
-
-
 const districtItems = [
     { key: '1', label: 'Makkah' },
     { key: '2', label: 'Eastern' },
@@ -187,4 +134,4 @@ const revenueLookups = [
     },
 ]
 
-export { categoriesItems, revenueLookups, maincategoriesItem, priorityItems, districtItems, statusItems, typeItems,meetingItems, businessdealItems, pushstatusItem,groupItems, groupselectItem, districtselectItems, yearOp, langItems };
+export { categoriesItems, revenueLookups, priorityItems, districtItems, statusItems, typeItems,meetingItems, businessdealItems, pushstatusItem,groupItems, groupselectItem, districtselectItems, yearOp, langItems };

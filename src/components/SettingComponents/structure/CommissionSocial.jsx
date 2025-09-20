@@ -1,11 +1,11 @@
 import { Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { MyInput, MySelect } from '../../Forms'
 import { langItems } from '../../../shared';
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { UPDATE_SETTING } from '../../../graphql/mutation/'
 import { GET_SETTINGS } from '../../../graphql/query'
 import { useMutation } from '@apollo/client'
-import { message,Spin } from "antd";
+import { message } from "antd";
 
 const { Title } = Typography
 const CommissionSocial = ({comssionSocial}) => {

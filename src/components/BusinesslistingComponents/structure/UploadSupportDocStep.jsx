@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Card, Flex, Form, Image, Tooltip, Typography } from 'antd'
 import { ModuleTopHeading } from '../../PageComponents'
 import { SingleFileUpload } from '../../Forms';

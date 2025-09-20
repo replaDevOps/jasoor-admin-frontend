@@ -1,6 +1,5 @@
-import React,{useState} from 'react'
-import { Button, Card, Col, Flex, Image, Row, Typography,Upload } from 'antd'
-import { UPDATE_DEAL,UPLOAD_DOCUMENT} from '../../../graphql/mutation/mutations';
+import { Button, Card, Col, Flex, Image, Row, Typography } from 'antd'
+import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
 import { message,Spin } from "antd";
 
@@ -58,7 +57,7 @@ const CommissionReceiptBuyer = ({ details }) => {
 
     if (updating) {
         return (
-            <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
             </Flex>
         );

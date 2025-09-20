@@ -3,7 +3,7 @@ import { BusinesslistCards, BusinessListingTable, ModuleTopHeading } from '../..
 import { PlusOutlined } from '@ant-design/icons';
 import { GET_BUSINESSES } from '../../graphql/query/business'
 import { useLazyQuery } from '@apollo/client'
-import React, { useState,useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const BusinesslIstingPage = () => {

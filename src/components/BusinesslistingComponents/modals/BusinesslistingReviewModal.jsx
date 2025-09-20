@@ -2,7 +2,7 @@ import { Button, Divider, Flex, Modal, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
 const { Title, Text } = Typography
-const BusinesslistingReviewModal = ({visible,onClose,onCreate}) => {
+const BusinesslistingReviewModal = ({visible,onClose}) => {
 
     const navigate = useNavigate()
   return (

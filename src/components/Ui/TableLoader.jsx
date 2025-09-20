@@ -2,18 +2,15 @@ import { SyncOutlined } from "@ant-design/icons"
 import { Spin } from 'antd';
 
 export const CustomSpin = ({ size = 'large', containerHeight = '250px' }) => (
-  <div style={{ 
-    height: containerHeight, 
-    display: 'flex', 
-    alignItems: 'center', 
-    justifyContent: 'center' 
-  }}>
+    <div style={{ 
+      height: containerHeight,
+    }}  className="center">
     <Spin 
       size={size}
-      indicator={<SyncOutlined spin style={{ color: 'var(--brand-color)', fontSize: '24px' }} />}
+      indicator={<SyncOutlined spin className="text-brand fs-24" />}
     />
   </div>
 );
 export const TableLoader={ 
-    indicator: <SyncOutlined  spin style={{color:'var(--brand-color)',fontSize: '24px'}}/>
+    indicator: <SyncOutlined  spin className="text-brand fs-24" />
   }

@@ -9,8 +9,7 @@ import { UPDATE_ROLE, DELETE_ROLE } from '../../../graphql/mutation';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { TableLoader } from '../../Ui/TableLoader';
 
-const { Text } = Typography;
-
+const { Text } = Typography
 const RolePermissionTable = () => {
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState("Status");

@@ -1,6 +1,4 @@
 import { Card, Col, Flex, Row, Typography } from 'antd'
-import { ModuleTopHeading } from '../../PageComponents'
-import React from 'react'
 import { GET_FINANCE_COUNT } from '../../../graphql/query/'
 import { useQuery } from '@apollo/client'
 

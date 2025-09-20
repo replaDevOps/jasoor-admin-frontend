@@ -1,7 +1,5 @@
-import { Button, Col, Divider, Flex, Form, Image, Modal, Row, Typography } from 'antd'
-import { MyInput, MySelect } from '../../Forms'
+import { Button, Divider, Flex, Image, Modal, Typography } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
-import { useEffect } from 'react'
 
 const { Title } = Typography
 const ViewIdentity = ({visible,onClose,viewstate}) => {

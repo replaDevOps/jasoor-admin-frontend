@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react'
 import { Row, Col, Flex, Button } from 'antd'
 import { AddEditFaqs, FaqsTable, ModuleTopHeading } from '../../components'

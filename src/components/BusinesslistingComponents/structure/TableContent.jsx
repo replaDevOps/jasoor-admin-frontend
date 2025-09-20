@@ -1,6 +1,5 @@
-import { Card, Col, Flex, Row, Table, Typography } from 'antd'
+import { Table } from 'antd'
 
-const { Title } = Typography
 const TableContent = ({columns,data,x=500}) => {
     return (
         <Table

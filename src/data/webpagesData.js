@@ -45,52 +45,52 @@ const articleData = [
 
 const toppagesData = [
     {
-        id: 1,
+        key: 1,
         pagename:'Listing / Ref # 12543',
         views:'1000'
     },
     {
-        id: 2,
+        key: 2,
         pagename:'Home Page',
         views:'700'
     },
     {
-        id: 3,
+        key: 3,
         pagename:'Landing Page',
         views:'670'
     },
     {
-        id: 4,
+        key: 4,
         pagename:'Listing Page',
         views:'650'
     },
     {
-        id: 5,
+        key: 5,
         pagename:'About Us',
         views:'450'
     },
     {
-        id: 6,
+        key: 6,
         pagename:'Listing / Ref # 12547',
         views:'440'
     },
     {
-        id: 7,
+        key: 7,
         pagename:'Listing / Ref # 12541',
         views:'430'
     },
     {
-        id: 8,
+        key: 8,
         pagename:'Listing / Ref # 13543',
         views:'320'
     },
     {
-        id: 8,
+        key: 9,
         pagename:'FAQ',
         views:'210'
     },
     {
-        id: 8,
+        key: 10,
         pagename:'Listing / Ref # 13543',
         views:'200'
     },

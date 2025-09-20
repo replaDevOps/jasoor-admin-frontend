@@ -1,7 +1,7 @@
 import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Typography, message } from 'antd';
 import { SearchInput } from '../../Forms';
 import { NavLink } from "react-router-dom";
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { CustomPagination, DeleteModal } from '../../Ui';
 import { UPDATE_USER, DELETE_USER } from '../../../graphql/mutation';
@@ -11,7 +11,7 @@ import { TableLoader } from '../../Ui/TableLoader';
 
 const { Text } = Typography;
 
-const StaffMemberTable = ({ setVisible, setEditItem, setRefetchStaff }) => {
+const StaffMemberTable = ({ setVisible, setEditItem }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedStatus, setSelectedStatus] = useState('Status');

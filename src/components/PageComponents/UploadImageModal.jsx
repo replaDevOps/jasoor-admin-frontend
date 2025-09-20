@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Modal, Button, Upload, Form, Typography } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { ImagePreviewModal } from './ImagePreviewModal';
@@ -66,7 +66,7 @@ const UploadImageModal = ({ visible, onClose }) => {
               {fileList.length < 5 && (
                 <div>
                   <PlusOutlined />
-                  <div style={{ marginTop: 8, }}>Upload</div>
+                  <div className='margintop-8'>Upload</div>
                 </div>
               )}
             </Upload>

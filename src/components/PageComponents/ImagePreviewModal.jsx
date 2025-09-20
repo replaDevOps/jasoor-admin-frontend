@@ -1,4 +1,3 @@
-import React from 'react'
 import { Modal } from 'antd'
 
 const ImagePreviewModal = ({ visible, imageSrc, onClose }) => {
@@ -10,7 +9,7 @@ const ImagePreviewModal = ({ visible, imageSrc, onClose }) => {
       onCancel={onClose}
       centered
     >
-      <img alt="preview" style={{ width: '100%' }} src={imageSrc} fetchPriority="high"/>
+      <img alt="preview" width={'100%'} src={imageSrc} fetchPriority="high"/>
     </Modal>
   )
 }

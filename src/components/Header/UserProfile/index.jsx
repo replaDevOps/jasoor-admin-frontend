@@ -8,7 +8,7 @@ export const UserProfile = () => {
     return (
         <>
           <Space 
-            style={{ cursor: 'pointer' }}
+            className="cursor"
             onClick={()=> setVisible(true)}
             size={10}
           >

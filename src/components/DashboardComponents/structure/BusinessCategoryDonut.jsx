@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, Col, Flex, Row, Typography } from 'antd';
 import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../PageComponents';
@@ -105,7 +104,7 @@ const BusinessCategoryDonut = () => {
 
   if (loading) {
           return (
-            <Flex justify="center" align="center" style={{ height: 200 }}>
+            <Flex justify="center" align="center" className='h-200'>
               <Spin size="large" />
             </Flex>
          );

@@ -1,5 +1,4 @@
-import React from 'react'
-import { Card, Col, Flex, Image, Row, Typography } from 'antd'
+import { Card, Col, Flex, Row, Typography } from 'antd'
 import { ModuleTopHeading } from '../../PageComponents'
 import { GET_BUSINESS_STATS } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
@@ -7,13 +6,12 @@ import { message,Spin } from "antd";
 
 const { Title, Text } = Typography
 const DashboardCards = () => {
-    const [messageApi, contextHolder] = message.useMessage();
     const { data, loading, error } = useQuery(GET_BUSINESS_STATS);
 
     // Show loader while fetching
     if (loading) {
       return (
-        <Flex justify="center" align="center" style={{ height: 200 }}>
+        <Flex justify="center" align="center" className='h-200'>
           <Spin size="large" />
         </Flex>
       );
@@ -59,7 +57,6 @@ const DashboardCards = () => {
 
   return (
     <>
-    {contextHolder}
     <Card className='border-gray radius-12'>
         <Row gutter={[14,14]}>
             <Col span={24}>

@@ -1,6 +1,5 @@
-import React, { useState } from "react"
-import { Drawer, Button, message} from "antd"
-import "./index.css"
+import { useState } from "react"
+import { Drawer, Button } from "antd"
 
 const UserProfileDrawer= ({visible, onClose})=>{
 

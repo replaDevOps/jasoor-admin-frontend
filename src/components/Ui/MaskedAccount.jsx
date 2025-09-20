@@ -1,4 +1,3 @@
-import React from 'react';
 
 const MaskedAccount = ({ iban, className }) => {
   const maskIban = (iban) => {

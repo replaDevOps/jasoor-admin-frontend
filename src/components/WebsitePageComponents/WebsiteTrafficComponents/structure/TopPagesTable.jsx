@@ -1,4 +1,3 @@
-import React from 'react'
 import { toppagesData } from '../../../../data'
 import { Card, Flex, Table } from 'antd'
 import { ModuleTopHeading } from '../../../PageComponents'

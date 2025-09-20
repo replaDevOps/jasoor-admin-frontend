@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Flex, Typography } from 'antd';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
