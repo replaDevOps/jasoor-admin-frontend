@@ -26,11 +26,7 @@ const AddUser = ({visible,onClose,edititem}) => {
             })
         }
     },[visible,edititem])
-
-    const onFinish = (values) => {
-        console.log('All values',values)
-    };
-
+    
     return (
         <Modal
             title={null}

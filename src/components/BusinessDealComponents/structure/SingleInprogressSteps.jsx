@@ -30,15 +30,13 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
     const [form] = Form.useForm();
     const initialStep = details?.status ? statusToStepIndex[details.status] || 0 : 0;
     const [activeStep, setActiveStep] = useState(initialStep);
-   
-    const found = details?.busines?.documents?.find(doc => doc.title === "Jasoor Commission");
-    const DSA = details?.status
+
     const allSteps = [
         {
             key: '1',
             label: 'Commission Receipt',
             content: <CommissionReceiptBuyer details={details} />,
-            status: found?.title ? 'Verified' : 'Jusoor verification pending',
+            status: details?.isCommissionVerified ? 'Verified' : 'Jusoor verification pending',
             emptytitle: 'Commission Pending!',
             emptydesc: 'Waiting for the buyer to pay the platform commission.',
         },
@@ -46,12 +44,13 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
             key: '2',
             label: 'Digital Sale Agreement',
             content: <DigitalSaleAgreement form={form} details={details} />,
-            status: 
-            DSA === 'DSA_FROM_SELLER_PENDING'
+            status: !details?.isDsaSeller && details?.isDsaBuyer
                 ? 'Seller DSA Pending'
-                : DSA === 'DSA_FROM_BUYER_PENDING'
+                : details?.isDsaSeller && !details?.isDsaBuyer
                 ? 'Buyer DSA Pending'
-                : 'Verified',
+                : details?.isDsaSeller && details?.isDsaBuyer
+                ? 'Verified'
+                : 'DSA Pending',
             emptytitle: 'DSA Pending!',
             emptydesc: 'Waiting for the seller & buyer to sign the digital sale agreement.',
         },

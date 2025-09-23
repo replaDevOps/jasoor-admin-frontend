@@ -40,7 +40,7 @@ const LoginPage = () => {
           messageApi.error("Login failed: Something went wrong");
         }
       };
-console.log("error",error)
+
       const lang = [
             {
               key: "1",

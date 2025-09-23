@@ -46,9 +46,7 @@ const FinalDeal = ({details}) => {
       });
     };
 
-  const isFinal = details.status === 'PENDING'
-  const isCompleted = details.status === 'COMPLETED'
-    console.log( "check this" , details?.isDocVedifiedBuyer, details?.isDocVedifiedSeller, isCompleted, isFinal )
+    const isCompleted = details?.isSellerCompleted && details?.isBuyerCompleted;
 
   return (
     <>
@@ -61,7 +59,7 @@ const FinalDeal = ({details}) => {
               <Flex vertical gap={10}>
               <Col span={24}>
               <Flex vertical gap={10}>
-                {isFinal ||isCompleted ? (
+                {details?.isSellerCompleted || details?.isBuyerCompleted ? (
                   <>
                     <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
                       <CheckCircleOutlined className="fs-14" /> Buyer marked the deal as "Finalized"

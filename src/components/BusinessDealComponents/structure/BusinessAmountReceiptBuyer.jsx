@@ -1,22 +1,25 @@
 import { useEffect } from 'react'
 import { Button, Card,  Col, Flex, Image, Row, Typography } from 'antd'
 import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
-import { GETDEAL } from '../../../graphql/query';
+import { GETDEAL,ME } from '../../../graphql/query';
 
 const { Text } = Typography
 const BusinessAmountReceiptBuyer = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const sellerReceipt = details?.busines?.documents?.find(doc => doc.title === 'Buyer Payment Receipt');
-    const sellerBank = details?.banks?.find(doc => doc.isActive === true);
+
+    const { loading, error:userError, data:user } = useQuery(ME, {
+            variables: { getUserId: details?.busines?.seller?.id },
+        });
+    const banks = user?.getUser?.banks?.find(doc => doc.isActive === true)
     const businessamountrecpData = [
-        {title:'Seller’s Bank Name', desc: sellerBank?.bankName },
-        {title:'Seller’s IBAN', desc:sellerBank?.iban },
-        {title:'Account Holder Name',desc:sellerBank?.accountTitle },
+        {title:'Seller’s Bank Name', desc: banks?.bankName },
+        {title:'Seller’s IBAN', desc:banks?.iban },
+        {title:'Account Holder Name',desc:banks?.accountTitle },
         {title:'Amount to Pay', desc:details?.finalizedOffer },
     ]
-
     const [updateDeals, { loading: updating, data, error }] = useMutation(UPDATE_DEAL, {
         refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
         awaitRefetchQueries: true,
@@ -69,7 +72,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
             </Card>
         </Flex>
     );
-    if (updating) {
+    if (updating || loading) {
         return (
             <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />

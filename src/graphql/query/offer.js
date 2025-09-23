@@ -151,6 +151,8 @@ query GetDeal($getDealId: ID!) {
     isCommissionVerified
     isPaymentVedifiedAdmin
     isDocVedifiedBuyer
+    isSellerCompleted
+    isBuyerCompleted
     createdAt
     business {
       id

@@ -31,7 +31,7 @@ const BusinessDealsDetails = ({completedeal}) => {
         variables: { getDealId: id },
         skip: !id, // skip if no id
     });
-    console.log("deal data", data?.getDeal?.business?.isSold    );
+
     const details = data?.getDeal
     ? {
         key: data.getDeal.id, // use actual id from API
@@ -48,8 +48,14 @@ const BusinessDealsDetails = ({completedeal}) => {
         isDocVedifiedAdmin: data.getDeal.isDocVedifiedAdmin,
         isPaymentVedifiedSeller: data.getDeal.isPaymentVedifiedSeller,
         isPaymentVedifiedAdmin: data.getDeal.isPaymentVedifiedAdmin,
+        isDsaSeller: data.getDeal.isDsaSeller,
+        isDsaBuyer: data.getDeal.isDsaBuyer,
+        isSellerCompleted: data.getDeal.isSellerCompleted,
+        isBuyerCompleted: data.getDeal.isBuyerCompleted,
+        isDocVedifiedBuyer: data.getDeal.isDocVedifiedBuyer,
     }
     : null;
+
     const buyerdealsData = [
         {
             title:'Seller Name',
@@ -65,10 +71,9 @@ const BusinessDealsDetails = ({completedeal}) => {
         },
         {
             title:'Status',
-            desc:statusMap[details?.status] || 'Unknown',
+            desc:details?.status || 'Unknown',
         },
     ]
-    console.log(typeof data?.getDeal?.business?.isSold, data?.getDeal?.business?.isSold);
 
     return (
         <Flex vertical gap={20}>
