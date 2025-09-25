@@ -54,16 +54,16 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
             emptytitle: 'DSA Pending!',
             emptydesc: 'Waiting for the seller & buyer to sign the digital sale agreement.',
         },
+        // {
+        //     key: '3',
+        //     label: 'Bank Account Details',
+        //     content: <BankAccountDetails details={details} />,
+        //     status:  'Send',
+        //     emptytitle: 'Bank Details Pending!',
+        //     emptydesc: 'Waiting for the seller to choose the bank account.',
+        // },
         {
             key: '3',
-            label: 'Bank Account Details',
-            content: <BankAccountDetails details={details} />,
-            status:  'Send',
-            emptytitle: 'Bank Details Pending!',
-            emptydesc: 'Waiting for the seller to choose the bank account.',
-        },
-        {
-            key: '4',
             label: 'Pay Business Amount',
             content: <BusinessAmountReceiptBuyer details={details} />,
             status: details?.isPaymentVedifiedSeller && details?.isPaymentVedifiedAdmin ? 'Verified' : details?.isPaymentVedifiedSeller ? 'Jusoor verification pending' : 'Seller verification Pending',
@@ -71,7 +71,7 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
             emptydesc: 'Waiting for the buyer to pay the seller business amount.',
         },
         {
-            key: '5',
+            key: '4',
             label: 'Document Confirmation',
             content: <DocumentPaymentConfirmation details={details} />,
             status: details?.isDocVedifiedAdmin && details?.isDocVedifiedSeller ? "Verified" : details?.isDocVedifiedSeller ? 'Jusoor verification pending': 'Seller verification pending',
@@ -79,7 +79,7 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
             emptydesc: 'Waiting for the seller to transfer the document & approve the payment.',
         },
         {
-            key: '6',
+            key: '5',
             label: 'Finalize Deal',
             content: <FinalDeal details={details} />,
             status: details?.isDocVedifiedAdmin ? "Verified" : 'Pending',

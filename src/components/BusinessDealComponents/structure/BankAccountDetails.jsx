@@ -2,18 +2,18 @@ import { Flex, Typography } from 'antd'
 import { MaskedAccount } from '../../Ui/MaskedAccount'
 import { useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
-import { ME } from '../../../graphql/query';
+import { GETUSERACTIVEBANK } from '../../../graphql/query';
 
 
 const { Text } = Typography
 const BankAccountDetails = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
-    const { data:bankData, loading } = useQuery(ME, {
+    const { data:bankData, loading } = useQuery(GETUSERACTIVEBANK, {
         variables: { 
-            getUserId:details?.busines?.seller?.id
+            getUserActiveBanksId:details?.busines?.seller?.id
         },
     });
-    const buyerBank = bankData?.getUser?.banks?.find(bank => bank.isActive);
+    const buyerBank = bankData?.getUserActiveBanks
     if (loading) {
         return (
             <Flex justify="center" align="center" className='h-200'>

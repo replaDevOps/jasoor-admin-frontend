@@ -154,6 +154,7 @@ query GetDeal($getDealId: ID!) {
     isSellerCompleted
     isBuyerCompleted
     createdAt
+    ndaPdfPath
     business {
       id
       businessTitle

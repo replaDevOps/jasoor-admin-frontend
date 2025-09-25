@@ -53,6 +53,7 @@ const BusinessDealsDetails = ({completedeal}) => {
         isSellerCompleted: data.getDeal.isSellerCompleted,
         isBuyerCompleted: data.getDeal.isBuyerCompleted,
         isDocVedifiedBuyer: data.getDeal.isDocVedifiedBuyer,
+        ndaPdfPath: data.getDeal.ndaPdfPath,
     }
     : null;
 
