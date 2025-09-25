@@ -55,7 +55,6 @@ const EndaTermPage = () => {
             }
           });
           messageApi.success("E-NDA Terms created successfully!");
-          form.resetFields();
           }
         } catch (err) {
           console.error(err);

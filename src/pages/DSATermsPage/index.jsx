@@ -134,11 +134,11 @@ const DSATermsPage = () => {
                   dsaTerms: { content: descriptionData },
                   policy: null,
               },
+              refetchQueries: [{ query: GETDSATERMS }],
+                awaitRefetchQueries: true,
           }
         });
-
         messageApi.success("Terms created successfully!");
-        form.resetFields();
         }          
       } catch (err) {
           console.error(err);

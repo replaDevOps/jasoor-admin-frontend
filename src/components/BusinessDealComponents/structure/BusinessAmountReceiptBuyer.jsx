@@ -114,7 +114,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                             className="btnsave bg-brand"
                             onClick={handleMarkVerified}
                             aria-labelledby="Mark as Verified"
-                            disabled={!sellerReceipt || !details?.isPaymentVedifiedAdmin}
+                            disabled={!(sellerReceipt && !details?.isPaymentVedifiedAdmin)}
                         >
                             Mark as Verified
                         </Button>

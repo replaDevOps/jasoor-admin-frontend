@@ -91,7 +91,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                             className="btnsave bg-brand"
                             onClick={handleMarkVerified}
                             aria-labelledby='Mark as Verified'
-                            disabled={!jasoorDoc || !details?.isCommissionVerified}
+                            disabled={!(jasoorDoc && !details?.isCommissionVerified)}
                         >
                             Mark as Verified
                         </Button>
