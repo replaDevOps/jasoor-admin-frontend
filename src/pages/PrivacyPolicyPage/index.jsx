@@ -23,9 +23,11 @@ const PrivacyPolicyPage = () => {
     
           await createTerms({
             variables: {
+                input: {
               term: null,   // ✅ now valid JSON,   // sending only term for now
               ndaTerm: null,
               policy: { content: descriptionData },
+                }
             },
           });
     

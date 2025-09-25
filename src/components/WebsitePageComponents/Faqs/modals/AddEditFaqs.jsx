@@ -2,11 +2,13 @@ import { Button, Flex, Typography, Form, Modal, Row, Col,message } from 'antd'
 import { CloseOutlined } from '@ant-design/icons';
 import { MyInput } from '../../../Forms';
 import { useEffect } from 'react';
-import { useMutation } from "@apollo/client";
+import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_FAQ, UPDATE_FAQ } from '../../../../graphql/mutation/mutations';
+import {GETFAQ} from '../../../../graphql/query/queries'
+
 
 const { Text, Title } = Typography;
-const AddEditFaqs = ({ visible, onClose, edititem }) => {
+const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
     
@@ -41,6 +43,8 @@ const AddEditFaqs = ({ visible, onClose, edititem }) => {
                 question,
                 answer,
               },
+                refetchQueries: [{ query: GETFAQ, variables: { search: "" } }],
+                awaitRefetchQueries: true,
             });
             messageApi.success('FAQ updated successfully');
           } else {
@@ -50,6 +54,8 @@ const AddEditFaqs = ({ visible, onClose, edititem }) => {
                 question,
                 answer,
               },
+                refetchQueries: [{ query: GETFAQ, variables: { search: "" } }],
+                awaitRefetchQueries: true,
             });
             messageApi.success('FAQ added successfully');
           }

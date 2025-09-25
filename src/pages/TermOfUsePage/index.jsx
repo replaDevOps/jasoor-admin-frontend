@@ -1,14 +1,23 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { Button, Card, Flex, Form ,Spin,message} from 'antd'
 import { EditorDescription, ModuleTopHeading } from '../../components';
-import { useMutation } from "@apollo/client";
-import { CREATE_TERMS } from '../../graphql/mutation/mutations';
+import { useMutation,useQuery } from "@apollo/client";
+import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
+import { GETTERMSOFUSE } from '../../graphql/query/queries';
 
 const TermOfUsePage = () => {
     const [form] = Form.useForm();
     const [ descriptionData, setDescriptionData ] = useState('')
     const [messageApi, contextHolder] = message.useMessage();
     const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);
+    const [updateTerms, { loading: updating }] = useMutation(UPDATE_TERMS);
+    // call GETTERMSOFUSE
+    const { data, loading, error } = useQuery(GETTERMSOFUSE);
+    useEffect(() => {
+        if (data?.getTerms?.term?.content) {
+          setDescriptionData(data?.getTerms?.term?.content);
+        }
+    }, [data]);
 
     const handleDescriptionChange = (value) =>{
         setDescriptionData(value)
@@ -21,30 +30,51 @@ const TermOfUsePage = () => {
             return;
           }
     
-          await createTerms({
-            variables: {
-              term: { content: descriptionData },   // ✅ now valid JSON,   // sending only term for now
-              ndaTerm: null,
-              policy: null,
-            },
-          });
+          if (data?.getTerms?.id) {
+            // ✅ Update existing terms
+            await updateTerms({
+              variables: {
+                updateTermsId: data.getTerms.id,
+                input: {
+                  term: { content: descriptionData },
+                  ndaTerm: null,
+                  policy: null,
+                },
+              },
+              refetchQueries: [{ query: GETTERMSOFUSE }],
+              awaitRefetchQueries: true,
+            });
+            messageApi.success("Terms updated successfully!");
+          } else {
+            // ✅ Create new terms
+            await createTerms({
+              variables: {
+                input: {
+                  term: { content: descriptionData },
+                  ndaTerm: null,
+                  policy: null,
+                },
+              },
+              refetchQueries: [{ query: GETTERMSOFUSE }],
+              awaitRefetchQueries: true,
+            });
+            messageApi.success("Terms created successfully!");
+          }
     
-          messageApi.success("Terms created successfully!");
-          form.resetFields();
-          setDescriptionData("");
         } catch (err) {
           console.error(err);
           messageApi.error("Failed to save terms");
         }
       };
 
-    if (creating) {
+    if (creating || loading || updating) {
         return (
             <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
             </Flex>
         );
     }
+
     return (
         <>
         {contextHolder}

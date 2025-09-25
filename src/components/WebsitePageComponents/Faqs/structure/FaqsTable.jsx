@@ -14,7 +14,7 @@ const FaqsTable = ({setVisible,setEditItem}) => {
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
 
-    const  {data, loading , error,refetch} = useQuery(GETFAQ,{
+    const  {data, loading , error,refetch:refetchFaqs} = useQuery(GETFAQ,{
         variables: { search: "" },
     });
     const [deleteFAQ, { loading: deleting }] = useMutation(DELETE_FAQ,{
@@ -63,7 +63,7 @@ const FaqsTable = ({setVisible,setEditItem}) => {
           });
           messageApi.success('FAQ deleted successfully');
           setDeleteItem(null);
-          refetch(); // refresh the FAQ list
+          refetchFaqs({ search: "" });
         } catch (err) {
           console.error(err);
           messageApi.error('Failed to delete FAQ');
@@ -84,7 +84,7 @@ const FaqsTable = ({setVisible,setEditItem}) => {
         }
 
         searchTimeout.current = setTimeout(() => {
-            refetch({ search: value });
+            refetchFaqs({ search: value });
             setCurrent(1); // reset pagination
         }, 500); // 500ms delay
     };

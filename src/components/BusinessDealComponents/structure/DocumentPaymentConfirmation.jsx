@@ -7,57 +7,20 @@ import { GETDEAL } from '../../../graphql/query';
 
 const { Text } = Typography
 const DocumentPaymentConfirmation = ({details}) => {
-    // const [messageApi, contextHolder] = message.useMessage();
+
     const uploadDocs = [
         {
             title: "Updated Commercial Registration (CR)",
-            ...details?.busines?.documents?.find(doc => doc.title === "Updated Commercial Registration (CR)")
+            ...details?.busines?.documents?.find(doc => doc.title === "Commercial Registration (CR)")
         },
         {
             title: "Notarized Ownership Transfer Letter",
             ...details?.busines?.documents?.find(doc => doc.title === "Notarized Ownership Transfer Letter")
         }
     ];
-    const hasDocuments = uploadDocs.some(doc => doc?.url); 
-    // const [updateDeals, { loading: updating, data, error }] = useMutation(UPDATE_DEAL, {
-    //     refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
-    //     awaitRefetchQueries: true,
-    // });
-
-    // useEffect(() => {
-    //     if (data?.updateDeal?.id) {
-    //         messageApi.success("Commission verified successfully!");
-    //     }
-    // }, [data?.updateDeal?.id]);
-
-    // useEffect(() => {
-    //     if (error) {
-    //         messageApi.error(error.message || "Something went wrong!");
-    //     }
-    // }, [error]);
-    
-
-    // const handleMarkVerified = async () => {
-    //     if (!details?.key) return;
-    //     await updateDeals({
-    //         variables: {
-    //             input: {
-    //                 id: details.key,
-    //                 status: "WAITING", 
-    //                 isDocVedifiedAdmin: true, 
-    //             },
-    //         },
-    //     });
-    // };
-
-    // if (updating) {
-    //     return (
-    //         <Flex justify="center" align="center" className='h-200'>
-    //             <Spin size="large" />
-    //         </Flex>
-    //     );
-    // }
-
+    const hasDocuments = uploadDocs.length > 0;
+    const isPaymentVerified = details?.isPaymentVedifiedSeller
+    console.log("uploadDocs",uploadDocs)
     return (
         <>
         {/* {contextHolder} */}
@@ -70,7 +33,7 @@ const DocumentPaymentConfirmation = ({details}) => {
             </Col>
           ) : (
             uploadDocs.map((item, index) =>
-              item?.url ? (
+              item?.filePath ? (
                 <Col span={24} key={index}>
                   <Text className="fw-600 text-medium-gray fs-13">{item.title}</Text>
                   <Card className="card-cs border-gray rounded-12 mt-2">
@@ -110,29 +73,17 @@ const DocumentPaymentConfirmation = ({details}) => {
               <Flex
                 gap={5}
                 className={
-                  details?.isDocVedifiedAdmin
+                  isPaymentVerified
                     ? "badge-cs success fs-12 fit-content"
                     : "badge-cs pending fs-12 fit-content"
                 }
                 align="center"
               >
                 <CheckCircleOutlined className="fs-14" />
-                {details?.isDocVedifiedAdmin
+                {isPaymentVerified
                   ? 'Seller marked "Payment Received"'
                   : '"Payment Received" Seller Confirmation pending'}
               </Flex>
-  
-              {/* Uncomment if button is needed */}
-              {/* <Flex>
-                <Button
-                  type="primary"
-                  className="btnsave bg-brand"
-                  onClick={handleMarkVerified}
-                  disabled={details?.isDocVedifiedAdmin}
-                >
-                  Mark as Verified
-                </Button>
-              </Flex> */}
             </Flex>
           </Col>
         </Row>

@@ -206,15 +206,15 @@ mutation DeleteFAQ($deleteFaqId: ID!) {
 }
 `
 const CREATE_TERMS = gql`
-mutation CreateTerms($term: JSON, $ndaTerm: JSON, $policy: JSON) {
-  createTerms(term: $term, ndaTerm: $ndaTerm, policy: $policy) {
+mutation CreateTerms($input: TermsInput) {
+  createTerms(input: $input) {
     id
   }
 }
 `
 const UPDATE_TERMS = gql`
-mutation UpdateTerms($updateTermsId: ID!, $term: JSON, $ndaTerm: JSON, $policy: JSON) {
-  updateTerms(id: $updateTermsId, term: $term, ndaTerm: $ndaTerm, policy: $policy) {
+mutation UpdateTerms($updateTermsId: ID!, $input: TermsInput) {
+  updateTerms(id: $updateTermsId, input: $input) {
     id
   }
 }
