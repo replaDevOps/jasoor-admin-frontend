@@ -1,18 +1,24 @@
-import { Button, Col, Divider, Flex, Form, Modal, Radio, Row, Select, Space, Typography, Upload } from 'antd'
+import { Button, Col, Divider, Flex, Form, Modal, Radio, Row, Select, Space, Typography, Upload,message } from 'antd'
 import { MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { cities, district } from '../../../data'
+import { useMutation } from "@apollo/client";
+import { CREATE_USER } from "../../../graphql/mutation/login";
+import imageCompression from 'browser-image-compression';
 
 const { Title } = Typography
 const AddUser = ({visible,onClose,edititem}) => {
-
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm()
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [idType, setIdType] = useState("national_id");
     const [frontFileName, setFrontFileName] = useState("");
     const [backFileName, setBackFileName] = useState("");
     const [passportFileName, setPassportFileName] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [documents, setDocuments] = useState([]);
+    const [createUser, { loading:userLoading, error }] = useMutation(CREATE_USER);
 
     useEffect(()=>{
         if(visible && edititem){
@@ -26,8 +32,84 @@ const AddUser = ({visible,onClose,edititem}) => {
             })
         }
     },[visible,edititem])
+
+
+    const onFinish = async () => {
+        try {
+            const formData = form.getFieldsValue(true);
+            const input = {
+                name: formData.fullName,
+                email: formData.email.toLowerCase(),
+                district: formData.district,
+                city: formData.city,
+                phone: formData.phoneNo,
+                password: formData.password,
+                documents: documents.length > 0 ? documents : undefined,
+            };
+    
+            const { data } = await createUser({ variables: { input } });
+    
+            messageApi.success("Account created successfully!");
+            // redirect or reset form
+            form.resetFields();
+        } catch (err) {
+            messageApi.error("Failed to create user. Please try again.");
+        }finally {
+            onClose();
+        }
+    };
+
+    const handleUpload = async ({ file,title }) => {
+        try {
+            setLoading(true); 
+            let compressedFile = file;
+            if (file.type.startsWith('image/')) {
+                compressedFile = await imageCompression(file, {
+                  maxSizeMB: 1,
+                  maxWidthOrHeight: 1024,
+                  useWebWorker: true,
+                });
+            }
+            const formData = new FormData();
+            formData.append('file', file);
+        
+            // Call your upload API
+            const res = await fetch('https://verify.jusoor-sa.co/upload', {
+                method: 'POST',
+                body: formData,
+            });
+        
+            if (!res.ok) throw new Error('Upload failed');
+            const data = await res.json();
+        
+            // Update documents state for front side
+            setDocuments(prevDocs => {
+                // Remove existing 'front' doc if any
+                // Add new
+                const filtered = prevDocs.filter(doc => doc.title !== title);
+                return [...filtered, {
+                title: 'front',
+                fileName: data.fileName,
+                filePath: data.fileUrl,
+                fileType: data.fileType,
+                }];
+            });
+
+            if (title === 'front') setFrontFileName(data.fileName);
+            else if (title === 'back') setBackFileName(data.fileName);
+            else if (title === 'passport') setPassportFileName(data.fileName);
+      
+        } catch (err) {
+          console.error(err);
+          messageApi.error('Failed to upload front file');
+        }finally {
+            setLoading(false); // Stop loading
+        }
+    };
     
     return (
+        <>
+        {contextHolder}
         <Modal
             title={null}
             open={visible}
@@ -165,7 +247,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                         beforeUpload={() => false} 
                                                         showUploadList={false} 
                                                         maxCount={1} 
-                                                        // onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
+                                                        onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
                                                     >
                                                         <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
                                                     </Upload>
@@ -189,7 +271,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                         beforeUpload={() => false} 
                                                         showUploadList={false} 
                                                         maxCount={1} 
-                                                        // onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
+                                                        onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
                                                     >
                                                         <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
                                                     </Upload>
@@ -215,7 +297,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                     beforeUpload={() => false} 
                                                     showUploadList={false} 
                                                     maxCount={1} 
-                                                    // onChange={(info) => handleUpload({ file: info.file, title: 'passport' })}
+                                                    onChange={(info) => handleUpload({ file: info.file, title: 'passport' })}
                                                 >
                                                     <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
                                                 </Upload>
@@ -273,6 +355,7 @@ const AddUser = ({visible,onClose,edititem}) => {
             </div>
             <Divider className='my-2 bg-light-brand' />
         </Modal>
+        </>
     )
 }
 

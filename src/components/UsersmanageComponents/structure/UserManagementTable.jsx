@@ -9,6 +9,7 @@ import { USERS } from '../../../graphql/query/user';
 import { useLazyQuery,useMutation } from '@apollo/client'
 import { DownOutlined } from '@ant-design/icons';
 
+
 const { Text } = Typography
 const UserManagementTable = ({setVisible,setEditItem}) => {
     const [form] = Form.useForm();
@@ -22,6 +23,11 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
     const [viewmodal, setViewModal] = useState(false)
     const [viewstate, SetViewState] = useState(null)
     const [messageApi, contextHolder] = message.useMessage();
+    const UserStatus = {
+        inactive: 'inactive',
+        pending: 'pending',
+        verified: 'verified',
+      };
 
     const [loadUsers, { data, loading }] = useLazyQuery(USERS, {
         fetchPolicy: "network-only"
@@ -100,11 +106,15 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
         {
             title: 'Status',
             dataIndex: 'status',
-            render: (status) => (
-                status === 1
-                    ? <Text className='btnpill fs-12 success'>Active</Text>
-                    : <Text className='btnpill fs-12 inactive'>Inactive</Text>
-            )
+            render: (status) => {
+                if (status === 'verified') {
+                    return <Text className="btnpill fs-12 success">Active</Text>;
+                } else if (status === 'pending') {
+                    return <Text className="btnpill fs-12 inactive">Pending</Text>;
+                } else if (status === 'inactive') {
+                    return <Text className="btnpill fs-12 inactive">Inactive</Text>;
+                } 
+            }
         },
         {
             title: 'Action',
@@ -112,13 +122,13 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
             fixed: "right",
             width: 100,
             render: (_, row) => {
-                const handleSetInactive = async () => {
+                const handleStatusChange = async () => {
                     try {
                         await updateUser({
                             variables: {
                                 input: {
                                     id: row.key, 
-                                    isActive: row.status === 1, 
+                                    status: row.status,
                                 }
                             }
                         });
@@ -127,7 +137,6 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                         messageApi.error(err.message || "Something went wrong!");
                     }
                 };
-        
                 return (
                     <Dropdown
                         menu={{
@@ -136,10 +145,28 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                     label: <NavLink onClick={(e) => { e.preventDefault(); setVisible(true); setEditItem(row); }}>Edit</NavLink>, 
                                     key: '1' 
                                 },
-                                { 
-                                    label: <NavLink onClick={(e) => { e.preventDefault(); handleSetInactive(); }}>Inactive</NavLink>, 
-                                    key: '2' 
-                                },
+                                ...(row.status === 'verified'
+                                    ? [
+                                        {
+                                            label: (
+                                                <NavLink onClick={(e) => { e.preventDefault(); handleStatusChange(row); }}>
+                                                    Inactive
+                                                </NavLink>
+                                            ),
+                                            key: '2'
+                                        }
+                                    ]
+                                    : [
+                                        {
+                                            label: (
+                                                <NavLink onClick={(e) => { e.preventDefault(); handleStatusChange(row); }}>
+                                                    Verify
+                                                </NavLink>
+                                            ),
+                                            key: '2'
+                                        }
+                                    ]
+                                ),
                                 { 
                                     label: <NavLink onClick={(e) => { e.preventDefault(); }}>Delete</NavLink>, 
                                     key: '3' 
@@ -201,7 +228,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
         city: user.city,
         mobileno: user.phone,
         type: user.type,
-        status: user.isActive ? 1 : 0,
+        status: user.status,
     })) || [];
 
     const total = data?.getUsers?.totalCount;
