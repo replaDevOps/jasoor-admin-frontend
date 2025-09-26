@@ -105,7 +105,7 @@ const BankAccountCard = ({ settingId }) => {
                             {
                                 data?.map((items)=>
                                     <Col span={24} key={items.id}>
-                                        <Card className='border-gray bg-transparent card-cs cursor' onClick={()=> setValue(items?.id)}>
+                                        <Card className='border-gray bg-transparent card-cs cursor' onClick={() => onChange({ target: { value: items.id } })}>
                                             <Flex justify='space-between' className='w-100' align='center' gap={10}>
                                                 <Flex gap={10} align='center'>
                                                     <Radio value={items.id}>{items.title}</Radio>
@@ -154,7 +154,7 @@ const BankAccountCard = ({ settingId }) => {
             />
             <DeleteModal 
                 visible={deleteitem}
-                onClose={()=>{setDeleteItem(false);setDeleteBankId(null);}}
+                onClose={()=>{ setDeleteItem(false); setDeleteBankId(null); }}
                 title='Remove Bank Account?'
                 subtitle='Are you sure you want to delete this bank account? 
                 This action cannot be undone, and any active deals won’t be able to send payments to this account.'
