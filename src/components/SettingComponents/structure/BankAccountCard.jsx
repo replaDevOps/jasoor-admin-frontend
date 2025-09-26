@@ -33,7 +33,7 @@ const BankAccountCard = ({ settingId }) => {
     }, [getAdminBanks]);
 
     const banks = adminBanksData?.getAdminBanks || [];
-    const defaultBankId = banks?.find(b => b.isActive)?.id || (banks?.[0]?.id ?? null);
+    const defaultBankId = banks?.find(b => b.isActive)?.id
 
     useEffect(() => {
         setValue(defaultBankId);
