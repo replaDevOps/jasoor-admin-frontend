@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import { DeleteModal, MaskedAccount } from '../../Ui';
 import { AddNewBankAccount } from '../modal';
 import { gql, useMutation, useLazyQuery } from '@apollo/client';
-import { GET_SETTINGS } from '../../../graphql/query';
 import { GETADMINBANK } from '../../../graphql/query/user';
 
 const { Title, Text } = Typography
@@ -77,6 +76,7 @@ const BankAccountCard = ({ settingId }) => {
     const data = banks?.map((b, index) => ({
         id: b.id,
         title: b.isActive ? 'Default' : `Account ${index + 1}`,
+        accountTitle: b?.accountTitle,
         bankname: b.bankName,
         accountno: b.accountNumber,
         ibanNo: b.iban

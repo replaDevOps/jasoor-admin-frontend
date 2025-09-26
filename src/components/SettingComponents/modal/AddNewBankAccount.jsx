@@ -9,15 +9,15 @@ import { message } from 'antd'
 
 const { Title, Text } = Typography
 const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
-
+    
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm()
-
+    console.log("vis", edititem)
     useEffect(() => {
     if (visible && edititem) {
         form.setFieldsValue({
             bankname: edititem?.bankname,
-            accountName: edititem?.accountno,
+            accountName: edititem?.accountTitle,
             ibanNumber: edititem?.ibanNo,
         });
     } else {
@@ -77,6 +77,8 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
     }
 
     return (
+        <>
+        {contextHolder}
         <Modal
             title={null}
             open={visible}
@@ -178,6 +180,7 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
             </div>
             <Divider className='my-3 bg-light-brand' />
         </Modal>
+        </>
     )
 }
 
