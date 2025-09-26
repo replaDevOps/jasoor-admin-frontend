@@ -152,6 +152,7 @@ const Sidebar = () => {
         break;
       case '18':
         navigate("/settings", { replace: true });
+        break;
       case '19':
         navigate("/dsaterms", { replace: true });
         break;
