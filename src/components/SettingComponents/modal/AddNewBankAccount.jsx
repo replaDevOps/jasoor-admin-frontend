@@ -12,7 +12,6 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
     
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm()
-    console.log("vis", edititem)
     useEffect(() => {
     if (visible && edititem) {
         form.setFieldsValue({

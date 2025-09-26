@@ -203,6 +203,7 @@ const GETADMINBANK = gql`
       accountTitle
       bankName
       iban
+      isActive
       accountNumber
       createdAt
     }
