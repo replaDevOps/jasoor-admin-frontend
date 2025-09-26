@@ -124,25 +124,27 @@ const BankAccountCard = ({ settingId }) => {
                                                         </Flex>
                                                     </Flex>
                                                 </Flex>
-                                                <Dropdown
-                                                    menu={{
-                                                        items: [
-                                                            { label: <NavLink onClick={(e) => {e.preventDefault();e.stopPropagation();setVisible(true);setEditItem(items)}}>Edit</NavLink>, key: '1' },
-                                                            { label: <NavLink onClick={(e) => {e.preventDefault();e.stopPropagation();setDeleteItem(true);setDeleteBankId(items.id);}}>Delete</NavLink>, key: '2' },
-                                                        ],
-                                                    }}
-                                                    trigger={['click']}
-                                                >
-                                                    <Button 
-                                                        aria-labelledby='action button' 
-                                                        className="bg-transparent border0 p-0"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
+                                                {items.id !== value && (
+                                                    <Dropdown
+                                                        menu={{
+                                                            items: [
+                                                                { label: <NavLink onClick={(e) => {e.preventDefault();e.stopPropagation();setVisible(true);setEditItem(items)}}>Edit</NavLink>, key: '1' },
+                                                                { label: <NavLink onClick={(e) => {e.preventDefault();e.stopPropagation();setDeleteItem(true);setDeleteBankId(items.id);}}>Delete</NavLink>, key: '2' },
+                                                            ],
                                                         }}
+                                                        trigger={['click']}
                                                     >
-                                                        <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
-                                                    </Button>
-                                                </Dropdown>
+                                                        <Button 
+                                                            aria-labelledby='action button' 
+                                                            className="bg-transparent border0 p-0"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                            }}
+                                                        >
+                                                            <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
+                                                        </Button>
+                                                    </Dropdown>
+                                                )}
                                             </Flex>
                                         </Card>
                                     </Col>
