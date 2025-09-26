@@ -17,6 +17,7 @@
     "antd": "^5.26.6",
     "apexcharts": "^5.3.1",
     "apollo-link-ws": "^1.0.20",
+    "axios": "^1.12.2",
     "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.13",
     "graphql": "^16.11.0",

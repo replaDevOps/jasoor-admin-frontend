@@ -1,28 +1,42 @@
+import { useEffect, useState } from "react";
 import { Avatar, Card, Col, Flex, Row, Typography } from 'antd';
 import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../../PageComponents';
+import axios from "axios";
 
 const { Text } = Typography
 const TrafficByCityDonut = () => {
+  const [seriesData, setSeriesData] = useState([]);
+  const [labelData, setLableData] = useState([]);
+  const colorPalette = [
+    '#FF4C00', '#D024B1', '#FFA600', '#953DCA', '#1D4ED8',
+    '#FF5C4E', '#FF3470', '#14AE5C', '#D00000',
+    '#FF822D', '#8A38F5', '#F71691', '#00BFFF',
+    '#32CD32', '#FF1493', '#FFD700'
+  ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("https://verify.jusoor-sa.co/api/trefficbycity");
+        if (data.success) {
+          setSeriesData(data.data.series);
+          setLableData(data.data.labels);
+        }
+      } catch (err) {
+        console.error("Failed to load traffic by city:", err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const chartData = {
-    series: [15, 18, 20, 16, 28, 10, 12, 14, 16, 18],
+    series: seriesData,
     options: {
       chart: {
         type: 'donut',
       },
-      labels: [
-        'Restaurants & Cafes',
-        'Retail Services',
-        'Health, Beauty & Fitness',
-        'Tech & Software',
-        'Digital Businesses',
-        'Education Services',
-        'Consulting & Professional Services',
-        'Real Estate & Construction',
-        'Industrial Businesses',
-        'Automotive, & Logistics',
-      ],
+      labels: labelData,
       dataLabels: {
         enabled: false,
       },
@@ -32,11 +46,7 @@ const TrafficByCityDonut = () => {
       legend: {
         show: false,
       },
-      colors: [
-        '#FF4C00', '#D024B1', '#FFA600', '#953DCA', '#1D4ED8',
-        '#FF5C4E', '#FF3470', '#FF5C4E', '#14AE5C', '#D00000',
-        '#FF822D', '#8A38F5', '#F71691'
-      ],
+      colors: colorPalette.slice(0, labelData?.length),
       plotOptions: {
         pie: {
           donut: {
@@ -47,73 +57,11 @@ const TrafficByCityDonut = () => {
     },
   };
 
-  const data = [
-    {
-      id:1,
-      color:'#1D4ED8',
-      title:'Riyadh'
-    },
-    {
-      id:2,
-      color:'#953DCA',
-      title:'Makkah'
-    },
-    {
-      id:3,
-      color:'#FFA600',
-      title:'Eastern'
-    },
-    {
-      id:4,
-      color:'#D024B1',
-      title:'Al-Madinah'
-    },
-    {
-      id:5,
-      color:'#FF4C00',
-      title:'Asir'
-    },
-    {
-      id:6,
-      color:'#D00000',
-      title:'Tabuk'
-    },
-    {
-      id:7,
-      color:'#14AE5C',
-      title:'Hail'
-    },
-    {
-      id:8,
-      color:'#FF5C4E',
-      title:'Al-Jouf'
-    },
-    {
-      id:9,
-      color:'#FF3470',
-      title:' Al-Bahah'
-    },
-    {
-      id:10,
-      color:'#FF5C4E',
-      title:'Jazan'
-    },
-    {
-      id:11,
-      color:'#FF822D',
-      title:'Najran'
-    },
-    {
-      id:12,
-      color:'#8A38F5',
-      title:'Northern Borders'
-    },
-    {
-      id:13,
-      color:'#F71691',
-      title:'Al-Qassim'
-    },
-  ]
+  const data = labelData.map((title, idx) => ({
+    id: idx + 1,
+    color: colorPalette[idx % colorPalette.length],
+    title,
+  }));
 
   return (
     <Card className='shadow-d radius-12 h-100'>
