@@ -51,16 +51,15 @@ const BankAccountCard = ({ settingId }) => {
     });
 
     const [deleteBankMutation, { loading: deleteLoading }] = useMutation(DELETEBANK, {
-        refetchQueries: [{ query: GETADMINBANK }],
-        awaitRefetchQueries: true,
         onCompleted: () => {
-            messageApi.success('Bank deleted successfully');
             setDeleteItem(false);
             setDeleteBankId(null);
+            messageApi.success('Bank deleted successfully');
         },
         onError: (err) => {
             messageApi.error(err.message);
         },
+        refetchQueries: [{ query: GETADMINBANK }],
     });
 
     const onChange = async e => {
@@ -75,7 +74,7 @@ const BankAccountCard = ({ settingId }) => {
 
     const data = banks?.map((b, index) => ({
         id: b.id,
-        title: b.isActive ? 'Default' : `Account ${index + 1}`,
+        title: b.isActive ? 'By Default' : `Account ${index + 1}`,
         accountTitle: b?.accountTitle,
         bankname: b.bankName,
         accountno: b.accountNumber,
@@ -85,7 +84,7 @@ const BankAccountCard = ({ settingId }) => {
     return (
         <>
             {contextHolder}
-            <Spin spinning={mutationLoading || deleteLoading || banksLoading} tip={mutationLoading ? "Updating..." : deleteLoading ? "Deleting..." : banksLoading ? "Loading..." : undefined}>
+            <Spin spinning={mutationLoading || banksLoading} tip={mutationLoading ? "Updating..." : banksLoading ? "Loading..." : undefined}>
                 <Card className='radius-12 border-gray'>
                     <Flex gap={10} align='center' justify='space-between' className='mb-3'>
                         <Title level={5} className='m-0'>
@@ -96,16 +95,23 @@ const BankAccountCard = ({ settingId }) => {
                         </Button>
                     </Flex>
                     <Radio.Group
-                        onChange={onChange}
                         value={value}
                         className='w-100'
-                        disabled={mutationLoading || deleteLoading}
+                        disabled={mutationLoading}
                     >
                         <Row gutter={[24,12]}>
                             {
                                 data?.map((items)=>
                                     <Col span={24} key={items.id}>
-                                        <Card className='border-gray bg-transparent card-cs cursor' onClick={() => onChange({ target: { value: items.id } })}>
+                                        <Card
+                                            className={`border-gray bg-transparent card-cs ${items.id === value ? 'cursor-not-allowed' : 'cursor'}`}
+                                            onClick={() => {
+                                                if (items.id !== value) {
+                                                    onChange({ target: { value: items.id } });
+                                                }
+                                            }}
+                                            style={items.id === value ? { pointerEvents: 'none', opacity: 0.7 } : {}}
+                                        >
                                             <Flex justify='space-between' className='w-100' align='center' gap={10}>
                                                 <Flex gap={10} align='center'>
                                                     <Radio value={items.id}>{items.title}</Radio>
@@ -159,6 +165,7 @@ const BankAccountCard = ({ settingId }) => {
                 subtitle='Are you sure you want to delete this bank account? 
                 This action cannot be undone, and any active deals won’t be able to send payments to this account.'
                 type='danger'
+                loading={deleteLoading}
                 onConfirm={() => {
                     if (deleteBankId) {
                         deleteBankMutation({ variables: { deleteBankId } });
