@@ -2,13 +2,14 @@ import { Button, Card, Col, Divider, Flex, Form, Image, Modal, Row, Typography }
 import { MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
 import { useEffect } from 'react'
-import { ADD_ADMIN_BANK } from '../../../graphql/mutation'
-import { useMutation } from '@apollo/client'
-import { GET_SETTINGS } from '../../../graphql/query'
+import { ADD_ADMIN_BANK, UPDATEBANK } from '../../../graphql/mutation'
+import { gql, useMutation } from '@apollo/client';
+import { GET_SETTINGS, GETADMINBANK } from '../../../graphql/query'
 import { message } from 'antd'
 
 const { Title, Text } = Typography
 const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
+
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm()
 
@@ -24,11 +25,11 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
     }
     }, [visible, edititem]);
 
-    const [addBank, { loading }] = useMutation(ADD_ADMIN_BANK, {
-        refetchQueries: [{ query: GET_SETTINGS }], 
+    const [addBank, { loading: addLoading }] = useMutation(ADD_ADMIN_BANK, {
+        refetchQueries: [{ query: GETADMINBANK }], 
         awaitRefetchQueries: true,
         onCompleted: () => {
-            messageApi.success(edititem ? 'Bank account updated successfully!' : 'Bank account added successfully!');
+            messageApi.success('Bank account added successfully!');
             onClose();
         },
         onError: (err) => {
@@ -36,18 +37,43 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
         }
     });
 
+    const [updateBank, { loading: updateLoading }] = useMutation(UPDATEBANK, {
+        refetchQueries: [{ query: GETADMINBANK }],
+        awaitRefetchQueries: true,
+        onCompleted: () => {
+            messageApi.success('Bank account updated successfully!');
+            onClose();
+        },
+        onError: (err) => {
+            messageApi.error(err.message || 'Failed to update bank account.');
+        }
+    });
+
     const onFinish = (values) => {
-        addBank({
-            variables: {
-                addAdminBankId: settingId,
-                input: {
-                    bankName: values.bankname,
-                    accountTitle: values.accountName,
-                    iban: values.ibanNumber,
-                },
-                // addAdminBankId: edititem?.id || null
-            }
-        });
+        if (edititem) {
+            updateBank({
+                variables: {
+                    updateBankId: edititem.id,
+                    input: {
+                        bankName: values.bankname,
+                        accountTitle: values.accountName,
+                        iban: values.ibanNumber,
+                    },
+                }
+            });
+        } else {
+            addBank({
+                variables: {
+                    addAdminBankId: settingId,
+                    input: {
+                        bankName: values.bankname,
+                        accountTitle: values.accountName,
+                        iban: values.ibanNumber,
+                        isAdmin: true,
+                    },
+                }
+            });
+        }
     }
 
     return (
@@ -63,8 +89,8 @@ const AddNewBankAccount = ({visible,onClose,edititem,settingId}) => {
                     <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
                         Cancel
                     </Button>
-                    <Button aria-labelledby='submit button' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
-                        {edititem ? 'Update':'Save Account'}
+                    <Button aria-labelledby='submit button' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()} disabled={addLoading || updateLoading}>
+                        {edititem ? (updateLoading ? 'Updating...' : 'Update') : (addLoading ? 'Saving...' : 'Save Account')}
                     </Button>
                 </Flex>
             }

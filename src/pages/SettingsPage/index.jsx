@@ -11,13 +11,12 @@ const SettingsPage = () => {
       commissionRate: data.getSetting.commissionRate,
       facebook: data.getSetting.faceBook,
       instagram: data.getSetting.instagram,
-      twitter: data.getSetting.x, // your backend calls this 'x', not 'twitter'
+      twitter: data.getSetting.x,
       email: data.getSetting.email,
       whatsapp: data.getSetting.whatsApp
     }
   : null;
 
-  const banks = data?.getSetting?.banks || [];
   const settingId = comssionSocial ? comssionSocial.id : null;
         
     return (
@@ -25,7 +24,7 @@ const SettingsPage = () => {
             <ModuleTopHeading level={4}  name='Settings' />
             <CommissionSocial comssionSocial={comssionSocial} />
             <PasswordManager />
-            <BankAccountCard banks={banks} settingId={settingId} />
+            <BankAccountCard settingId={settingId} />
         </Flex>
     )
 }

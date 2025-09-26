@@ -197,16 +197,16 @@ query GetFavoritBusiness {
 `
 
 const GETADMINBANK = gql`
-query GetAdminBanks {
-  getAdminBanks {
-    id
-    accountTitle
-    bankName
-    iban
-    accountNumber
-    createdAt
+  query GetAdminBanks {
+    getAdminBanks {
+      id
+      accountTitle
+      bankName
+      iban
+      accountNumber
+      createdAt
+    }
   }
-}
 `
 
 const GETADMINACTIVEBANK = gql`
@@ -324,13 +324,6 @@ query GetSetting {
     whatsApp
     x
     email
-    banks {
-      id
-      accountTitle
-      bankName
-      accountNumber
-      iban
-    }
   }
 }
 `
@@ -405,6 +398,7 @@ query GetUserActiveBanks($getUserActiveBanksId: ID) {
   }
 }
 `
+
 export {
     ME,
     NOTIFICATION,
