@@ -68,7 +68,7 @@ const BusinesslIstingPage = () => {
               </Col>
               <Col span={24}>
                 <BusinessListingTable
-                  businesses={data?.getAllBusinesses?.businesses || []}
+                  businesses={data?.getAdminBusinesses?.businesses || []}
                   totalCount={totalCount}
                   loading={loading}
                   page={page}
