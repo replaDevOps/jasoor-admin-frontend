@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 
 const { Title, Text, Paragraph } = Typography;
 const LoginPage = () => {
-     const {t, i18n}= useTranslation()
+    const {t, i18n}= useTranslation()
     const navigate = useNavigate()
     const [messageApi, contextHolder] = message.useMessage();
     const [loginUser, { loading, error }] = useMutation(LOGIN);
@@ -61,46 +61,45 @@ const LoginPage = () => {
           console.error("Login error:", error);
           messageApi.error("Login failed: Something went wrong");
         }
-      };
+    };
+    
     const handleChange= (value)=>{
-        alert(value)
         setLanguage(value)
         localStorage.setItem("lang", value)
         i18n?.changeLanguage(value)
         window.location.href='/'
     }
 
-
-      const lang = [
-            {
-              key: "1",
-              label: (
-                <Space>
-                  <Image src="assets/icons/en.png" width={20} alt="English" fetchPriority="high" preview={false} />
-                  <Text className='fs-13'>EN</Text>
-                </Space>
-              ),
-              onClick: () =>{
-                setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
-                setLanguage("en")
-                handleChange("en")
-              }
-            },
-            {
-              key: "2",
-              label: (
-                <Space>
-                  <Image src="assets/icons/ar.png" width={20} alt="Arabic" fetchPriority="high" preview={false} />
-                  <Text className='fs-13'>AR</Text>
-                </Space>
-              ),
-              onClick: () =>{
-                setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
-                setLanguage("ar")
-                handleChange("ar")  
-              }
-            },
-          ];
+    const lang = [
+        {
+            key: "1",
+            label: (
+            <Space>
+                <Image src="assets/icons/en.png" width={20} alt="English" fetchPriority="high" preview={false} />
+                <Text className='fs-13'>EN</Text>
+            </Space>
+            ),
+            onClick: () =>{
+            setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+            setLanguage("en")
+            handleChange("en")
+            }
+        },
+        {
+            key: "2",
+            label: (
+            <Space>
+                <Image src="assets/icons/ar.png" width={20} alt="Arabic" fetchPriority="high" preview={false} />
+                <Text className='fs-13'>AR</Text>
+            </Space>
+            ),
+            onClick: () =>{
+            setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+            setLanguage("ar")
+            handleChange("ar")  
+            }
+        },
+    ];
 
     return (
         <>
@@ -122,30 +121,30 @@ const LoginPage = () => {
 
                         <Form layout="vertical" form={form} onFinish={handleFinish} requiredMark={false}>
                             <MyInput 
-                                label="Email Address" 
+                                label={t("Email Address")}
                                 name="email" 
                                 required 
                                 message="Please enter email address" 
-                                placeholder="Enter Email Address" 
+                                placeholder={t("Enter Email Address" )}
                             />
                             <MyInput 
-                                label="Password" 
+                                label={t("Password")}
                                 type="password" 
                                 name="password" 
                                 required 
                                 message="Please enter password" 
-                                placeholder="Enter Password" 
+                                placeholder={t("Enter Password")}
                             />
                             <Flex justify="space-between" className="mb-3">
-                                <Checkbox>Remember Me</Checkbox>
+                                <Checkbox>{t("Remember Me")}</Checkbox>
                                 <NavLink to={"/forgotpassword"} className="fs-13 text-brand">
-                                    Forget Password?
+                                    {t("Forgot Password?")}
                                 </NavLink>
                             </Flex>
                             <Button aria-labelledby='Sign In' htmlType="submit" type="primary" className="btnsave bg-dark-blue fs-16" block 
                                 // loading={loading}
                             >
-                                Sign In
+                                {t("Sign In")}
                             </Button>
                         </Form>
                     </div>
