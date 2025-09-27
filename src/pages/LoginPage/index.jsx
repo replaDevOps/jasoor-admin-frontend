@@ -5,11 +5,13 @@ import { useMutation } from "@apollo/client";
 import { LOGIN } from "../../graphql/mutation/login";
 import { useNavigate } from "react-router-dom";
 import { MyInput } from "../../components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DownOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text, Paragraph } = Typography;
 const LoginPage = () => {
+     const {t, i18n}= useTranslation()
     const navigate = useNavigate()
     const [messageApi, contextHolder] = message.useMessage();
     const [loginUser, { loading, error }] = useMutation(LOGIN);
@@ -18,7 +20,26 @@ const LoginPage = () => {
         key: "1",
         label: "EN",
         icon: "assets/icons/en.png",
-    });
+    })
+    const [language, setLanguage]= useState()
+    useEffect(()=>{
+        let lang= localStorage.getItem("lang")
+        setLanguage(lang  || 'en')
+        i18n.changeLanguage(lang  || 'en')
+        if(lang === "ar"){
+            setSelectedLang({
+                key: "2",
+                label: "AR",
+                icon: "assets/icons/ar.png",
+            })
+        }else{
+            setSelectedLang({
+                key: "1",
+                label: "EN",
+                icon: "assets/icons/en.png",
+            })
+        }
+    }, [])
 
     const handleFinish = async (values) => {
         try {
@@ -41,6 +62,14 @@ const LoginPage = () => {
           messageApi.error("Login failed: Something went wrong");
         }
       };
+    const handleChange= (value)=>{
+        alert(value)
+        setLanguage(value)
+        localStorage.setItem("lang", value)
+        i18n?.changeLanguage(value)
+        window.location.href='/'
+    }
+
 
       const lang = [
             {
@@ -51,8 +80,11 @@ const LoginPage = () => {
                   <Text className='fs-13'>EN</Text>
                 </Space>
               ),
-              onClick: () =>
+              onClick: () =>{
                 setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+                setLanguage("en")
+                handleChange("en")
+              }
             },
             {
               key: "2",
@@ -62,8 +94,11 @@ const LoginPage = () => {
                   <Text className='fs-13'>AR</Text>
                 </Space>
               ),
-              onClick: () =>
+              onClick: () =>{
                 setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+                setLanguage("ar")
+                handleChange("ar")  
+              }
             },
           ];
 
@@ -79,9 +114,9 @@ const LoginPage = () => {
                             </div>
                         </NavLink>
 
-                        <Title level={3} className="mb-1">Welcome Back, Admin</Title>
+                        <Title level={3} className="mb-1">{t("Welcome Back, Admin")}</Title>
                         <Paragraph>
-                            Please Sign In to access your admin dashboard and manage platform activities.
+                            {t("Please Sign In to access your admin dashboard and manage platform activities.")}
                         </Paragraph>
                         <Divider />
 
@@ -116,7 +151,13 @@ const LoginPage = () => {
                     </div>
                 </Col>
                 <Col xs={0} md={12} lg={8} className="signup-visual-container">
-                    <Dropdown menu={{ items: lang }} trigger={["click"]} className="lang-dropdown">
+                    <Dropdown 
+                        menu={{ items: lang }} 
+                        trigger={["click"]} 
+                        className="lang-dropdown"
+                        onChange={handleChange}
+                        value={language}
+                    >
                         <Button
                             onClick={(e) => e.preventDefault()}
                             className="bg-transparent btn-outline btn p-2 border-white"
