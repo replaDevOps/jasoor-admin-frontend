@@ -4,6 +4,7 @@ import { ModuleTopHeading } from '../../PageComponents';
 import { GET_BUSINESS_CATEGORY_COUNT } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
 import { Spin } from "antd";
+import { t } from 'i18next';
 
 const { Text } = Typography
 const BusinessCategoryDonut = () => {
@@ -114,7 +115,7 @@ const BusinessCategoryDonut = () => {
     <div>
       <Card className='shadow-d radius-12'>
         <Flex className='pb-2'>
-          <ModuleTopHeading level={4} name='Business Categories' />
+          <ModuleTopHeading level={4} name={t('Business Categories')} />
         </Flex>
         <Row gutter={[24,24]} align={'middle'}>
           <Col lg={{span: 10}} md={{span: 24}} xs={{span: 24}} sm={{span: 24}}>

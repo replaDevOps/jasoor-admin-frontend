@@ -11,6 +11,7 @@ import {GET_CATEGORIES_BY_ID} from '../../../graphql/query'
 import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
 import { TableContent } from '../../BusinesslistingComponents/structure/TableContent';
+import { t } from 'i18next';
 
 const mapDensity = (value) => {
     if (!value) return null;
@@ -199,13 +200,13 @@ const AddNewCategory = () => {
                         {
                             title: (
                                 <Text className="cursor fs-13 text-gray" onClick={() => navigate("/categorymanagement")}>
-                                    Categories Management
+                                    {t("Categories Management")}
                                 </Text>
                             ),
                         },
                         {
                             title: <Text className="fw-500 fs-14 text-black">
-                                {editdata?.name ? editdata?.name : 'Add New Category' }
+                                {editdata?.name ? editdata?.name : t('Add New Category') }
                             </Text>,
                         },
                     ]}
@@ -216,15 +217,15 @@ const AddNewCategory = () => {
                             <ArrowLeftOutlined />
                         </Button>
                         <Title level={4} className="fw-500 m-0">
-                            {editdata?.name ? editdata?.name : 'Add New Category' }
+                            {editdata?.name ? editdata?.name : t('Add New Category') }
                         </Title>
                     </Flex>
                     <Flex gap={10}>
                         <Button aria-labelledby='Cancel' className="btncancel" onClick={() => navigate("/categorymanagement")}>
-                            Cancel      
+                            {t("Cancel")}      
                         </Button>
                         <Button aria-labelledby='submit button' className="btnsave brand-bg border0 text-white" onClick={()=>form.submit()}>
-                            {    id ? 'Update' : 'Save'    }
+                            {    id ? t('Update') : t('Save')    }
                         </Button>
                     </Flex>
                 </Flex>
@@ -233,26 +234,26 @@ const AddNewCategory = () => {
                         <Row gutter={[24, 14]}>
                             <Col span={24}>
                                 <Title level={5} className="m-0">
-                                    Category Details
+                                    {t("Category Details")}
                                 </Title>
                             </Col> 
                             <Col xs={24} sm={24} md={12}>
                                 <MyInput
-                                    label="Business Title"
+                                    label={t("Business Title")}
                                     name="title"
                                     required
                                     message="Please enter title"
-                                    placeholder="Write business name"
+                                    placeholder={t("Write business name")}
                                 />
                             </Col>
                             <Col xs={24} sm={24} md={12}>
                                 <MySelect
-                                    label="Business Category"
+                                    label={t("Business Category")}
                                     name="category"
                                     required
-                                    message="Choose business category"
+                                    message={t("Choose business category")}  
                                     options={categoriesItems}
-                                    placeholder="Choose business category"
+                                    placeholder={t("Choose business category")}
                                 />                        
                             </Col>  
                             <Col span={24}>
@@ -261,16 +262,16 @@ const AddNewCategory = () => {
                                 label={
                                 <Flex vertical>
                                     <Title level={5} className="m-0 fw-500">
-                                    Category Icon
+                                    {t("Category Icon")}
                                     </Title>
                                     <Text className="text-gray">
-                                    Accepted formats: JPEG, JPG & PNG, Max size: 5MB per file. Aspect Ratio: 1:1.
+                                    {t("Accepted formats")}: JPEG, JPG & PNG, Max size: 5MB per file. Aspect Ratio: 1:1.
                                     </Text>
                                 </Flex>
                                 }
                                 form={form}
                                 name={'uploadcr'}
-                                title={'Upload'}
+                                title={t('Upload')}
                                 onUpload={async (file) => {
                                 const fileUrl = await handleSingleFileUpload(file);
                                 if (fileUrl) {
@@ -295,7 +296,7 @@ const AddNewCategory = () => {
                 <Card className='radius-12 border-gray'>
                     <Flex vertical gap={10} className='alignStart'>
                         <Title level={5} className="m-0">
-                            Category Stats & Profitability
+                            {t("Category Stats & Profitability")}
                         </Title>
                         <TableContent x={2000} data={categoryProfData} columns={categoryStatsProfColumn(handleInputChange)} />
                     </Flex>

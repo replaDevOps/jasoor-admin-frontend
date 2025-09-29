@@ -8,6 +8,7 @@ import { GETROLES } from '../../../graphql/query/user';
 import { UPDATE_ROLE, DELETE_ROLE } from '../../../graphql/mutation';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { TableLoader } from '../../Ui/TableLoader';
+import { t } from 'i18next';
 
 const { Text } = Typography
 const RolePermissionTable = () => {
@@ -63,21 +64,21 @@ const RolePermissionTable = () => {
 
   const rolepermissionColumn = (setDeleteItem, navigate) => [
     {
-      title: "Role Name",
+      title: t("Role Name"),
       dataIndex: "name",
     },
     {
-      title: "Status",
+      title: t("Status"),
       dataIndex: "isActive",
       render: (isActive) =>
         isActive ? (
-          <Text className="btnpill fs-12 success">Active</Text>
+          <Text className="btnpill fs-12 success">{t("Active")}</Text>
         ) : (
-          <Text className="btnpill fs-12 inactive">Inactive</Text>
+          <Text className="btnpill fs-12 inactive">{t("Inactive")}</Text>
         ),
     },
     {
-      title: "Action",
+      title: t("Action"),
       key: "action",
       fixed: "right",
       width: 100,
@@ -95,7 +96,7 @@ const RolePermissionTable = () => {
                         navigate("/addrolepermission/" + row.key);
                       }}
                     >
-                      Edit
+                      {t("Edit")}
                     </NavLink>
                   ),
                   key: "1",
@@ -108,7 +109,7 @@ const RolePermissionTable = () => {
                         setRoleId(row.key);
                       }}
                     >
-                      Delete
+                      {t("Delete")}
                     </NavLink>
                   ),
                   key: "2",
@@ -128,7 +129,7 @@ const RolePermissionTable = () => {
                         });
                       }}
                     >
-                      {row.isActive ? "Deactivate" : "Activate"}
+                      {row.isActive ? t("Deactivate") : t("Activate")}
                     </NavLink>
                   ),
                   key: "3",
@@ -155,9 +156,9 @@ const RolePermissionTable = () => {
   ];
 
   const statusItems = [
-    { key: "1", label: "All" },
-    { key: "2", label: "Active" },
-    { key: "3", label: "Inactive" },
+    { key: "1", label: t("All") },
+    { key: "2", label: t("Active") },
+    { key: "3", label: t("Inactive") },
   ];
 
   const handleStatusClick = ({ key }) => {
@@ -234,7 +235,7 @@ const RolePermissionTable = () => {
                 <Flex gap={5} wrap>
                   <SearchInput
                     name="name"
-                    placeholder="Search"
+                    placeholder={t("Search")}
                     prefix={
                       <img
                         src="/assets/icons/search.png"
@@ -258,7 +259,7 @@ const RolePermissionTable = () => {
                       className="btncancel px-3 filter-bg fs-13 text-black"
                     >
                       <Flex justify="space-between" align="center" gap={30}>
-                        {selectedStatus}
+                        {t(selectedStatus)}
                         <DownOutlined />
                       </Flex>
                     </Button>

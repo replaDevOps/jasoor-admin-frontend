@@ -2,6 +2,7 @@ import { Button, Dropdown, Flex, Space, Tooltip, Typography } from "antd";
 import { NavLink } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
 import { priorityItems } from "../shared";
+import { t } from "i18next";
 
 const { Text } = Typography
 
@@ -80,7 +81,7 @@ const offertableColumn = [
 
 const categoryStatsProfColumn = (handleInputChange) => [
     {
-        title: 'Region Name',
+        title: t('Region Name'),
         dataIndex: 'regionname',
     },
     {
@@ -140,7 +141,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
         )
     },
     {
-        title: 'Local Business Growth',
+        title: t('Local Business Growth'),
         dataIndex: 'localbusinessgrowth',
         render: (value, record, index) => (
             <MyInput
@@ -154,7 +155,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
         )
     },
     {
-        title: 'Population Density',
+        title: t('Population Density'),
         dataIndex: 'populationdensity',
         render: (value, record, index) => (
             <MySelect
@@ -167,7 +168,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
         )
     },
     {
-        title: 'Industry Demand',
+        title: t('Industry Demand'),
         dataIndex: 'industrydemand',
         render: (value, record, index) => (
             <MySelect
@@ -307,31 +308,31 @@ const pushnotifyColumn = ({setVisible,setViewNotify ,setEditItem,setDeleteItem})
 ];
 
 
-const financeColumn =  [
-    {
-        title: 'Business Title',
-        dataIndex: 'businessTitle',
-    },
-    {
-        title: 'Seller Name',
-        dataIndex: 'sellerName',
-    },
-    {
-        title: 'Buyer Name',
-        dataIndex: 'buyerName',
-    },
-    {
-        title: 'Deal Amount',
-        dataIndex: 'dealAmount',
-    },
-    {
-        title: 'Commission Earned',
-        dataIndex: 'commissionEarn',
-    },
-    {
-        title: 'Date & Time',
-        dataIndex: 'dateTime',
-    },
+const financeColumn = [
+  {
+    title: t("Business Title"),
+    dataIndex: "businessTitle",
+  },
+  {
+    title: t("Seller Name"),
+    dataIndex: "sellerName",
+  },
+  {
+    title: t("Buyer Name"),
+    dataIndex: "buyerName",
+  },
+  {
+    title: t("Deal Amount"),
+    dataIndex: "dealAmount",
+  },
+  {
+    title: t("Commission Earned"),
+    dataIndex: "commissionEarn",
+  },
+  {
+    title: t("Date & Time"),
+    dataIndex: "dateTime",
+  },
 ];
 
 

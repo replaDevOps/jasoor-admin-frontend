@@ -6,6 +6,7 @@ import { CustomPagination } from '../../Ui';
 import { GET_ALL_CONTACT_US } from '../../../graphql/query/user';
 import { useLazyQuery } from '@apollo/client';
 import { TableLoader } from '../../Ui/TableLoader';
+import { t } from 'i18next';
 
 const { Text } = Typography;
 
@@ -69,9 +70,9 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem, setRefetch 
   };
 
   const statusItems = [
-    { key: '1', label: 'All' },
-    { key: '2', label: 'Send' },
-    { key: '3', label: 'Pending' },
+    { key: '1', label: t('All') },
+    { key: '2', label: t('Send') },
+    { key: '3', label: t('Pending') },
   ];
 
   const handleStatusClick = ({ key }) => {
@@ -93,7 +94,7 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem, setRefetch 
                 <Flex gap={5} wrap>
                   <SearchInput
                     name="name"
-                    placeholder="Search"
+                    placeholder={t("Search")}
                     prefix={<img src="/assets/icons/search.png" width={14} alt="search icon" fetchPriority="high" />}
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
                     onChange={(e) => setSearchValue(e.target.value)}
@@ -107,7 +108,7 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem, setRefetch 
                   >
                     <Button aria-labelledby="filter status" className="btncancel px-3 filter-bg fs-13 text-black">
                       <Flex justify="space-between" align="center" gap={30}>
-                        {selectedStatus}
+                        {t(selectedStatus)}
                         <DownOutlined />
                       </Flex>
                     </Button>
@@ -120,15 +121,15 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem, setRefetch 
             size="large"
             columns={[
               {
-                title: 'Full Name',
+                title: t('Full Name'),
                 dataIndex: 'name',
               },
               {
-                title: 'Email',
+                title: t('Email'),
                 dataIndex: 'email',
               },
               {
-                title: 'Massage Preview',
+                title: t('Massage Preview'),
                 dataIndex: 'msgPreview',
                 render: (msgPreview) => {
                   const words = msgPreview?.split(' ') || [];
@@ -142,11 +143,11 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem, setRefetch 
                 },
               },
               {
-                title: 'Date',
+                title: t('Date'),
                 dataIndex: 'date',
               },
               {
-                title: 'Reply Status',
+                title: t('Reply Status'),
                 dataIndex: 'status',
                 render: (status) =>
                   status === 1 ? (
@@ -156,7 +157,7 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem, setRefetch 
                   ),
               },
               {
-                title: 'Action',
+                title: t('Action'),
                 key: 'action',
                 fixed: 'right',
                 width: 100,

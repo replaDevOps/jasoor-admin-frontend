@@ -2,6 +2,7 @@ import { Col, Flex, Row, Typography } from 'antd'
 import { BusinessCategoryDonut, BusinessListBarChart, DashboardCards, ListingPriceBar, ListingRevenueBar } from '../../components'
 import { useQuery } from '@apollo/client';
 import {ME} from '../../graphql/query'
+import { t } from 'i18next';
 
 const { Text, Title } = Typography
 const Dashboard = () => {
@@ -28,7 +29,7 @@ const Dashboard = () => {
       <Flex vertical gap={24}>
         <Flex vertical gap={2}>
           <Text className='text-gray fs-13'>{today}</Text>
-          <Title level={3} className='m-0'>Hi  {data?.getUser?.name}!</Title>
+          <Title level={3} className='m-0'>{t("Hi")}  {data?.getUser?.name}!</Title>
         </Flex>
         <DashboardCards />
         <BusinessListBarChart />

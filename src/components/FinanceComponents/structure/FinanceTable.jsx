@@ -7,6 +7,7 @@ import moment from 'moment';
 import dayjs from 'dayjs';
 import {GET_COMPLETED_DEALS} from '../../../graphql/query/business';
 import { useQuery } from '@apollo/client';
+import { t } from 'i18next';
 
 const FinanceTable = () => {
     const [form] = Form.useForm();
@@ -50,7 +51,7 @@ const FinanceTable = () => {
                             <Col lg={{span: 7}} md={{span: 12}} span={24}>
                                 <SearchInput
                                     name='name'
-                                    placeholder='Search'
+                                    placeholder={t('Search')}
                                     prefix={<img src='/assets/icons/search.png' width={14} alt='search icon' fetchPriority="high" />}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                 />

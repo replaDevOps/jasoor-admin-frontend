@@ -4,6 +4,7 @@ import { ModuleTopHeading } from '../../PageComponents';
 import { GET_BUSINESS_REVENUE_TIER } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
 import { Spin } from "antd";
+import { t } from 'i18next';
 
 const ListingRevenueBar = () => {
 
@@ -17,7 +18,7 @@ const ListingRevenueBar = () => {
     const yAxisMax = Math.ceil(maxCount / 10) * 10; // round up to nearest 10 for nice scale
     
     const chartData = {
-        series: [{ name: 'Business Revenue', data: counts }],
+        series: [{ name: t('Business Revenue'), data: counts }],
         options: {
           chart: { type: 'bar', toolbar: { show: false } },
           plotOptions: { bar: { columnWidth: '40%', dataLabels: { position: 'top' } } },
@@ -53,7 +54,7 @@ const ListingRevenueBar = () => {
   return (
     <Card className='radius-12 border-gray'>
         <Flex align='center' wrap gap={10}>
-            <ModuleTopHeading level={4} name='Listings by Revenue' />
+            <ModuleTopHeading level={4} name={t('Listings by Revenue')} />
         </Flex>
         <div className='w-100 h-300'>
           <ReactApexChart
