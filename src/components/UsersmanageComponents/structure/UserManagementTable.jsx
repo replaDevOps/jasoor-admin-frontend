@@ -123,12 +123,13 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
             width: 100,
             render: (_, row) => {
                 const handleStatusChange = async () => {
+                    console.log("row.status",row.status)
                     try {
                         await updateUser({
                             variables: {
                                 input: {
                                     id: row.key, 
-                                    status: row.status,
+                                    status: row.status==='verified'? 'inactive' : 'verified',
                                 }
                             }
                         });
