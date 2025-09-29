@@ -88,7 +88,7 @@ const AddNotification = ({visible,onClose,edititem,viewnotify}) => {
 
     return (
         <>
-            <contextHolder />
+            {contextHolder}
             <Modal
                 title={null}
                 open={visible}

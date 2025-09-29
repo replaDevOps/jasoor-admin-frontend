@@ -1,9 +1,10 @@
-import { useState,useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Card, Flex, Form,Spin,message } from 'antd'
 import { EditorDescription, ModuleTopHeading } from '../../components';
 import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
 import { GETENDATERMS } from '../../graphql/query/queries';
+
 
 const EndaTermPage = () => {
     const [form] = Form.useForm();
@@ -19,9 +20,10 @@ const EndaTermPage = () => {
         }
     }, [data]);
 
-    const handleDescriptionChange = (value) =>{
+    const handleDescriptionChange = (value) => {
         setDescriptionData(value)
     }
+
 
     const onFinish = async () => {
         try {
@@ -60,7 +62,7 @@ const EndaTermPage = () => {
           console.error(err);
           messageApi.error("Failed to save terms");
         }
-      };
+    };
 
     if (creating || loading|| updating) {
         return (
@@ -69,6 +71,7 @@ const EndaTermPage = () => {
             </Flex>
         );
     }
+
 
     return (
         <>
@@ -90,7 +93,7 @@ const EndaTermPage = () => {
                     <EditorDescription
                         label={'Terms Content'} 
                         descriptionData={descriptionData}
-                        onChange={handleDescriptionChange}
+                        onChange={handleDescriptionChange}                  
                     />
                 </Form>
             </Card>

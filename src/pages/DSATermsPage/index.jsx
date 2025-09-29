@@ -1,6 +1,6 @@
 import { useState,useRef,useEffect } from 'react'
-import { Button, Card, Flex, Form,Spin,message,Tag,Input } from 'antd'
-import { ModuleTopHeading } from '../../components';
+import { Button, Card, Flex, Form,Spin,message,Tag } from 'antd'
+import { EditorDescription, ModuleTopHeading } from '../../components';
 import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
 import { GETDSATERMS } from '../../graphql/query/queries';
@@ -28,83 +28,75 @@ const DSATermsPage = () => {
         setDescriptionData(data?.getDSATerms?.dsaTerms?.content);
       }
   }, [data]);
+
+  const editorRef = useRef(null);
+
+    const handleDescriptionChange = (value) => {
+        setDescriptionData(value)
+    }
+
+    // Callback to get the editor reference
+    const handleEditorInit = (editor) => {
+        editorRef.current = editor;
+    }
+
   
 
-  const textareaRef = useRef(null);
-  const modules = {
-    toolbar: {
-        container: [
-            [{ 'font': [] }, { 'size': [] }],
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            [{ 'color': [] }, { 'background': [] }],
-            [{ 'script': 'sub'}, { 'script': 'super' }],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'indent': '-1'}, { 'indent': '+1' }],
-            [{ 'align': [] }],
-            ['blockquote', 'code-block'],
-            ['link', 'image', 'video'],
-            ['clean']
-        ],
-        handlers: {
-            // Add custom handlers if needed
-        }
-    }
-};
+  // const textareaRef = useRef(null);
 
-  const getTextAreaDOM = () => {
-    const r = textareaRef.current;
-    if (!r) return null;
-    // AntD exposes different internals depending on version; try the common ones then fallback to the ref itself
-    return r?.resizableTextArea?.textArea || r?.textArea || r?.input || r;
-  };
+  // const getTextAreaDOM = () => {
+  //   const r = textareaRef.current;
+  //   if (!r) return null;
+  //   // AntD exposes different internals depending on version; try the common ones then fallback to the ref itself
+  //   return r?.resizableTextArea?.textArea || r?.textArea || r?.input || r;
+  // };
 
-  const handleDescriptionChange = (e) => {
-      setDescriptionData(e.target.value);
-  };
+  // const handleDescriptionChange = (e) => {
+  //     setDescriptionData(e.target.value);
+  // };
 
-  const handleInsertTag = (tag) => {
-  const dom = getTextAreaDOM();
-  if (!dom) return;
+//   const handleInsertTag = (tag) => {
+//   const dom = getTextAreaDOM();
+//   if (!dom) return;
 
-  // ensure textarea has focus so selectionStart/End are meaningful
-  dom.focus();
+//   // ensure textarea has focus so selectionStart/End are meaningful
+//   dom.focus();
 
-  // read the *actual* value from the DOM (safer than relying on possibly-stale state)
-  const currentValue = typeof dom.value === 'string' ? dom.value : (descriptionData ?? '');
+//   // read the *actual* value from the DOM (safer than relying on possibly-stale state)
+//   const currentValue = typeof dom.value === 'string' ? dom.value : (descriptionData ?? '');
 
-  // safe selection handling: if selectionStart/End aren't numbers, default to end of text
-  const rawStart = typeof dom.selectionStart === 'number' ? dom.selectionStart : currentValue.length;
-  const rawEnd   = typeof dom.selectionEnd   === 'number' ? dom.selectionEnd   : rawStart;
+//   // safe selection handling: if selectionStart/End aren't numbers, default to end of text
+//   const rawStart = typeof dom.selectionStart === 'number' ? dom.selectionStart : currentValue.length;
+//   const rawEnd   = typeof dom.selectionEnd   === 'number' ? dom.selectionEnd   : rawStart;
 
-  // guard against reverse selections by normalizing start/end
-  const start = Math.min(rawStart, rawEnd);
-  const end   = Math.max(rawStart, rawEnd);
+//   // guard against reverse selections by normalizing start/end
+//   const start = Math.min(rawStart, rawEnd);
+//   const end   = Math.max(rawStart, rawEnd);
 
-  const tagText = `{{${tag}}}`;
-  const newValue = currentValue.slice(0, start) + tagText + currentValue.slice(end);
+//   const tagText = `{{${tag}}}`;
+//   const newValue = currentValue.slice(0, start) + tagText + currentValue.slice(end);
 
-  // update React state (controlled component)
-  setDescriptionData(newValue);
+//   // update React state (controlled component)
+//   setDescriptionData(newValue);
 
-  // After React has a chance to render the new value, set caret to after inserted tag.
-  // requestAnimationFrame is more reliable than tiny timeouts.
-  requestAnimationFrame(() => {
-    const caretPos = start + tagText.length;
-    if (typeof dom.setSelectionRange === 'function') {
-      try {
-        dom.setSelectionRange(caretPos, caretPos);
-      } catch (e) {
-        // some wrapped elements might still throw; fallback to assignments
-        dom.selectionStart = dom.selectionEnd = caretPos;
-      }
-    } else {
-      // fallback
-      dom.selectionStart = dom.selectionEnd = caretPos;
-    }
-    dom.focus();
-  });
-};
+//   // After React has a chance to render the new value, set caret to after inserted tag.
+//   // requestAnimationFrame is more reliable than tiny timeouts.
+//   requestAnimationFrame(() => {
+//     const caretPos = start + tagText.length;
+//     if (typeof dom.setSelectionRange === 'function') {
+//       try {
+//         dom.setSelectionRange(caretPos, caretPos);
+//       } catch (e) {
+//         // some wrapped elements might still throw; fallback to assignments
+//         dom.selectionStart = dom.selectionEnd = caretPos;
+//       }
+//     } else {
+//       // fallback
+//       dom.selectionStart = dom.selectionEnd = caretPos;
+//     }
+//     dom.focus();
+//   });
+// };
 
   const onFinish = async () => {
       try {
@@ -154,6 +146,32 @@ const DSATermsPage = () => {
       );
   }
 
+  const handleInsertTag = (tagKey) => {
+        const tagText = `{{${tagKey}}}`;
+
+        if (editorRef.current) {
+            const editor = editorRef.current;
+
+            // Force focus before inserting
+            editor.focus();
+
+            let range = editor.getSelection(true); // true = focus if not active
+            if (range) {
+            // Insert at current cursor position
+            editor.insertText(range.index, tagText, "user");
+            editor.setSelection(range.index + tagText.length);
+            } else {
+            // Fallback: append at end
+            const length = editor.getLength();
+            editor.insertText(length - 1, tagText, "user"); // before last \n
+            editor.setSelection(length - 1 + tagText.length);
+            }
+        } else {
+            // Fallback: update state
+            setDescriptionData((prev) => prev + tagText);
+        }
+    };
+
   return (
       <>
           {contextHolder}
@@ -185,18 +203,18 @@ const DSATermsPage = () => {
               </Card>
 
               <Card className='radius-12 border-gray'>
-                  <Form layout='vertical' form={form} requiredMark={false}>
-                      <Form.Item label="Terms Content" required>
-                          <Input.TextArea
-                              ref={textareaRef}
-                              value={descriptionData}
-                              onChange={handleDescriptionChange}
-                              rows={15}
-                              placeholder="Enter your terms and conditions here..."
-                              style={{ resize: 'vertical' }}
-                              modules={modules}
-                          />
-                      </Form.Item>
+                  <Form
+                      layout='vertical'
+                      form={form}
+                      // onFinish={onFinish} 
+                      requiredMark={false}
+                  >
+                      <EditorDescription
+                          label={'Terms Content'} 
+                          descriptionData={descriptionData}
+                          onChange={handleDescriptionChange}
+                          onEditorInit={handleEditorInit}                     
+                      />
                   </Form>
               </Card>
           </Flex>
