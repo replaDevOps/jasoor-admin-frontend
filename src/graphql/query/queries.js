@@ -36,8 +36,48 @@ query GetFAQs($search: String) {
   }
 }
 `
+const GETTERMSOFUSE = gql`
+query GetTerms {
+  getTerms {
+    id
+    term
+    arabicTerm
+  }
+}
+`
+const GETENDATERMS = gql`
+query GetNDATerms {
+  getNDATerms {
+    id
+    ndaTerm
+    arabicNdaTerm
+  }
+}
+`
+const GETDSATERMS = gql`
+query GetDSATerms {
+  getDSATerms {
+    id
+    dsaTerms
+    arabicNdaTerm
+  }
+}
+`
+const GETPRIVACYPOLICY = gql`
+query GetPrivacyPolicy {
+  getPrivacyPolicy {
+    id
+    policy
+    arabicPolicy
+  }
+}
+`
 export {
     GETARTICLES,
     GETARTICLE,
-    GETFAQ
+    GETFAQ,
+    GETTERMSOFUSE,
+    GETENDATERMS,
+    GETDSATERMS,
+    GETPRIVACYPOLICY
 }

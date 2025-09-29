@@ -3,12 +3,15 @@ import { MyInput } from "../../components";
 import { NavLink } from "react-router-dom";
 import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text, Paragraph } = Typography;
 
 const ForgotPassword = () => {
+    const {t, i18n}= useTranslation()
     const [form] = Form.useForm();
     const [ requestState, setRequestState ] = useState('request')
+    const [language, setLanguage]= useState()
     const [selectedLang, setSelectedLang] = useState({
         key: "1",
         label: "EN",
@@ -34,28 +37,40 @@ const ForgotPassword = () => {
         }
     };
 
+    const handleChange= (value)=>{
+        setLanguage(value)
+        localStorage.setItem("lang", value)
+        i18n?.changeLanguage(value)
+    }
+
     const lang = [
         {
-          key: "1",
-          label: (
+            key: "1",
+            label: (
             <Space>
-              <Image src="assets/icons/en.png" width={20} alt="English" fetchPriority="high" preview={false} />
-              <Text className='fs-13'>EN</Text>
+                <Image src="assets/icons/en.png" width={20} alt="English" fetchPriority="high" preview={false} />
+                <Text className='fs-13'>EN</Text>
             </Space>
-          ),
-          onClick: () =>
+            ),
+            onClick: () =>{
             setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+            setLanguage("en")
+            handleChange("en")
+            }
         },
         {
-          key: "2",
-          label: (
+            key: "2",
+            label: (
             <Space>
-              <Image src="assets/icons/ar.png" width={20} alt="Arabic" fetchPriority="high" preview={false} />
-              <Text className='fs-13'>AR</Text>
+                <Image src="assets/icons/ar.png" width={20} alt="Arabic" fetchPriority="high" preview={false} />
+                <Text className='fs-13'>AR</Text>
             </Space>
-          ),
-          onClick: () =>
+            ),
+            onClick: () =>{
             setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+            setLanguage("ar")
+            handleChange("ar")  
+            }
         },
     ];
 
@@ -79,14 +94,14 @@ const ForgotPassword = () => {
                         }
                     </div>
                     <Title level={3}>
-                        {requestState === 'request' && 'Forget Password'}
-                        {requestState === 'otp' && 'OTP'}
-                        {requestState === 'reset' && 'Set a New Password'}
+                        {requestState === 'request' && t('Forget Password')}
+                        {requestState === 'otp' && t('OTP')}
+                        {requestState === 'reset' && t('Set a New Password')}
                     </Title>
                     <Paragraph>
-                        {requestState === 'request' && 'Enter the email address to send you the OTP code.'}
-                        {requestState === 'otp' && 'Enter the 5 digit OTP code sent to your email abc****4@gmail.com'}
-                        {requestState === 'reset' && 'Your OTP has been verified. Please create a strong new password to secure your account.'}
+                        {requestState === 'request' && t('Enter the email address to send you the OTP code.')}
+                        {requestState === 'otp' && t('Enter the 5 digit OTP code sent to your email')}
+                        {requestState === 'reset' && t('Your OTP has been verified. Please create a strong new password to secure your account.')}
                     </Paragraph>
                     <Form 
                         layout="vertical" 
@@ -97,11 +112,11 @@ const ForgotPassword = () => {
                         {requestState === 'request' && (
                             <Col span={24}>
                                 <MyInput
-                                    label='Email Address'
+                                    label={t("Email Address")}
                                     name='email'
                                     required
-                                    message="Please enter Email Address"
-                                    placeholder='Enter Email Address'
+                                    message={t("Please enter Email Address")}
+                                    placeholder={t("Enter Email Address" )}
                                 />
                             </Col>
                         )}
@@ -110,11 +125,11 @@ const ForgotPassword = () => {
                                 <MyInput
                                     oTp
                                     length={5}
-                                    label={'OTP'}
+                                    label={t('OTP')}
                                     name='otp'
                                     type='number'
                                     required
-                                    message="Please enter the OTP sent to your email"
+                                    message= {t("Please enter the OTP sent to your email")}
                                     onKeyPress={(e) => {
                                         if (!/[0-9]/.test(e.key)) {
                                         e.preventDefault();
@@ -128,18 +143,18 @@ const ForgotPassword = () => {
                             <>
                                 <Col span={24}>
                                     <MyInput
-                                        label="New Password"
+                                        label={t("New Password")}
                                         type="password"
                                         name="password"
                                         size='large'
                                         required
                                         message={()=>{}}
-                                        placeholder={'Enter new password'}
+                                        placeholder={t('Enter new password')}
                                         validator={({ getFieldValue }) => ({
                                             validator: (_, value) => {
                                                 const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
                                                 if (!reg.test(value)) {
-                                                    return Promise.reject(new Error('Password should contain at least 8 characters, one uppercase letter, one number, one special character'));
+                                                    return Promise.reject(new Error( t('Password should contain at least 8 characters, one uppercase letter, one number, one special character')));
                                                 } else {
                                                     return Promise.resolve();
                                                 }
@@ -149,21 +164,21 @@ const ForgotPassword = () => {
                                 </Col>
                                 <Col span={24}>
                                     <MyInput
-                                        label="Confirm Password"
+                                        label={t("Confirm Password")}
                                         type="password"
                                         name="confirmationPassword"
                                         size='large'
                                         dependencies={['password']}
                                         required
-                                        message='Please enter confirm password'
-                                        placeholder={'Re-enter new password'}
+                                        message={t('Please enter confirm password')}
+                                        placeholder={t('Re-enter new password')}
                                         rules={[
                                             ({ getFieldValue }) => ({
                                                 validator(_, value) {
                                                     if (!value || getFieldValue('password') === value) {
                                                         return Promise.resolve();
                                                     }
-                                                    return Promise.reject(new Error('The password that you entered do not match!'));
+                                                    return Promise.reject(new Error(t('The password that you entered do not match!')));
                                                 },
                                             }),
                                         ]}
@@ -172,7 +187,7 @@ const ForgotPassword = () => {
                                                 if (!value || getFieldValue('password') === value) {
                                                     return Promise.resolve();
                                                 }
-                                                return Promise.reject(new Error('The password that you entered do not match!'));
+                                                return Promise.reject(new Error(t('The password that you entered do not match!')));
                                             },
                                         })}
                                     />
@@ -181,15 +196,15 @@ const ForgotPassword = () => {
                             )}
                         <Col span={24}>
                             <Button aria-labelledby='submit button' htmlType="submit" className="btnsave bg-dark-blue text-white fs-16" block onClick={forgotpass}>
-                                {requestState === 'request' && 'Next'}
-                                {requestState === 'otp' && 'Confirm'}
-                                {requestState === 'reset' && 'Update Password'}
+                                {requestState === 'request' && t('Next')}
+                                {requestState === 'otp' && t('Confirm')}
+                                {requestState === 'reset' && t('Update Password')}
                             </Button>
                         </Col>
                         <Col span={24}>
                             <Paragraph className="text-center mt-2">
-                                {requestState === 'request' && <>Remember Password? <NavLink to={'/login'}>Sign in</NavLink></>}
-                                {requestState === 'otp' && <>Didn’t receive code? <NavLink to={''}>Resend</NavLink></>}
+                                {requestState === 'request' && <> {t("Remember Password?")} <NavLink to={'/login'}>{t("Sign In")}</NavLink></>}
+                                {requestState === 'otp' && <> {t("Didn’t receive code?")} <NavLink to={''}>{t("Resend")}</NavLink></>}
                                 {requestState === 'reset' && null}
                             </Paragraph>
                         </Col>
@@ -205,7 +220,12 @@ const ForgotPassword = () => {
                 lg={8}
                 className="signup-visual-container"
             >
-                <Dropdown menu={{ items: lang }} trigger={["click"]} className="lang-dropdown">
+                <Dropdown 
+                menu={{ items: lang }} 
+                trigger={["click"]} 
+                onChange={handleChange} 
+                className="lang-dropdown"
+                value={language}>
                     <Button
                         onClick={(e) => e.preventDefault()}
                         className="bg-transparent btn-outline btn p-2 border-white"

@@ -10,7 +10,6 @@ const UploadSupportDocStep = ({ data, setData }) => {
   const [uploading, setUploading] = useState(false);
 
   const uploadFileToServer = async (file) => {
-    console.log("get file file",file)
     setUploading(true);
     try {
       let compressedFile = file;

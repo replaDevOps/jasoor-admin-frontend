@@ -1,14 +1,23 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { Button, Card, Flex, Form,Spin,message } from 'antd'
 import { EditorDescription, ModuleTopHeading } from '../../components';
-import { useMutation } from "@apollo/client";
-import { CREATE_TERMS } from '../../graphql/mutation/mutations';
+import { useMutation,useQuery } from "@apollo/client";
+import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
+import { GETENDATERMS } from '../../graphql/query/queries';
 
 const EndaTermPage = () => {
     const [form] = Form.useForm();
     const [ descriptionData, setDescriptionData ] = useState('')
     const [messageApi, contextHolder] = message.useMessage();
     const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);
+    const [updateTerms, { loading: updating }] = useMutation(UPDATE_TERMS);
+    const { data, loading, error } = useQuery(GETENDATERMS);
+
+    useEffect(() => {
+        if (data?.getNDATerms?.term?.content) {
+          setDescriptionData(data?.getNDATerms?.ndaTerm?.content);
+        }
+    }, [data]);
 
     const handleDescriptionChange = (value) =>{
         setDescriptionData(value)
@@ -20,31 +29,47 @@ const EndaTermPage = () => {
             messageApi.error("Please add terms content");
             return;
           }
-    
-          await createTerms({
-            variables: {
-              term:    null,
-              ndaTerm: { content: descriptionData },
-              policy: null,
-            },
+          if (data?.getNDATerms?.id) {
+            await updateTerms({
+                variables: {
+                  updateTermsId: data.getTerms.id,
+                  input: {
+                    term: null,
+                    ndaTerm: { content: descriptionData },
+                    policy: null,
+                  },
+                },
+                refetchQueries: [{ query: GETTERMSOFUSE }],
+                awaitRefetchQueries: true,
+              });
+              messageApi.success("E-NDA Terms updated successfully!");
+          }
+          else{
+            await createTerms({
+                variables: {
+                    input:{
+                    term:    null,
+                    ndaTerm: { content: descriptionData },
+                    policy: null,
+                },
+            }
           });
-    
-          messageApi.success("Terms created successfully!");
-          form.resetFields();
-          setDescriptionData("");
+          messageApi.success("E-NDA Terms created successfully!");
+          }
         } catch (err) {
           console.error(err);
           messageApi.error("Failed to save terms");
         }
       };
 
-    if (creating) {
+    if (creating || loading|| updating) {
         return (
             <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
             </Flex>
         );
     }
+
     return (
         <>
         {contextHolder}

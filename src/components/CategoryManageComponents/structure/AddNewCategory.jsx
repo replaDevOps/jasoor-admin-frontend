@@ -4,12 +4,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { MyInput, MySelect, SingleFileUpload } from '../../Forms';
 import { categoriesItems } from '../../../shared';
-import { categorystatsProfData } from '../../../data';
+import { categorystatsProfData,categoryStatsProfColumn } from '../../../data';
 import { useEffect, useState } from 'react';
 import { UPDATE_CATEGORY, CREATE_CATEGORY} from '../../../graphql/mutation/mutations';
 import {GET_CATEGORIES_BY_ID} from '../../../graphql/query'
 import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
+import { TableContent } from '../../BusinesslistingComponents/structure/TableContent';
 
 const mapDensity = (value) => {
     if (!value) return null;
@@ -132,12 +133,13 @@ const AddNewCategory = () => {
           },
     });
 
-    const onFinish = (values) => {      
+    const onFinish = (values) => {   
+        console.log("values",values)   
         const input = {
         ...(id && { id }),
           name: values.title,
           icon: documents.filePath || null, // from uploaded file
-          isDigital: values.category.status === "Digital" ? true : false, // adjust based on your dropdown
+          isDigital: values.category === "Digital Business" ? true : false, // adjust based on your dropdown
           growthRecords: transformGrowthRecords(categoryProfData),
         };
         if(id){
@@ -290,14 +292,14 @@ const AddNewCategory = () => {
                         </Row>
                     </Form>
                 </Card>
-                {/* <Card className='radius-12 border-gray'>
+                <Card className='radius-12 border-gray'>
                     <Flex vertical gap={10} className='alignStart'>
                         <Title level={5} className="m-0">
                             Category Stats & Profitability
                         </Title>
                         <TableContent x={2000} data={categoryProfData} columns={categoryStatsProfColumn(handleInputChange)} />
                     </Flex>
-                </Card> */}
+                </Card> 
             </Flex>
         </>
     );

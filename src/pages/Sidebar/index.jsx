@@ -23,6 +23,7 @@ import { SettingsPage } from '../SettingsPage';
 import { FinancePage } from '../FinancePage';
 import { FaqsPage } from '../FaqsPage';
 import { Dashboard } from '../Dashboard';
+import {DSATermsPage} from '../DSATermsPage';
 
 
 const { Header, Sider, Content } = Layout;
@@ -55,6 +56,7 @@ const Sidebar = () => {
       tab === 'faqs' ? '11' :
       tab === 'termofuse' ? '12' :
       tab === 'endaterm' ? '13' :
+      tab === 'dsaterms' ? '19' :
       tab === 'privacypolicy' ? '14' :
       tab === 'contactrequests' ? '15' :
       tab === 'pushnotificationmanager' ? '16' :
@@ -81,6 +83,7 @@ const Sidebar = () => {
       getItem('FAQs', '11'),
       getItem('Terms of Use', '12'),
       getItem('E-NDA Term', '13'),
+      getItem('DSA Term', '19'),
       getItem('Privacy Policy', '14'),
     ]),
     getItem('Contact Requests', '15'),
@@ -149,6 +152,9 @@ const Sidebar = () => {
         break;
       case '18':
         navigate("/settings", { replace: true });
+        break;
+      case '19':
+        navigate("/dsaterms", { replace: true });
         break;
       default:
         break;
@@ -231,6 +237,7 @@ const Sidebar = () => {
             <Route path="/articles/add/:id" element={<AddArticle />} />
             <Route path="/termofuse" element={<TermOfUsePage/>} />
             <Route path="/endaterm" element={<EndaTermPage/>} />
+            <Route path="/dsaterms" element={<DSATermsPage/>} />
             <Route path="/privacypolicy" element={<PrivacyPolicyPage />} />
             <Route path="/contactrequests" element={<ContactRequestPage />} />
             <Route path="/pushnotificationmanager" element={<PushNotificationManagerPage />} />

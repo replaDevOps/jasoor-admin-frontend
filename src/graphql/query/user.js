@@ -19,6 +19,7 @@ const ME = gql`
       iban
       cardNumber
       cardType
+      isActive
     }
     role{
       id
@@ -196,16 +197,17 @@ query GetFavoritBusiness {
 `
 
 const GETADMINBANK = gql`
-query GetAdminBanks {
-  getAdminBanks {
-    id
-    accountTitle
-    bankName
-    iban
-    accountNumber
-    createdAt
+  query GetAdminBanks {
+    getAdminBanks {
+      id
+      accountTitle
+      bankName
+      iban
+      isActive
+      accountNumber
+      createdAt
+    }
   }
-}
 `
 
 const GETADMINACTIVEBANK = gql`
@@ -323,13 +325,6 @@ query GetSetting {
     whatsApp
     x
     email
-    banks {
-      id
-      accountTitle
-      bankName
-      accountNumber
-      iban
-    }
   }
 }
 `
@@ -393,6 +388,18 @@ query GetUserBanks($getUserBankId: ID) {
   }
 }
 `
+const GETUSERACTIVEBANK = gql`
+query GetUserActiveBanks($getUserActiveBanksId: ID) {
+  getUserActiveBanks(id: $getUserActiveBanksId) {
+    id
+    iban
+    bankName
+    accountTitle
+    accountNumber
+  }
+}
+`
+
 export {
     ME,
     NOTIFICATION,
@@ -414,5 +421,6 @@ export {
     GET_SETTINGS,
     GET_CAMPAIGNS,
     GET_NOTIFICATIONS,
-    GET_ALERTS
+    GET_ALERTS,
+    GETUSERACTIVEBANK
 }

@@ -1,111 +1,52 @@
-import {useState} from 'react'
+import { useEffect } from 'react'
 import { Button, Card,  Col, Flex, Image, Row, Typography } from 'antd'
-import { UPDATE_DEAL,UPLOAD_DOCUMENT} from '../../../graphql/mutation/mutations';
-import { useMutation } from '@apollo/client';
+import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
+import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
+import { GETDEAL,ME } from '../../../graphql/query';
 
 const { Text } = Typography
 const BusinessAmountReceiptBuyer = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
-    const [documents, setDocuments] = useState({});
-    
-    // const paymentReceipt = details?.busines?.documents?.find(doc => doc.title === 'Buyer Payment Receipt');
     const sellerReceipt = details?.busines?.documents?.find(doc => doc.title === 'Buyer Payment Receipt');
-    console.log("details?.banks",details)
-    const sellerBank = details?.banks?.find(doc => doc.isActive === true);
+
+    const { loading, error:userError, data:user } = useQuery(ME, {
+            variables: { getUserId: details?.busines?.seller?.id },
+        });
+    const banks = user?.getUser?.banks?.find(doc => doc.isActive === true)
     const businessamountrecpData = [
-        {title:'Seller’s Bank Name', desc: sellerBank?.bankName },
-        {title:'Seller’s IBAN', desc:sellerBank?.iban },
-        {title:'Account Holder Name',desc:sellerBank?.accountTitle },
+        {title:'Seller’s Bank Name', desc: banks?.bankName },
+        {title:'Seller’s IBAN', desc:banks?.iban },
+        {title:'Account Holder Name',desc:banks?.accountTitle },
         {title:'Amount to Pay', desc:details?.finalizedOffer },
     ]
-
-    const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
-        onCompleted: () => {
-            messageApi.success("Status changed successfully!");
-        },
-        onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
-        },
+    const [updateDeals, { loading: updating, data, error }] = useMutation(UPDATE_DEAL, {
+        refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
+        awaitRefetchQueries: true,
     });
+    useEffect(() => {
+        if (data?.updateDeal?.id) {
+            messageApi.success("Buyer payment receipt verified successfully!");
+        }
+    }, [data?.updateDeal?.id]);
 
-    const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
-        onCompleted: () => {
-            messageApi.success("Document uploaded successfully!");
-        },
-        onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
-        },
-    });
-
-    const handleSingleFileUpload = async (file) => {
-            try {
-                const formData = new FormData();
-                formData.append("file", file);
+    useEffect(() => {
+        if (error) {
+            messageApi.error(error.message || "Something went wrong!");
+        }
+    }, [error]);
     
-                const response = await fetch("https://verify.jusoor-sa.co/upload", {
-                    method: "POST",
-                    body: formData,
-                });
-    
-                if (!response.ok) throw new Error("Upload failed");
-    
-                const result = await response.json();
-    
-                // Set the uploaded file info to state
-                setDocuments({
-                    fileName: file.name,
-                    fileType: file.type,
-                    filePath: result.fileUrl || result.url,
-                    fileSize: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
-                });
-    
-                // Call GraphQL mutation to save file info in backend
-                await uploadDocument({
-                    variables: {
-                        input: {
-                            title:'Buyer Payment Receipt',
-                            businessId: details?.businessId,
-                            filePath: result.fileUrl || result.url,
-                            fileName: file.name,
-                            fileType: file.type,
-                            // businessId:details?.busines?.id
-                        },
-                    },
-                });
-    
-                return false; // Prevent default upload behavior
-            } catch (error) {
-                console.error("Error uploading file:", error);
-                messageApi.error(error.message || "Upload failed!");
-                return false;
-            }
-    };
-
-    const confirmPayment = async () => {
-        if (!details?.key) return;
-        await updateDeals({
-            variables: {
-                input: {
-                    id: details.key,
-                    status: "DOCUMENT_PAYMENT_CONFIRMATION", // Example status
-                },
-            },
-        });
-    };
-
     const handleMarkVerified = async () => {
         if (!details?.key) return;
         await updateDeals({
             variables: {
                 input: {
                     id: details.key,
-                    status: "PAYMENT_APPROVAL_FROM_SELLER_PENDING", // Example status
+                    isPaymentVedifiedAdmin: true,
                 },
             },
         });
     };
-    const  isCompleted = details.status === 'COMPLETED'
     const renderUploadedDoc = ({ fileName, fileSize, filePath }) => (
         <Flex vertical gap={6}>
             <Text className="fw-600 text-medium-gray fs-13">Upload transaction receipt or screenshot</Text>
@@ -131,7 +72,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
             </Card>
         </Flex>
     );
-    if (updating || uploading) {
+    if (updating || loading) {
         return (
             <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
@@ -156,7 +97,6 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                 </Col>
 
                 <Col span={24}>
-                    {/* If receipt already exists, show it */}
                     {
                         sellerReceipt && (
                         renderUploadedDoc({
@@ -165,27 +105,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                             filePath: sellerReceipt?.filePath,
                         })
                     )}
-                    {/* : (
-                         <Upload
-                    //         beforeUpload={(file) => handleSingleFileUpload(file, "Buyer Payment Receipt")}
-                    //         showUploadList={false}
-                    //         accept=".pdf,.jpg,.png"
-                    //     >
-                    //         <Button icon={<UploadOutlined />}>Upload Buyer Payment Receipt</Button>
-                    //     </Upload>
-                    // )} */}
-                    {/* <Flex className="mt-3">
-                        <Button
-                            type="primary"
-                            className="btnsave bg-brand"
-                            onClick={confirmPayment}
-                            disabled={!sellerReceipt || !documents["Buyer Payment Receipt"]}
-                        >
-                            Confirm Payment
-                        </Button>
-                    </Flex> */}
                 </Col>
-                
 
                 <Col span={24}>
                     <Flex>
@@ -194,7 +114,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                             className="btnsave bg-brand"
                             onClick={handleMarkVerified}
                             aria-labelledby="Mark as Verified"
-                            disabled={!documents && !paymentReceipt || isCompleted}
+                            disabled={!(sellerReceipt && !details?.isPaymentVedifiedAdmin)}
                         >
                             Mark as Verified
                         </Button>

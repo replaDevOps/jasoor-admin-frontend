@@ -53,6 +53,14 @@ mutation UpdateSettings($updateSettingsId: ID!, $commissionRate: String, $faceBo
   }
 }
 `
+
+export const CREATE_SETTINGS = gql`
+mutation CreateSettings($commissionRate: String!, $banks: [BankInput!]!, $email: String, $x: String, $whatsApp: String, $instagram: String, $faceBook: String) {
+  createSettings(commissionRate: $commissionRate, banks: $banks, email: $email, x: $x, whatsApp: $whatsApp, instagram: $instagram, faceBook: $faceBook){
+    id
+  }
+}
+`
 export const CHANGE_ADMIN_PASSWORD = gql`
 mutation AdminChangePassword($adminChangePasswordId: ID, $oldPassword: String, $newPassword: String) {
   adminChangePassword(id: $adminChangePasswordId, oldPassword: $oldPassword, newPassword: $newPassword)
@@ -65,6 +73,15 @@ mutation AddAdminBank($input: BankInput!, $addAdminBankId: ID) {
   }
 }
 `
+
+export const UPDATEBANK = gql`
+  mutation UpdateBank($updateBankId: ID!, $input: BankInput!) {
+    updateBank(id: $updateBankId, input: $input) {
+      id
+    }
+  }
+`;
+
 export const DELETE_USER = gql`
 mutation DeleteUser($deleteUserId: ID) {
   deleteUser(id: $deleteUserId)

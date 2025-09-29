@@ -31,6 +31,7 @@ const BusinessDealsDetails = ({completedeal}) => {
         variables: { getDealId: id },
         skip: !id, // skip if no id
     });
+
     const details = data?.getDeal
     ? {
         key: data.getDeal.id, // use actual id from API
@@ -42,11 +43,20 @@ const BusinessDealsDetails = ({completedeal}) => {
         date: data.getDeal.createdAt ? new Date(data.getDeal.createdAt).toLocaleDateString() : '-',
         busines: data.getDeal.business || '-',
         banks: data.getDeal.buyer?.banks || '-',
-        isDocVedifiedSeller: data.getDeal.isDocVedifiedSeller || '-',
-        isDocVedifiedAdmin: data.getDeal.isDocVedifiedAdmin || '-',
-        isPaymentVedifiedSeller: data.getDeal.isPaymentVedifiedSeller || '-',
+        isCommissionVerified: data.getDeal.isCommissionVerified,
+        isDocVedifiedSeller: data.getDeal.isDocVedifiedSeller,
+        isDocVedifiedAdmin: data.getDeal.isDocVedifiedAdmin,
+        isPaymentVedifiedSeller: data.getDeal.isPaymentVedifiedSeller,
+        isPaymentVedifiedAdmin: data.getDeal.isPaymentVedifiedAdmin,
+        isDsaSeller: data.getDeal.isDsaSeller,
+        isDsaBuyer: data.getDeal.isDsaBuyer,
+        isSellerCompleted: data.getDeal.isSellerCompleted,
+        isBuyerCompleted: data.getDeal.isBuyerCompleted,
+        isDocVedifiedBuyer: data.getDeal.isDocVedifiedBuyer,
+        ndaPdfPath: data.getDeal.ndaPdfPath,
     }
     : null;
+
     const buyerdealsData = [
         {
             title:'Seller Name',
@@ -62,10 +72,10 @@ const BusinessDealsDetails = ({completedeal}) => {
         },
         {
             title:'Status',
-            desc:statusMap[details?.status] || 'Unknown',
+            desc:details?.status || 'Unknown',
         },
     ]
-    
+
     return (
         <Flex vertical gap={20}>
             <Flex vertical gap={25}>
@@ -90,7 +100,12 @@ const BusinessDealsDetails = ({completedeal}) => {
                         {details?.businessTitle}
                     </Title>
                 </Flex>
-                <Button aria-labelledby='Cancel Deal' type='button' className='btnsave border0 text-white bg-red'>
+                <Button 
+                aria-labelledby='Cancel Deal' 
+                type="primary"
+                className='btnsave border0 text-white bg-red'
+                disabled={data?.getDeal?.business?.isSold}
+                >
                     Cancel Deal
                 </Button>
             </Flex>

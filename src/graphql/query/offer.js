@@ -148,10 +148,17 @@ query GetDeal($getDealId: ID!) {
     isPaymentVedifiedSeller
     isDocVedifiedSeller
     isDocVedifiedAdmin
+    isCommissionVerified
+    isPaymentVedifiedAdmin
+    isDocVedifiedBuyer
+    isSellerCompleted
+    isBuyerCompleted
     createdAt
+    ndaPdfPath
     business {
       id
       businessTitle
+      isSold
       seller {
         id
         name

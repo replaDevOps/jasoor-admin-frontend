@@ -5,11 +5,13 @@ import { useMutation } from "@apollo/client";
 import { LOGIN } from "../../graphql/mutation/login";
 import { useNavigate } from "react-router-dom";
 import { MyInput } from "../../components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DownOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text, Paragraph } = Typography;
 const LoginPage = () => {
+    const {t, i18n}= useTranslation()
     const navigate = useNavigate()
     const [messageApi, contextHolder] = message.useMessage();
     const [loginUser, { loading, error }] = useMutation(LOGIN);
@@ -18,11 +20,31 @@ const LoginPage = () => {
         key: "1",
         label: "EN",
         icon: "assets/icons/en.png",
-    });
+    })
+    const [language, setLanguage]= useState()
+    useEffect(()=>{
+        let lang= localStorage.getItem("lang")
+        setLanguage(lang  || 'en')
+        i18n.changeLanguage(lang  || 'en')
+        if(lang === "ar"){
+            setSelectedLang({
+                key: "2",
+                label: "AR",
+                icon: "assets/icons/ar.png",
+            })
+        }else{
+            setSelectedLang({
+                key: "1",
+                label: "EN",
+                icon: "assets/icons/en.png",
+            })
+        }
+    }, [])
 
     const handleFinish = async (values) => {
         try {
-          const { email, password } = values;
+        const email = values.email.toLowerCase(); // convert to lowercase
+        const password = values.password;
           const { data,error } = await loginUser({ variables: { email, password } });
       
           if (data?.login?.token) {
@@ -39,32 +61,45 @@ const LoginPage = () => {
           console.error("Login error:", error);
           messageApi.error("Login failed: Something went wrong");
         }
-      };
-console.log("error",error)
-      const lang = [
-            {
-              key: "1",
-              label: (
-                <Space>
-                  <Image src="assets/icons/en.png" width={20} alt="English" fetchPriority="high" preview={false} />
-                  <Text className='fs-13'>EN</Text>
-                </Space>
-              ),
-              onClick: () =>
-                setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
-            },
-            {
-              key: "2",
-              label: (
-                <Space>
-                  <Image src="assets/icons/ar.png" width={20} alt="Arabic" fetchPriority="high" preview={false} />
-                  <Text className='fs-13'>AR</Text>
-                </Space>
-              ),
-              onClick: () =>
-                setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
-            },
-          ];
+    };
+    
+    const handleChange= (value)=>{
+        setLanguage(value)
+        localStorage.setItem("lang", value)
+        i18n?.changeLanguage(value)
+        window.location.href='/'
+    }
+
+    const lang = [
+        {
+            key: "1",
+            label: (
+            <Space>
+                <Image src="assets/icons/en.png" width={20} alt="English" fetchPriority="high" preview={false} />
+                <Text className='fs-13'>EN</Text>
+            </Space>
+            ),
+            onClick: () =>{
+            setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+            setLanguage("en")
+            handleChange("en")
+            }
+        },
+        {
+            key: "2",
+            label: (
+            <Space>
+                <Image src="assets/icons/ar.png" width={20} alt="Arabic" fetchPriority="high" preview={false} />
+                <Text className='fs-13'>AR</Text>
+            </Space>
+            ),
+            onClick: () =>{
+            setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+            setLanguage("ar")
+            handleChange("ar")  
+            }
+        },
+    ];
 
     return (
         <>
@@ -78,44 +113,50 @@ console.log("error",error)
                             </div>
                         </NavLink>
 
-                        <Title level={3} className="mb-1">Welcome Back, Admin</Title>
+                        <Title level={3} className="mb-1">{t("Welcome Back, Admin")}</Title>
                         <Paragraph>
-                            Please Sign In to access your admin dashboard and manage platform activities.
+                            {t("Please Sign In to access your admin dashboard and manage platform activities.")}
                         </Paragraph>
                         <Divider />
 
                         <Form layout="vertical" form={form} onFinish={handleFinish} requiredMark={false}>
                             <MyInput 
-                                label="Email Address" 
+                                label={t("Email Address")}
                                 name="email" 
                                 required 
                                 message="Please enter email address" 
-                                placeholder="Enter Email Address" 
+                                placeholder={t("Enter Email Address" )}
                             />
                             <MyInput 
-                                label="Password" 
+                                label={t("Password")}
                                 type="password" 
                                 name="password" 
                                 required 
                                 message="Please enter password" 
-                                placeholder="Enter Password" 
+                                placeholder={t("Enter Password")}
                             />
                             <Flex justify="space-between" className="mb-3">
-                                <Checkbox>Remember Me</Checkbox>
+                                <Checkbox>{t("Remember Me")}</Checkbox>
                                 <NavLink to={"/forgotpassword"} className="fs-13 text-brand">
-                                    Forget Password?
+                                    {t("Forgot Password?")}
                                 </NavLink>
                             </Flex>
                             <Button aria-labelledby='Sign In' htmlType="submit" type="primary" className="btnsave bg-dark-blue fs-16" block 
                                 // loading={loading}
                             >
-                                Sign In
+                                {t("Sign In")}
                             </Button>
                         </Form>
                     </div>
                 </Col>
                 <Col xs={0} md={12} lg={8} className="signup-visual-container">
-                    <Dropdown menu={{ items: lang }} trigger={["click"]} className="lang-dropdown">
+                    <Dropdown 
+                        menu={{ items: lang }} 
+                        trigger={["click"]} 
+                        className="lang-dropdown"
+                        onChange={handleChange}
+                        value={language}
+                    >
                         <Button
                             onClick={(e) => e.preventDefault()}
                             className="bg-transparent btn-outline btn p-2 border-white"
