@@ -1,17 +1,18 @@
 import { Row, Col, Tabs, Card } from 'antd'
 import { MeetingReqCards, MeetingRequestTable, ModuleTopHeading, ScheduleMeetingTable } from '../../components'
+import { t } from 'i18next'
 
 const MeetingRequestPage = () => {
 
     const tabs = [
         {
             key: '1',
-            label: 'Meeting Requests',
+            label: t('Meeting Requests'),
             children: <MeetingRequestTable />,
         },
         {
             key: '2',
-            label: 'Schedule Meetings',
+            label: t('Schedule Meetings'),
             children: <ScheduleMeetingTable />,
         },
     ]
@@ -19,7 +20,7 @@ const MeetingRequestPage = () => {
         <>
             <Row gutter={[24,24]}>
                 <Col span={24}>
-                    <ModuleTopHeading level={4} name='Meeting Requests' />
+                    <ModuleTopHeading level={4} name={t('Meeting Requests')} />
                 </Col>
                 <Col span={24}>
                     <MeetingReqCards />

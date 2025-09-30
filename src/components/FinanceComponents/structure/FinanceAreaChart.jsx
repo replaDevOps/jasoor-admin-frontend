@@ -6,6 +6,7 @@ import { yearOp } from '../../../shared';
 import {GET_FINANCE_GRAPH} from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 import { ModuleTopHeading } from '../../PageComponents';
+import { t } from 'i18next';
 
 const { Title } = Typography;
 
@@ -59,7 +60,7 @@ const FinanceAreaChart = () => {
         <Card className='radius-12 border-gray'>
             <Flex justify='space-between' align='center' wrap gap={10}>
                 <Flex vertical gap={3}>
-                    <ModuleTopHeading level={4} name='Revenue' />
+                    <ModuleTopHeading level={4} name={t('Revenue')} />
                     <Title level={4} className='fw-600 text-black m-0'>SAR 120,784</Title>
                 </Flex>
                 <Dropdown

@@ -4,6 +4,7 @@ import { ModuleTopHeading } from '../../PageComponents';
 import { GET_BUSINESS_PRICE_TIER } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
 import { Spin } from "antd";
+import { t } from 'i18next';
 
 const ListingPriceBar = () => {
     const { data, loading, error } = useQuery(GET_BUSINESS_PRICE_TIER);
@@ -18,7 +19,7 @@ const ListingPriceBar = () => {
   
     const chartData = {
         series: [
-        { name: 'Business Price', data:counts  }],
+        { name: t('Business Price'), data:counts  }],
         options: {plotOptions: { bar: { columnWidth: '60%', dataLabels: { position: 'top', }, } },
         chart: { type: 'bar', toolbar:{ show: false,  },  },
         dataLabels: {  enabled: false, },
@@ -73,7 +74,7 @@ const ListingPriceBar = () => {
   return (
     <Card className='radius-12 border-gray'>
         <Flex align='center' wrap gap={10}>
-            <ModuleTopHeading level={4} name='Listings by Price Tier' />
+            <ModuleTopHeading level={4} name={t('Listings by Price Tier')} />
         </Flex>
         <div className='w-100 h-300'>
           <ReactApexChart

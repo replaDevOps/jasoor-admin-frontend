@@ -3,6 +3,7 @@ import { ModuleTopHeading } from '../../PageComponents'
 import { GET_BUSINESS_STATS } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
 import { message,Spin } from "antd";
+import { t } from 'i18next';
 
 const { Title, Text } = Typography
 const DashboardCards = () => {
@@ -60,7 +61,7 @@ const DashboardCards = () => {
     <Card className='border-gray radius-12'>
         <Row gutter={[14,14]}>
             <Col span={24}>
-                <ModuleTopHeading  level={4} name='Business Statistics' />
+                <ModuleTopHeading  level={4} name={t("Business Statistics")} />
             </Col>
             <Col xs={{span: 24}} sm={{span: 24}} md={{span: 24}} lg={{span: 19}}>
                 <Row gutter={[14,24]} className='h-100'>
@@ -72,7 +73,7 @@ const DashboardCards = () => {
                                         <div>
                                             <img src={"/assets/icons/"+item?.icon} width={45}  alt="stats icon" fetchPriority="high" />
                                         </div>
-                                        <Text className='fs-14 text-gray'>{item?.subtitle}</Text>
+                                        <Text className='fs-14 text-gray'>{t(item?.subtitle)}</Text>
                                         <Title level={5} className='fw-600 text-black m-0'>{item?.title}</Title>
                                     </Flex>
                                 </Card>
@@ -87,7 +88,7 @@ const DashboardCards = () => {
                         <div>
                             <img src={"/assets/icons/dc-5.png"} width={45} alt="icon" fetchPriority="high"/>
                         </div>
-                        <Text className='fs-14 text-gray'>Today's Meeting</Text>
+                        <Text className='fs-14 text-gray'>{t("Today's Meeting")}</Text>
                         <Title level={5} className='fw-600 text-black m-0'>{stats.todaysMeetings || 0}</Title>
                     </Flex>
                 </Card>

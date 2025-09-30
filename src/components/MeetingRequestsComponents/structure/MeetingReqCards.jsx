@@ -1,6 +1,7 @@
 import { Card, Row, Col, Flex, Typography } from 'antd'
 import { GETMEETINGSCOUNT } from '../../../graphql/query/meeting'
 import { useQuery } from '@apollo/client'
+import { t } from 'i18next'
 
 const { Title, Text } = Typography
 const MeetingReqCards = () => {
@@ -11,19 +12,19 @@ const MeetingReqCards = () => {
             id:1,
             icon:'/assets/icons/todaymeet.png',
             title:meetingsCount?.getAdminMeetingCounts?.todayMeetings,
-            subtitle:'Today’s Meeting',
+            subtitle:t('Today’s Meeting'),
         },
         {
             id:2,
             icon:'/assets/icons/schedulemeeting.png',
             title:meetingsCount?.getAdminMeetingCounts?.totalScheduleMeetings,
-            subtitle:'Total Schedule Meetings',
+            subtitle:t('Total Schedule Meetings'),
         },
         {
             id:3,
             icon:'/assets/icons/pendingmeeting.png',
             title:meetingsCount?.getAdminMeetingCounts?.totalPendingMeetings,
-            subtitle:'Total Pending Meetings Request',
+            subtitle:t('Total Pending Meetings Request'),
         },
     ]
 

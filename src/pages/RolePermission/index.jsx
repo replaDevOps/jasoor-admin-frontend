@@ -2,6 +2,7 @@ import { Row, Col, Flex, Button } from 'antd';
 import { ModuleTopHeading, RolePermissionTable } from '../../components';
 import { PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 const RolePermission = () => {
   const navigate = useNavigate();
@@ -10,9 +11,9 @@ const RolePermission = () => {
       <Row gutter={[24, 24]}>
         <Col span={24}>
           <Flex justify='space-between'>
-            <ModuleTopHeading level={4} name='Role & Permissions' />
+            <ModuleTopHeading level={4} name={t('Role & Permissions')} />
             <Button aria-labelledby='Add New Role' type='primary' className='btnsave' onClick={() => navigate('/addrolepermission')}>
-              <PlusOutlined /> Add New Role
+              <PlusOutlined /> {t("Add New Role")}
             </Button>
           </Flex>
         </Col>

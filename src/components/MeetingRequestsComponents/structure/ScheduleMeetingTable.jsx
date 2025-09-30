@@ -9,6 +9,7 @@ import { UPDATE_BUSINESS_MEETING,UPDATE_OFFER } from '../../../graphql/mutation'
 import { GETADMINSCHEDULEMEETINGS } from '../../../graphql/query/meeting'
 import { useQuery,useMutation } from '@apollo/client'
 import { Spin } from "antd";
+import { t } from 'i18next';
 
 const { Text } = Typography
 
@@ -28,52 +29,52 @@ const ScheduleMeetingTable = () => {
     );
     const schedulemeetingColumn = ( setVisible, setDeleteItem ) =>  [
         {
-            title: 'Business Title',
+            title: t('Business Title'),
             dataIndex: 'businessTitle',
         },
         {
-            title: 'Buyer Name',
+            title: t('Buyer Name'),
             dataIndex: 'buyerName',
         },
         {
-            title: 'Email',
+            title: t('Email'),
             dataIndex: 'email',
         },
         {
-            title: 'Phone Number',
+            title: t('Phone Number'),
             dataIndex: 'phoneNumber',
         },
         {
-            title: 'Seller Name',
+            title: t('Seller Name'),
             dataIndex: 'sellerName',
         },
         {
-            title: 'Email',
+            title: t('Email'),
             dataIndex: 'sellerEmail',
         },
         {
-            title: 'Phone Number',
+            title: t('Phone Number'),
             dataIndex: 'sellerPhoneNumber',
         },
         {
-            title: 'Schedule Date & Time',
+            title: t('Schedule Date & Time'),
             dataIndex: 'scheduleDateTime',
         },
         {
-            title: 'Business Price',
+            title: t('Business Price'),
             dataIndex: 'businessPrice',
         },
         {
-            title: 'Offer Price',
+            title: t('Offer Price'),
             dataIndex: 'offerPrice',
         },
         {
-            title: 'Meet Link',
+            title: t('Meet Link'),
             dataIndex: 'meetLink',
             render: (meetLink) => <NavLink to={meetLink}>{meetLink}</NavLink>
         },
         {
-            title: 'Status',
+            title: t('Status'),
             dataIndex: 'status',
             render: (status) => { 
                 return ( 
@@ -87,7 +88,7 @@ const ScheduleMeetingTable = () => {
             ) }
         },
         {
-            title: 'Action',
+            title: t('Action'),
             key: "action",
             fixed: "right",
             width: 100,
@@ -122,7 +123,7 @@ const ScheduleMeetingTable = () => {
                                 } catch (err) {
                                     console.error(err);
                                 }
-                            }}>Open Deal</NavLink>, key: '1' },
+                            }}>{t("Open Deal")}</NavLink>, key: '1' },
                             { label: <NavLink onClick={async (e) => {
                                 e.preventDefault(); 
                                 setDeleteItem(true) 
@@ -139,7 +140,7 @@ const ScheduleMeetingTable = () => {
                                 } catch (err) {
                                     console.error(err);
                                 }
-                            }}>Schedule New Meeting</NavLink>, key: '2' },
+                            }}>{t("Schedule New Meeting")}</NavLink>, key: '2' },
                         ],
                     }}
                     trigger={['click']}
@@ -233,14 +234,17 @@ const ScheduleMeetingTable = () => {
                                 />
                                 <Dropdown 
                                     menu={{ 
-                                        items: meetingItems,
+                                        items: meetingItems.map((item) => ({
+                      ...item,
+                      label: t(item.label), 
+                    })),
                                         onClick: handleStatusClick
                                     }} 
                                     trigger={['click']}
                                 >
                                     <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                                         <Flex justify='space-between' align='center' gap={30}>
-                                            {selectedStatus}
+                                            {t(selectedStatus)}
                                             <DownOutlined />
                                         </Flex>
                                     </Button>

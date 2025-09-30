@@ -7,6 +7,7 @@ import { GET_BUSINESS_STATS_GRAPH } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
 import { Spin } from "antd";
 import moment from 'moment';
+import { t } from 'i18next';
 
 const { Title } = Typography
 
@@ -34,7 +35,7 @@ const BusinessListBarChart = () => {
       const chartData = {
         series: [
             {
-              name: 'Avg. Annual Profit',
+              name: t("Avg. Annual Profit"),
               data: data?.getBusinessStatsGraph?.monthlyStats.map((m) => m.businessCount) || Array(12).fill(0),
             },
           ],
@@ -84,7 +85,7 @@ const BusinessListBarChart = () => {
     <Card className='radius-12 border-gray'>
         <Flex justify='space-between' align='center' wrap gap={10}>
             <Flex vertical gap={3}>
-                <ModuleTopHeading level={4} name='Business Listing Stats' />
+                <ModuleTopHeading level={4} name={t('Business Listing Stats')} />
                 <Title level={4} className='fw-600 text-black m-0'>{data?.getBusinessStatsGraph?.totalBusinesses}</Title>
             </Flex>
             <Flex justify='end' gap={10}>
@@ -92,7 +93,7 @@ const BusinessListBarChart = () => {
                 withoutForm
                 className="datepicker-cs"
                 picker="year"
-                placeholder="Select Year"
+                placeholder={t("Select Year")}
                 value={selectedYear}
                 onChange={(year) => setSelectedYear(year)}
             />

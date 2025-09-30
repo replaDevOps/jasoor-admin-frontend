@@ -9,6 +9,7 @@ import { CREATE_ROLE,UPDATE_ROLE } from '../../../graphql/mutation/login';
 import {GETROLE} from '../../../graphql/query'
 import { useMutation,useQuery } from '@apollo/client';
 import { message } from "antd";
+import { t } from 'i18next';
 
 const { Text, Title } = Typography;
 
@@ -150,14 +151,14 @@ return (
                 className="cursor fs-13 text-gray"
                 onClick={() => navigate("/rolepermission")}
               >
-                Role & Permission
+                {t("Role & Permissions")}
               </Text>
             ),
           },
           {
             title: (
               <Text className="fw-500 fs-14 text-black">
-                {detail?.name ? detail?.name : "Add Roles"}
+                {detail?.name ? detail?.name : t("Add Roles")}
               </Text>
             ),
           },
@@ -174,19 +175,19 @@ return (
             <ArrowLeftOutlined />
           </Button>
           <Title level={4} className="fw-500 m-0">
-            {detail?.name ? detail?.name : "Add New Role"}
+            {detail?.name ? detail?.name : t("Add New Role")}
           </Title>
         </Flex>
         <Flex gap={10}>
           <Button aria-labelledby='Cancel' className="btncancel" onClick={() => navigate("/rolepermission")}>
-            Cancel
+            {t("Cancel")}
           </Button>
           <Button
             className="btnsave brand-bg border0 text-white"
             onClick={() => form.submit()}
             aria-labelledby='submit button'
           >
-            {id ? "Update" : "Save"}
+            {id ? t("Update") : t("Save")}
           </Button>
         </Flex>
       </Flex>
@@ -197,21 +198,21 @@ return (
           <Row gutter={[24, 14]}>
             <Col span={24}>
               <Title level={5} className="m-0">
-                Role Details
+                {t("Role Details")}
               </Title>
             </Col>
             <Col span={24}>
               <MyInput
-                label="Role Name"
+                label={t("Role Name")}
                 size="large"
                 name="name"
                 className="w-100"
-                placeholder="Enter Role Name"
+                placeholder={t("Enter Role Name")}
                 rules={[{ required: true, message: "Please enter role name" }]}
               />
             </Col>
             <Col span={24}>
-              <Text strong>Permissions</Text>
+              <Text strong>{t("Permissions")}</Text>
             </Col>
             <Col span={24}>
               <Form.Item name="permissions">
@@ -224,7 +225,7 @@ return (
                           handleCategoryChange(permission.category, e.target.checked)
                         }
                       >
-                        {permission.category}
+                        {t(permission.category)}
                       </Checkbox>
                       <Space direction="vertical" className="px-3">
                         {permission.options.map((option, _) => (
@@ -239,7 +240,7 @@ return (
                               )
                             }
                           >
-                            {option}
+                            {t(option)}
                           </Checkbox>
                         ))}
                       </Space>

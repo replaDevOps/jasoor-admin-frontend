@@ -9,6 +9,7 @@ import { useQuery,useMutation } from '@apollo/client'
 import { message,Spin } from "antd";
 import { NavLink } from "react-router-dom";
 import {DeleteModal} from '../../../components/Ui'
+import { t } from 'i18next';
 
 const { Text } = Typography
 
@@ -18,20 +19,20 @@ const CategoryTable = () => {
     const navigate = useNavigate();
     const categoryColumn = ( setDeleteItem, navigate ) =>  [
         {
-            title: 'Category Icon',
+            title: t('Category Icon'),
             dataIndex: 'categoryicon',
             render:(categoryicon)=> <Image src={categoryicon} fetchPriority="high" preview={false} width={25} alt='category-icon' />
         },
         {
-            title: 'Category Name',
+            title: t('Category Name'),
             dataIndex: 'categoryname',
         },
         {
-            title: 'Business Type',
+            title: t('Business Type'),
             dataIndex: 'businesstype',
         },
         {
-            title: 'Status',
+            title: t('Status'),
             dataIndex: 'status',
             render: (status) => {
                 return (
@@ -46,7 +47,7 @@ const CategoryTable = () => {
             }
         },
         {
-            title: 'Action',
+            title: t('Action'),
             key: "action",
             fixed: "right",
             width: 100,
@@ -60,7 +61,7 @@ const CategoryTable = () => {
                                     navigate('/addnewcategory/detail/' + row?.key) 
                                 }}
                             >
-                                Edit
+                               {t("Edit")}
                             </NavLink>
                         ), 
                         key: '1' 
@@ -73,7 +74,7 @@ const CategoryTable = () => {
                                     setDeleteItem(true); 
                                 }}
                             >
-                                Delete
+                                {t("Delete")}
                             </NavLink>
                         ), 
                         key: '2' 
@@ -96,7 +97,7 @@ const CategoryTable = () => {
                                 });
                                 }}
                             >
-                                Active
+                                {t("Active")}
                             </NavLink>
                         ),
                         key: '3',
@@ -115,7 +116,7 @@ const CategoryTable = () => {
                                     }});
                                 }}
                             >
-                                InActive
+                                {t("InActive")}
                             </NavLink>
                         ),
                         key: '4',
@@ -149,16 +150,16 @@ const CategoryTable = () => {
     const [deleteItem, setDeleteItem] = useState(false);
 
     const statusItems = [
-        { key: null, label: 'All' },
-        { key: 'ACTIVE', label: 'Active' },
-        { key: 'UNDER_REVIEW', label: 'Pending' },
-        { key: 'INACTIVE', label: 'Inactive' }
+        { key: null, label: t('All') },
+        { key: 'ACTIVE', label: t('Active') },
+        { key: 'UNDER_REVIEW', label: t('Pending') },
+        { key: 'INACTIVE', label: t('Inactive') }
     ];
 
     const typeItems = [
-        { key: null, label: 'All' },
-        { key: false, label: 'Physical Business' },
-        { key: true, label: 'Online Business' }
+        { key: null, label: t('All') },
+        { key: false, label: t('Physical Business') },
+        { key: true, label: t('Online Business') }
     ];
 
     // Apollo query with variables
@@ -245,11 +246,11 @@ const CategoryTable = () => {
         refetchQueries: [{ query: GET_CATEGORIES },],
         awaitRefetchQueries: true,
         onCompleted: () => {
-          message.success("Category deleted successfully");
+          message.success(t("Category deleted successfully"));
           setDeleteItem(false);
         },
         onError: (err) => {
-          message.error(err.message || "Something went wrong");
+          message.error(err.message || t("Something went wrong"));
         }
     });
 
@@ -257,11 +258,11 @@ const CategoryTable = () => {
         refetchQueries: [{ query: GET_CATEGORIES },],
         awaitRefetchQueries: true,
         onCompleted: () => {
-          message.success("Category deleted successfully");
+          message.success(t("Category deleted successfully"));
           setDeleteItem(false);
         },
         onError: (err) => {
-          message.error(err.message || "Something went wrong");
+          message.error(err.message || t("Something went wrong"));
         }
     });
     if (isLoading || deleting) {
@@ -284,7 +285,7 @@ const CategoryTable = () => {
                                 <Col span={12}>
                                     <Input
                                     name="name"
-                                    placeholder="Search"
+                                    placeholder={t("Search")}
                                     prefix={<img src="/assets/icons/search.png" alt='search icon' width={14} fetchPriority="high" />}
                                     allowClear
                                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
@@ -357,8 +358,8 @@ const CategoryTable = () => {
             <DeleteModal 
                 visible={deleteItem}
                 onClose={()=>setDeleteItem(false)}
-                title='Are you sure?'
-                subtitle='This action cannot be undone. Are you sure you want to delete this Category?'
+                title={t('Are you sure?')}
+                subtitle={t('This action cannot be undone. Are you sure you want to delete this Category?')}
                 type='danger'
                 onConfirm={() => {
                     if (selectedCategoryId) {

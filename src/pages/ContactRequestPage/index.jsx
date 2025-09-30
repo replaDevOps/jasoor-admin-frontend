@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Row, Col } from 'antd';
 import { ContactFormSentPending, ContactRequestTable, ModuleTopHeading } from '../../components';
+import { t } from 'i18next';
 
 const ContactRequestPage = () => {
 
@@ -13,7 +14,7 @@ const ContactRequestPage = () => {
         <>
             <Row gutter={[24,24]}>
                 <Col span={24}>
-                    <ModuleTopHeading level={4} name='Contact Requests' />
+                    <ModuleTopHeading level={4} name={t('Contact Requests')} />
                 </Col>
                 <Col span={24}>
                     <ContactRequestTable {...{setVisible,setSendView,setViewItem}}
