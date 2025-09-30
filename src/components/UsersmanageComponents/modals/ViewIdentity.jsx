@@ -1,5 +1,6 @@
 import { Button, Divider, Flex, Image, Modal, Typography } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
+import { t } from 'i18next'
 
 const { Title } = Typography
 const ViewIdentity = ({visible,onClose,viewstate}) => {
@@ -18,7 +19,7 @@ const ViewIdentity = ({visible,onClose,viewstate}) => {
             <div>
                 <Flex justify='space-between' className='mb-3' gap={6}>
                     <Title level={5} className='m-0'>
-                        View Passport & National Identity
+                        {t("View Passport & National Identity")}
                     </Title>
                     <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />

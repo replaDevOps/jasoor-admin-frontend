@@ -8,6 +8,7 @@ import { UPDATE_USER } from '../../../graphql/mutation'
 import { USERS } from '../../../graphql/query/user';
 import { useLazyQuery,useMutation } from '@apollo/client'
 import { DownOutlined } from '@ant-design/icons';
+import { t } from 'i18next';
 
 
 const { Text } = Typography
@@ -75,49 +76,49 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
 
     const usermanageColumn = [
         {
-            title: 'Full Name',
+            title: t('Full Name'),
             dataIndex: 'fullname',
         },
         {
-            title: 'Email',
+            title: t('Email'),
             dataIndex: 'email',
         },
         {
-            title: 'District',
+            title: t('District'),
             dataIndex: 'district',
         },
         {
-            title: 'City',
+            title: t('City'),
             dataIndex: 'city',
         },
         {
-            title: 'Mobile Number',
+            title: t('Mobile Number'),
             dataIndex: 'mobileno',
         },
         {
-            title: 'Type',
+            title: t('Type'),
             dataIndex: 'type',
             render: (type) => (
                 type === 'New'
-                    ? <Text className='btnpill fs-12 branded'>New</Text>
-                    : <Text className='btnpill fs-12 pending'>Old</Text>
+                    ? <Text className='btnpill fs-12 branded'>{t("New")}</Text>
+                    : <Text className='btnpill fs-12 pending'>{t("Old")}</Text>
             )
         },
         {
-            title: 'Status',
+            title: t('Status'),
             dataIndex: 'status',
             render: (status) => {
                 if (status === 'verified') {
-                    return <Text className="btnpill fs-12 success">Active</Text>;
+                    return <Text className="btnpill fs-12 success">{t("Active")}</Text>;
                 } else if (status === 'pending') {
-                    return <Text className="btnpill fs-12 inactive">Pending</Text>;
+                    return <Text className="btnpill fs-12 inactive">{t("Pending")}</Text>;
                 } else if (status === 'inactive') {
-                    return <Text className="btnpill fs-12 inactive">Inactive</Text>;
+                    return <Text className="btnpill fs-12 inactive">{t("Inactive")}</Text>;
                 } 
             }
         },
         {
-            title: 'Action',
+            title: t('Action'),
             key: "action",
             fixed: "right",
             width: 100,
@@ -133,7 +134,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                 }
                             }
                         });
-                        messageApi.success("User status updated successfully!");
+                        messageApi.success(t("User status updated successfully!"));
                     } catch (err) {
                         messageApi.error(err.message || "Something went wrong!");
                     }
@@ -143,7 +144,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                         menu={{
                             items: [
                                 { 
-                                    label: <NavLink onClick={(e) => { e.preventDefault(); setVisible(true); setEditItem(row); }}>Edit</NavLink>, 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); setVisible(true); setEditItem(row); }}>{t("Edit")}</NavLink>, 
                                     key: '1' 
                                 },
                                 ...(row.status === 'verified'
@@ -151,7 +152,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                         {
                                             label: (
                                                 <NavLink onClick={(e) => { e.preventDefault(); handleStatusChange(row); }}>
-                                                    Inactive
+                                                    {t("Inactive")}
                                                 </NavLink>
                                             ),
                                             key: '2'
@@ -161,7 +162,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                         {
                                             label: (
                                                 <NavLink onClick={(e) => { e.preventDefault(); handleStatusChange(row); }}>
-                                                    Verify
+                                                    {t("Verify")}
                                                 </NavLink>
                                             ),
                                             key: '2'
@@ -169,11 +170,11 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                     ]
                                 ),
                                 { 
-                                    label: <NavLink onClick={(e) => { e.preventDefault(); }}>Delete</NavLink>, 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); }}>{t("Delete")}</NavLink>, 
                                     key: '3' 
                                 },
                                 { 
-                                    label: <NavLink onClick={(e) => { e.preventDefault(); setViewModal(true);SetViewState(row) }}>View Passport & National ID</NavLink>, 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); setViewModal(true);SetViewState(row) }}>{t("View Passport & National ID")}</NavLink>, 
                                     key: '4' 
                                 },
                             ],
@@ -252,7 +253,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                             <Col span={6}>
                                 <Input
                                     name='name'
-                                    placeholder='Search'
+                                    placeholder={t('Search')}
                                     prefix={<img src='/assets/icons/search.png' width={14} alt='search icon' fetchPriority="high"/>}
                                     allowClear
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
@@ -264,7 +265,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                     <Dropdown menu={{ items: districtItems, onClick: handleDistrictClick }}>
                                         <Button aria-labelledby='filter district'  className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify="space-between" align="center" gap={30}>
-                                                {selectedDistrict || "District"}
+                                                {selectedDistrict || t("District")}
                                                 <DownOutlined />
                                             </Flex>
                                         </Button>
@@ -272,7 +273,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                     <Dropdown menu={{ items: districtItems, onClick: handleCityClick }}>
                                         <Button aria-labelledby='filter city' className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify="space-between" align="center" gap={30}>
-                                                {selectedCity || "City"}
+                                                {selectedCity || t("City")}
                                                 <DownOutlined />
                                             </Flex>
                                         </Button>
@@ -280,7 +281,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                     <Dropdown menu={{ items: typeItems, onClick: handleCategoryClick }}>
                                         <Button aria-labelledby='filter type' className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify="space-between" align="center" gap={30}>
-                                                {selectedCategory || "Type"}
+                                                {selectedCategory || t("Type")}
                                                 <DownOutlined />
                                             </Flex>
                                         </Button>
@@ -288,7 +289,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                     <Dropdown menu={{ items: statusItems, onClick: handleStatusClick }}>
                                         <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify="space-between" align="center" gap={30}>
-                                                {selectedStatus || "Status"}
+                                                {selectedStatus || t("Status")}
                                                 <DownOutlined />
                                             </Flex>
                                         </Button>

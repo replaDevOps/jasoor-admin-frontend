@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Row, Col, Flex, Button } from 'antd'
 import { AddUser, ModuleTopHeading, UserManagementTable } from '../../components'
 import { PlusOutlined } from '@ant-design/icons';
+import { t } from 'i18next';
 
 const UserManagement = () => {
     
@@ -12,9 +13,9 @@ const UserManagement = () => {
             <Row gutter={[24,24]}>
                 <Col span={24}>
                     <Flex justify='space-between'>
-                        <ModuleTopHeading level={4} name='User Management' />
+                        <ModuleTopHeading level={4} name={t('User Management')} />
                         <Button aria-labelledby='Add New User' type='primary' className='btnsave' onClick={()=>setVisible(true)}> 
-                            <PlusOutlined /> Add New User
+                            <PlusOutlined /> {t("Add New User")}
                         </Button>
                     </Flex>
                 </Col>

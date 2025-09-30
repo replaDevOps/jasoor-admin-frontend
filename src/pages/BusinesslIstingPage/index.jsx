@@ -5,6 +5,7 @@ import { GET_BUSINESSES } from '../../graphql/query/business'
 import { useLazyQuery } from '@apollo/client'
 import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 const BusinesslIstingPage = () => {
   const [page, setPage] = useState(1); 
@@ -57,9 +58,9 @@ const BusinesslIstingPage = () => {
           <Row gutter={[24,24]}>
               <Col span={24}>
                   <Flex justify='space-between'>
-                      <ModuleTopHeading level={4} name='Business Listing' />
+                      <ModuleTopHeading level={4} name={t('Business Listing')} />
                       <Button aria-labelledby='Add Business' type='primary' className='btnsave' onClick={()=>navigate('/createbusinesslist')}> 
-                        <PlusOutlined /> Add Business
+                        <PlusOutlined /> {t("Add Business")}
                       </Button>
                   </Flex>
               </Col>

@@ -4,6 +4,7 @@ import { EditorDescription, ModuleTopHeading } from '../../components';
 import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
 import { GETENDATERMS } from '../../graphql/query/queries';
+import { t } from 'i18next';
 
 
 const EndaTermPage = () => {
@@ -28,7 +29,7 @@ const EndaTermPage = () => {
     const onFinish = async () => {
         try {
           if (!descriptionData) {
-            messageApi.error("Please add terms content");
+            messageApi.error(t("Please add terms content"));
             return;
           }
           if (data?.getNDATerms?.id) {
@@ -44,7 +45,7 @@ const EndaTermPage = () => {
                 refetchQueries: [{ query: GETTERMSOFUSE }],
                 awaitRefetchQueries: true,
               });
-              messageApi.success("E-NDA Terms updated successfully!");
+              messageApi.success(t("E-NDA Terms updated successfully!"));
           }
           else{
             await createTerms({
@@ -56,11 +57,11 @@ const EndaTermPage = () => {
                 },
             }
           });
-          messageApi.success("E-NDA Terms created successfully!");
+          messageApi.success(t("E-NDA Terms created successfully!"));
           }
         } catch (err) {
           console.error(err);
-          messageApi.error("Failed to save terms");
+          messageApi.error(t("Failed to save terms"));
         }
     };
 
@@ -78,9 +79,9 @@ const EndaTermPage = () => {
         {contextHolder}
         <Flex vertical gap={20}>
             <Flex justify='space-between' align='center'>
-                <ModuleTopHeading level={4}  name='E-NDA Terms' />
+                <ModuleTopHeading level={4}  name={t('E-NDA Terms')} />
                 <Button onClick={onFinish} aria-labelledby='Save' type='button' className='btnsave border0 text-white brand-bg'>
-                    Save
+                    {t("Save")}
                 </Button>
             </Flex>
             <Card className='radius-12 border-gray'>
@@ -91,7 +92,7 @@ const EndaTermPage = () => {
                     requiredMark={false}
                 >
                     <EditorDescription
-                        label={'Terms Content'} 
+                        label={t('Terms Content')} 
                         descriptionData={descriptionData}
                         onChange={handleDescriptionChange}                  
                     />

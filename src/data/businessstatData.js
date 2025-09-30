@@ -1,53 +1,54 @@
+import { t } from "i18next";
 
 const district = [
     {
         id: 1,
-        name: 'Riyadh',
+        name: t('Riyadh'),
         value: 'riyadh'
     },
     {
         id: 2,
-        name: 'Jeddah',
+        name: t('Jeddah'),
         value: 'jeddah'
     },
     {
         id: 3,
-        name: 'Dammam',
+        name: t('Dammam'),
         value: 'dammam'
     },
     {
         id: 4,
-        name: 'Khobar',
+        name: t('Khobar'),
         value: 'khobar'
     },
     {
         id: 5,
-        name: 'Makkah',
+        name: t('Makkah'),
         value: 'makkah'
     },
     {
         id: 6,
-        name: 'Medina',
+        name: t('Medina'),
         value: 'medina'
     },
     {
         id: 7,
-        name: 'Taif',
+        name: t('Taif'),
         value: 'taif'
     },
     {
         id: 8,
-        name: 'Tabuk',
+        name: t('Tabuk'),
         value: 'tabuk'
     },
     {
         id: 9,
-        name: 'Hail',
+        name: t('Hail'),
         value: 'hail'
     },
     {
         id: 10,
-        name: 'Najran',
+        name: t('Najran'),
         value: 'najran'
     }
 ]

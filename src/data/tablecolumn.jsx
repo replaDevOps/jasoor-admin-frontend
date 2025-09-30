@@ -185,23 +185,23 @@ const categoryStatsProfColumn = (handleInputChange) => [
 
 const completedealColumn = [
     {
-        title: 'Business Title',
+        title: t('Business Title'),
         dataIndex: 'businessTitle',
     },
     {
-        title: 'Buyer Name',
+        title: t('Buyer Name'),
         dataIndex: 'buyerName',
     },
     {
-        title: 'Seller Name',
+        title: t('Seller Name'),
         dataIndex: 'sellerName',
     },
     {
-        title: 'Finalized Offer',
+        title: t('Finalized Offer'),
         dataIndex: 'finalizedOffer',
     },
     {
-        title: 'Date',
+        title: t('Date'),
         dataIndex: 'date',
     },
 ]

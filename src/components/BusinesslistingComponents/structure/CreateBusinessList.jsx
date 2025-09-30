@@ -9,6 +9,7 @@ import { FinancialInfoStep } from './FinancialInfoStep';
 import { BusinessVisionStep } from './BusinessVisionStep';
 import { UploadSupportDocStep } from './UploadSupportDocStep';
 import { BusinesslistingReviewModal, CancelModal } from '../modals';
+import { t } from 'i18next';
 
 const { Text } = Typography
 const LOCAL_STORAGE_KEY = 'sellBusinessDraft';
@@ -83,10 +84,10 @@ const CreateBusinessList = ({ addstep }) => {
       });
 
     const steps = [
-        { title: 'Business Details', content: <BusinessDetailStep data={businessData} setData={setBusinessData} /> },
-        { title: 'Financial & Growth Information', content: <FinancialInfoStep data={businessData} setData={setBusinessData} /> },
-        { title: 'Business Vision', content: <BusinessVisionStep data={businessData} setData={setBusinessData} /> },
-        { title: 'Document Uploads', content: <UploadSupportDocStep data={businessData} setData={setBusinessData} /> },
+        { title: t('Business Details'), content: <BusinessDetailStep data={businessData} setData={setBusinessData} /> },
+        { title: t('Financial & Growth Information'), content: <FinancialInfoStep data={businessData} setData={setBusinessData} /> },
+        { title: t('Business Vision'), content: <BusinessVisionStep data={businessData} setData={setBusinessData} /> },
+        { title: t('Document Uploads'), content: <UploadSupportDocStep data={businessData} setData={setBusinessData} /> },
     ];
 
     const onChange = (value) => {
@@ -211,7 +212,7 @@ const CreateBusinessList = ({ addstep }) => {
     const handleSaveDraft = () => {
         const draft = JSON.stringify(businessData);
         localStorage.setItem(LOCAL_STORAGE_KEY, draft);
-        messageApi.success('Draft saved locally!');
+        messageApi.success(t('Draft saved locally!'));
     };
 
     if (loading) {
@@ -232,10 +233,10 @@ const CreateBusinessList = ({ addstep }) => {
                         separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
                         items={[
                             {
-                                title: <Text className='fs-13 text-gray' onClick={() => navigate('/')}>Home</Text>,
+                                title: <Text className='fs-13 text-gray' onClick={() => navigate('/')}>{t("Home")}</Text>,
                             },
                             {
-                                title: <Text className='fw-500 fs-13 text-black'>Create a List</Text>,
+                                title: <Text className='fw-500 fs-13 text-black'>{t("Create a List")}</Text>,
                             },
                         ]}
                     />
@@ -268,13 +269,13 @@ const CreateBusinessList = ({ addstep }) => {
                     <Flex justify={'space-between'} gap={5} align='center'>
                         {current === 0 ? (
                                 <Button aria-labelledby='Cancel' type="button" className='btncancel text-black border-gray' onClick={()=>setIsCancel(true)}>
-                                    Cancel
+                                    {t("Cancel")}
                                 </Button>
                             )
                             :
                             (
                                 <Button aria-labelledby='Previous' type="button" className='btncancel text-black border-gray' onClick={prev}>
-                                    Previous
+                                    {t("Previous")}
                                 </Button>
                             )  
                         }
@@ -284,18 +285,18 @@ const CreateBusinessList = ({ addstep }) => {
                                 onClick={handleSaveDraft}
                                 aria-labelledby='Save as Draft'
                             >
-                                Save as Draft
+                                {t("Save as Draft")}
                             </Button>
 
                             {current < steps.length - 1 && (
                                 <Button aria-labelledby='Next' type="primary" className='btnsave border0 text-white brand-bg' onClick={next}>
-                                    Next
+                                    {t("Next")}
                                 </Button>
                             )}
 
                             {current === steps.length - 1 && (
                                 <Button aria-labelledby='Publish' type="primary" className='btnsave border0 text-white brand-bg' onClick={handleCreateListing}>
-                                    Publish
+                                    {t("Publish")}
                                 </Button>
                             )}
                         </Flex>

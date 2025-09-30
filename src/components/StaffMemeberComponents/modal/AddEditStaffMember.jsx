@@ -5,6 +5,7 @@ import { useEffect,useState } from 'react'
 import { GETROLES,GETSTAFFMEMBERS } from '../../../graphql/query';
 import { CREATE_USER } from '../../../graphql/mutation';
 import { useQuery,useMutation } from '@apollo/client';
+import { t } from 'i18next';
 
 const { Title } = Typography
 const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
@@ -83,10 +84,10 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
             footer={
                 <Flex justify='end' gap={5}>
                     <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
-                        Cancel
+                        {t("Cancel")}
                     </Button>
                     <Button aria-labelledby='Save' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
-                        Save
+                        {t("Save")}
                     </Button>
                 </Flex>
             }
@@ -95,7 +96,7 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
             <div>
                 <Flex justify='space-between' className='mb-3' gap={6}>
                     <Title level={5} className='m-0'>
-                        {edititem ? 'Edit Staff Member' : 'Add Staff Member'}
+                        {edititem ? t('Edit Staff Member') : t('Add Staff Member')}
                     </Title>
                     <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />
@@ -110,47 +111,47 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
                     <Row>
                         <Col span={24}>
                             <MyInput
-                                label='Full Name'
+                                label={t('Full Name')}
                                 name='fullName'
                                 required
-                                message='Please enter your full name'
-                                placeholder='Enter full name'
+                                message={t('Please enter your full name')}
+                                placeholder={t('Enter full name')}
                             />
                         </Col>
                         <Col span={24}>
                             <MyInput
-                                label='Email Address'
+                                label={t('Email Address')}
                                 name='email'
                                 required
-                                message='Please enter your email address'
-                                placeholder='Enter email address'
+                                message={t('Please enter your email address')}
+                                placeholder={t('Enter email address')}
                             />
                         </Col>
                         <Col span={24}>
                             <MyInput
                                 // type='number'
-                                label='Phone Number (Optional)'
+                                label={t('Phone Number (Optional)')}
                                 name='phoneNo'
-                                placeholder='Enter phone number'
+                                placeholder={t('Enter phone number')}
                             />
                         </Col>
                         <Col span={24}>
                         <MySelect
-                            label="Assign Role"
+                            label={t("Assign Role")}
                             name="assignRole"
-                            options={roles.map(role => ({ name: role.name, id: role.id }))}
-                            value={selectedRole}
+                            options={roles.map(role => ({ name: t(role.name), id: role.id }))}
+                            value={selectedRole }
                             onChange={handleRoleChange}   // ✅ correct
                         />
                         </Col>
                         <Col span={24}>
                             <MyInput
                                 type='password'
-                                label='Password'
+                                label={t('Password')}
                                 name='password'
                                 required
-                                message='Enter password'
-                                placeholder='Enter password'
+                                message={t('Enter password')}
+                                placeholder={t('Enter password')}
                             />
                         </Col>
                     </Row>

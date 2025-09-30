@@ -7,6 +7,7 @@ import { CustomPagination, TableLoader } from '../../Ui';
 import { GET_CATEGORIES } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
 import dayjs from 'dayjs';
+import { t } from 'i18next';
 
 const { Text } = Typography
 const BusinessListingTable = ({
@@ -45,7 +46,7 @@ const BusinessListingTable = ({
         if (!data?.getAllCategories) return [];
         return data.getAllCategories.map(cat => ({
             key: cat.id, 
-            label: cat.name
+            label: t(cat.name)
         }));
     }, [data]);
     
@@ -58,31 +59,31 @@ const BusinessListingTable = ({
     };
 
     const statusItems = [
-        { key: '1', label: 'All' },
-        { key: 'ACTIVE', label: 'Active' },
-        { key: 'UNDER_REVIEW', label: 'Pending' },
-        { key: 'INACTIVE', label: 'Inactive' }
+        { key: '1', label: t('All') },
+        { key: 'ACTIVE', label: t('Active') },
+        { key: 'UNDER_REVIEW', label: t('Pending') },
+        { key: 'INACTIVE', label: t('Inactive') }
     ];
     const columns =[
         {
-            title: 'Business Title',
+            title: t('Business Title'),
             dataIndex: 'businessTitle',
         },
         {
-            title: 'Seller Name',
+            title: t('Seller Name'),
             render:(_,record)=>record?.seller?.name
         },
         {
-            title: 'Category',
+            title: t('Category'),
             dataIndex: 'category',
             render:(_,record)=>record?.category?.name
         },
         {
-            title: 'Business Price',
+            title: t('Business Price'),
             dataIndex: 'price',
         },
         {
-            title: 'Status',
+            title: t('Status'),
             dataIndex: 'businessStatus',
             render:(_,record) => {
                 const status=record?.businessStatus;
@@ -102,7 +103,7 @@ const BusinessListingTable = ({
             }
         },
         {
-            title: 'Date',
+            title: t('Date'),
             render:(_,record)=>{
                 const date = new Date(record?.createdAt);
                 const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -120,7 +121,7 @@ const BusinessListingTable = ({
                             <Flex gap={5} wrap>
                                 <SearchInput
                                     name='name'
-                                    placeholder='Search'
+                                    placeholder={t('Search')}
                                     value={search}
                                     onChange={(e) => {
                                         setSearch(e.target.value);
@@ -137,21 +138,21 @@ const BusinessListingTable = ({
                                 >
                                     <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                                         <Flex justify='space-between' align='center' gap={30}>
-                                            {selectedStatus}
+                                            {t(selectedStatus)}
                                             <DownOutlined />
                                         </Flex>
                                     </Button>
                                 </Dropdown>
                                 <Dropdown 
                                     menu={{ 
-                                        items: [{ key: null, label: 'All' }, ...categoryItems], // Add "All" option
+                                        items: [{ key: null, label: t('All') }, ...categoryItems], // Add "All" option
                                         onClick: handleCategoryClick
                                     }} 
                                     trigger={['click']}
                                 >
                                     <Button aria-labelledby='filter category' className="btncancel px-3 filter-bg fs-13 text-black">
                                         <Flex justify='space-between' align='center' gap={30}>
-                                            {selectedCategory}
+                                            {t(selectedCategory)}
                                             <DownOutlined />
                                         </Flex>
                                     </Button>

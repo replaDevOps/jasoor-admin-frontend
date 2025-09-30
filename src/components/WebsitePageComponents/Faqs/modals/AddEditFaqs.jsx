@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_FAQ, UPDATE_FAQ } from '../../../../graphql/mutation/mutations';
 import {GETFAQ} from '../../../../graphql/query/queries'
+import { t } from 'i18next';
 
 
 const { Text, Title } = Typography;
@@ -46,7 +47,7 @@ const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
                 refetchQueries: [{ query: GETFAQ, variables: { search: "" } }],
                 awaitRefetchQueries: true,
             });
-            messageApi.success('FAQ updated successfully');
+            messageApi.success(t('FAQ updated successfully'));
           } else {
             // Create FAQ
             await createFAQ({
@@ -57,7 +58,7 @@ const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
                 refetchQueries: [{ query: GETFAQ, variables: { search: "" } }],
                 awaitRefetchQueries: true,
             });
-            messageApi.success('FAQ added successfully');
+            messageApi.success(t('FAQ added successfully'));
           }
     
           onClose(); // Close modal
