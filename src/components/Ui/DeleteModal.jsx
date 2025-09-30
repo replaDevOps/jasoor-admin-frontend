@@ -25,10 +25,10 @@ const DeleteModal = ({visible,onClose,title,subtitle,type,onConfirm, loading}) =
         <Flex vertical align='center' className='text-center' gap={10}>
             <img src='/assets/icons/cancel-ic.png' alt='cancel icon' width={50} fetchPriority="high" />
             <Title level={5} className='m-0'>
-                {title}
+                {t(title)}
             </Title>
             <Text className='fs-14'>
-                {subtitle}
+                {t(subtitle)}
             </Text>
         </Flex>
         <Divider className='my-2 bg-light-brand' />

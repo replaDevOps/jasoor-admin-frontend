@@ -8,6 +8,7 @@ import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_ARTICLE, UPDATE_ARTICLE } from '../../../../graphql/mutation/mutations';
 import {GETARTICLE} from '../../../../graphql/query/queries'
 import imageCompression from 'browser-image-compression';
+import { t } from 'i18next'
 
 const { Title, Text } = Typography
 const AddArticle = () => {
@@ -97,7 +98,7 @@ const AddArticle = () => {
             return;
           }
           if (!imageUrl) {
-            messageApi.error('Please upload an image');
+            messageApi.error(t('Please upload an image'));
             return;
           }
     
@@ -154,7 +155,7 @@ const AddArticle = () => {
                       className='fs-13 text-gray cursor'
                       onClick={() => navigate('/articles')}
                     >
-                      Article
+                      {t("Article")}
                     </Text>
                   ),
                 },
@@ -191,7 +192,7 @@ const AddArticle = () => {
                 type='button'
                 className='btncancel text-black border-gray'
               >
-                Cancel
+                {t("Cancel")}
               </Button>
               {/* Save/Update should submit form */}
               <Button
@@ -201,14 +202,14 @@ const AddArticle = () => {
                 type='button'
                 className='btnsave border0 text-white brand-bg'
               >
-                {detail ? 'Update' : 'Save'}
+                {detail ? t('Update') : t('Save')}
               </Button>
             </Flex>
           </Flex>
       
           {/* Form */}
           <Card className='radius-12 border-gray'>
-            <Title level={5} className='mt-0'>Article Details</Title>
+            <Title level={5} className='mt-0'>{t("Article Details")}</Title>
             <Form
               layout='vertical'
               form={form}
@@ -218,11 +219,11 @@ const AddArticle = () => {
               <Row>
                 <Col span={24}>
                   <MyInput
-                    label='Article Title'
+                    label={t('Article Title')}
                     name='articletitle'
                     required
-                    message='Please enter article title'
-                    placeholder='Enter Title'
+                    message={t('Please enter article title')}
+                    placeholder={t('Enter Title')}
                   />
                 </Col>
       
@@ -250,15 +251,15 @@ const AddArticle = () => {
                     <SingleFileUpload
                       label={
                         <Flex vertical>
-                          <Title level={5} className='m-0 fw-500'>Article Image</Title>
+                          <Title level={5} className='m-0 fw-500'>{t("Article Image")}</Title>
                           <Text className='text-gray'>
-                            Accepted formats: JPEG, JPG & PNG, Max size: 5MB per file. Aspect Ratio: 1:1.
+                            {t("Accepted formats: JPEG, JPG & PNG, Max size: 5MB per file. Aspect Ratio: 1:1.")}
                           </Text>
                         </Flex>
                       }
                       form={form}
                       name={'uploadcr'}
-                      title={'Upload'}
+                      title={t('Upload')}
                       multiple={false}
                       onUpload={uploadFileToServer}
                     />
@@ -267,7 +268,7 @@ const AddArticle = () => {
       
                 <Col span={24} className='my-3'>
                   <EditorDescription
-                    label={'Article Content'}
+                    label={t('Article Content')}
                     descriptionData={descriptionData}
                     onChange={handleDescriptionChange}
                   />

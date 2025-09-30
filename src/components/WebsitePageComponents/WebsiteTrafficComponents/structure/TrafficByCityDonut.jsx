@@ -3,6 +3,7 @@ import { Avatar, Card, Col, Flex, Row, Typography } from 'antd';
 import ReactApexChart from 'react-apexcharts';
 import { ModuleTopHeading } from '../../../PageComponents';
 import axios from "axios";
+import { t } from "i18next";
 
 const { Text } = Typography
 const TrafficByCityDonut = () => {
@@ -66,7 +67,7 @@ const TrafficByCityDonut = () => {
   return (
     <Card className='shadow-d radius-12 h-100'>
         <Flex className='pb-2'>
-            <ModuleTopHeading level={4} name='Traffic by City' />
+            <ModuleTopHeading level={4} name={t('Traffic by City')} />
         </Flex>
         <Row gutter={[24,24]} align={'middle'}>
             <Col span={24}>

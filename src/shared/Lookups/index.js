@@ -1,3 +1,5 @@
+import { t } from "i18next";
+
 const categoriesItems = [
     { id: '1', name: 'Digital Business' },
     { id: '2', name: 'Physical Business' },

@@ -4,6 +4,7 @@ import { EditorDescription, ModuleTopHeading } from '../../components';
 import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
 import { GETPRIVACYPOLICY } from '../../graphql/query/queries';
+import { t } from 'i18next';
 
 const PrivacyPolicyPage = () => {
     const [form] = Form.useForm();
@@ -60,7 +61,7 @@ const PrivacyPolicyPage = () => {
           }
         } catch (err) {
           console.error(err);
-          messageApi.error("Failed to save Policy");
+          messageApi.error(t("Failed to save Policy"));
         }
       };
 
@@ -77,9 +78,9 @@ const PrivacyPolicyPage = () => {
         {contextHolder}
         <Flex vertical gap={20}>
             <Flex justify='space-between' align='center'>
-                <ModuleTopHeading level={4}  name='Privacy Policy' />
+                <ModuleTopHeading level={4}  name={t('Privacy Policy')} />
                 <Button onClick={onFinish} aria-labelledby='Save' type='button' className='btnsave border0 text-white brand-bg'>
-                    Save
+                    {t("Save")}
                 </Button>
             </Flex>
             <Card className='radius-12 border-gray'>
@@ -90,7 +91,7 @@ const PrivacyPolicyPage = () => {
                     requiredMark={false}
                 >
                     <EditorDescription
-                        label={'Privacy Policy Content'} 
+                        label={t('Privacy Policy Content')} 
                         descriptionData={descriptionData}
                         onChange={handleDescriptionChange}
                     />
