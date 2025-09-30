@@ -73,9 +73,9 @@ const MeetingRequestTable = () => {
       dataIndex: "status",
       render: (status) => {
         return status === "ACCEPTED" ? (
-          <Text className="btnpill fs-12 pending">Pending</Text>
+          <Text className="btnpill fs-12 pending">{t("Pending")}</Text>
         ) : (
-          <Text className="btnpill fs-12 inactive">Cancel Meeting</Text>
+          <Text className="btnpill fs-12 inactive">{t("Cancel Meeting")}</Text>
         );
       },
     },

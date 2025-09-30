@@ -310,27 +310,27 @@ const pushnotifyColumn = ({setVisible,setViewNotify ,setEditItem,setDeleteItem})
 
 const financeColumn = [
   {
-    title: t("Business Title"),
+    title: (t("Business Title")),
     dataIndex: "businessTitle",
   },
   {
-    title: t("Seller Name"),
+    title: (t("Seller Name")),
     dataIndex: "sellerName",
   },
   {
-    title: t("Buyer Name"),
+    title: (t("Buyer Name")),
     dataIndex: "buyerName",
   },
   {
-    title: t("Deal Amount"),
+    title: (t("Deal Amount")),
     dataIndex: "dealAmount",
   },
   {
-    title: t("Commission Earned"),
+    title: (t("Commission Earned")),
     dataIndex: "commissionEarn",
   },
   {
-    title: t("Date & Time"),
+    title: (t("Date & Time")),
     dataIndex: "dateTime",
   },
 ];

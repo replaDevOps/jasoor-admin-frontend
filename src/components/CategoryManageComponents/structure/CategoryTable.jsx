@@ -246,11 +246,11 @@ const CategoryTable = () => {
         refetchQueries: [{ query: GET_CATEGORIES },],
         awaitRefetchQueries: true,
         onCompleted: () => {
-          message.success("Category deleted successfully");
+          message.success(t("Category deleted successfully"));
           setDeleteItem(false);
         },
         onError: (err) => {
-          message.error(err.message || "Something went wrong");
+          message.error(err.message || t("Something went wrong"));
         }
     });
 
@@ -258,11 +258,11 @@ const CategoryTable = () => {
         refetchQueries: [{ query: GET_CATEGORIES },],
         awaitRefetchQueries: true,
         onCompleted: () => {
-          message.success("Category deleted successfully");
+          message.success(t("Category deleted successfully"));
           setDeleteItem(false);
         },
         onError: (err) => {
-          message.error(err.message || "Something went wrong");
+          message.error(err.message || t("Something went wrong"));
         }
     });
     if (isLoading || deleting) {
@@ -358,8 +358,8 @@ const CategoryTable = () => {
             <DeleteModal 
                 visible={deleteItem}
                 onClose={()=>setDeleteItem(false)}
-                title='Are you sure?'
-                subtitle='This action cannot be undone. Are you sure you want to delete this Category?'
+                title={t('Are you sure?')}
+                subtitle={t('This action cannot be undone. Are you sure you want to delete this Category?')}
                 type='danger'
                 onConfirm={() => {
                     if (selectedCategoryId) {

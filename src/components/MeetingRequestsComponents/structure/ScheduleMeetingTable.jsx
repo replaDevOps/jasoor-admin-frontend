@@ -123,7 +123,7 @@ const ScheduleMeetingTable = () => {
                                 } catch (err) {
                                     console.error(err);
                                 }
-                            }}>Open Deal</NavLink>, key: '1' },
+                            }}>{t("Open Deal")}</NavLink>, key: '1' },
                             { label: <NavLink onClick={async (e) => {
                                 e.preventDefault(); 
                                 setDeleteItem(true) 
@@ -140,7 +140,7 @@ const ScheduleMeetingTable = () => {
                                 } catch (err) {
                                     console.error(err);
                                 }
-                            }}>Schedule New Meeting</NavLink>, key: '2' },
+                            }}>{t("Schedule New Meeting")}</NavLink>, key: '2' },
                         ],
                     }}
                     trigger={['click']}
@@ -234,14 +234,17 @@ const ScheduleMeetingTable = () => {
                                 />
                                 <Dropdown 
                                     menu={{ 
-                                        items: meetingItems,
+                                        items: meetingItems.map((item) => ({
+                      ...item,
+                      label: t(item.label), 
+                    })),
                                         onClick: handleStatusClick
                                     }} 
                                     trigger={['click']}
                                 >
                                     <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
                                         <Flex justify='space-between' align='center' gap={30}>
-                                            {selectedStatus}
+                                            {t(selectedStatus)}
                                             <DownOutlined />
                                         </Flex>
                                     </Button>

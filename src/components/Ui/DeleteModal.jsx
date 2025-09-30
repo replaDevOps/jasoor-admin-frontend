@@ -1,4 +1,5 @@
 import { Button, Divider, Flex, Modal, Typography } from 'antd'
+import { t } from 'i18next'
 
 const { Title, Text } = Typography
 const DeleteModal = ({visible,onClose,title,subtitle,type,onConfirm, loading}) => {
@@ -12,10 +13,10 @@ const DeleteModal = ({visible,onClose,title,subtitle,type,onConfirm, loading}) =
         footer={
             <Flex justify='center' gap={5}>
                 <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray' >
-                    Cancel
+                    {t("Cancel")}
                 </Button>
                 <Button aria-labelledby='Confirm' className={`btnsave border0 text-white ${type==='danger'? 'bg-red':'bg-brand'}`} onClick={onConfirm} loading={loading} >
-                    Confirm
+                    {t("Confirm")}
                 </Button>
             </Flex>
         }

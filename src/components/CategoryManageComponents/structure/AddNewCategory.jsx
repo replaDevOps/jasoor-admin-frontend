@@ -242,7 +242,7 @@ const AddNewCategory = () => {
                                     label={t("Business Title")}
                                     name="title"
                                     required
-                                    message="Please enter title"
+                                    message={t("Please enter title")}
                                     placeholder={t("Write business name")}
                                 />
                             </Col>
