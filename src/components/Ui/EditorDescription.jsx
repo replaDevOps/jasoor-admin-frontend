@@ -1,21 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Flex, Typography } from 'antd';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
 const { Title } = Typography
-const EditorDescription = ({ descriptionData, onChange, label }) => {
+const EditorDescription = ({ descriptionData, onChange, label, onEditorInit  }) => {
 
     const [text, setText] = useState("");
+    const quillRef = useRef(null);
+    
     useEffect(() => {
         if (descriptionData) {
             setText(descriptionData);
         }
     }, [descriptionData]);
 
-    const handleChange = (content) => {
-        setText(content);
-        onChange(content);
+
+    useEffect(() => {
+        if (quillRef.current && onEditorInit) {
+            const editor = quillRef.current.getEditor();
+            onEditorInit(editor);
+        }
+    }, [onEditorInit]);
+
+    const handleChange = (value) => {
+        setText(value);
+        onChange(value);
     };
 
     var toolbarOptions = [
@@ -40,6 +50,7 @@ const EditorDescription = ({ descriptionData, onChange, label }) => {
                 </Title>
             }
             <ReactQuill
+                ref={quillRef ? quillRef : null}
                 theme="snow"
                 value={text}
                 onChange={handleChange}
