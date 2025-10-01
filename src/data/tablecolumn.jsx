@@ -185,29 +185,28 @@ const categoryStatsProfColumn = (handleInputChange) => [
     },
 ]
 
-
 const completedealColumn = [
-  {
-    title: "Business Title",
-    dataIndex: "businessTitle",
-  },
-  {
-    title: "Buyer Name",
-    dataIndex: "buyerName",
-  },
-  {
-    title: "Seller Name",
-    dataIndex: "sellerName",
-  },
-  {
-    title: "Finalized Offer",
-    dataIndex: "finalizedOffer",
-  },
-  {
-    title: "Date",
-    dataIndex: "date",
-  },
-];
+    {
+        title: t('Business Title'),
+        dataIndex: 'businessTitle',
+    },
+    {
+        title: t('Buyer Name'),
+        dataIndex: 'buyerName',
+    },
+    {
+        title: t('Seller Name'),
+        dataIndex: 'sellerName',
+    },
+    {
+        title: t('Finalized Offer'),
+        dataIndex: 'finalizedOffer',
+    },
+    {
+        title: t('Date'),
+        dataIndex: 'date',
+    },
+]
 
 const pushnotifyColumn = ({
   setVisible,
