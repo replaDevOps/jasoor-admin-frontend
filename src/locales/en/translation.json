@@ -499,6 +499,22 @@
   "No. of Website Visitors":"No. of Website Visitors",
   "Edit Question":"Edit Question",
   "Edit a question and its answer to help users better understand how Jusoor works.":"Edit a question and its answer to help users better understand how Jusoor works.",
-  "Failed to save FAQ":"Failed to save FAQ"
-
+  "Failed to save FAQ":"Failed to save FAQ",
+"Policy created successfully!":"Policy created successfully!",
+"Settings updated successfully!":"Settings updated successfully!",
+"Failed to update settings.":"Failed to update settings.",
+"campaign created successfully!":"campaign created successfully!",
+"Failed to create campaign.":"Failed to create campaign.",
+"Response sent successfully!":"Response sent successfully!",
+"Something went wrong!":"Something went wrong!",
+"Edit Notification":"Edit Notification",
+"Failed to upload file":"Failed to upload file",
+"Please upload an image":"Please upload an image",
+"Please add article content":"Please add article content",
+"Article updated successfully":"Article updated successfully",
+"Failed to save article":"Failed to save article",
+"Please fill in both question and answer":"Please fill in both question and answer",
+"FAQ added successfully":"FAQ added successfully",
+"This action cannot be undone. Are you sure you want to delete this Role?":"This action cannot be undone. Are you sure you want to delete this Role?",
+"Stats changed successfully!":"Stats changed successfully!"
 }

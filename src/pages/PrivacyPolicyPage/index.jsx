@@ -57,11 +57,11 @@ const PrivacyPolicyPage = () => {
                 refetchQueries: [{ query: GETPRIVACYPOLICY }],
                 awaitRefetchQueries: true,
               });
-          messageApi.success("Policy created successfully!");
+          messageApi.success(t("Policy created successfully!"));
           }
         } catch (err) {
           console.error(err);
-          messageApi.error(t("Failed to save Policy"));
+          messageApi.error(t("Failed to save policy"));
         }
       };
 

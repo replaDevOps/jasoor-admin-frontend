@@ -84,7 +84,7 @@ const AddArticle = () => {
           };
         } catch (err) {
           console.error(err);
-          message.error('Failed to upload file');
+          message.error(t('Failed to upload file'));
           throw err;
         } finally {
           setUploading(false);
@@ -94,7 +94,7 @@ const AddArticle = () => {
     const onFinish = async (values) => {
         try {
           if (!descriptionData) {
-            messageApi.error('Please add article content');
+            messageApi.error(t('Please add article content'));
             return;
           }
           if (!imageUrl) {
@@ -112,7 +112,7 @@ const AddArticle = () => {
                 body: descriptionData,
               },
             });
-            messageApi.success('Article updated successfully');
+            messageApi.success(t('Article updated successfully'));
           } else {
             // Create
             await createArticle({
@@ -122,13 +122,13 @@ const AddArticle = () => {
                 body: descriptionData,
               },
             });
-            messageApi.success('Article created successfully');
+            messageApi.success(t('Article created successfully'));
           }
     
           navigate('/articles');
         } catch (err) {
           console.error(err);
-          messageApi.error('Failed to save article');
+          messageApi.error(t('Failed to save article'));
         }
     };
 

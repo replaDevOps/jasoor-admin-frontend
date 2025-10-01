@@ -32,10 +32,10 @@ const CommissionSocial = ({ comssionSocial }) => {
         refetchQueries: [{ query: GET_SETTINGS }],
         awaitRefetchQueries: true,
         onCompleted: () => {
-            messageApi.success('Settings updated successfully!');
+            messageApi.success(t('Settings updated successfully!'));
         },
         onError: (err) => {
-            messageApi.error(err?.message || 'Failed to update settings.');
+            messageApi.error(err?.message || t('Failed to update settings.'));
         }
     });
 

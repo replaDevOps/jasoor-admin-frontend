@@ -114,10 +114,10 @@ const AddRolePermission = () => {
         ],
         awaitRefetchQueries: true,
         onCompleted: () => {
-            messageApi.success("Stats changed successfully!");
+            messageApi.success(t("Stats changed successfully!"));
           },
           onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
+            messageApi.error(err.message || t("Something went wrong!"));
           },
     });
 

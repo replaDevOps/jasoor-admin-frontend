@@ -2,7 +2,7 @@ import { Button, Col, Divider, Flex, Form, Modal, Row, Typography } from "antd";
 import { MyDatepicker, MyInput, MySelect } from "../../Forms";
 import { CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { districtselectItems, groupselectItem } from "../../../shared";
+import { districtselectItems, useGroupItem } from "../../../shared";
 import moment from "moment";
 import { CREATE_CAMPAIGN } from "../../../graphql/mutation";
 import { useMutation } from "@apollo/client";
@@ -12,6 +12,8 @@ import { t } from "i18next";
 
 const { Title } = Typography;
 const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
+
+  const groupselectItem = useGroupItem()
   const [messageApi, contextHolder] = message.useMessage();
   const [searchValue, setSearchValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -30,7 +32,7 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
 
       form.setFieldsValue({
         title: source?.title || "",
-        group: source?.group || "",
+        group: source?.group?.toUpperCase() || "",
         district: Array.isArray(source?.district)
           ? source.district.map((d) => d?.item)
           : [],
@@ -60,11 +62,11 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
     ],
     awaitRefetchQueries: true,
     onCompleted: () => {
-      messageApi.success("campaign created successfully!");
+      messageApi.success(t("campaign created successfully!"));
       onClose();
     },
     onError: (err) => {
-      messageApi.error(err.message || "Failed to create campaign.");
+      messageApi.error(err.message || t("Failed to create campaign."));
     },
   });
 
@@ -74,12 +76,12 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
       : [];
 
     // Ensure group matches GraphQL enum
-    let groupEnum = values.group.toUpperCase(); // e.g., 'NEW', 'OLD', 'BOTH'
+    // let groupEnum = values.group.toUpperCase(); // e.g., 'NEW', 'OLD', 'BOTH'
 
     campaign({
       variables: {
         title: values.title,
-        group: groupEnum,
+        group: values?.group,
         district: districts,
         schedule: values.dateTime,
         description: values.description,
@@ -124,7 +126,7 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
               {viewnotify
                 ? "View Notification"
                 : edititem
-                ? "Edit Notification"
+                ? t("Edit Notification")
                 : t("Add Notification")}
             </Title>
             <Button
@@ -160,10 +162,8 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
                   required
                   message={t("Please choose group")}
                   placeholder={t("Choose")}
-                  options={groupselectItem.map((item) => ({
-                    ...item,
-                    name: t(item.name),
-                  }))}
+                  options={groupselectItem}
+                  showKey
                   disabled={viewnotify}
                 />
               </Col>
@@ -177,7 +177,7 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
                   placeholder={t("Choose district")}
                   options={districtselectItems.map((item) => ({
                     ...item,
-                    name: t(item.name), // translate here, keep `id` and `name`
+                    name: t(item.name), 
                   }))}
                   disabled={viewnotify}
                 />

@@ -476,5 +476,22 @@
   "No. of Website Visitors":"عدد زوار الموقع",
   "Edit Question":"تحرير السؤال",
   "Edit a question and its answer to help users better understand how Jusoor works.":"قم بتعديل السؤال وإجابته لمساعدة المستخدمين على فهم كيفية عمل جسور بشكل أفضل.",
-  "Failed to save FAQ":"فشل حفظ الأسئلة الشائعة"
+  "Failed to save FAQ":"فشل حفظ الأسئلة الشائعة",
+  "Policy created successfully!":"تم إنشاء السياسة بنجاح!",
+  "Settings updated successfully!":"تم تحديث الإعدادات بنجاح!",
+  "Failed to update settings.":"فشل في تحديث الإعدادات.",
+  "campaign created successfully!":"تم إنشاء الحملة بنجاح!",
+  "Failed to create campaign.":"فشل إنشاء الحملة.",
+  "Response sent successfully!":"تم إرسال الرد بنجاح!",
+  "Something went wrong!":"حدث خطأ ما!",
+  "Edit Notification":"تحرير الإخطار",
+  "Failed to upload file":"فشل تحميل الملف",
+  "Please upload an image":"يرجى تحميل صورة",
+  "Please add article content":"الرجاء إضافة محتوى المقال",
+  "Article updated successfully":"تم تحديث المقالة بنجاح",
+  "Failed to save article":"فشل حفظ المقالة",
+  "Please fill in both question and answer":"الرجاء ملء كل من السؤال والجواب",
+  "FAQ added successfully":"تمت إضافة الأسئلة الشائعة بنجاح",
+  "This action cannot be undone. Are you sure you want to delete this Role?":"لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من حذف هذا الدور؟",
+  "Stats changed successfully!":"تم تغيير الإحصائيات بنجاح!"
 }

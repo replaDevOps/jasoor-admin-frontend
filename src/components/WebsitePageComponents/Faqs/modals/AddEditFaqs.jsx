@@ -31,7 +31,7 @@ const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
         const { question, answer } = values;
     
         if (!question || !answer) {
-          messageApi.error('Please fill in both question and answer');
+          messageApi.error(t('Please fill in both question and answer'));
           return;
         }
     

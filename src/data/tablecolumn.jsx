@@ -387,32 +387,6 @@ const pushnotifyColumn = ({
   },
 ];
 
-const financeColumn = [
-  {
-    title: t("Business Title"),
-    dataIndex: "businessTitle",
-  },
-  {
-    title: t("Seller Name"),
-    dataIndex: "sellerName",
-  },
-  {
-    title: t("Buyer Name"),
-    dataIndex: "buyerName",
-  },
-  {
-    title: t("Deal Amount"),
-    dataIndex: "dealAmount",
-  },
-  {
-    title: t("Commission Earned"),
-    dataIndex: "commissionEarn",
-  },
-  {
-    title: t("Date & Time"),
-    dataIndex: "dateTime",
-  },
-];
 
 export {
   postsaleColumn,
@@ -420,5 +394,4 @@ export {
   categoryStatsProfColumn,
   completedealColumn,
   pushnotifyColumn,
-  financeColumn,
 };
