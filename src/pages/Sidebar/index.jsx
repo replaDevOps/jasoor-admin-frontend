@@ -41,7 +41,6 @@ const Sidebar = () => {
     const storedLang = localStorage.getItem("lang") || "en";
     i18n.changeLanguage(storedLang);
     document.documentElement.setAttribute("dir", storedLang === "ar" ? "rtl" : "ltr");
-    alert("check this")
     i18n.on("languageChanged", (lng) => {
       document.documentElement.setAttribute("dir", lng === "ar" ? "rtl" : "ltr");
       localStorage.setItem("lang", lng);

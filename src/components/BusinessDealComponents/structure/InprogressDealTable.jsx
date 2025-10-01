@@ -164,7 +164,7 @@ const InprogressDealTable = () => {
                 <Table
                     size='large'
                     columns={inprogressdealColumn}
-                    dataSource={inprogressdealData.slice((current - 1) * pageSize, current * pageSize)}
+                    dataSource={inprogressdealData}
                     className='pagination table-cs table'
                     showSorterTooltip={false}
                     scroll={{ x: 1600 }}
@@ -172,7 +172,7 @@ const InprogressDealTable = () => {
                     onRow={(record) => ({
                         onClick: () => navigate('/businessdeal/details/'+record?.key)
                     })}
-                    pagination={true}
+                    pagination={false}
                     loading={{
                         ...TableLoader,
                         spinning: loading

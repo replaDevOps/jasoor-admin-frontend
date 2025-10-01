@@ -24,11 +24,6 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
     const [viewmodal, setViewModal] = useState(false)
     const [viewstate, SetViewState] = useState(null)
     const [messageApi, contextHolder] = message.useMessage();
-    const UserStatus = {
-        inactive: 'inactive',
-        pending: 'pending',
-        verified: 'verified',
-      };
 
     const [loadUsers, { data, loading }] = useLazyQuery(USERS, {
         fetchPolicy: "network-only"

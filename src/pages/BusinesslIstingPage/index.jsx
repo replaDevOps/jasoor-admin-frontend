@@ -13,7 +13,6 @@ const BusinesslIstingPage = () => {
   const [search, setSearch] = useState(""); 
   const [status, setStatus] = useState(null); 
   const navigate = useNavigate()
-  const offSet = (page - 1) * pageSize;
 
   const [loadBusinesses, { data, loading, error }] = useLazyQuery(GET_BUSINESSES, {
     fetchPolicy: 'network-only',
@@ -23,16 +22,16 @@ const BusinesslIstingPage = () => {
     loadBusinesses({
       variables: {
         limit: pageSize,
-        offSet,
+        offSet: (page - 1) * pageSize,
         search: search || null,
         filter: { categoryId: null, startDate: null, endDate: null, status: status || null }
       }
     });
-  }, [ page, pageSize, search, status ]);
+  }, [page, pageSize, search, status, loadBusinesses]);  
   
-  const totalActiveCount = data?.getAllBusinesses?.totalActiveCount
-  const totalCount = data?.getAllBusinesses?.totalCount
-  const totalPendingCount = data?.getAllBusinesses?.totalPendingCount
+  const totalActiveCount = data?.getAdminBusinesses?.totalActiveCount
+  const totalCount = data?.getAdminBusinesses?.totalCount
+  const totalPendingCount = data?.getAdminBusinesses?.totalPendingCount
 
   const handleFiltersChange = (filters) => {
     setPage(1);
@@ -42,16 +41,9 @@ const BusinesslIstingPage = () => {
     }));
   };
 
-  const handlePageChange = (newPage, newPageSize) => {
-    const effectivePageSize = newPageSize || pageSize;
-    const effectivePage = newPage || 1;
-
-    if (effectivePageSize !== pageSize) {
-      setPage(1);
-      setPageSize(effectivePageSize);
-      return;
-    }
-    setPage(effectivePage);
+  const handlePageChange = (page, size) => {
+    setPage(page);
+    setPageSize(size);
   };
   return (
       <>

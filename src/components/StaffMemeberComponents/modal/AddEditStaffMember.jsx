@@ -20,7 +20,7 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
         fetchPolicy: "network-only",
         skip: !visible // 👈 Skip until modal is visible
     });
-    const roles = data?.getRoles || [];
+    const roles = data?.getRoles?.roles || [];
 
     const [form] = Form.useForm()
     useEffect(()=>{

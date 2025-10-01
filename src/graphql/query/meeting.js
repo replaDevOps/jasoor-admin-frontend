@@ -10,8 +10,8 @@ query GetAdminMeetingCounts {
 }
 `
 const GETADMINPENDINGMEETINGS = gql`
-query GetAdminPendingMeetings($search: String, $status: MeetingFilterType) {
-  getAdminPendingMeetings(search: $search, status: $status) {
+query GetAdminPendingMeetings($search: String, $status: MeetingFilterType, $limit: Int, $offset: Int) {
+  getAdminPendingMeetings(search: $search, status: $status, limit: $limit, offset: $offset) {
     totalCount
     items {
       id
@@ -39,8 +39,8 @@ query GetAdminPendingMeetings($search: String, $status: MeetingFilterType) {
 }
 `
 const GETADMINSCHEDULEMEETINGS = gql`
-query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType) {
-  getAdminScheduledMeetings(search: $search, status: $status) {
+query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType,$limit: Int, $offset: Int) {
+  getAdminScheduledMeetings(search: $search, status: $status,limit: $limit, offset: $offset) {
     totalCount
     items {
       id
