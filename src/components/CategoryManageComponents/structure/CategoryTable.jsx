@@ -1,4 +1,4 @@
-import { Button, Dropdown, Form,Image,Typography,Flex,Card,Row,Col,Input,Table } from 'antd';
+import { Button, Dropdown, Form,Image,Typography,Flex,Card,Row,Col,Input,Table, Empty } from 'antd';
 import { CustomPagination } from '../../Ui';
 import { DownOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';;
@@ -9,11 +9,13 @@ import { useQuery,useMutation } from '@apollo/client'
 import { message,Spin } from "antd";
 import { NavLink } from "react-router-dom";
 import {DeleteModal} from '../../../components/Ui'
-import { t } from 'i18next';
+// import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 
 const CategoryTable = () => {
+    const {t}=useTranslation()
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const navigate = useNavigate();

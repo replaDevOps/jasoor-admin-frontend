@@ -540,6 +540,14 @@
 "FAQ added successfully":"FAQ added successfully",
 "This action cannot be undone. Are you sure you want to delete this Role?":"This action cannot be undone. Are you sure you want to delete this Role?",
 "Stats changed successfully!":"Stats changed successfully!",
-"Article with same question uploaded": "Article with same question uploaded"
+"Article with same question uploaded": "Article with same question uploaded",
+
+
+"Error loading business stats:":"Error loading business stats:",
+"Arabic Name":"Arabic Name",
+"Category Title":"Category Title",
+"Arabic Title":"Arabic Title",
+"Preferred Date & Time":"Preferred Date & Time",
+"Schedule Date & Time":"Schedule Date & Time"
 }
 

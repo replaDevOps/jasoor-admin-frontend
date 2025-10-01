@@ -21,7 +21,7 @@ const DashboardCards = () => {
     if (error) {
       return (
         <Card>
-          <Text type="danger">Error loading business stats: {error.message}</Text>
+          <Text type="danger">{t("Error loading business stats:")} {error.message}</Text>
         </Card>
       );
     }

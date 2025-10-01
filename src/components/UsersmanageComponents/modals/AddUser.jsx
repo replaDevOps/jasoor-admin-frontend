@@ -2,7 +2,7 @@ import { Button, Col, Divider, Flex, Form, Modal, Radio, Row, Select, Space, Typ
 import { MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
-import { cities, district } from '../../../data'
+import { cities } from '../../../data'
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../../../graphql/mutation/login";
 import imageCompression from 'browser-image-compression';
@@ -107,6 +107,59 @@ const AddUser = ({visible,onClose,edititem}) => {
             setLoading(false); // Stop loading
         }
     };
+
+    const district = [
+    {
+        id: 1,
+        name: t('Riyadh'),
+        value: 'riyadh'
+    },
+    {
+        id: 2,
+        name: t('Jeddah'),
+        value: 'jeddah'
+    },
+    {
+        id: 3,
+        name: t('Dammam'),
+        value: 'dammam'
+    },
+    {
+        id: 4,
+        name: t('Khobar'),
+        value: 'khobar'
+    },
+    {
+        id: 5,
+        name: t('Makkah'),
+        value: 'makkah'
+    },
+    {
+        id: 6,
+        name: t('Medina'),
+        value: 'medina'
+    },
+    {
+        id: 7,
+        name: t('Taif'),
+        value: 'taif'
+    },
+    {
+        id: 8,
+        name: t('Tabuk'),
+        value: 'tabuk'
+    },
+    {
+        id: 9,
+        name: t('Hail'),
+        value: 'hail'
+    },
+    {
+        id: 10,
+        name: t('Najran'),
+        value: 'najran'
+    }
+]
     
     return (
         <>
