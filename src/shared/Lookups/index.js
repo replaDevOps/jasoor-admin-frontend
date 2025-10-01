@@ -1,3 +1,6 @@
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
+
 const categoriesItems = [
     { id: '1', name: 'Digital Business' },
     { id: '2', name: 'Physical Business' },
@@ -10,14 +13,18 @@ const priorityItems = [
     { id: 3, name: 'High' },
 ] 
 
-const groupselectItem = [
-    { id: 1, name: 'Old' },
-    { id: 2, name: 'New' },
-    { id: 3, name: 'Both' },
-    // { id: 4, name: 'Draft Sellers' },
-    // { id: 5, name: 'Active Sellers' },
-    // { id: 6, name: 'Closed Sellers' },
-]
+const useGroupItem = ()=>{
+    const { t } = useTranslation() 
+    const groupselectItem = [
+        { id: "OLD", name: t('Old' )},
+        { id: "NEW", name:t( 'New') },
+        { id: "BOTH", name: t('Both') },
+        // { id: 4, name: 'Draft Sellers' },
+        // { id: 5, name: 'Active Sellers' },
+        // { id: 6, name: 'Closed Sellers' },
+    ]
+    return groupselectItem
+}
 
 const districtselectItems = [
     { id: 1, name: 'All District'},
@@ -134,4 +141,4 @@ const revenueLookups = [
     },
 ]
 
-export { categoriesItems, revenueLookups, priorityItems, districtItems, statusItems, typeItems,meetingItems, businessdealItems, pushstatusItem,groupItems, groupselectItem, districtselectItems, yearOp, langItems };
+export { categoriesItems, revenueLookups, priorityItems, districtItems, statusItems, typeItems,meetingItems, businessdealItems, pushstatusItem,groupItems, useGroupItem, districtselectItems, yearOp, langItems };

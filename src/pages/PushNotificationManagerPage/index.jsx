@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Row, Col, Button, Flex } from 'antd';
 import { AddNotification, DeleteModal, ModuleTopHeading, PushNotificationTable } from '../../components';
 import { PlusOutlined } from '@ant-design/icons';
+import { t } from 'i18next';
 
 const PushNotificationManagerPage = () => {
 
@@ -14,9 +15,9 @@ const PushNotificationManagerPage = () => {
             <Row gutter={[24,24]}>
                 <Col span={24}>
                     <Flex justify='space-between'>
-                        <ModuleTopHeading level={4} name='Campaign Manager' />
+                        <ModuleTopHeading level={4} name={t('Campaign Manager')} />
                         <Button aria-labelledby='Add Campaign' type='primary' className='btnsave' onClick={()=>setVisible(true)}> 
-                            <PlusOutlined /> Add Campaign
+                            <PlusOutlined /> {t("Add Campaign")}
                         </Button>
                     </Flex>
                 </Col>

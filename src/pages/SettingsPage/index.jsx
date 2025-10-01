@@ -2,6 +2,7 @@ import { Flex } from 'antd'
 import { BankAccountCard, CommissionSocial, ModuleTopHeading, PasswordManager } from '../../components';
 import {GET_SETTINGS} from '../../graphql/query';
 import {useQuery} from '@apollo/client';
+import { t } from 'i18next';
 
 const SettingsPage = () => {
     const {data, loading, error} = useQuery(GET_SETTINGS);
@@ -21,7 +22,7 @@ const SettingsPage = () => {
         
     return (
         <Flex vertical gap={20}>
-            <ModuleTopHeading level={4}  name='Settings' />
+            <ModuleTopHeading level={4}  name={t('Settings')} />
             <CommissionSocial comssionSocial={comssionSocial} />
             <PasswordManager />
             <BankAccountCard settingId={settingId} />

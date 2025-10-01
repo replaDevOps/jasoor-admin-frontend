@@ -6,6 +6,7 @@ import {GETFAQ} from '../../../../graphql/query/queries'
 import {DELETE_FAQ} from '../../../../graphql/mutation/mutations'
 import { useQuery,useMutation } from "@apollo/client";
 import { NavLink } from "react-router-dom";
+import { t } from 'i18next';
 
 const FaqsTable = ({setVisible,setEditItem}) => {
     const [form] = Form.useForm();
@@ -27,11 +28,11 @@ const FaqsTable = ({setVisible,setEditItem}) => {
 
     const faqsColumn = ( setVisible, setEditItem, setDeleteItem ) =>  [
         {
-            title: 'Questions',
+            title: t('Questions'),
             dataIndex: 'question',
         },
         {
-            title: 'Action',
+            title: t('Action'),
             key: "action",
             fixed: "right",
             width: 100,
@@ -39,8 +40,8 @@ const FaqsTable = ({setVisible,setEditItem}) => {
                 <Dropdown
                     menu={{
                         items: [
-                            { label: <NavLink onClick={(e) =>{e.preventDefault(); setVisible(true); setEditItem(row)}}>Edit</NavLink>, key: '1' },
-                            { label: <NavLink onClick={(e) =>{e.preventDefault(); setDeleteItem(row) }}>Delete</NavLink>, key: '2' },
+                            { label: <NavLink onClick={(e) =>{e.preventDefault(); setVisible(true); setEditItem(row)}}>{t("Edit")}</NavLink>, key: '1' },
+                            { label: <NavLink onClick={(e) =>{e.preventDefault(); setDeleteItem(row) }}>{t("Delete")}</NavLink>, key: '2' },
                         ],
                     }}
                     trigger={['click']}
@@ -105,7 +106,7 @@ const FaqsTable = ({setVisible,setEditItem}) => {
                         <Flex gap={5} wrap>
                             <SearchInput
                                 name='name'
-                                placeholder='Search'
+                                placeholder={t('Search')}
                                 prefix={<img src='/assets/icons/search.png' alt='search icon' fetchPriority='high' width={14} />}
                                 className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                 onChange={handleSearchChange} 

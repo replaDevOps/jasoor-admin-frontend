@@ -5,6 +5,7 @@ import { CustomPagination } from '../../../Ui';
 import { NavLink } from 'react-router-dom';
 import {GETARTICLES} from '../../../../graphql/query/queries'
 import { useQuery } from "@apollo/client";
+import { t } from 'i18next';
 
 const { Paragraph, Text } = Typography
 const ArticleCards = ({setDeleteItem}) => {
@@ -56,7 +57,7 @@ const ArticleCards = ({setDeleteItem}) => {
                                 <Flex gap={5} wrap>
                                     <SearchInput
                                         name='name'
-                                        placeholder='Search'
+                                        placeholder={t('Search')}
                                         prefix={<img src='/assets/icons/search.png' alt='search icon' fetchPriority='high' width={14} />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                         onChange={handleSearchChange} 

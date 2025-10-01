@@ -5,6 +5,7 @@ import { DeleteModal, MaskedAccount } from '../../Ui';
 import { AddNewBankAccount } from '../modal';
 import { gql, useMutation, useLazyQuery } from '@apollo/client';
 import { GETADMINBANK } from '../../../graphql/query/user';
+import { t } from 'i18next';
 
 const { Title, Text } = Typography
 const ACTIVEBANK = gql`
@@ -88,10 +89,10 @@ const BankAccountCard = ({ settingId }) => {
                 <Card className='radius-12 border-gray'>
                     <Flex gap={10} align='center' justify='space-between' className='mb-3'>
                         <Title level={5} className='m-0'>
-                            Bank Account
+                            {t("Bank Account")}
                         </Title>
                         <Button aria-labelledby='Add Bank Detail' className="btnsave brand-bg border0 text-white" onClick={()=>setVisible(true)}>
-                            Add Bank Detail
+                            {t("Add Bank Detail")}
                         </Button>
                     </Flex>
                     <Radio.Group

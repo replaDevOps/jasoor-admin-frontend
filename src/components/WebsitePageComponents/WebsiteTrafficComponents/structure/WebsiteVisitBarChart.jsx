@@ -3,6 +3,7 @@ import { Card, Flex, Typography,DatePicker } from "antd";
 import ReactApexChart from "react-apexcharts";
 import axios from "axios";
 import dayjs from "dayjs";
+import { t } from "i18next";
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -76,7 +77,7 @@ const WebsiteVisitBarChart = () => {
   const chartData = {
     series: [
       {
-        name: "No. of Website Visitors",
+        name: t("No. of Website Visitors"),
         data: series,
       },
     ],
@@ -121,7 +122,7 @@ const WebsiteVisitBarChart = () => {
       <Flex justify="space-between" align="center" wrap gap={10}>
         <Flex vertical gap={3}>
           <Title level={4} className="fw-600 text-black m-0">
-            Website Visits
+            {t("Website Visits")}
           </Title>
           <Title level={4} className="fw-600 text-black m-0">
             {totalVisitors.toLocaleString()}
