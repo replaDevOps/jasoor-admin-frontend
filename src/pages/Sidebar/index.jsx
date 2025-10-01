@@ -38,9 +38,17 @@ const Sidebar = () => {
   const [ completedeal, setCompleteDeal ] = useState(null)
   
   useEffect(() => {
-    const storedLang = localStorage.getItem("lang");
+    const storedLang = localStorage.getItem("lang") || "en";
     i18n.changeLanguage(storedLang);
     document.documentElement.setAttribute("dir", storedLang === "ar" ? "rtl" : "ltr");
+    alert("check this")
+    i18n.on("languageChanged", (lng) => {
+      document.documentElement.setAttribute("dir", lng === "ar" ? "rtl" : "ltr");
+      localStorage.setItem("lang", lng);
+    });
+    return () => {
+      i18n.off("languageChanged");
+    };
   }, [i18n]);
 
   function getItem(label, key, icon, children) {
@@ -75,7 +83,7 @@ const Sidebar = () => {
   }, [location]);
 
   const menuItems = useMemo(() => [
-    getItem(t('Dashboard'), '1'),
+    getItem(t('Dashboard'), '1'), 
     getItem(t('Business listing'), '2'),
     getItem(t('Categories Management'), '3'),
     getItem(t('User Management'), '4'),
@@ -97,7 +105,7 @@ const Sidebar = () => {
     getItem(t('Push Notification Manager'), '16'),
     getItem(t('Alert'), '17'),
     getItem(t('Settings'), '18'),
-], []);
+], [i18n.language]);
 
 
   const handleMenuClick = (e) => {
