@@ -112,22 +112,20 @@ const FinancialInfoStep = ({ data, setData }) => {
             ? ((adjustedProfit / adjustedRevenue) * 100).toFixed(2)
             : '';
 
-        const annualProfit = profitPeriod === 1 ? adjustedProfit * 2 : adjustedProfit;
-        const recoveryTime = annualProfit ? (price / annualProfit).toFixed(2) : '';
         const capitalRecovery = avgMonthlyProfit ? (price / avgMonthlyProfit).toFixed(2) : '';
 
         setData(prev => ({
             ...prev,
             multiple: scaledMultiple,
             profitMargen: profitMargin,
-            recoveryTime,
+            capitalRecovery,
             capitalRecovery
         }));
 
         form.setFieldsValue({
             multiple: scaledMultiple,
             profitMargin,
-            recoveryTime,
+            capitalRecovery,
             capitalRecovery
         });
     }, [form,

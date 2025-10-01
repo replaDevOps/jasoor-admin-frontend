@@ -1,8 +1,9 @@
 import { Form, Button, Typography, Row, Col, Divider, Checkbox, Flex, Image, Space, Dropdown } from "antd";
 import { NavLink } from "react-router-dom";
 import { message } from "antd";
-import { useMutation } from "@apollo/client";
+import { useMutation,useLazyQuery } from "@apollo/client";
 import { LOGIN } from "../../graphql/mutation/login";
+import {GET_SETTINGS} from '../../graphql/query';
 import { useNavigate } from "react-router-dom";
 import { MyInput } from "../../components";
 import { useEffect, useState } from "react";
@@ -21,6 +22,8 @@ const LoginPage = () => {
         label: "EN",
         icon: "assets/icons/en.png",
     })
+    const [getSeetings] = useLazyQuery(GET_SETTINGS);
+          
     const [language, setLanguage]= useState()
     useEffect(()=>{
         let lang= localStorage.getItem("lang")
@@ -50,7 +53,21 @@ const LoginPage = () => {
           if (data?.login?.token) {
             // store token/id
             localStorage.setItem("accessToken", data.login.token);
-            localStorage.setItem("userId", data.login.user.id);      
+            localStorage.setItem("userId", data.login.user.id);   
+            const settingsResult = await getSeetings();
+            const backendLang = settingsResult?.data?.getSetting?.language?.toLowerCase();
+
+            if (backendLang) {
+                localStorage.setItem("lang", backendLang);
+                i18n.changeLanguage(backendLang);
+                setLanguage(backendLang);
+                setSelectedLang(
+                backendLang === "ar"
+                    ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
+                    : { key: "1", label: "EN", icon: "assets/icons/en.png" }
+                );
+            }
+
             messageApi.success("Login successful!");
             navigate("/")
             // compute destination safely (it could be a string or Location object)

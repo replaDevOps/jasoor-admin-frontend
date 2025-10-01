@@ -124,7 +124,6 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
             width: 100,
             render: (_, row) => {
                 const handleStatusChange = async () => {
-                    console.log("row.status",row.status)
                     try {
                         await updateUser({
                             variables: {

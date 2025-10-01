@@ -28,6 +28,10 @@ const CategoryTable = () => {
             dataIndex: 'categoryname',
         },
         {
+            title: t('Arabic Name'),
+            dataIndex: 'arabicName',
+        },
+        {
             title: t('Business Type'),
             dataIndex: 'businesstype',
         },
@@ -183,6 +187,7 @@ const CategoryTable = () => {
                 key: item.id,
                 categoryicon: item.icon,
                 categoryname: item.name,
+                arabicName: item.arabicName,
                 businesstype: item.isDigital ? 'Online Business' : 'Physical Business',
                 status: item.status
             }));

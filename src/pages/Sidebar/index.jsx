@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Route, Routes, useLocation } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 import './index.css';
 import { Layout, Menu, Image, Space, Divider } from 'antd';
 import { Notifications, UserDropdown } from '../../components/Header';
@@ -26,16 +27,21 @@ import { Dashboard } from '../Dashboard';
 import {DSATermsPage} from '../DSATermsPage';
 import { t } from 'i18next';
 
-
 const { Header, Sider, Content } = Layout;
 const Sidebar = () => {
   let navigate = useNavigate();
+  const {t, i18n}= useTranslation()
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [currentTab, setCurrentTab] = useState('1');
   const [openKeys, setOpenKeys] = useState(['']);
   const [ completedeal, setCompleteDeal ] = useState(null)
   
+  useEffect(() => {
+    const storedLang = localStorage.getItem("lang");
+    i18n.changeLanguage(storedLang);
+    document.documentElement.setAttribute("dir", storedLang === "ar" ? "rtl" : "ltr");
+  }, [i18n]);
 
   function getItem(label, key, icon, children) {
     return { key, icon, children, label };

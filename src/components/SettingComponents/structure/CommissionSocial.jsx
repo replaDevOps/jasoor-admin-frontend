@@ -1,6 +1,5 @@
 import { Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { MyInput, MySelect } from '../../Forms'
-import { langItems } from '../../../shared';
 import { useEffect } from 'react'
 import { UPDATE_SETTING, CREATE_SETTINGS } from '../../../graphql/mutation/'
 import { GET_SETTINGS } from '../../../graphql/query'
@@ -10,10 +9,16 @@ import { t } from 'i18next';
 
 const { Title } = Typography
 const CommissionSocial = ({ comssionSocial }) => {
-
+    const langItems = [
+        {
+            id: 'EN', name: 'English'
+        },
+        {
+            id: 'AR', name: 'Arabic'
+        },
+    ]
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
-
     useEffect(() => {
         if (comssionSocial) {
             form.setFieldsValue({
@@ -23,7 +28,7 @@ const CommissionSocial = ({ comssionSocial }) => {
                 whatsapp: comssionSocial.whatsapp,
                 twitter: comssionSocial.twitter,
                 email: comssionSocial.email,
-                language: comssionSocial.language,
+                language: comssionSocial.language === "EN" ? "English" : "Arabic",
             });
         }
     }, [comssionSocial, form]);
@@ -58,7 +63,6 @@ const CommissionSocial = ({ comssionSocial }) => {
         const twitter = values.twitter || null;
         const email = values.email || null;
         const language = values.language || null;
-
         if (comssionSocial && comssionSocial?.id) {
             changeSetting({
                 variables: {
@@ -69,7 +73,7 @@ const CommissionSocial = ({ comssionSocial }) => {
                     whatsApp,
                     twitter,
                     email,
-                    language,
+                    language: language==='Arabic'?'AR':'EN',
                 }
             });
         } else {
@@ -82,6 +86,7 @@ const CommissionSocial = ({ comssionSocial }) => {
                     whatsApp,
                     instagram,
                     faceBook: facebook || null,
+                    language,
                 }
             });
         }

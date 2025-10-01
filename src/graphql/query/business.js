@@ -60,7 +60,7 @@ const GET_BUSINESSES = gql`
       revenue
       profit
       price
-      recoveryTime
+      capitalRecovery
       category {
         name
       }
@@ -89,17 +89,17 @@ query GetBusinessById($getBusinessByIdId: ID!) {
     businessStatus
     revenue
     revenueTime
-    recoveryTime
+    capitalRecovery
     profit
     profittime
     numberOfEmployees
     profitMargen
-    recoveryTime
+    capitalRecovery
     multiple
     growthOpportunities
     reason
     supportSession
-    suppportDuration
+    supportDuration
     isSupportVerified
     isStatsVerified
     foundedDate
@@ -173,6 +173,7 @@ query GetAllCategories($limit: Int, $offset: Int, $filter: CategoryFilter) {
     icon
     isDigital
     name
+    arabicName
     status
   }
 }

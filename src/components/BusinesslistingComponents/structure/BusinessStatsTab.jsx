@@ -38,7 +38,7 @@ const BusinessStatsTab = ({status}) => {
         {
             id: 5,
             icon:'/assets/icons/cap-re.png',
-            title:status?.recoveryTime,
+            title:status?.capitalRecovery,
             subtitle:'Capital Recovery'
         },
         {
@@ -52,7 +52,7 @@ const BusinessStatsTab = ({status}) => {
         {
             key:1,
             supportperiod:status?.supportSession,
-            nosession:status?.suppportDuration,
+            nosession:status?.supportDuration,
         },
     ]
     const [updateBusiness] = useMutation(UPDATE_BUSINESS, {

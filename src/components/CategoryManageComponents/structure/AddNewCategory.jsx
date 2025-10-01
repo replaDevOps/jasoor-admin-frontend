@@ -135,10 +135,10 @@ const AddNewCategory = () => {
     });
 
     const onFinish = (values) => {   
-        console.log("values",values)   
         const input = {
         ...(id && { id }),
           name: values.title,
+          arabicName: values.arabicTitle,
           icon: documents.filePath || null, // from uploaded file
           isDigital: values.category === "Digital Business" ? true : false, // adjust based on your dropdown
           growthRecords: transformGrowthRecords(categoryProfData),
@@ -239,7 +239,7 @@ const AddNewCategory = () => {
                             </Col> 
                             <Col xs={24} sm={24} md={12}>
                                 <MyInput
-                                    label={t("Business Title")}
+                                    label={t("Category Title")}
                                     name="title"
                                     required
                                     message={t("Please enter title")}
@@ -256,6 +256,16 @@ const AddNewCategory = () => {
                                     placeholder={t("Choose business category")}
                                 />                        
                             </Col>  
+                            <Col xs={24} sm={24} md={24}>
+                                <MyInput
+                                    label={t("Arabic Title")}
+                                    name="arabicTitle"
+                                    required
+                                    message={t("Please enter arabic title")}
+                                    placeholder={t("Write business name")}
+                                />
+                            </Col>
+                            
                             <Col span={24}>
                             {!editdata?.icon ? (
                             <SingleFileUpload

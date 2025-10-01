@@ -60,6 +60,26 @@ query GetOffersById($getOffersByIdId: String) {
   }
 }
 `
+const OFFERBYBUSINESSID = gql`
+query GetOfferByBusinessId($getOfferByBusinessIdId: ID, $limit: Int, $offSet: Int, $search: String, $status: String) {
+  getOfferByBusinessId(id: $getOfferByBusinessIdId, limit: $limit, offSet: $offSet, search: $search, status: $status) {
+    count
+    offers {
+      id
+      buyer {
+        id
+        name
+      }
+      business {
+        id
+        price
+      }
+      price
+      status
+      createdAt
+    }
+  }
+}`
 const BUYERINPROGRESSDEALS = gql`
 query GetBuyerInprogressDeals($limit: Int, $offset: Int, $search: String) {
   getBuyerInprogressDeals(limit: $limit, offset: $offset, search: $search) {
@@ -194,5 +214,6 @@ export {
     SELLERDEALS,
     BUYERINPROGRESSDEALS,
     SELLERINPROGRESSDEALS,
-    GETDEAL
+    GETDEAL,
+    OFFERBYBUSINESSID
 }

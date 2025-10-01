@@ -175,7 +175,7 @@ const SingleviewBusinesslist = () => {
                         </Col>                      
                     </Row>
                 </Card>
-                <PendingUnverifiedTabs status={data} />
+                <PendingUnverifiedTabs data={data} />
             </Flex>
         </>
     );

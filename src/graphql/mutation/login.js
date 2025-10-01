@@ -47,16 +47,16 @@ mutation DeleteRole($deleteRoleId: ID) {
 }
 `
 export const UPDATE_SETTING = gql`
-mutation UpdateSettings($updateSettingsId: ID!, $commissionRate: String, $faceBook: String, $instagram: String, $whatsApp: String, $x: String, $email: String) {
-  updateSettings(id: $updateSettingsId, commissionRate: $commissionRate, faceBook: $faceBook, instagram: $instagram, whatsApp: $whatsApp, x: $x, email: $email) {
+mutation UpdateSettings($updateSettingsId: ID!, $language: String,$commissionRate: String, $faceBook: String, $instagram: String, $whatsApp: String, $x: String, $email: String) {
+  updateSettings(id: $updateSettingsId, language: $language,commissionRate: $commissionRate, faceBook: $faceBook, instagram: $instagram, whatsApp: $whatsApp, x: $x, email: $email) {
     id
   }
 }
 `
 
 export const CREATE_SETTINGS = gql`
-mutation CreateSettings($commissionRate: String!, $banks: [BankInput!]!, $email: String, $x: String, $whatsApp: String, $instagram: String, $faceBook: String) {
-  createSettings(commissionRate: $commissionRate, banks: $banks, email: $email, x: $x, whatsApp: $whatsApp, instagram: $instagram, faceBook: $faceBook){
+mutation CreateSettings($commissionRate: String!, $language: String, $banks: [BankInput!]!, $email: String, $x: String, $whatsApp: String, $instagram: String, $faceBook: String) {
+  createSettings(commissionRate: $commissionRate, language: $language, banks: $banks, email: $email, x: $x, whatsApp: $whatsApp, instagram: $instagram, faceBook: $faceBook){
     id
   }
 }

@@ -58,7 +58,20 @@
     --gray: #E6E8EC;
     --border-color: #d9d9d9;
     --side-bar-border: #E3E3E3;
-}   
+} 
+/* For RTL (Arabic) */
+body.rtl {
+    direction: rtl;
+    text-align: right;
+    font-family: "Tajawal", "Cairo", "Noto Sans Arabic", sans-serif;
+  }
+  
+/* For LTR (English) */
+body.ltr {
+    direction: ltr;
+    text-align: left;
+    font-family: "Inter", sans-serif;
+}  
 
 .success{
     background-color: var(--light-green) !important;

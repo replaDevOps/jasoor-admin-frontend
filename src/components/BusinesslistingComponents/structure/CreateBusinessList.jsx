@@ -52,7 +52,7 @@ const CreateBusinessList = ({ addstep }) => {
         profit: null,
         price: null,
         profitMargen: null,
-        recoveryTime: null,
+        capitalRecovery: null,
         multiple: null,
         assets: [
           { name: null, price: null, purchaseYear: null, quantity: null },
@@ -151,7 +151,7 @@ const CreateBusinessList = ({ addstep }) => {
                     profit: parseFloat(businessData.profit),
                     price: parseFloat(businessData.price),
                     profitMargen: parseFloat(businessData.profitMargen),
-                    recoveryTime: parseFloat(businessData.recoveryTime),
+                    capitalRecovery: parseFloat(businessData.capitalRecovery),
                     multiple: parseFloat(businessData.multiple),
     
                     assets: businessData.assets.map(asset => ({
@@ -176,7 +176,7 @@ const CreateBusinessList = ({ addstep }) => {
                     })),
     
                     // Business vision
-                    suppportDuration: parseInt(businessData.supportDuration),
+                    supportDuration: parseInt(businessData.supportDuration),
                     supportSession: parseInt(businessData.supportSession),
                     growthOpportunities: businessData.growthOpportunities,
                     reason: businessData.reason,
