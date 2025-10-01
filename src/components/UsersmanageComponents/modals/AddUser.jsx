@@ -6,6 +6,7 @@ import { cities, district } from '../../../data'
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../../../graphql/mutation/login";
 import imageCompression from 'browser-image-compression';
+import { t } from 'i18next'
 
 const { Title } = Typography
 const AddUser = ({visible,onClose,edititem}) => {
@@ -49,11 +50,11 @@ const AddUser = ({visible,onClose,edititem}) => {
     
             const { data } = await createUser({ variables: { input } });
     
-            messageApi.success("Account created successfully!");
+            messageApi.success(t("Account created successfully!"));
             // redirect or reset form
             form.resetFields();
         } catch (err) {
-            messageApi.error("Failed to create user. Please try again.");
+            messageApi.error(t("Failed to create user. Please try again."));
         }finally {
             onClose();
         }
@@ -119,10 +120,10 @@ const AddUser = ({visible,onClose,edititem}) => {
             footer={
                 <Flex justify='end' gap={5}>
                     <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
-                        Cancel
+                        {t("Cancel")}
                     </Button>
                     <Button aria-labelledby='submit button' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
-                        {edititem? 'Update':'Save'}
+                        {edititem? t('Update'):t('Save')}
                     </Button>
                 </Flex>
             }
@@ -133,7 +134,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                 <Flex justify='space-between' className='mb-3' gap={6}>
                     <Title level={5} className='m-0'>
                         {
-                            edititem ? 'Update user' : 'Add new user'
+                            edititem ? t('Update user') : t('Add new user')
                         }
                     </Title>
                     <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
@@ -149,57 +150,57 @@ const AddUser = ({visible,onClose,edititem}) => {
                     <Row>
                         <Col span={24}>
                             <MyInput
-                                label='Full Name'
+                                label={t('Full Name')}
                                 name='fullName'
                                 required
-                                message='Please enter your full name'
-                                placeholder='Enter full name'
+                                message={t('Please enter your full name')}
+                                placeholder={t('Enter full name')}
                             />
                         </Col>
                         <Col span={24}>
                             <MyInput
-                                label='Email Address'
+                                label={t('Email Address')}
                                 name='email'
                                 required
-                                message='Please enter your email address'
-                                placeholder='Enter email address'
+                                message={t('Please enter your email address')}
+                                placeholder={t('Enter email address')}
                             />
                         </Col>
                         <Col span={24}>
                             <MySelect
-                                label="District"
+                                label={t("District")}
                                 name="district"
                                 required
-                                message="Please select district"
-                                placeholder="Select district"
+                                message={t("Please select district")}
+                                placeholder={t("Select district")}
                                 options={district}
                                 onChange={(val) => setSelectedDistrict(val)}
                             />
                         </Col>
                         <Col span={24}>
                             <MySelect
-                                label="City"
+                                label={t("City")}
                                 name="city"
                                 required
-                                message="Please select city"
+                                message={t("Please select city")}
                                 options={selectedDistrict ? cities[selectedDistrict.toLowerCase()] || [] : []}
-                                placeholder="Select city"
+                                placeholder={t("Select city")}
                             />
                         </Col>
                         <Col span={24}>
                             <MyInput
                                 name="phoneNo"
-                                label="Mobile Number"
+                                label={t("Mobile Number")}
                                 required
-                                message="Please enter a valid phone number"
+                                message={t("Please enter a valid phone number")}
                                 addonBefore={
                                     <Select
-                                        defaultValue="SA"
+                                        defaultValue={t("SA")}
                                         className='w-80'
                                         onChange={(value) => form.setFieldsValue({ countryCode: value })}
                                     >
-                                        <Select.Option value="sa">SA</Select.Option>
-                                        <Select.Option value="ae">AE</Select.Option>
+                                        <Select.Option value="sa">{t("SA")}</Select.Option>
+                                        <Select.Option value="ae">{t("AE")}</Select.Option>
                                     </Select>
                                 }
                                 placeholder="3445592382"
@@ -210,7 +211,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                         <Col span={24}>
                             <Row gutter={8}>
                                 <Col span={24}>
-                                    <Form.Item label="Upload National ID or Passport" className='m-0' required>
+                                    <Form.Item label={t("Upload National ID or Passport")}className='m-0' required>
                                         <Radio.Group 
                                             value={idType} 
                                             onChange={(e) => {
@@ -221,8 +222,8 @@ const AddUser = ({visible,onClose,edititem}) => {
                                             }}
                                         >
                                             <Space>
-                                                <Radio value="national_id">National ID</Radio>
-                                                <Radio value="passport">Passport</Radio>
+                                                <Radio value="national_id">{t("National ID")}</Radio>
+                                                <Radio value="passport">{t("Passport")}</Radio>
                                             </Space>
                                         </Radio.Group>
                                     </Form.Item>
@@ -237,7 +238,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                         withoutForm 
                                                         size={'large'} 
                                                         className='m-0' 
-                                                        placeholder="Upload Front Side" 
+                                                        placeholder={t("Upload Front Side" )}
                                                         readOnly 
                                                         value={frontFileName} 
                                                     />
@@ -249,7 +250,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                         maxCount={1} 
                                                         onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
                                                     >
-                                                        <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
+                                                        <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>{t("Upload")}</Button>
                                                     </Upload>
                                                 </Col>
                                             </Row>
@@ -261,7 +262,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                         withoutForm 
                                                         size={'large'} 
                                                         className='m-0' 
-                                                        placeholder="Upload Back Side" 
+                                                        placeholder={t("Upload Back Side" )}
                                                         readOnly 
                                                         value={backFileName} 
                                                     />
@@ -273,7 +274,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                         maxCount={1} 
                                                         onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
                                                     >
-                                                        <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
+                                                        <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>{t("Upload")}</Button>
                                                     </Upload>
                                                 </Col>
                                             </Row>
@@ -287,7 +288,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                     withoutForm 
                                                     size={'large'} 
                                                     className='m-0' 
-                                                    placeholder="Upload Passport" 
+                                                    placeholder={t("Upload Passport")} 
                                                     readOnly 
                                                     value={passportFileName} 
                                                 />
@@ -299,7 +300,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                                                     maxCount={1} 
                                                     onChange={(info) => handleUpload({ file: info.file, title: 'passport' })}
                                                 >
-                                                    <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>Upload</Button>
+                                                    <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>{t("Upload")}</Button>
                                                 </Upload>
                                             </Col>
                                         </Row>
@@ -309,18 +310,18 @@ const AddUser = ({visible,onClose,edititem}) => {
                         </Col>
                         <Col span={24}>
                             <MyInput
-                                label="New Password"
+                                label={t("New Password")}
                                 type="password"
                                 name="password"
                                 size='large'
                                 required
                                 message={()=>{}}
-                                placeholder={'Enter Password'}
+                                placeholder={t('Enter Password')}
                                 validator={({ getFieldValue }) => ({
                                     validator: (_, value) => {
                                         const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
                                         if (!reg.test(value)) {
-                                            return Promise.reject(new Error('Password should contain at least 8 characters, one uppercase letter, one number, one special character'));
+                                            return Promise.reject(new Error(t('Password should contain at least 8 characters, one uppercase letter, one number, one special character')));
                                         } else {
                                             return Promise.resolve();
                                         }
@@ -330,21 +331,21 @@ const AddUser = ({visible,onClose,edititem}) => {
                         </Col>
                         <Col span={24}>
                             <MyInput
-                                label="Re-Type Password"
+                                label={t("Re-Type Password")}
                                 type="password"
                                 name="confirmationPassword"
                                 size='large'
                                 dependencies={['password']}
                                 required
-                                message='Please enter confirm password'
-                                placeholder={'Enter Confirm Password'}
+                                message={t('Please enter confirm password')}
+                                placeholder={t('Enter Confirm Password')}
                                 rules={[
                                     ({ getFieldValue }) => ({
                                         validator(_, value) {
                                             if (!value || getFieldValue('password') === value) {
                                                 return Promise.resolve();
                                             }
-                                            return Promise.reject(new Error('The password that you entered do not match!'));
+                                            return Promise.reject(new Error(t('The password that you entered do not match!')));
                                         },
                                     }),
                                 ]}

@@ -5,14 +5,15 @@ import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
 import { GETDSATERMS } from '../../graphql/query/queries';
 import 'react-quill/dist/quill.snow.css';
+import { t } from 'i18next';
 
 const TAGS = [
-  { key: "buyerName", label: "Buyer Name" },
-  { key: "sellerName", label: "Seller Name" },
-  { key: "businessName", label: "Business Name" },
-  { key: "offerPrice", label: "Offer Price" },
-  { key: "commission", label: "Commission" },
-  { key: "date", label: "Date" },
+  { key: t("buyerName"), label: t("Buyer Name") },
+  { key: t("sellerName"), label: t("Seller Name") },
+  { key: t("businessName"), label: t("Business Name") },
+  { key: t("offerPrice"), label: t("Offer Price") },
+  { key: t("commission"), label: t("Commission") },
+  { key: t("date"), label: t("Date") },
 ];
 
 const DSATermsPage = () => {
@@ -101,7 +102,7 @@ const DSATermsPage = () => {
   const onFinish = async () => {
       try {
           if (!descriptionData || descriptionData.trim().length === 0) {
-              messageApi.error("Please add terms content");
+              messageApi.error(t("Please add terms content"));
               return;
           }
           if(data?.getDSATerms?.id){
@@ -117,7 +118,7 @@ const DSATermsPage = () => {
                 refetchQueries: [{ query: GETDSATERMS }],
                 awaitRefetchQueries: true,
               });
-              messageApi.success("DSA Terms updated successfully!");
+              messageApi.success(t("DSA Terms updated successfully!"));
           }else{
             await createTerms({
               variables: {
@@ -130,11 +131,11 @@ const DSATermsPage = () => {
                 awaitRefetchQueries: true,
           }
         });
-        messageApi.success("Terms created successfully!");
+        messageApi.success(t("Terms created successfully!"));
         }          
       } catch (err) {
           console.error(err);
-          messageApi.error("Failed to save terms");
+          messageApi.error(t("Failed to save terms"));
       }
   };
 
@@ -177,9 +178,9 @@ const DSATermsPage = () => {
           {contextHolder}
           <Flex vertical gap={20}>
               <Flex justify='space-between' align='center'>
-                  <ModuleTopHeading level={4} name='DSA Terms' />
+                  <ModuleTopHeading level={4} name={t('DSA Terms')} />
                   <Button onClick={onFinish} aria-labelledby='Save' type='button' className='btnsave border0 text-white brand-bg'>
-                      Save
+                      {t("Save")}
                   </Button>
               </Flex>
               
@@ -210,7 +211,7 @@ const DSATermsPage = () => {
                       requiredMark={false}
                   >
                       <EditorDescription
-                          label={'Terms Content'} 
+                          label={t('Terms Content')} 
                           descriptionData={descriptionData}
                           onChange={handleDescriptionChange}
                           onEditorInit={handleEditorInit}                     

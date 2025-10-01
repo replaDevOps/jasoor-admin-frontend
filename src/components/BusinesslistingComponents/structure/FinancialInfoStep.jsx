@@ -4,6 +4,7 @@ import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../PageComponents'
 import { FormReplicate } from '../../Header'
 import { revenueLookups } from '../../../shared'
+import { t } from 'i18next'
 
 const { Text } = Typography
 const FinancialInfoStep = ({ data, setData }) => {
@@ -140,12 +141,12 @@ const FinancialInfoStep = ({ data, setData }) => {
         <>
             <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
                  <Flex vertical gap={1}>
-                    <ModuleTopHeading level={4} name='Share your business numbers & potential' />
-                    <Text className='text-gray'>These numbers help buyers understand your business value.</Text>
+                    <ModuleTopHeading level={4} name={t('Share your business numbers & potential')} />
+                    <Text className='text-gray'>{t("These numbers help buyers understand your business value.")}</Text>
                 </Flex>
                 <Flex className='pill-round' gap={8} align='center'>
                     <Image src="/assets/icons/info-b.png" fetchPriority="high" preview={false} width={16} alt="info-icon" />
-                    <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
+                    <Text className='fs-12 text-sky'>{t("For any query, contact us on +966 543 543 654")}</Text>
                 </Flex>
             </Flex>
             <Form layout="vertical" form={form} requiredMark={false} onValuesChange={handleFormChange}
@@ -153,11 +154,11 @@ const FinancialInfoStep = ({ data, setData }) => {
                 <Card className='radius-12 border-gray mb-3'>
                     <Row gutter={24}>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-                        <Form.Item label="Revenue" className="w-100">
+                        <Form.Item label={t("Revenue")} className="w-100">
                             <Flex gap={2} className="w-100">
                                 <Form.Item name="revenueTime" noStyle>
                                     <Select
-                                        placeholder="Select period"
+                                        placeholder={t("Select period")}
                                         className="addonselect fs-14 w-180px"
                                     >
                                     {revenueLookups?.map((list, index) => (
@@ -169,12 +170,12 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 </Form.Item>
                                 <Form.Item
                                     name="revenue"
-                                    rules={[{ required: true, message: "Please enter revenue" }]}
+                                    rules={[{ required: true, message: t("Please enter revenue") }]}
                                     noStyle
                                 >
                                     <Input
                                         type='number'
-                                        placeholder="Enter revenue"
+                                        placeholder={t("Enter revenue")}
                                         className="w-100 add-p"
                                         addonBefore={<img src="/assets/icons/reyal-g.png" width={15} alt='currency symbol' fetchPriority="high" />}
                                     />
@@ -183,11 +184,11 @@ const FinancialInfoStep = ({ data, setData }) => {
                         </Form.Item>
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-                            <Form.Item label="Profit" className="w-100">
+                            <Form.Item label={t("Profit")} className="w-100">
                                 <Flex gap={2} className="w-100">
                                 <Form.Item name="profittime" noStyle>
                                     <Select
-                                    placeholder="Select period"
+                                    placeholder={t("Select period")}
                                     className="addonselect fs-14 w-180px"
                                     >
                                     {revenueLookups?.map((list, index) => (
@@ -200,12 +201,12 @@ const FinancialInfoStep = ({ data, setData }) => {
 
                                 <Form.Item
                                     name="profit"
-                                    rules={[{ required: true, message: "Please enter profit" }]}
+                                    rules={[{ required: true, message: t("Please enter profit") }]}
                                     noStyle
                                 >
                                     <Input
                                         type='number'
-                                        placeholder="Enter profit"
+                                        placeholder={t("Enter profit")}
                                         className="w-100 add-p"
                                         addonBefore={<img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' fetchPriority="high" />}
                                     />
@@ -230,22 +231,22 @@ const FinancialInfoStep = ({ data, setData }) => {
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
-                                label="Profit Margin"
+                                label={t("Profit Margin")}
                                 name="profitMargin"
                                 required
                                 readOnly
-                                placeholder='Enter profit margin'
+                                placeholder={t('Enter profit margin')}
                                 suffix = '%'
                             />
                         </Col>
                         
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
-                                label='Business Price'
+                                label={t('Business Price')}
                                 name='businessPrice'
                                 required
-                                message="Please enter business price"
-                                placeholder='Enter business price'
+                                message={t("Please enter business price")}
+                                placeholder={t('Enter business price')}
                                 addonBefore={
                                     <img src='/assets/icons/reyal-g.png' width={14} alt='currency symbol' fetchPriority="high" />
                                 }
@@ -257,32 +258,32 @@ const FinancialInfoStep = ({ data, setData }) => {
                 <Card className='radius-12 border-gray mb-3'>
                     <FormReplicate
                         dayKey="keyassets"
-                        title="Key Assets (Optional)"
+                        title={t("Key Assets (Optional)")}
                         form={form}
                         fieldsConfig={[
                             {
                                 name: "assetName",
-                                label: "Asset Name",
-                                placeholder: "Write asset name",
+                                label: t("Asset Name"),
+                                placeholder: t("Write asset name"),
                                 type: "input",
                             },
                             {
                                 name: "noItems",
-                                label: "Number of items",
-                                placeholder: "Enter quantity",
+                                label: t("Number of items"),
+                                placeholder: t("Enter quantity"),
                                 type: "input",
                             },
                             {
                                 name: "purchaseYear",
-                                label: "Purchase Year",
-                                placeholder: "Choose purchase year",
+                                label: t("Purchase Year"),
+                                placeholder: t("Choose purchase year"),
                                 type: "select",
                                 options: yearOp,
                             },
                             {
                                 name: "price",
-                                label: "Total Price",
-                                placeholder: "Enter price",
+                                label: t("Total Price"),
+                                placeholder: t("Enter price"),
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' fetchPriority="high" />,
                                 className: "w-100 bg-white",
@@ -293,32 +294,32 @@ const FinancialInfoStep = ({ data, setData }) => {
                 <Card className='radius-12 border-gray mb-3'>
                     <FormReplicate
                         dayKey="liability"
-                        title="Outstanding Liabilities / Debt (Optional)"
+                        title={t("Outstanding Liabilities / Debt (Optional)")}
                         form={form}
                         fieldsConfig={[
                             {
                                 name: "liabilityName",
-                                label: "Liabilities Name",
-                                placeholder: "Write liability name",
+                                label: t("Liabilities Name"),
+                                placeholder: t("Write liability name"),
                                 type: "input",
                             },
                             {
                                 name: "quantity",
-                                label: "Number of items",
-                                placeholder: "Enter quantity",
+                                label: t("Number of items"),
+                                placeholder: t("Enter quantity"),
                                 type: "input",
                             },
                             {
                                 name: "liabilitypurchaseYear",
-                                label: "Purchase Year",
-                                placeholder: "Choose purchase year",
+                                label: t("Purchase Year"),
+                                placeholder: t("Choose purchase year"),
                                 type: "select",
                                 options: yearOp,
                             },
                             {
                                 name: "liabilityPrice",
-                                label: "Total Price",
-                                placeholder: "Enter price",
+                                label: t("Total Price"),
+                                placeholder: t("Enter price"),
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' fetchPriority="high" />,
                                 className: "w-100 bg-white",
@@ -329,32 +330,32 @@ const FinancialInfoStep = ({ data, setData }) => {
                 <Card className='radius-12 border-gray mb-3'>
                     <FormReplicate
                         dayKey="inventory"
-                        title="Inventory (Optional)"
+                        title={t("Inventory (Optional)")}
                         form={form}
                         fieldsConfig={[
                             {
                                 name: "inventoryName",
-                                label: "Inventory Name",
-                                placeholder: "Write inventory name",
+                                label: t("Inventory Name"),
+                                placeholder: t("Write inventory name"),
                                 type: "input",
                             },
                             {
                                 name: "inventoryquantity",
-                                label: "Number of items",
-                                placeholder: "Enter quantity",
+                                label: t("Number of items"),
+                                placeholder: t("Enter quantity"),
                                 type: "input",
                             },
                             {
                                 name: "inventoryypurchaseYear",
-                                label: "Purchase Year",
-                                placeholder: "Choose purchase year",
+                                label: t("Purchase Year"),
+                                placeholder: t("Choose purchase year"),
                                 type: "select",
                                 options: yearOp,
                             },
                             {
                                 name: "inventoryPrice",
-                                label: "Total Price",
-                                placeholder: "Enter price",
+                                label: t("Total Price"),
+                                placeholder: t("Enter price"),
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" width={14} alt='currency symbol' fetchPriority="high" />,
                                 className: "w-100 bg-white",

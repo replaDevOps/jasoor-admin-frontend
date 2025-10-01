@@ -24,6 +24,7 @@ import { FinancePage } from '../FinancePage';
 import { FaqsPage } from '../FaqsPage';
 import { Dashboard } from '../Dashboard';
 import {DSATermsPage} from '../DSATermsPage';
+import { t } from 'i18next';
 
 
 const { Header, Sider, Content } = Layout;
@@ -68,28 +69,28 @@ const Sidebar = () => {
   }, [location]);
 
   const menuItems = useMemo(() => [
-    getItem('Dashboard', '1'),
-    getItem('Business listing', '2'),
-    getItem('Categories Management', '3'),
-    getItem('User Management', '4'),
-    getItem('Meeting Requests', '5'),
-    getItem('Business Deals', '6'),
-    getItem('Roles & Permissions', '7'),
-    getItem('Staff Members', '8'),
-    getItem('Finance', '9'),
-    getItem('Website Pages', 'sub1', null, [
-      getItem('Website Traffic Analysis', '10'),
-      getItem('Articles', '11a'),
-      getItem('FAQs', '11'),
-      getItem('Terms of Use', '12'),
-      getItem('E-NDA Term', '13'),
-      getItem('DSA Term', '19'),
-      getItem('Privacy Policy', '14'),
+    getItem(t('Dashboard'), '1'),
+    getItem(t('Business listing'), '2'),
+    getItem(t('Categories Management'), '3'),
+    getItem(t('User Management'), '4'),
+    getItem(t('Meeting Requests'), '5'),
+    getItem(t('Business Deals'), '6'),
+    getItem(t('Roles & Permissions'), '7'),
+    getItem(t('Staff Members'), '8'),
+    getItem(t('Finance'), '9'),
+    getItem(t('Website Pages'), 'sub1', null, [
+      getItem(t('Website Traffic Analysis'), '10'),
+      getItem(t('Articles'), '11a'),
+      getItem(t('FAQs'), '11'),
+      getItem(t('Terms of Use'), '12'),
+      getItem(t('E-NDA Term'), '13'),
+      getItem(t('DSA Term'), '19'),
+      getItem(t('Privacy Policy'), '14'),
     ]),
-    getItem('Contact Requests', '15'),
-    getItem('Push Notification Manager', '16'),
-    getItem('Alert', '17'),
-    getItem('Settings', '18'),
+    getItem(t('Contact Requests'), '15'),
+    getItem(t('Push Notification Manager'), '16'),
+    getItem(t('Alert'), '17'),
+    getItem(t('Settings'), '18'),
 ], []);
 
 

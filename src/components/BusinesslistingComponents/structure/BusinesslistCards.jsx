@@ -1,4 +1,5 @@
 import { Card, Row, Col, Flex, Typography } from 'antd'
+import { t } from 'i18next'
 
 const { Title, Text } = Typography
 const BusinesslistCards = ({totalActiveCount,totalCount,totalPendingCount}) => {
@@ -34,7 +35,7 @@ const BusinesslistCards = ({totalActiveCount,totalCount,totalPendingCount}) => {
                                 <div>
                                     <img src={"/assets/icons/"+data?.icon} width={45} alt="icon" fetchPriority="high"/>
                                 </div>
-                                <Text className='fs-14 text-gray'>{data?.subtitle}</Text>
+                                <Text className='fs-14 text-gray'>{t(data?.subtitle)}</Text>
                                 <Title level={4} className='fw-600 text-black m-0'>{data?.title}</Title>
                             </Flex>
                         </Card>

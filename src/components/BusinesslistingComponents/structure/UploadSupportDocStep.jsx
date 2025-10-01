@@ -3,6 +3,7 @@ import { Card, Flex, Form, Image, Tooltip, Typography } from 'antd'
 import { ModuleTopHeading } from '../../PageComponents'
 import { SingleFileUpload } from '../../Forms';
 import imageCompression from 'browser-image-compression';
+import { t } from 'i18next';
 
 const { Title, Text } = Typography
 const UploadSupportDocStep = ({ data, setData }) => {
@@ -95,12 +96,12 @@ const UploadSupportDocStep = ({ data, setData }) => {
     <>
       <Flex justify='space-between' className='mb-3' gap={5} wrap align='flex-start'>
         <Flex vertical gap={1}>
-          <ModuleTopHeading level={4} name='Upload supporting documents' />
-          <Text className='text-gray'>Verified data builds buyer confidence.</Text>
+          <ModuleTopHeading level={4} name={t('Upload supporting documents')} />
+          <Text className='text-gray'>{t("Verified data builds buyer confidence.")}</Text>
         </Flex>
         <Flex className='pill-round' gap={8} align='center'>
           <Image src="/assets/icons/info-b.png" fetchPriority="high" preview={false} width={16} alt="info-icon" />
-          <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
+          <Text className='fs-12 text-sky'>{t("For any query, contact us on +966 543 543 654")}</Text>
         </Flex>
       </Flex>
 
@@ -109,17 +110,17 @@ const UploadSupportDocStep = ({ data, setData }) => {
           <Flex vertical gap={5} className="w-100">
             <Flex vertical>
               <Title level={5} className="m-0 fw-500">
-                Commercial Registration (CR)
+                {t("Commercial Registration (CR)")}
               </Title>
               <Text className="text-gray">
-                Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file.
+                {t("Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file.")}
               </Text>
             </Flex>
             <Flex className="w-100">
               <SingleFileUpload
                 form={form}
                 name={'uploadcr'}
-                title={'Upload'}
+                title={t('Upload')}
                 onUpload={handleSingleFileUpload}
                 uploading={uploading}
                 multiple={false}
@@ -132,20 +133,20 @@ const UploadSupportDocStep = ({ data, setData }) => {
           <Flex vertical gap={5} className="w-100">
             <Flex vertical>
               <Title level={5} className="m-0 fw-500">
-                Upload Other Supporting Documents{' '}
+                {t("Upload Other Supporting Documents")}{' '}
                 <Tooltip title="Info">
                   <img src="/assets/icons/info-outline.png" width={14} alt='info icon' fetchPriority="high" />
                 </Tooltip>
               </Title>
               <Text className="text-gray">
-                Accepted formats: PDF, JPG, PNG, DOCX, XLSX. Max size: 10MB per file.
+                {t("Accepted formats: PDF, JPG, PNG, DOCX, XLSX. Max size: 10MB per file.")}
               </Text>
             </Flex>
             <Flex className="w-100">
               <SingleFileUpload
                 form={form}
                 name={'uploadmult'}
-                title={'Upload'}
+                title={t('Upload')}
                 onUpload={handleMultipleFileUpload}
                 uploading={uploading}
                 multiple={true}

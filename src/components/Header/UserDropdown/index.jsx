@@ -6,6 +6,7 @@ import { LOGOUT } from '../../../graphql/mutation/login';
 import {ME} from '../../../graphql/query'
 
 import { client } from '../../../config';
+import { t } from 'i18next';
 
 const UserDropdown = ()=> {
   const userId = localStorage.getItem("userId"); 
@@ -65,7 +66,7 @@ const UserDropdown = ()=> {
           onClick={logout}
           aria-labelledby='logout'
           >
-            Logout
+            {t("Logout")}
         </Button>
       </Space>
     </Card>

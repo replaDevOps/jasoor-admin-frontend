@@ -8,14 +8,15 @@ import { UPDATE_USER, DELETE_USER } from '../../../graphql/mutation';
 import { GETSTAFFMEMBERS, GETROLES } from '../../../graphql/query';
 import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
 import { TableLoader } from '../../Ui/TableLoader';
+import { t } from 'i18next';
 
 const { Text } = Typography;
 
 const StaffMemberTable = ({ setVisible, setEditItem }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [selectedStatus, setSelectedStatus] = useState('Status');
-  const [selectedRole, setSelectedRole] = useState('Role');
+  const [selectedStatus, setSelectedStatus] = useState(t('Status'));
+  const [selectedRole, setSelectedRole] = useState(t('Role'));
   const [deleteitem, setDeleteItem] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
@@ -99,23 +100,23 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
 
   const staffmemberColumn = (setVisible, setDeleteItem, setEditItem) => [
     {
-      title: 'Name',
+      title: t('Name'),
       dataIndex: 'name'
     },
     {
-      title: 'Email',
+      title: t('Email'),
       dataIndex: 'email'
     },
     {
-      title: 'Phone',
+      title: t('Phone'),
       dataIndex: 'phone'
     },
     {
-      title: 'Role',
+      title: t('Role'),
       dataIndex: 'role'
     },
     {
-      title: 'Status',
+      title: t('Status'),
       dataIndex: 'status',
       render: (status) => {
         if (status === 'verified') {
@@ -129,7 +130,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
       }
     },
     {
-      title: 'Action',
+      title: t('Action'),
       key: 'action',
       fixed: 'right',
       width: 100,
@@ -144,9 +145,9 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                 }
               }
             });
-            messageApi.success('User status updated successfully!');
+            messageApi.success(t('User status updated successfully!'));
           } catch (err) {
-            messageApi.error(err.message || 'Something went wrong!');
+            messageApi.error(err.message || t('Something went wrong!'));
           }
         };
 
@@ -154,13 +155,13 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
         let nextStatus = '';
 
         if (row.status === 'pending') {
-          actionLabel = 'Verify';
+          actionLabel = t('Verify');
           nextStatus = 'verified';
         } else if (row.status === 'verified') {
-          actionLabel = 'Inactive';
+          actionLabel = t('Inactive');
           nextStatus = 'inactive';
         } else if (row.status === 'inactive') {
-          actionLabel = 'Verify';
+          actionLabel = t('Verify');
           nextStatus = 'verified';
         }
 
@@ -177,7 +178,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                         setEditItem(row);
                       }}
                     >
-                      Edit
+                      {t("Edit")}
                     </NavLink>
                   ),
                   key: '1'
@@ -204,7 +205,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                         setSelectedUserId(row.key);
                       }}
                     >
-                      Delete
+                      {t("Delete")}
                     </NavLink>
                   ),
                   key: '3'
@@ -223,15 +224,15 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
   ];
 
   const statusItems = [
-    { key: '1', label: 'All' },
-    { key: '2', label: 'Active' },
-    { key: '3', label: 'Inactive' }
+    { key: '1', label: t('All') },
+    { key: '2', label: t('Active') },
+    { key: '3', label: t('Inactive') }
   ];
 
   const roleItems =
     roles?.map((role) => ({
       key: role?.id,
-      label: role?.name
+      label: t(role?.name)
     })) || [];
 
   return (
@@ -245,7 +246,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                 <Flex gap={5} wrap>
                   <SearchInput
                     name="name"
-                    placeholder="Search"
+                    placeholder={t("Search")}
                     prefix={<img src="/assets/icons/search.png" width={14} alt="search icon" fetchPriority="high" />}
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
                     onChange={(e) => handleSearch(e.target.value.trim())}
@@ -290,8 +291,8 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
       <DeleteModal
         visible={deleteitem}
         onClose={() => setDeleteItem(false)}
-        title="Are you sure?"
-        subtitle="This action cannot be undone. Are you sure you want to delete this staff member?"
+        title={t("Are you sure?")}
+        subtitle={t("This action cannot be undone. Are you sure you want to delete this staff member?")}
         type="danger"
         onConfirm={() => {
           if (selectedUserId) {

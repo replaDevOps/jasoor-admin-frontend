@@ -1,4 +1,6 @@
-import { useTranslation } from "react-i18next";
+
+import { t } from "i18next";
+
 
 const categoriesItems = [
     { id: '1', name: 'Digital Business' },
@@ -26,49 +28,49 @@ const useGroupItem = ()=>{
 }
 
 const districtselectItems = [
-    { id: 1, name: 'All District'},
-    { id: 2, name: 'Makkah' },
-    { id: 3, name: 'Eastern' },
-    { id: 4, name: 'Al-Madinah' },
-    { id: 5, name: 'Asir' },
-    { id: 6, name: 'Tabuk' },
-    { id: 7, name: 'Najran' },
-    { id: 8, name: 'Al-Qassim' },
-    { id: 9, name: 'Hail' },
-    { id: 10, name: 'Al-Jouf' },
-    { id: 11, name: 'Al-Bahah' },
-    { id: 12, name: 'Riyadh' },
-    { id: 13, name: 'Northern Borders' },
-    { id: 14, name: 'Jazan' },
+    { id: 1, name: t('All District')},
+    { id: 2, name: t('Makkah')},
+    { id: 3, name: t('Eastern')},
+    { id: 4, name: t('Al-Madinah')},
+    { id: 5, name: t('Asir')},
+    { id: 6, name: t('Tabuk')},
+    { id: 7, name: t('Najran')},
+    { id: 8, name: t('Al-Qassim')},
+    { id: 9, name: t('Hail')},
+    { id: 10, name: t('Al-Jouf')},
+    { id: 11, name: t('Al-Bahah')},
+    { id: 12, name: t('Riyadh')},
+    { id: 13, name: t('Northern Borders')},
+    { id: 14, name: t('Jazan')},
 ]
 
 
 const districtItems = [
-    { key: '1', label: 'Makkah' },
-    { key: '2', label: 'Eastern' },
-    { key: '3', label: 'Al-Madinah' },
-    { key: '4', label: 'Asir' },
-    { key: '5', label: 'Tabuk' },
-    { key: '6', label: 'Najran' },
-    { key: '7', label: 'Al-Qassim' },
-    { key: '8', label: 'Hail' },
-    { key: '9', label: 'Al-Jouf' },
-    { key: '10', label: 'Al-Bahah' },
-    { key: '11', label: 'Riyadh' },
-    { key: '12', label: 'Northern Borders' },
-    { key: '13', label: 'Jazan' },
+    { key: '1', label: t('Makkah') },
+    { key: '2', label: t('Eastern') },
+    { key: '3', label: t('Al-Madinah') },
+    { key: '4', label: t('Asir') },
+    { key: '5', label: t('Tabuk') },
+    { key: '6', label: t('Najran') },
+    { key: '7', label: t('Al-Qassim') },
+    { key: '8', label: t('Hail') },
+    { key: '9', label: t('Al-Jouf') },
+    { key: '10', label: t('Al-Bahah') },
+    { key: '11', label: t('Riyadh') },
+    { key: '12', label: t('Northern Borders') },
+    { key: '13', label: t('Jazan') },
 ]
 
  const statusItems = [
-    { key: '1', label: 'All' },
-    { key: '2', label: 'Active' },
-    { key: '3', label: 'Inactive' }
+    { key: '1', label: t('All') },
+    { key: '2', label: t('Active') },
+    { key: '3', label: t('Inactive') }
 ];
 
 const typeItems = [
-    { key: '1', label: 'All' },
-    { key: '2', label: 'New' },
-    { key: '3', label: 'Old' }
+    { key: '1', label: t('All') },
+    { key: '2', label: t('New') },
+    { key: '3', label: t('Old') }
 ];
 
 const meetingItems = [
@@ -78,15 +80,15 @@ const meetingItems = [
 ]
 
 const businessdealItems = [
-    { key: '1', label: 'All' },
-    { key: '2', label: 'Document & Payment Confirmation' },
-    { key: '3', label: 'Commission Verification Pending' },
-    { key: '4', label: 'Seller Payment Verification Pending' },
-    { key: '5', label: 'Closed Deal Verification Pending' },
-    { key: '6', label: 'Payment Approval From Seller Pending' },
-    { key: '7', label: 'Bank Details  From Seller Pending' },
-    { key: '8', label: 'DSA From Seller Pending' },
-    { key: '9', label: 'DSA From Buyer Pending' },
+    { key: '1', label: t('All') },
+    { key: '2', label: t('Document & Payment Confirmation') },
+    { key: '3', label: t('Commission Verification Pending') },
+    { key: '4', label: t('Seller Payment Verification Pending') },
+    { key: '5', label: t('Closed Deal Verification Pending') },
+    { key: '6', label: t('Payment Approval From Seller Pending') },
+    { key: '7', label: t('Bank Details From Seller Pending') },
+    { key: '8', label: t('DSA From Seller Pending') },
+    { key: '9', label: t('DSA From Buyer Pending') },
 ]
 
 const pushstatusItem = [

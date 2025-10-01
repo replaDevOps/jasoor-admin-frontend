@@ -8,12 +8,13 @@ import { CustomPagination } from '../../Ui';
 import { GETDEALS } from '../../../graphql/query/meeting'
 import { useLazyQuery } from '@apollo/client'
 import { TableLoader } from '../../Ui/TableLoader';
+import { t } from 'i18next';
 
 const { Text } = Typography
 
 const InprogressDealTable = () => {
     const [form] = Form.useForm();
-    const [selectedStatus, setSelectedStatus] = useState('Status');
+    const [selectedStatus, setSelectedStatus] = useState(t('Status'));
     const navigate = useNavigate()
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
@@ -65,23 +66,23 @@ const InprogressDealTable = () => {
 
     const inprogressdealColumn = [
         {
-            title: 'Business Title',
+            title: t('Business Title'),
             dataIndex: 'businessTitle',
         },
         {
-            title: 'Buyer Name',
+            title: t('Buyer Name'),
             dataIndex: 'buyerName',
         },
         {
-            title: 'Seller Name',
+            title: t('Seller Name'),
             dataIndex: 'sellerName',
         },
         {
-            title: 'Finalized Offer',
+            title: t('Finalized Offer'),
             dataIndex: 'finalizedOffer',
         },
         {
-            title: 'Status',
+            title: t('Status'),
             dataIndex: 'status',
             render: (status) => {
                 return (
@@ -123,7 +124,7 @@ const InprogressDealTable = () => {
             }
         },
         {
-            title: 'Date',
+            title: t('Date'),
             dataIndex: 'date',
         },
     ];
@@ -137,7 +138,7 @@ const InprogressDealTable = () => {
                             <Flex gap={5} wrap>
                                 <SearchInput
                                     name='name'
-                                    placeholder='Search'
+                                    placeholder={t('Search')}
                                     prefix={<img src='/assets/icons/search.png' width={14} alt='search icon' fetchPriority="high" />}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                     onChange={(e) => handleSearch(e.target.value)}

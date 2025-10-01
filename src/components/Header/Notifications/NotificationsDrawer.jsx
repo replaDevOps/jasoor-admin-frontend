@@ -5,6 +5,7 @@ import {
 import { MARK_AS_READ } from '../../../graphql/mutation';
 import {GET_NOTIFICATIONS} from '../../../graphql/query'
 import { useMutation,useQuery } from '@apollo/client';
+import { t } from "i18next";
 
 const { Text } = Typography
 const NotificationsDrawer= ({visible, onClose})=>{
@@ -36,7 +37,7 @@ const NotificationsDrawer= ({visible, onClose})=>{
     
     return (
         <Drawer
-            title='Notifications'
+            title={t('Notifications')}
             onClose={onClose}
             open={visible}
             destroyOnClose
@@ -49,7 +50,7 @@ const NotificationsDrawer= ({visible, onClose})=>{
                     onClick={handleClearAll}
                     aria-labelledby='Clear all'
                 >
-                    Clear All
+                    {t("Clear All")}
                 </Button>
             }
         >

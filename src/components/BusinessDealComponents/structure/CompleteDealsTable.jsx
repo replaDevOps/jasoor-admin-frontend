@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { GETDEALS } from '../../../graphql/query/meeting'
 import { useLazyQuery } from '@apollo/client'
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 const CompleteDealsTable = ({ setCompleteDeal }) => {
     const [form] = Form.useForm();
@@ -59,7 +60,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
                     <Flex gap={5}>
                         <SearchInput
                             name="name"
-                            placeholder="Search"
+                            placeholder={t("Search")}
                             prefix={<img src="/assets/icons/search.png" width={14} alt="search icon" fetchPriority="high" />}
                             className="border-light-gray pad-x ps-0 radius-8 fs-13"
                             onChange={(e) => handleSearch(e.target.value)}
