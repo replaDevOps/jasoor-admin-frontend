@@ -39,6 +39,9 @@
 
     "Jusoor": "جسور",
   "Business Listing": "قائمة الأعمال",
+  "Business listing": "قائمة الأعمال",
+  "Roles & Permissions":"الأدوار والصلاحيات",
+  "Staff Members":"أفراد الطاقم",
   "Add Business": "إضافة عمل",
   "Total Listing": "إجمالي القوائم",
   "Total Active Listing": "إجمالي القوائم النشطة",
@@ -77,6 +80,8 @@
   "Sell business by Takbeel": "بيع العمل عبر تكبيل",
   "Username": "اسم المستخدم",
   "Select User": "اختر مستخدم",
+  "Select user":"حدد المستخدم",
+  "Choose purchase year":"اختر سنة الشراء",
   "Business Category": "فئة العمل",
   "Write business name": "اكتب اسم العمل",
   "Choose business category": "اختر فئة العمل",
@@ -107,7 +112,7 @@
   "Previous": "السابق",
   "next": "التالي",
   "Save as Draft": "حفظ كمسودة",
-  "publish": "نشر",
+  "Publish": "نشر",
   "Share your business numbers & potential": "شارك أرقام عملك وإمكاناته",
   "These numbers help buyers understand your business value.": "هذه الأرقام تساعد المشترين على فهم قيمة عملك.",
   "Revenue": "الإيرادات",
@@ -245,6 +250,9 @@
   "/sellbusinesscreate": "/sellbusinesscreate",
   "Login Page": "صفحة تسجيل الدخول",
   "/profiledashboard": "/profiledashboard",
+  "Profile":"حساب تعريفي",
+  "Logout":"تسجيل الخروج",
+  "Please select user":"يرجى اختيار المستخدم",
   "About Us": "من نحن",
   "Listing / Ref # b6c4bd96-7032-4115-8da4-be2c1763b9e3": "القائمة / المرجع # b6c4bd96-7032-4115-8da4-be2c1763b9e3",
   "/article": "/article",
@@ -294,8 +302,11 @@
   "E-NDA Terms updated successfully!":"تم تحديث شروط اتفاقية عدم الإفصاح الإلكتروني (E-NDA) بنجاح!",
   "E-NDA Terms created successfully!":"تم إنشاء شروط اتفاقية عدم الإفصاح الإلكتروني (E-NDA) بنجاح!",
   "E-NDA Terms": "شروط NDA الإلكتروني",
+  "E-NDA Term":"شروط NDA الإلكتروني",
   "Failed to save terms": "فشل حفظ الشروط",
   "DSA Terms": "شروط DSA",
+  "DSA Term": "شروط DSA",
+  "Push Notification Manager":"مدير إشعارات الدفع",
   "buyerName": "اسم المشتري",
   "sellerName":"على العمل:",
   "Seller Name": "اسم البائع",
@@ -444,6 +455,9 @@
   "Delete Article": "حذف المقال",
   "Publish Article": "نشر المقال",
   "Alerts": "التنبيهات",
+  "Alert":"يُحذًِر",
+  "Notifications":"إشعارات",
+  "Clear All":"مسح الكل",
   "View Alerts": "عرض التنبيهات",
   "Admin Setting": "إعدادات المدير",
   "Add/Edit/Delete Roles": "إضافة/تعديل/حذف الأدوار",
@@ -470,10 +484,43 @@
   "Something went wrong":"حدث خطأ ما",
   "Please enter title":"الرجاء إدخال العنوان",
   "Cancel Meeting":"إلغاء الاجتماع",
-  "Business Details": "تفاصيل العمل"
+  "Business Details": "تفاصيل العمل",
 
 
 
 
+
+
+
+
+
+  "Please enter commission rate":"الرجاء إدخال سعر العمولة",
+  "Please enter facebook link":"الرجاء إدخال رابط الفيسبوك",
+  "Please enter instagram link":"الرجاء إدخال رابط الانستغرام",
+  "Please enter whatsapp number":"الرجاء إدخال رقم الواتساب",
+  "Please enter twitter link":"الرجاء إدخال رابط تويتر",
+  "View":"منظر",
+  "All District":"كل المنطقة",
+  "Please choose district":"الرجاء اختيار المنطقة",
+  "No. of Website Visitors":"عدد زوار الموقع",
+  "Edit Question":"تحرير السؤال",
+  "Edit a question and its answer to help users better understand how Jusoor works.":"قم بتعديل السؤال وإجابته لمساعدة المستخدمين على فهم كيفية عمل جسور بشكل أفضل.",
+  "Failed to save FAQ":"فشل حفظ الأسئلة الشائعة",
+  "Policy created successfully!":"تم إنشاء السياسة بنجاح!",
+  "Settings updated successfully!":"تم تحديث الإعدادات بنجاح!",
+  "Failed to update settings.":"فشل في تحديث الإعدادات.",
+  "campaign created successfully!":"تم إنشاء الحملة بنجاح!",
+  "Failed to create campaign.":"فشل إنشاء الحملة.",
+  "Response sent successfully!":"تم إرسال الرد بنجاح!",
+  "Something went wrong!":"حدث خطأ ما!",
+  "Edit Notification":"تحرير الإخطار",
+  "Failed to upload file":"فشل تحميل الملف",
+  "Please upload an image":"يرجى تحميل صورة",
+  "Please add article content":"الرجاء إضافة محتوى المقال",
+  "Article updated successfully":"تم تحديث المقالة بنجاح",
+  "Failed to save article":"فشل حفظ المقالة",
+  "FAQ added successfully":"تمت إضافة الأسئلة الشائعة بنجاح",
+  "This action cannot be undone. Are you sure you want to delete this Role?":"لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من حذف هذا الدور؟",
+  "Stats changed successfully!":"تم تغيير الإحصائيات بنجاح!"
 
 }

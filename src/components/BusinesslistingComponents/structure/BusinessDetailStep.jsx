@@ -112,7 +112,7 @@ const BusinessDetailStep = ({ data, setData }) => {
                 label={t("Username")}
                 name="username"
                 required
-                message="Please select user"
+                message={t("Please select user")}
                 placeholder={t("Select user")}
               />
             </Col>

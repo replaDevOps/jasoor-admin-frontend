@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Drawer, Button } from "antd"
+import { t } from "i18next"
 
 const UserProfileDrawer= ({visible, onClose})=>{
 
@@ -35,7 +36,7 @@ const UserProfileDrawer= ({visible, onClose})=>{
 
     return (
         <Drawer
-            title='Profile'
+            title={t('Profile')}
             onClose={onClose}
             open={visible}
             width={400}
@@ -48,7 +49,7 @@ const UserProfileDrawer= ({visible, onClose})=>{
                     // onClick={logout}
                     aria-labelledby='logout'
                 >
-                    Logout
+                    {t("Logout")}
                 </Button>
             }
         >

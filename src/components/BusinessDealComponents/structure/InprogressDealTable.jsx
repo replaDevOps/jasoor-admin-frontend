@@ -14,7 +14,7 @@ const { Text } = Typography
 
 const InprogressDealTable = () => {
     const [form] = Form.useForm();
-    const [selectedStatus, setSelectedStatus] = useState('Status');
+    const [selectedStatus, setSelectedStatus] = useState(t('Status'));
     const navigate = useNavigate()
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
@@ -124,7 +124,7 @@ const InprogressDealTable = () => {
             }
         },
         {
-            title: 'Date',
+            title: t('Date'),
             dataIndex: 'date',
         },
     ];
