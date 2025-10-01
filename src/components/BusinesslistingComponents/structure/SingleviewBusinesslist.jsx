@@ -85,7 +85,7 @@ const SingleviewBusinesslist = () => {
                         onClick={() =>
                             updateBusiness({
                                 variables: {
-                                    input: { id, businessStatus: 'REJECT' },
+                                    input: { id, businessStatus: 'REJECT',isStatsVerified:false },
                                 },
                             })
                         }
@@ -99,7 +99,7 @@ const SingleviewBusinesslist = () => {
                         onClick={() =>
                             updateBusiness({
                                 variables: {
-                                    input: { id, businessStatus: 'ACTIVE' },
+                                    input: { id, businessStatus: 'ACTIVE',isStatsVerified:true },
                                 },
                             })
                         }
@@ -115,7 +115,7 @@ const SingleviewBusinesslist = () => {
                         onClick={() =>
                             updateBusiness({
                                 variables: {
-                                    input: { id, businessStatus: 'INACTIVE' },
+                                    input: { id, businessStatus: 'INACTIVE',isStatsVerified:false },
                                 },
                             })
                         }
@@ -130,7 +130,7 @@ const SingleviewBusinesslist = () => {
                         onClick={() =>
                             updateBusiness({
                                 variables: {
-                                    input: { id, businessStatus: 'ACTIVE' },
+                                    input: { id, businessStatus: 'ACTIVE',isStatsVerified:true },
                                 },
                             })
                         }

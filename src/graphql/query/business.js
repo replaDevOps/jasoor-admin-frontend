@@ -60,6 +60,7 @@ const GET_BUSINESSES = gql`
       revenue
       profit
       price
+      isStatsVerified
       capitalRecovery
       category {
         name

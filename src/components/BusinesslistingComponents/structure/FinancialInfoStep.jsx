@@ -119,7 +119,6 @@ const FinancialInfoStep = ({ data, setData }) => {
             multiple: scaledMultiple,
             profitMargen: profitMargin,
             capitalRecovery,
-            capitalRecovery
         }));
 
         form.setFieldsValue({
