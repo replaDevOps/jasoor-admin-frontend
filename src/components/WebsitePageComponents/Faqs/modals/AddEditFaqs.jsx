@@ -64,8 +64,9 @@ const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
           onClose(); // Close modal
           form.resetFields();
         } catch (err) {
-          console.error(err);
-          messageApi.error(t('Failed to save FAQ'));
+           if (err.graphQLErrors) {
+            messageApi.error(t(err.graphQLErrors[0].message));
+          }
         }
     };
 
