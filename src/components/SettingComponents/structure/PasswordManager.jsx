@@ -3,6 +3,7 @@ import { MyInput } from '../../Forms'
 import { CHANGE_ADMIN_PASSWORD } from '../../../graphql/mutation'
 import { useMutation } from '@apollo/client'
 import { message } from "antd";
+import { t } from 'i18next';
 
 const { Title } = Typography
 const PasswordManager = () => {
@@ -43,7 +44,7 @@ const PasswordManager = () => {
             actions={[
                 <Flex justify='end' className='px-3'>
                     <Button aria-labelledby='Save Changes' type='button' className='btncancel text-black border-gray'  onClick={() => form.submit()}>
-                        Save Changes
+                        {t("Save Changes")}
                     </Button>
                 </Flex>
             ]}
@@ -56,34 +57,34 @@ const PasswordManager = () => {
                 requiredMark={false}
             >
                 <Title level={5} className='mt-0 mb-3 fw-600'>
-                    Password Manager
+                    {t("Password Manager")}
                 </Title>
                 <Row gutter={12}>
                     <Col lg={{span: 8}} md={{span: 12}} span={24}>
                         <MyInput
-                            label='Old Password'
+                            label={t('Old Password')}
                             name='oldPassword'
                             type='password' 
                             required
-                            message='Please enter old password'
+                            message={t('Please enter old password')}
                         />
                     </Col>
                     <Col lg={{span: 8}} md={{span: 12}} span={24}>
                         <MyInput
-                            label='New Password'
+                            label={t('New Password')}
                             name='newPassword'
                             type='password' 
                             required
-                            message='Please enter new password'
+                            message={t('Please enter new password')}
                         />
                     </Col>
                     <Col lg={{ span: 8 }} md={{ span: 12 }} span={24}>
                         <Form.Item
                             name='confirmPassword'
-                            label='Re-type Password'
+                            label={t('Re-type Password')}
                             dependencies={['newPassword']}
                             rules={[
-                                { required: true, message: 'Please confirm your password' },
+                                { required: true, message: t('Please confirm your password') },
                                 ({ getFieldValue }) => ({
                                     validator(_, value) {
                                         if (!value || getFieldValue('newPassword') === value) {

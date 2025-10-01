@@ -2,6 +2,7 @@ import { Card, Col, Flex, Row, Typography } from 'antd'
 import { ModuleTopHeading } from '../../../PageComponents'
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { t } from 'i18next';
 
 const { Title, Text } = Typography
 const WebsiteTrafficCards = () => {
@@ -44,25 +45,25 @@ const WebsiteTrafficCards = () => {
       id: 1,
       icon: "totalvisitor.png",
       title: stats.totalVisitors,
-      subtitle: "Total Visitors",
+      subtitle: t("Total Visitors"),
     },
     {
       id: 2,
       icon: "returnvisitor.png",
       title: stats.returningVisitors,
-      subtitle: "Returning Visitors",
+      subtitle: t("Returning Visitors"),
     },
     {
       id: 3,
       icon: "avgsession.png",
       title: stats.avgSession,
-      subtitle: "Avg. Session Duration",
+      subtitle: t("Avg. Session Duration"),
     },
     {
       id: 4,
       icon: "desktopuser.png",
       title: stats.desktopUsers,
-      subtitle: "Desktop Users",
+      subtitle: t("Desktop Users"),
     },
   ];
 
@@ -71,7 +72,7 @@ const WebsiteTrafficCards = () => {
     <Card className='border-gray radius-12'>
         <Row gutter={[14,14]}>
             <Col span={24}>
-                <ModuleTopHeading  level={4} name='Traffic Insights' />
+                <ModuleTopHeading  level={4} name={t('Traffic Insights')} />
             </Col>
             <Col xs={{span: 24}} sm={{span: 24}} md={{span: 24}} lg={{span: 19}}>
                 <Row gutter={[14,24]} className='h-100'>
@@ -98,7 +99,7 @@ const WebsiteTrafficCards = () => {
                         <div>
                             <img src={"/assets/icons/mobileuser.png"} width={45} alt="user icon" fetchPriority="high"/>
                         </div>
-                        <Text className='fs-14 text-gray'>Mobile Users</Text>
+                        <Text className='fs-14 text-gray'>{t("Mobile Users")}</Text>
                         <Title level={5} className='fw-600 text-black m-0'>{stats.mobileUsers}</Title>
                     </Flex>
                 </Card>

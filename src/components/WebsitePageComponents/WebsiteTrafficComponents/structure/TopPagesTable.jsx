@@ -2,6 +2,7 @@ import { Card, Flex, Table } from 'antd'
 import { ModuleTopHeading } from '../../../PageComponents'
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { t } from 'i18next';
 
 const TopPagesTable = () => {
     const [toppagesData, setTopPagesData] = useState([]);
@@ -29,18 +30,18 @@ const TopPagesTable = () => {
     
       const Column = [
         {
-            title:'Page Name',
+            title:t('Page Name'),
             dataIndex: 'pagename'
         },
         {
-            title:'Views',
+            title:t('Views'),
             dataIndex: 'views'
         },
     ]
     return (
         <Card className='radius-12 border-gray h-100'>
             <Flex vertical gap={14}>
-                <ModuleTopHeading level={4}  name='Top Pages' />
+                <ModuleTopHeading level={4}  name={t('Top Pages')} />
                 <Table
                     size='large'
                     columns={Column}

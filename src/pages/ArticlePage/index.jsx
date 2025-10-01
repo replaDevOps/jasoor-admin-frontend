@@ -5,6 +5,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import {DELETE_ARTICLE} from '../../graphql/mutation/mutations'
 import { useMutation } from "@apollo/client";
+import { t } from 'i18next';
 
 const ArticlePage = () => {
     const [ visible, setVisible ] = useState(false)
@@ -39,9 +40,9 @@ const ArticlePage = () => {
             <Row gutter={[24,24]}>
                 <Col span={24}>
                     <Flex justify='space-between'>
-                        <ModuleTopHeading level={4} name='Articles' />
+                        <ModuleTopHeading level={4} name={t('Articles')} />
                         <Button aria-labelledby='Add New Article' type='primary' className='btnsave' onClick={()=>navigate('/articles/add')}> 
-                            <PlusOutlined /> Add New Article
+                            <PlusOutlined /> {t("Add New Articles")}
                         </Button>
                     </Flex>
                 </Col>

@@ -1,6 +1,5 @@
 import { Card, Col, Flex, Form, Row, Table } from 'antd';
 import { MyDatepicker, SearchInput } from '../../Forms';
-import { financeColumn } from '../../../data';
 import { useState } from 'react';
 import { CustomPagination } from '../../Ui';
 import moment from 'moment';
@@ -10,6 +9,7 @@ import { useQuery } from '@apollo/client';
 import { t } from 'i18next';
 
 const FinanceTable = () => {
+    
     const [form] = Form.useForm();
     const [dateRange, setDateRange] = useState();
     const [pageSize, setPageSize] = useState(10);
@@ -26,6 +26,32 @@ const FinanceTable = () => {
         },
         fetchPolicy: 'cache-and-network',
     });
+    const financeColumn = [
+        {
+            title: t("Business Title"),
+            dataIndex: "businessTitle",
+        },
+        {
+            title: t("Seller Name"),
+            dataIndex: "sellerName",
+        },
+        {
+            title: t("Buyer Name"),
+            dataIndex: "buyerName",
+        },
+        {
+            title: t("Deal Amount"),
+            dataIndex: "dealAmount",
+        },
+        {
+            title: t("Commission Earned"),
+            dataIndex: "commissionEarn",
+        },
+        {
+            title: t("Date & Time"),
+            dataIndex: "dateTime",
+        },
+    ];
 
     const total = data?.getCompletedDeals?.totalCount;
     const financeData = data?.getCompletedDeals?.deals.map(deal => ({

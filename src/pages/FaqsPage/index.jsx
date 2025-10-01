@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Row, Col, Flex, Button } from 'antd'
 import { AddEditFaqs, FaqsTable, ModuleTopHeading } from '../../components'
 import { PlusOutlined } from '@ant-design/icons'
+import { t } from 'i18next'
 
 const FaqsPage = () => {
 
@@ -12,9 +13,9 @@ const FaqsPage = () => {
             <Row gutter={[24,24]}>
                 <Col span={24}>
                     <Flex justify='space-between'>
-                        <ModuleTopHeading level={4} name='FAQs'/>
+                        <ModuleTopHeading level={4} name={t('FAQs')}/>
                         <Button aria-labelledby='Add a Question' type='primary' className='btnsave' onClick={() => setVisible(true)}>
-                            <PlusOutlined /> Add A Question
+                            <PlusOutlined /> {t("Add A Question")}
                         </Button>
                     </Flex>
                 </Col>

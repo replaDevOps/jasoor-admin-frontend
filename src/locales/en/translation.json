@@ -111,6 +111,7 @@
     "next": "Next",
     "Save as Draft": "Save as Draft",
     "Publish": "Publish",
+    "publish": "Publish",
     "Share your business numbers & potential":" Share your business numbers & potential",
     "These numbers help buyers understand your business value.":" These numbers help buyers understand your business value.",
     "Revenue": "Revenue",
@@ -511,14 +512,6 @@
   "Cancel Meeting":"Cancel Meeting",
 
 
-
-
-
-
-
-
-
-
   "Please enter commission rate":"Please enter commission rate",
   "Please enter facebook link":"Please enter facebook link",
   "Please enter instagram link":"Please enter instagram link",
@@ -544,7 +537,9 @@
 "Please add article content":"Please add article content",
 "Article updated successfully":"Article updated successfully",
 "Failed to save article":"Failed to save article",
+"Please fill in both question and answer":"Please fill in both question and answer",
 "FAQ added successfully":"FAQ added successfully",
 "This action cannot be undone. Are you sure you want to delete this Role?":"This action cannot be undone. Are you sure you want to delete this Role?",
 "Stats changed successfully!":"Stats changed successfully!"
 }
+

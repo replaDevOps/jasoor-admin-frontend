@@ -1,5 +1,6 @@
 import { Col, Flex, Row, Typography } from 'antd'
 import { TopPagesTable, TrafficByCityDonut, WebsiteTrafficCards, WebsiteVisitBarChart } from '../../components'
+import { t } from 'i18next'
 
 const { Title } = Typography
 const WebsiteTraficAnalysisPage = () => {
@@ -7,7 +8,7 @@ const WebsiteTraficAnalysisPage = () => {
     <div>
       <Flex vertical gap={24}>
         <Flex vertical gap={2}>
-          <Title level={4} className='m-0'>Website Traffic Analysis</Title>
+          <Title level={4} className='m-0'>{t("Website Traffic Analysis")}</Title>
         </Flex>
         <WebsiteTrafficCards />
         <WebsiteVisitBarChart />

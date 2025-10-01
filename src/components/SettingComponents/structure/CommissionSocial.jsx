@@ -6,6 +6,7 @@ import { UPDATE_SETTING, CREATE_SETTINGS } from '../../../graphql/mutation/'
 import { GET_SETTINGS } from '../../../graphql/query'
 import { useMutation } from '@apollo/client'
 import { message } from "antd";
+import { t } from 'i18next';
 
 const { Title } = Typography
 const CommissionSocial = ({ comssionSocial }) => {
@@ -31,10 +32,10 @@ const CommissionSocial = ({ comssionSocial }) => {
         refetchQueries: [{ query: GET_SETTINGS }],
         awaitRefetchQueries: true,
         onCompleted: () => {
-            messageApi.success('Settings updated successfully!');
+            messageApi.success(t('Settings updated successfully!'));
         },
         onError: (err) => {
-            messageApi.error(err?.message || 'Failed to update settings.');
+            messageApi.error(err?.message || t('Failed to update settings.'));
         }
     });
 
@@ -101,7 +102,7 @@ const CommissionSocial = ({ comssionSocial }) => {
                             onClick={() => form.submit()}
                             loading={isLoading}
                         >
-                            Save Changes
+                            {t("Save Changes")}
                         </Button>
                     </Flex>
                 ]}
@@ -113,73 +114,73 @@ const CommissionSocial = ({ comssionSocial }) => {
                     requiredMark={false}
                 >
                     <Title level={5} className='mt-0 mb-3 fw-600'>
-                        System Language
+                        {t("System Language")}
                     </Title>
                     <MySelect
-                        label="Language"
+                        label={t("Language")}
                         name="language"
                         required
-                        message="Choose language"
+                        message={t("Choose language")}
                         options={langItems}
-                        placeholder="Choose language"
+                        placeholder={t("Choose language")}
                     />
                     <Title level={5} className='my-3 fw-600'>
-                        Commission Rate
+                        {t("Commission Rate")}
                     </Title>
                     <Row className='mb-3'>
                         <Col span={24}>
                             <MyInput
-                                label='Commission rate'
+                                label={t('Commission rate')}
                                 name='rate'
                                 required
-                                message='Please enter commission rate'
-                                placeholder='Enter commission rate'
+                                message={t('Please enter commission rate')}
+                                placeholder={t('Enter commission rate')}
                                 addonAfter={'%'}
                             />
                         </Col>
                     </Row>
                     <Title level={5} className='mt-0 mb-3 fw-600'>
-                        Social Links
+                        {t("Social Links")}
                     </Title>
                     <Row gutter={12}>
                         <Col lg={{ span: 8 }} md={{ span: 12 }} span={24}>
                             <MyInput
-                                label='Facebook'
+                                label={t('Facebook')}
                                 name='facebook'
                                 required
-                                message='Please enter facebook link'
+                                message={t('Please enter facebook link')}
                             />
                         </Col>
                         <Col lg={{ span: 8 }} md={{ span: 12 }} span={24}>
                             <MyInput
-                                label='Instagram'
+                                label={t('Instagram')}
                                 name='instagram'
                                 required
-                                message='Please enter instagram link'
+                                message={t('Please enter instagram link')}
                             />
                         </Col>
                         <Col lg={{ span: 8 }} md={{ span: 12 }} span={24}>
                             <MyInput
-                                label='WhatsApp'
+                                label={t('WhatsApp')}
                                 name='whatsapp'
                                 required
-                                message='Please enter whatsapp number'
+                                message={t('Please enter whatsapp number')}
                             />
                         </Col>
                         <Col md={{ span: 12 }} span={24}>
                             <MyInput
-                                label='X'
+                                label={t('X')}
                                 name='twitter'
                                 required
-                                message='Please enter twitter link'
+                                message={t('Please enter twitter link')}
                             />
                         </Col>
                         <Col md={{ span: 12 }} span={24}>
                             <MyInput
-                                label='Email Address'
+                                label={t('Email Address')}
                                 name='email'
                                 required
-                                message='Please enter email address'
+                                message={t('Please enter email address')}
                             />
                         </Col>
                     </Row>
