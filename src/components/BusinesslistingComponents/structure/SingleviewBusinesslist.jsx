@@ -6,11 +6,13 @@ import { PendingUnverifiedTabs } from './PendingUnverifiedTabs';
 import {GET_BUSINESSES_STATS_BY_ID} from '../../../graphql/query'
 import { UPDATE_BUSINESS } from '../../../graphql/mutation'
 import { useMutation,useQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 
 const { Text, Title } = Typography;
 
 const SingleviewBusinesslist = () => {
     const navigate = useNavigate()
+    const {t} = useTranslation()
     const { id } = useParams();
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -29,10 +31,10 @@ const SingleviewBusinesslist = () => {
         ],
         awaitRefetchQueries: true,
         onCompleted: () => {
-            messageApi.success("Stats changed successfully!");
+            messageApi.success(t("Stats changed successfully!"));
           },
           onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
+            messageApi.error(err.message || t("Something went wrong!"));
           },
     });
     if (loading) {
@@ -52,7 +54,7 @@ const SingleviewBusinesslist = () => {
                         {
                             title: (
                                 <Text className="cursor fs-13 text-gray" onClick={() => navigate("/businesslist")}>
-                                    Business listing
+                                    {t("Business listing")}
                                 </Text>
                             ),
                         },
@@ -74,7 +76,7 @@ const SingleviewBusinesslist = () => {
                 </Flex>
                 <Flex justify='space-between' align='center' gap={5}>
                 <Title level={5} className="m-0">
-                    Business Verification
+                   {t("Business Verification")}
                 </Title>
                 
                 {data?.businessStatus === 'UNDER_REVIEW' ? (
@@ -91,7 +93,7 @@ const SingleviewBusinesslist = () => {
                         }
                         aria-labelledby='Reject'
                     >
-                        Reject
+                        {t("Reject")}
                     </Button>
                     <Button
                         className="btnsave border0 bg-green text-white"
@@ -105,7 +107,7 @@ const SingleviewBusinesslist = () => {
                         }
                         aria-labelledby='Accept'
                     >
-                        Accept
+                        {t("Accept")}
                     </Button>
                 </Flex>
                 ) : data?.businessStatus === 'ACTIVE' ? (
@@ -121,7 +123,7 @@ const SingleviewBusinesslist = () => {
                         }
                         aria-labelledby='Inactivate'
                     >
-                        Inactivate
+                        {t("Inactivate")}
                     </Button>
                 ) : data?.businessStatus === 'INACTIVE' ? (
                     <Button
@@ -136,7 +138,7 @@ const SingleviewBusinesslist = () => {
                         }
                         aria-labelledby='Activate'
                     >
-                        Activate
+                        {t("Activate")}
                     </Button>
                 ) : null}
                 </Flex>

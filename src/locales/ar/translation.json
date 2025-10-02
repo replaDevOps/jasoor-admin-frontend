@@ -518,11 +518,49 @@
   "This action cannot be undone. Are you sure you want to delete this Role?":"لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من حذف هذا الدور؟",
   "Stats changed successfully!":"تم تغيير الإحصائيات بنجاح!",
   "Article with same question uploaded": "تم رفع مقال بنفس السؤال",
-
   "Error loading business stats:":"خطأ في تحميل إحصائيات العمل:",
   "Arabic Name":"الاسم العربي",
   "Category Title":"عنوان الفئة",
   "Arabic Title":"العنوان العربي",
   "Preferred Date & Time":"التاريخ والوقت المفضل",
-  "Schedule Date & Time":"جدولة التاريخ والوقت"
+  "Schedule Date & Time":"جدولة التاريخ والوقت",
+
+
+
+
+
+
+
+
+"Al Tazaj Grill":"الطازج جريل",
+"Business Verification":"التحقق من العمل",
+"Activate":"تفعيل",
+"Inactivate":"إلغاء التفعيل",
+"A family-friendly Saudi restaurant serving traditional and modern Middle Eastern cuisine.":"مطعم سعودي عائلي يقدم المأكولات الشرق أوسطية التقليدية والحديثة.",
+"Business Stats":"إحصائيات العمل",
+"Assets":"الأصول",
+"Documents":"المستندات",
+"Offers":"العروض",
+"Revenue undefined":"الإيرادات غير معرفة",
+"Profit undefined":"الأرباح غير معرفة",
+"Profit Margin %":"هامش الربح %",
+"Capital Recovery":"استرداد رأس المال",
+"Multiples":"المضاعفات",
+"Growth Opportunity":"فرصة للنمو",
+"Post - Sale Support":"الدعم بعد البيع",
+"Support Period":"فترة الدعم",
+"Number of Session":"عدد الجلسات",
+"Response not successful: Received status code 400":"الاستجابة غير ناجحة: تم استلام رمز الحالة 400",
+"Outstanding Liabilities / Debt":"الالتزامات / الديون القائمة",
+"Liabilities name":"اسم الالتزامات",
+"Number of Items":"عدد العناصر",
+"Price":"السعر",
+"Key Asset":"الأصل الرئيسي",
+"Inventory":"المخزون",
+"Offer":"العرض",
+"Offer Date":"تاريخ العرض",
+"No Business Found":"لم يتم العثور على أي عمل"
+
+
+
 }

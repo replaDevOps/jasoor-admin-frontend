@@ -5,47 +5,49 @@ import { UPDATE_BUSINESS } from '../../../graphql/mutation'
 import { useMutation } from '@apollo/client';
 import {GET_BUSINESSES_STATS_BY_ID} from '../../../graphql/query'
 import { message } from "antd";
+import { useTranslation } from 'react-i18next';
 
 const { Title,Text } = Typography
 const BusinessStatsTab = ({status}) => {
     const [messageApi, contextHolder] = message.useMessage();
+    const {t} = useTranslation()
     
     const businessstatsData = [
         {
             id: 1,
             icon:'/assets/icons/rev.png',
             title: status?.revenue,
-            subtitle:`Revenue ${(status?.revenueTime)}`,
+            subtitle: t(`Revenue ${(status?.revenueTime)}`),
         },
         {
             id: 2,
             icon:'/assets/icons/pro.png',
             title:status?.profit,
-            subtitle:`Profit ${(status?.profittime)}`,
+            subtitle: t(`Profit ${(status?.profittime)}`),
         },
         {
             id: 3,
             icon:'/assets/icons/teamsize.png',
             title:status?.numberOfEmployees,
-            subtitle:'Team Size'
+            subtitle: t('Team Size')
         },
         {
             id: 4,
             icon:'/assets/icons/promar.png',
             title:status?.profitMargen,
-            subtitle:'Profit Margin %'
+            subtitle: t('Profit Margin %')
         },
         {
             id: 5,
             icon:'/assets/icons/cap-re.png',
             title:status?.capitalRecovery,
-            subtitle:'Capital Recovery'
+            subtitle: t('Capital Recovery')
         },
         {
             id: 6,
             icon:'/assets/icons/multiple.png',
             title:status?.multiple,
-            subtitle:'Multiples'
+            subtitle: t('Multiples')
         },
     ]
     const postsaleData = [
@@ -64,10 +66,10 @@ const BusinessStatsTab = ({status}) => {
         ],
         awaitRefetchQueries: true,
         onCompleted: () => {
-            messageApi.success("Stats changed successfully!");
+            messageApi.success(t("Stats changed successfully!"));
           },
           onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
+            messageApi.error(err.message || t("Something went wrong!"));
           },
     });
   return (
@@ -79,7 +81,7 @@ const BusinessStatsTab = ({status}) => {
                 <Col span={24}>
                     <Flex justify='space-between' align='center' gap={5}>
                         <Title level={5} className="m-0">
-                            Business Stats
+                            {t("Business Stats")}
                         </Title>
                         <Switch
                             size="small"
@@ -123,7 +125,7 @@ const BusinessStatsTab = ({status}) => {
         <Card className='radius-12 border-gray'>
             <Flex vertical gap={10}>
                 <Title level={5} className='m-0'>
-                    Growth Opportunity
+                    {t("Growth Opportunity")}
                 </Title>
                 <Text className='text-gray'>
                     {status?.growthOpportunities}
@@ -133,7 +135,7 @@ const BusinessStatsTab = ({status}) => {
         <Card className='radius-12 border-gray'>
             <Flex vertical gap={10}>
                 <Title level={5} className='m-0'>
-                    Reason for Selling
+                    {t("Reason for Selling")}
                 </Title>
                 <Text className='text-gray'>
                     {status?.reason}
@@ -144,7 +146,7 @@ const BusinessStatsTab = ({status}) => {
             <Flex vertical gap={10}>
                 <Flex justify='space-between' align='center' gap={5}>
                     <Title level={5} className="m-0">
-                        Post - Sale Support
+                        {t("Post - Sale Support")}
                     </Title>
                     <Switch
                             size="small"

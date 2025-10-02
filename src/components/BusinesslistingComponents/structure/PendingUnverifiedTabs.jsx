@@ -4,27 +4,31 @@ import { AssetsTab } from './AssetsTab'
 import { DocumentTab } from './DocumentTab'
 import { OfferTable } from './OfferTable'
 
+import { useTranslation } from 'react-i18next'
+
+
 const PendingUnverifiedTabs = ({ data }) => {
     const businessId = data?.id
+    const {t} = useTranslation()
     const baseTabs = [
         {
             key: '1',
-            label: 'Business Stats',
+            label: t('Business Stats'),
             children: <BusinessStatsTab data={data} />,
         },
         {
             key: '2',
-            label: 'Assets',
+            label: t('Assets'),
             children: <AssetsTab businessId={businessId} />,
         },
         {
             key: '3',
-            label: 'Documents',
+            label: t('Documents'),
             children: <DocumentTab businessId={businessId} />,
         },
         {
             key: '4',
-            label: "Offers",
+            label: t("Offers"),
             children: <OfferTable businessId={businessId} />,
         }
     ]

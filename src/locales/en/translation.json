@@ -37,8 +37,8 @@
 
 
     "Jusoor":"Jusoor",
-    "Business Listing": "Business Listing",
-    "Business listing": "Business listing",
+    "Business Listing":"Business Listing",
+    "Business listing":"Business listing",
     "Roles & Permissions":"Roles & Permissions",
     "Staff Members":"Staff Members",
     "Add Business": "Add Business",
@@ -541,13 +541,51 @@
 "This action cannot be undone. Are you sure you want to delete this Role?":"This action cannot be undone. Are you sure you want to delete this Role?",
 "Stats changed successfully!":"Stats changed successfully!",
 "Article with same question uploaded": "Article with same question uploaded",
-
-
 "Error loading business stats:":"Error loading business stats:",
 "Arabic Name":"Arabic Name",
 "Category Title":"Category Title",
 "Arabic Title":"Arabic Title",
 "Preferred Date & Time":"Preferred Date & Time",
-"Schedule Date & Time":"Schedule Date & Time"
+"Schedule Date & Time":"Schedule Date & Time",
+
+
+
+
+
+
+
+"Al Tazaj Grill":"Al Tazaj Grill",
+"Business Verification":"Business Verification",
+"Activate":"Activate",
+"Inactivate":"Inactivate",
+"A family-friendly Saudi restaurant serving traditional and modern Middle Eastern cuisine.":"A family-friendly Saudi restaurant serving traditional and modern Middle Eastern cuisine.",
+"Business Stats": "Business Stats",
+"Assets":"Assets",
+"Documents":"Documents",
+"Offers":"Offers",
+"Revenue undefined":"Revenue undefined",
+"Profit undefined":"Profit undefined",
+"Profit Margin %":"Profit Margin %",
+"Capital Recovery":"Capital Recovery",
+"Multiples":"Multiples",
+"Growth Opportunity":"Growth Opportunity",
+"Post - Sale Support":"Post - Sale Support",
+"Support Period":"Support Period",
+"Number of Session":"Number of Session",
+"Response not successful: Received status code 400":"Response not successful: Received status code 400",
+"Outstanding Liabilities / Debt":"Outstanding Liabilities / Debt",
+"Liabilities name":"Liabilities name",
+"Number of Items":"Number of Items",
+"Price":"Price",
+"Key Asset":"Key Asset",
+"Inventory":"Inventory",
+"Offer":"Offer",
+"Offer Date":"Offer Date",
+"No Business Found":"No Business Found"
+
+
+
+
+
 }
 
