@@ -541,13 +541,20 @@
 "This action cannot be undone. Are you sure you want to delete this Role?":"This action cannot be undone. Are you sure you want to delete this Role?",
 "Stats changed successfully!":"Stats changed successfully!",
 "Article with same question uploaded": "Article with same question uploaded",
-
-
 "Error loading business stats:":"Error loading business stats:",
 "Arabic Name":"Arabic Name",
 "Category Title":"Category Title",
 "Arabic Title":"Arabic Title",
 "Preferred Date & Time":"Preferred Date & Time",
-"Schedule Date & Time":"Schedule Date & Time"
+"Schedule Date & Time":"Schedule Date & Time",
+
+
+"Bank account added successfully!":"Bank account added successfully!",
+"Failed to add bank account.":"Failed to add bank account.",
+"Bank account updated successfully!":"Bank account updated successfully!",
+"Failed to update bank account.":"Failed to update bank account.",
+"Updating...":"Updating...",
+"Please choose bank name":"Please choose bank name"
+
 }
 

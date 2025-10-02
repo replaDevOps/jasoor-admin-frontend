@@ -518,11 +518,44 @@
   "This action cannot be undone. Are you sure you want to delete this Role?":"لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من حذف هذا الدور؟",
   "Stats changed successfully!":"تم تغيير الإحصائيات بنجاح!",
   "Article with same question uploaded": "تم رفع مقال بنفس السؤال",
-
   "Error loading business stats:":"خطأ في تحميل إحصائيات العمل:",
   "Arabic Name":"الاسم العربي",
   "Category Title":"عنوان الفئة",
   "Arabic Title":"العنوان العربي",
   "Preferred Date & Time":"التاريخ والوقت المفضل",
-  "Schedule Date & Time":"جدولة التاريخ والوقت"
+  "Schedule Date & Time":"جدولة التاريخ والوقت",
+
+
+
+"Bank status updated successfully":"تم تحديث حالة البنك بنجاح",
+"Bank account added successfully!":"تمت إضافة الحساب البنكي بنجاح!",
+"Failed to add bank account.":"فشل في إضافة حساب بنكي.",
+"Bank account updated successfully!":"تم تحديث الحساب البنكي بنجاح!",
+"Failed to update bank account.":"فشل في تحديث الحساب البنكي.",
+"Updating...":"جارٍ التحديث...",
+"Edit Bank Account":"تحرير الحساب البنكي",
+"Add New Bank Account":"إضافة حساب بنكي جديد",
+"Securely link your bank account to receive payments for completed deals. Make sure the IBAN is correct to avoid payout delays.":"اربط حسابك المصرفي بأمان لتلقي المدفوعات عن الصفقات المنجزة. تأكد من صحة رقم IBAN لتجنب تأخير الدفع.",
+"Bank Name":"اسم البنك",
+"Saudi National Bank":"البنك الوطني السعودي",
+"The Saudi Investment Bank":"البنك السعودي للاستثمار",
+"Alinma Bank":"بنك الإنماء",
+"Al Rajhi Bank":"بنك الراجحي",
+"Arab National Bank":"البنك العربي الوطني",
+"Bank Albilad":"بنك البلاد",
+"Bank AlJazira":"بنك الجزيرة",
+"Gulf International Bank":"بنك الخليج الدولي",
+"Please choose bank name":"الرجاء اختيار اسم البنك",
+"Account Holder Name":"اسم صاحب الحساب",
+"Please enter account holder name":"الرجاء إدخال اسم صاحب الحساب",
+"Enter Holder Name":"أدخل اسم المالك",
+"IBAN Number":"رقم الآيبان",
+"Please enter IBAN number":"الرجاء إدخال رقم IBAN",
+"Enter IBAN Number":"أدخل رقم IBAN",
+"Your banking details are encrypted and used only for secure payouts through Jusoor.":"يتم تشفير بياناتك المصرفية واستخدامها فقط للدفعات الآمنة من خلال جسور.",
+"Save Account":"حفظ الحساب",
+"Remove Bank Account?":"هل تريد إزالة الحساب البنكي؟",
+"Are you sure you want to delete this bank account? This action cannot be undone, and any active deals won’t be able to send payments to this account.":"هل أنت متأكد من رغبتك في حذف هذا الحساب البنكي؟ لا يمكن التراجع عن هذا الإجراء، ولن تتمكن أي صفقات نشطة من إرسال المدفوعات إلى هذا الحساب.",
+"Bank deleted successfully":"تم حذف البنك بنجاح"
+
 }
