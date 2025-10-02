@@ -44,7 +44,7 @@ const BusinessListingTable = ({
 
     const categoryItems = useMemo(() => {
         if (!data?.getAllCategories) return [];
-        return data.getAllCategories.map(cat => ({
+        return data?.getAllCategories?.map(cat => ({
             key: cat.id, 
             label: t(cat.name)
         }));
