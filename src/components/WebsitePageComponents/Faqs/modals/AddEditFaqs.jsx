@@ -39,22 +39,19 @@ const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
         // get language from localStorage or i18n
           const lang = localStorage.getItem("lang") || i18n.language || "en";
           const isArabic = lang.toLowerCase() === "ar";
-
-          // prepare dynamic input
-          const questionInput = isArabic
-          ? { arabicQuestion: { content: descriptionData } }
-          : { question: { content: descriptionData } };
-
-          const answerInput = isArabic
-          ? { arabicAnswer: { content: descriptionData } }
-          : { answer: { content: descriptionData } };
           if (edititem) {
             // Update FAQ
             await updateFAQ({
               variables: {
                 updateFaqId: edititem.id,
-                ...questionInput,
-                ...answerInput,
+                input:{
+                    ...(
+                        isArabic
+                          ? { arabicQuestion: question, arabicAnswer: answer }
+                          : { question: question, answer: answer }
+                      ),
+                    isArabic
+                }
               },
                 refetchQueries: [{ query: GETFAQ, variables: { search: "" } }],
                 awaitRefetchQueries: true,
@@ -64,8 +61,14 @@ const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
             // Create FAQ
             await createFAQ({
               variables: {
-                ...questionInput,
-                ...answerInput,
+                input:{
+                    ...(
+                        isArabic
+                          ? { arabicQuestion: question, arabicAnswer: answer }
+                          : { question: question, answer: answer }
+                      ),
+                    isArabic
+                }
               },
                 refetchQueries: [{ query: GETFAQ, variables: { search: "" } }],
                 awaitRefetchQueries: true,
@@ -77,7 +80,7 @@ const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
           form.resetFields();
         } catch (err) {
            if (err.graphQLErrors) {
-            messageApi.error(t(err.graphQLErrors[0].message));
+            messageApi.error(t(err.graphQLErrors[0]));
           }
         }
     };

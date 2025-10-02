@@ -4,10 +4,13 @@ import { EditorDescription, ModuleTopHeading } from '../../components';
 import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
 import { GETTERMSOFUSE } from '../../graphql/query/queries';
-import { t } from 'i18next';
+import { useTranslation } from "react-i18next";
 
 const TermOfUsePage = () => {
+    const {t, i18n}= useTranslation()
     const [form] = Form.useForm();
+    const lang = localStorage.getItem("lang") || i18n.language || "en";
+    const isArabic = lang.toLowerCase() === "ar";
     const [ descriptionData, setDescriptionData ] = useState('')
     const [messageApi, contextHolder] = message.useMessage();
     const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);
@@ -15,9 +18,16 @@ const TermOfUsePage = () => {
     // call GETTERMSOFUSE
     const { data, loading, error } = useQuery(GETTERMSOFUSE);
     useEffect(() => {
+      if(isArabic){
+        if (data?.getTerms?.arabicTerm?.content) {
+          setDescriptionData(data?.getTerms?.arabicTerm?.content);
+        }
+      }else{
         if (data?.getTerms?.term?.content) {
           setDescriptionData(data?.getTerms?.term?.content);
         }
+      }
+        
     }, [data]);
 
     const handleDescriptionChange = (value) =>{
@@ -30,20 +40,17 @@ const TermOfUsePage = () => {
             messageApi.error(t("Please add terms content"));
             return;
           }
-          // get language from localStorage or i18n
-          const lang = localStorage.getItem("lang") || i18n.language || "en";
-          const isArabic = lang.toLowerCase() === "ar";
-
-          // prepare dynamic input
-          const termInput = isArabic
-          ? { arabicTerm: { content: descriptionData } }
-          : { term: { content: descriptionData } };
           if (data?.getTerms?.id) {
             await updateTerms({
               variables: {
                 updateTermsId: data.getTerms.id,
                 input: {
-                  ...termInput,
+                  ...(
+                    isArabic
+                      ? { arabicTerm: { content: descriptionData } }
+                      : { term: { content: descriptionData} }
+                  ),
+                  isArabic,
                   ndaTerm: null,
                   policy: null,
                 },
@@ -57,7 +64,12 @@ const TermOfUsePage = () => {
             await createTerms({
               variables: {
                 input: {
-                  ...termInput,
+                  ...(
+                    isArabic
+                      ? { arabicTerm: { content: descriptionData } }
+                      : { term: { content: descriptionData} }
+                  ),
+                  isArabic,
                   ndaTerm: null,
                   policy: null,
                 },

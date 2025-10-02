@@ -117,6 +117,7 @@ const AddArticle = () => {
                     ? { arabicTitle: articletitle, arabicBody: { content: descriptionData } }
                     : { title: articletitle, body: { content: descriptionData } }
                 ),
+                isArabic
                 }
               },
             });
@@ -131,6 +132,7 @@ const AddArticle = () => {
                       : { title: articletitle, body: { content: descriptionData } }
                   ),
                 image: imageUrl,
+                isArabic
                 }
               },
             });

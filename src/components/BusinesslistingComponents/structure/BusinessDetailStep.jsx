@@ -3,19 +3,20 @@ import { Card, Col, Flex, Form, Image, Radio, Row, Tooltip, Typography } from 'a
 import { MyDatepicker, MyInput, MySelect } from '../../Forms'
 import { teamsizeOp,district, cities  } from '../../../data'
 import { ModuleTopHeading } from '../../PageComponents'
-import { GET_CATEGORIES } from "../../../graphql/query/business";
+import { GET_CATEGORIES,CUSTOMER } from "../../../graphql/query";
 import { useQuery } from '@apollo/client';
 import { t } from 'i18next'
 
 const {Text } = Typography
 const BusinessDetailStep = ({ data, setData }) => {
   const { data: categoryData } = useQuery(GET_CATEGORIES);
+  const { data: customer } = useQuery(CUSTOMER);
   const [form] = Form.useForm();
   const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
 
-  const categories = categoryData?.getAllCategories?.map(cat => ({
+  const categories = categoryData?.getAllCategories?.categories?.map(cat => ({
     id: cat.id,
     name: t(cat.name),
     isDigital: cat.isDigital,
@@ -24,6 +25,7 @@ const BusinessDetailStep = ({ data, setData }) => {
   const handleRadioChange = (e) => {
     setIsAccess(e.target.value === 2);
   };
+
 
   const handleFormChange = (_, allValues) => {
       const selected = categories.find(c => c.name === allValues.category);
@@ -43,6 +45,7 @@ const BusinessDetailStep = ({ data, setData }) => {
       numberOfEmployees: allValues.teamSize,
       description: allValues.description,
       url: allValues.url,
+      createdBy:allValues.username
     }));
   };
 
@@ -78,7 +81,7 @@ const BusinessDetailStep = ({ data, setData }) => {
       </Flex>
 
       <Card className="radius-12 border-gray">
-        <Form layout="vertical" form={form} onValuesChange={handleFormChange} requiredMark={false}>
+        <Form layout="vertical" form={form} onValuesChange={handleFormChange} requiredMark={false} >
           <Row gutter={24}>
             <Col span={24}>
               <Flex>
@@ -114,6 +117,13 @@ const BusinessDetailStep = ({ data, setData }) => {
                 required
                 message={t("Please select user")}
                 placeholder={t("Select user")}
+                showKey
+                options={
+                  customer?.getCustomers?.map((user, index) => ({
+                    name: user?.name || "Unnamed User",
+                    id: user?.id || `temp-${index}`, // fallback unique value
+                  })) || []
+                }
               />
             </Col>
 

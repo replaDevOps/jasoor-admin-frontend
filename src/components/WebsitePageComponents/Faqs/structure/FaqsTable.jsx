@@ -6,9 +6,12 @@ import {GETFAQ} from '../../../../graphql/query/queries'
 import {DELETE_FAQ} from '../../../../graphql/mutation/mutations'
 import { useQuery,useMutation } from "@apollo/client";
 import { NavLink } from "react-router-dom";
-import { t } from 'i18next';
+import { useTranslation } from "react-i18next";
 
 const FaqsTable = ({setVisible,setEditItem}) => {
+    const {t, i18n}= useTranslation()
+    const lang = localStorage.getItem("lang") || i18n.language || "en";
+    const isArabic = lang.toLowerCase() === "ar";
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
     const [deleteItem, setDeleteItem] = useState(null);
@@ -23,13 +26,18 @@ const FaqsTable = ({setVisible,setEditItem}) => {
             deleteFaqId: deleteItem?.id
         }
     });
-
-    const faqsData = data?.getFAQs?.faqs || [];
+    const faqsData = (isArabic
+        ? data?.getFAQs?.faqs?.filter(faqs => faqs.isArabic)
+        : data?.getFAQs?.faqs?.filter(faqs => !faqs.isArabic)
+      ) || [];
 
     const faqsColumn = ( setVisible, setEditItem, setDeleteItem ) =>  [
         {
             title: t('Questions'),
             dataIndex: 'question',
+            render: (_, row) => (
+                row.isArabic ? row.arabicQuestion : row.question
+            ),
         },
         {
             title: t('Action'),

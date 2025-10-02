@@ -5,7 +5,9 @@ import 'react-quill-new/dist/quill.snow.css';
 
 const { Title } = Typography
 const EditorDescription = ({ descriptionData, onChange, label, onEditorInit  }) => {
-
+    const lang = localStorage.getItem("lang") || "en";
+    const isArabic = lang.toLowerCase() === "ar";
+  
     const [text, setText] = useState("");
     const quillRef = useRef(null);
     
@@ -56,6 +58,10 @@ const EditorDescription = ({ descriptionData, onChange, label, onEditorInit  }) 
                 onChange={handleChange}
                 modules={{
                     toolbar: toolbarOptions
+                }}
+                style={{
+                    direction: isArabic ? "rtl" : "ltr",
+                    textAlign: isArabic ? "right" : "left"
                 }}
             />
         </Flex>

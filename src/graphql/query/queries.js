@@ -11,6 +11,7 @@ query GetArticles($search: String) {
       image
       arabicBody
       body
+      isArabic
     }
   }
 }
@@ -25,6 +26,7 @@ query GetArticle($getArticleId: ID!) {
     body
     arabicBody
     createdAt
+    isArabic
   }
 }
 `
@@ -35,7 +37,10 @@ query GetFAQs($search: String) {
     faqs {
       id
       question
+      arabicQuestion
       answer
+      arabicAnswer
+      isArabic
     }
   }
 }
@@ -46,6 +51,7 @@ query GetTerms {
     id
     term
     arabicTerm
+    isArabic
   }
 }
 `
@@ -55,6 +61,7 @@ query GetNDATerms {
     id
     ndaTerm
     arabicNdaTerm
+    isArabic
   }
 }
 `
@@ -64,6 +71,7 @@ query GetDSATerms {
     id
     dsaTerms
     arabicNdaTerm
+    isArabic
   }
 }
 `
@@ -73,6 +81,7 @@ query GetPrivacyPolicy {
     id
     policy
     arabicPolicy
+    isArabic
   }
 }
 `

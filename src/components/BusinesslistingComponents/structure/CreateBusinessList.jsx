@@ -37,6 +37,7 @@ const CreateBusinessList = ({ addstep }) => {
         return draft ? JSON.parse(draft) : {
         isByTakbeer: null,
         businessTitle: null,
+        createdBy:null,
         categoryId: null,
         district: null,
         city: null,

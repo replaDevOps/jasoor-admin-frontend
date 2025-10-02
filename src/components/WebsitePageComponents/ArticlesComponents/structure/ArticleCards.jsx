@@ -10,7 +10,6 @@ import { useTranslation } from "react-i18next";
 const { Paragraph, Text } = Typography
 const ArticleCards = ({setDeleteItem}) => {
     const {t, i18n}= useTranslation()
-    // get language from localStorage or i18n
     const lang = localStorage.getItem("lang") || i18n.language || "en";
     const isArabic = lang.toLowerCase() === "ar";
     const [form] = Form.useForm();
@@ -26,7 +25,11 @@ const ArticleCards = ({setDeleteItem}) => {
     });
 
     const total = data?.getArticles?.totalCount || 0;
-    const articleData = data?.getArticles?.articles || [];
+    const articleData = (isArabic
+        ? data?.getArticles?.articles?.filter(article => article.isArabic)
+        : data?.getArticles?.articles?.filter(article => !article.isArabic)
+      ) || [];
+      
     const searchTimeout = useRef(null);
 
     const handleSearchChange = (e) => {
@@ -113,17 +116,20 @@ const ArticleCards = ({setDeleteItem}) => {
                                                 >
                                                     {isArabic ? art?.arabicTitle: art.title}
                                                 </Paragraph>
-                                                <Paragraph 
+                                                <Paragraph
                                                     ellipsis={{
                                                         rows: 2,
                                                         expandable: true,
                                                         symbol: 'more'
                                                     }}
                                                     className='fs-14 text-gray'
-                                                >
-                                                    {isArabic ? <span dangerouslySetInnerHTML={{ __html: art?.arabic }} /> : <span dangerouslySetInnerHTML={{ __html: art?.body }} />}
-                                                     
-                                                </Paragraph>
+                                                    >
+                                                    {isArabic ? (
+                                                        <span dangerouslySetInnerHTML={{ __html: art?.arabicBody?.content || "" }} />
+                                                    ) : (
+                                                        <span dangerouslySetInnerHTML={{ __html: art?.body?.content || "" }} />
+                                                    )}
+                                                    </Paragraph>
                                             </div>
                                         </Flex>
                                     </Card>

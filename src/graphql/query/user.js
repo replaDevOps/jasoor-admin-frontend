@@ -45,6 +45,15 @@ query GetUsers($limit: Int, $offset: Int, $filter: UserFilterInput) {
   }
 }
 `
+const CUSTOMER = gql`
+query GetCustomers {
+  getCustomers {
+    id
+    name
+    email
+  }
+}
+`
 const NOTIFICATION = gql`
   query GetNotifications($userId: ID!) {
     getNotifications(userId: $userId) {
@@ -426,5 +435,6 @@ export {
     GET_CAMPAIGNS,
     GET_NOTIFICATIONS,
     GET_ALERTS,
-    GETUSERACTIVEBANK
+    GETUSERACTIVEBANK,
+    CUSTOMER
 }

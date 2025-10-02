@@ -187,15 +187,15 @@ mutation DeleteArticle($deleteArticleId: ID!) {
 }
 `
 const CREATE_FAQ = gql`
-mutation CreateFAQ($question: String!, $answer: String!) {
-  createFAQ(question: $question, answer: $answer) {
+mutation CreateFAQ($input: CreateFAQ) {
+  createFAQ(input: $input) {
     id
   }
 }
 `
 const UPDATE_FAQ = gql`
-mutation UpdateFAQ($updateFaqId: ID!, $question: String, $answer: String) {
-  updateFAQ(id: $updateFaqId, question: $question, answer: $answer) {
+mutation UpdateFAQ($updateFaqId: ID!, $input: CreateFAQ) {
+  updateFAQ(id: $updateFaqId, input: $input) {
     id
   }
 }
