@@ -1,4 +1,5 @@
 import { Flex, Select, Pagination } from 'antd';
+import { t } from 'i18next';
 
 const CustomPagination = ({
   total,
@@ -12,7 +13,7 @@ const CustomPagination = ({
   return (
     <Flex justify="space-between" align="center" className="px-2 py-4">
       <Flex align="center" gap={8}>
-        <span className="text-gray-500">Rows per page:</span>
+        <span className="text-gray-500">{t("Rows per page")}:</span>
         <Select
           value={pageSize}
           onChange={(value) => {

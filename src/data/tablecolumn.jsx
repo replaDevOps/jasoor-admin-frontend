@@ -8,11 +8,11 @@ const { Text } = Typography;
 
 const postsaleColumn = [
   {
-    title: "Support Period",
+    title: t("Support Period"),
     dataIndex: "supportperiod",
   },
   {
-    title: "Number of Session",
+    title: t("Number of Session"),
     dataIndex: "nosession",
   },
 ];

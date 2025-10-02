@@ -44,26 +44,27 @@ const BusinessListingTable = ({
 
     const categoryItems = useMemo(() => {
         if (!data?.getAllCategories) return [];
-        return data.getAllCategories.map(cat => ({
+        return data?.getAllCategories?.categories?.map(cat => ({
             key: cat.id, 
             label: t(cat.name)
         }));
     }, [data]);
-    
+
     const handleCategoryClick = ({ key }) => {
-        const selectedItem = categoryItems.find(item => item.key === key);
+        const selectedItem = categoryItems?.find(item => item.key === key);
         if (selectedItem) {
             setSelectedCategory(selectedItem.label);
             onFiltersChange({ categoryId: selectedItem.key });
         }
     };
 
-    const statusItems = [
+    const statusItems = useMemo(() => [
         { key: '1', label: t('All') },
         { key: 'ACTIVE', label: t('Active') },
         { key: 'UNDER_REVIEW', label: t('Pending') },
         { key: 'INACTIVE', label: t('Inactive') }
-    ];
+      ], [t]);
+      
     const columns =[
         {
             title: t('Business Title'),
@@ -90,12 +91,12 @@ const BusinessListingTable = ({
                 return (
                     status === 'UNDER_REVIEW' ? (
                         <Space align='center'>
-                            <Text className='btnpill fs-12 pending'>Under Review</Text>
+                            <Text className='btnpill fs-12 pending'>{t("Under Review")}</Text>
                         </Space>
                     ) : status === 'INACTIVE' ? (
                         <Text className='btnpill fs-12 inactive'>Inactive</Text>
                     ) : status === 'ACTIVE' ? (
-                        <Text className='btnpill fs-12 success'>Active</Text>
+                        <Text className='btnpill fs-12 success'>{t("Active")}</Text>
                     ) : status === 'SOLD' ? (
                         <Text className='btnpill fs-12 success'>Sold</Text>
                     ) : null
@@ -178,6 +179,7 @@ const BusinessListingTable = ({
                     </Row>
                 </Form>
                 <Table
+                    rowKey={(record) => record.id}
                     size='large'
                     columns={columns}
                     dataSource={businesses}
@@ -197,7 +199,7 @@ const BusinessListingTable = ({
                     }
                 />
                 <CustomPagination 
-                    total={totalCount}
+                    total={totalCount || 0}
                     current={page}
                     pageSize={pageSize}
                     onPageChange={(newPage, newPageSize) => {

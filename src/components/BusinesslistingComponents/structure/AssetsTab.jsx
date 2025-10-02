@@ -4,29 +4,31 @@ import { UPDATE_ASSET ,UPDATE_INVENTORY,UPDATE_LIABILITY} from '../../../graphql
 import { useMutation,useQuery } from '@apollo/client';
 import {GET_BUSINESSES_ASSETS_BY_ID} from '../../../graphql/query'
 import { message } from "antd";
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography
 const AssetsTab = ({businessId}) => {
+    const {t} = useTranslation()
 
 const outstandliabColumn = [
     {
-        title: 'Liabilities name',
+        title: t('Liabilities name'),
         dataIndex: 'liabilitiesname',
     },
     {
-        title: 'Number of Items',
+        title: t('Number of Items'),
         dataIndex: 'noitems',
     },
     {
-        title: 'Purchase Year',
+        title: t('Purchase Year'),
         dataIndex: 'purchaseyear',
     },
     {
-        title: 'Price',
+        title: t('Price'),
         dataIndex: 'price',
     },
     {
-        title: 'Verify',
+        title: t('Verify'),
         dataIndex: 'verify',
         render:(_,row)=>{
             return(
@@ -51,23 +53,23 @@ const outstandliabColumn = [
 
 const keyassetColumn = [
     {
-        title: 'Asset Name',
+        title: t('Asset Name'),
         dataIndex: 'assetname',
     },
     {
-        title: 'Number of Items',
+        title: t('Number of Items'),
         dataIndex: 'noitems',
     },
     {
-        title: 'Purchase Year',
+        title: t('Purchase Year'),
         dataIndex: 'purchaseyear',
     },
     {
-        title: 'Price',
+        title: t('Price'),
         dataIndex: 'price',
     },
     {
-        title: 'Verify',
+        title: t('Verify'),
         dataIndex: 'verify',
         render:(_,row)=>{
             return(
@@ -92,23 +94,23 @@ const keyassetColumn = [
 
 const inventoryColumn = [
     {
-        title: 'Inventory Name',
+        title: t('Inventory Name'),
         dataIndex: 'inventoryname',
     },
     {
-        title: 'Number of Items',
+        title: t('Number of Items'),
         dataIndex: 'noitems',
     },
     {
-        title: 'Purchase Year',
+        title: t('Purchase Year'),
         dataIndex: 'purchaseyear',
     },
     {
-        title: 'Price',
+        title: t('Price'),
         dataIndex: 'price',
     },
     {
-        title: 'Verify',
+        title: t('Verify'),
         dataIndex: 'verify',
         render:(_,row)=>{
             return(
@@ -168,10 +170,10 @@ const inventoryColumn = [
         ],
         awaitRefetchQueries: true,
         onCompleted: () => {
-            messageApi.success("Stats changed successfully!");
+            messageApi.success(t("Stats changed successfully!"));
           },
           onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
+            messageApi.error(err.message || t("Something went wrong!"));
           },
       });
       const [updateBusinessInventory] = useMutation(UPDATE_INVENTORY, {
@@ -183,10 +185,10 @@ const inventoryColumn = [
         ],
         awaitRefetchQueries: true,
         onCompleted: () => {
-            messageApi.success("Stats changed successfully!");
+            messageApi.success(t("Stats changed successfully!"));
           },
           onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
+            messageApi.error(err.message || t("Something went wrong!"));
           },
       });
       const [updateBusinessLibility] = useMutation(UPDATE_LIABILITY, {
@@ -198,10 +200,10 @@ const inventoryColumn = [
         ],
         awaitRefetchQueries: true,
         onCompleted: () => {
-            messageApi.success("Stats changed successfully!");
+            messageApi.success(t("Stats changed successfully!"));
           },
           onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
+            messageApi.error(err.message || t("Something went wrong!"));
           },
       });
     return (
@@ -211,7 +213,7 @@ const inventoryColumn = [
             <Card className='radius-12 border-gray'>
                 <Flex vertical gap={15}>
                     <Title level={5} className="m-0">
-                        Outstanding Liabilities / Debt
+                        {t("Outstanding Liabilities / Debt")}
                     </Title>
                     <TableContent data={outstandliabilitiesData} columns={outstandliabColumn} />
                 </Flex>
@@ -219,7 +221,7 @@ const inventoryColumn = [
             <Card className='radius-12 border-gray'>
                 <Flex vertical gap={15}>
                     <Title level={5} className="m-0">
-                        Key Asset
+                        {t("Key Asset")}
                     </Title>
                     <TableContent data={keyassetData} columns={keyassetColumn} />
                 </Flex>
@@ -227,7 +229,7 @@ const inventoryColumn = [
             <Card className='radius-12 border-gray'>
                 <Flex vertical gap={15}>
                     <Title level={5} className="m-0">
-                        Inventory
+                        {t("Inventory")}
                     </Title>
                     <TableContent data={inventoryData} columns={inventoryColumn} />
                 </Flex>

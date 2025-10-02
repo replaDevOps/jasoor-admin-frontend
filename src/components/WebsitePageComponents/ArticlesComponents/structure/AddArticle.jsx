@@ -8,10 +8,11 @@ import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_ARTICLE, UPDATE_ARTICLE } from '../../../../graphql/mutation/mutations';
 import {GETARTICLE} from '../../../../graphql/query/queries'
 import imageCompression from 'browser-image-compression';
-import { t } from 'i18next'
+import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography
 const AddArticle = () => {
+  const {t, i18n}= useTranslation()
     const {id} = useParams()
     const navigate = useNavigate()
     const [form] = Form.useForm();
@@ -91,6 +92,7 @@ const AddArticle = () => {
     };
 
     const onFinish = async (values) => {
+      const { articletitle } = values;
         try {
           if (!descriptionData) {
             messageApi.error(t('Please add article content'));
@@ -103,32 +105,33 @@ const AddArticle = () => {
           const lang = localStorage.getItem("lang") || i18n.language || "en";
           const isArabic = lang.toLowerCase() === "ar";
 
-          // prepare dynamic input
-          const titleInput = isArabic
-          ? { arabicTitle: { content: descriptionData } }
-          : { title: { content: descriptionData } };
-
-          const bodyInput = isArabic
-          ? { arabicBody: { content: descriptionData } }
-          : { body: { content: descriptionData } };
-          if (detail) {
+          if (detail.id) {
             // Update
             await updateArticle({
               variables: {
-                updateArticleId: detail.id,
-                ...titleInput,
+                input:{
+                  updateArticleId: detail.id,
                 image: imageUrl,
-                ... bodyInput,
+                ...(
+                  isArabic
+                    ? { arabicTitle: articletitle, arabicBody: { content: descriptionData } }
+                    : { title: articletitle, body: { content: descriptionData } }
+                ),
+                }
               },
             });
             messageApi.success(t('Article updated successfully'));
           } else {
-            // Create
             await createArticle({
               variables: {
-                ... titleInput,
+                input:{
+                  ...(
+                    isArabic
+                      ? { arabicTitle: articletitle, arabicBody: { content: descriptionData } }
+                      : { title: articletitle, body: { content: descriptionData } }
+                  ),
                 image: imageUrl,
-                ... bodyInput,
+                }
               },
             });
             messageApi.success(t('Article created successfully'));
@@ -171,7 +174,7 @@ const AddArticle = () => {
                 {
                   title: (
                     <Text className='fw-500 fs-13 text-black'>
-                      {detail ? detail?.title : 'Add a New Article'}
+                      {detail ? detail?.title : t('Add a New Article')}
                     </Text>
                   ),
                 },

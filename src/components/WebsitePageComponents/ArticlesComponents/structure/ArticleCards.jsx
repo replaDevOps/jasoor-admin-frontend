@@ -5,10 +5,14 @@ import { CustomPagination } from '../../../Ui';
 import { NavLink } from 'react-router-dom';
 import {GETARTICLES} from '../../../../graphql/query/queries'
 import { useQuery } from "@apollo/client";
-import { t } from 'i18next';
+import { useTranslation } from "react-i18next";
 
 const { Paragraph, Text } = Typography
 const ArticleCards = ({setDeleteItem}) => {
+    const {t, i18n}= useTranslation()
+    // get language from localStorage or i18n
+    const lang = localStorage.getItem("lang") || i18n.language || "en";
+    const isArabic = lang.toLowerCase() === "ar";
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
     const [pageSize, setPageSize] = useState(10);
@@ -79,8 +83,8 @@ const ArticleCards = ({setDeleteItem}) => {
                                                 <Dropdown
                                                     menu={{
                                                         items: [
-                                                            { label: <NavLink to={'/articles/add/'+art?.id}>Edit</NavLink>, key: '1' },
-                                                            { label: <NavLink onClick={(e) => {e.preventDefault();setDeleteItem(art?.id)}}>Delete</NavLink>, key: '2' },
+                                                            { label: <NavLink to={'/articles/add/'+art?.id}>{t("Edit")}</NavLink>, key: '1' },
+                                                            { label: <NavLink onClick={(e) => {e.preventDefault();setDeleteItem(art?.id)}}>{t("Delete")}</NavLink>, key: '2' },
                                                         ]
                                                     }}
                                                     trigger={['click']}
@@ -95,7 +99,11 @@ const ArticleCards = ({setDeleteItem}) => {
                                         <Flex vertical gap={20}>
                                             <div>
                                                 <div className='w-100 card-img-2 mb-2 radius-12'>
+                                                    {isArabic?
                                                     <img src={art?.img} width={'100%'} height={'100%'} className='object-cover object-top radius-12' alt="image" fetchPriority="high"/>
+                                                    :
+                                                    <img src={art?.img} width={'100%'} height={'100%'} className='object-cover object-top radius-12' alt="image" fetchPriority="high"/>
+                                                }
                                                 </div>
                                                 <Paragraph 
                                                     ellipsis={{
@@ -103,7 +111,7 @@ const ArticleCards = ({setDeleteItem}) => {
                                                     }}
                                                     className='fs-16 fw-500 h-50'
                                                 >
-                                                    {art?.title}
+                                                    {isArabic ? art?.arabicTitle: art.title}
                                                 </Paragraph>
                                                 <Paragraph 
                                                     ellipsis={{
@@ -113,7 +121,8 @@ const ArticleCards = ({setDeleteItem}) => {
                                                     }}
                                                     className='fs-14 text-gray'
                                                 >
-                                                     <span dangerouslySetInnerHTML={{ __html: art?.body }} />
+                                                    {isArabic ? <span dangerouslySetInnerHTML={{ __html: art?.arabic }} /> : <span dangerouslySetInnerHTML={{ __html: art?.body }} />}
+                                                     
                                                 </Paragraph>
                                             </div>
                                         </Flex>
