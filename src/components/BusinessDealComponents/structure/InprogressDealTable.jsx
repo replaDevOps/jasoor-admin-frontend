@@ -1,6 +1,6 @@
 import { Button, Col, Dropdown, Flex, Form, Row, Table ,Typography} from 'antd';
 import { SearchInput } from '../../Forms';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination } from '../../Ui';
@@ -12,7 +12,12 @@ import { useTranslation } from 'react-i18next';
 const { Text } = Typography
 
 const InprogressDealTable = () => {
+<<<<<<< Updated upstream
     const {t, i18n} = useTranslation()
+=======
+
+    const { t } = useTranslation();
+>>>>>>> Stashed changes
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState(t("Status"));
     const navigate = useNavigate()
