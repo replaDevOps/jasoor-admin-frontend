@@ -30,12 +30,11 @@ const AddArticle = () => {
         variables: { getArticleId: id },
     });
     const detail = {
-            id:data?.getArticle.id,
-            img:data?.getArticle.image,
-            title:data?.getArticle.title,
-            description:data?.getArticle.body,
-            date:data?.getArticle.createdAt,
-        
+      id:data?.getArticle.id,
+      img:data?.getArticle.image,
+      title:data?.getArticle.title,
+      description:data?.getArticle.body,
+      date:data?.getArticle.createdAt,
     };
 
     const handleDescriptionChange = (value) =>{
@@ -101,15 +100,25 @@ const AddArticle = () => {
             messageApi.error(t('Please upload an image'));
             return;
           }
-    
+          const lang = localStorage.getItem("lang") || i18n.language || "en";
+          const isArabic = lang.toLowerCase() === "ar";
+
+          // prepare dynamic input
+          const titleInput = isArabic
+          ? { arabicTitle: { content: descriptionData } }
+          : { title: { content: descriptionData } };
+
+          const bodyInput = isArabic
+          ? { arabicBody: { content: descriptionData } }
+          : { body: { content: descriptionData } };
           if (detail) {
             // Update
             await updateArticle({
               variables: {
                 updateArticleId: detail.id,
-                title: values.articletitle,
+                ...titleInput,
                 image: imageUrl,
-                body: descriptionData,
+                ... bodyInput,
               },
             });
             messageApi.success(t('Article updated successfully'));
@@ -117,9 +126,9 @@ const AddArticle = () => {
             // Create
             await createArticle({
               variables: {
-                title: values.articletitle,
+                ... titleInput,
                 image: imageUrl,
-                body: descriptionData,
+                ... bodyInput,
               },
             });
             messageApi.success(t('Article created successfully'));

@@ -149,6 +149,8 @@ const MeetingRequestTable = () => {
   // Apollo query
   const { data, loading, refetch } = useQuery(GETADMINPENDINGMEETINGS, {
     variables: {
+      limit: pageSize,
+      offset: (current - 1) * pageSize,
       search: searchValue,
       status: selectedStatus !== "Status" ? selectedStatus.toUpperCase() : null,
     },
@@ -277,21 +279,12 @@ const MeetingRequestTable = () => {
         <Table
           size="large"
           columns={meetingreqColumn(setVisible, setDeleteItem)}
-          dataSource={mainmeetingreqData.slice(
-            (current - 1) * pageSize,
-            current * pageSize
-          )}
+          dataSource={mainmeetingreqData} 
           className="pagination table-cs table"
           showSorterTooltip={false}
           scroll={{ x: 2300 }}
           rowHoverable={false}
           pagination={true}
-          // loading={
-          //     {
-          //         ...TableLoader,
-          //         spinning: loading
-          //     }
-          // }
         />
         <CustomPagination
           total={total}

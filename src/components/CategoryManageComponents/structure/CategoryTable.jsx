@@ -172,7 +172,7 @@ const CategoryTable = () => {
     const { data, loading: isLoading, error, refetch } = useQuery(GET_CATEGORIES, {
         variables: {
             limit: pageSize,
-            offset: (current - 1) * pageSize,
+            offSet: (current - 1) * pageSize, 
             filter: {
                 isDigital: selectedCategory,
                 name: searchName,
@@ -181,11 +181,10 @@ const CategoryTable = () => {
         },
         fetchPolicy: "network-only"
     });
-
     // Map API response to table data
     useEffect(() => {
-        if (data?.getAllCategories?.length) {
-            const mappedCategories = data.getAllCategories.map((item) => ({
+        if (data?.getAllCategories?.categories) {
+            const mappedCategories = data.getAllCategories?.categories.map((item) => ({
                 key: item.id,
                 categoryicon: item.icon,
                 categoryname: item.name,
@@ -210,7 +209,7 @@ const CategoryTable = () => {
         setSelectedStatus(key === "null" ? null : key);
         refetch({
             limit: pageSize,
-            offset: (current - 1) * pageSize,
+            offSet: (current - 1) * pageSize,
             filter: {
                 isDigital: selectedCategory,
                 name: searchName,
@@ -224,7 +223,7 @@ const CategoryTable = () => {
         setSelectedCategory(isDigitalValue);
         refetch({
             limit: pageSize,
-            offset: (current - 1) * pageSize,
+            offSet: (current - 1) * pageSize,
             filter: {
                 isDigital: isDigitalValue,
                 name: searchName,
@@ -240,7 +239,7 @@ const CategoryTable = () => {
     useEffect(() => {
         refetch({
         limit: pageSize,
-        offset: (current - 1) * pageSize,
+        offSet: (current - 1) * pageSize,
         filter: {
             isDigital: selectedCategory,
             name: searchName,
@@ -253,11 +252,11 @@ const CategoryTable = () => {
         refetchQueries: [{ query: GET_CATEGORIES },],
         awaitRefetchQueries: true,
         onCompleted: () => {
-          message.success(t("Category deleted successfully"));
+            messageApi.success(t("Category deleted successfully"));
           setDeleteItem(false);
         },
         onError: (err) => {
-          message.error(err.message || t("Something went wrong"));
+            messageApi.error(err || t("Something went wrong"));
         }
     });
 
@@ -265,11 +264,11 @@ const CategoryTable = () => {
         refetchQueries: [{ query: GET_CATEGORIES },],
         awaitRefetchQueries: true,
         onCompleted: () => {
-          message.success(t("Category deleted successfully"));
+          messageApi.success(t("Category deleted successfully"));
           setDeleteItem(false);
         },
         onError: (err) => {
-          message.error(err.message || t("Something went wrong"));
+          messageApi.error(err.message || t("Something went wrong"));
         }
     });
     if (isLoading || deleting) {
@@ -355,7 +354,7 @@ const CategoryTable = () => {
                         loading={isLoading}
                     />
                     <CustomPagination 
-                        total={categories.length}
+                        total={data.getAllCategories?.totalcount}
                         current={current}
                         pageSize={pageSize}
                         onPageChange={handlePageChange}

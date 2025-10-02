@@ -5,11 +5,11 @@ import { useEffect } from 'react';
 import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_FAQ, UPDATE_FAQ } from '../../../../graphql/mutation/mutations';
 import {GETFAQ} from '../../../../graphql/query/queries'
-import { t } from 'i18next';
-
+import { useTranslation } from "react-i18next";
 
 const { Text, Title } = Typography;
 const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
+    const {t, i18n}= useTranslation()
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
     
@@ -36,13 +36,25 @@ const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
         }
     
         try {
+        // get language from localStorage or i18n
+          const lang = localStorage.getItem("lang") || i18n.language || "en";
+          const isArabic = lang.toLowerCase() === "ar";
+
+          // prepare dynamic input
+          const questionInput = isArabic
+          ? { arabicQuestion: { content: descriptionData } }
+          : { question: { content: descriptionData } };
+
+          const answerInput = isArabic
+          ? { arabicAnswer: { content: descriptionData } }
+          : { answer: { content: descriptionData } };
           if (edititem) {
             // Update FAQ
             await updateFAQ({
               variables: {
                 updateFaqId: edititem.id,
-                question,
-                answer,
+                ...questionInput,
+                ...answerInput,
               },
                 refetchQueries: [{ query: GETFAQ, variables: { search: "" } }],
                 awaitRefetchQueries: true,
@@ -52,8 +64,8 @@ const AddEditFaqs = ({ visible, onClose, edititem,refetch }) => {
             // Create FAQ
             await createFAQ({
               variables: {
-                question,
-                answer,
+                ...questionInput,
+                ...answerInput,
               },
                 refetchQueries: [{ query: GETFAQ, variables: { search: "" } }],
                 awaitRefetchQueries: true,

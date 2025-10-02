@@ -156,6 +156,8 @@ const ScheduleMeetingTable = () => {
     // Apollo query
     const { data, loading, refetch } = useQuery(GETADMINSCHEDULEMEETINGS, {
         variables: {
+            limit: pageSize,
+            offset: (current - 1) * pageSize,
             search: searchValue,
             status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null
         },
@@ -257,18 +259,12 @@ const ScheduleMeetingTable = () => {
                 <Table
                     size='large'
                     columns={schedulemeetingColumn(setVisible,setDeleteItem)}
-                    dataSource={schedulemeetingData.slice((current - 1) * pageSize, current * pageSize)}
+                    dataSource={schedulemeetingData}
                     className='pagination table-cs table'
                     showSorterTooltip={false}
                     scroll={{ x: 2300 }}
                     rowHoverable={false}
                     pagination={false}
-                    // loading={
-                    //     {
-                    //         ...TableLoader,
-                    //         spinning: loading
-                    //     }
-                    // }
                 />
                 <CustomPagination 
                     total={total}

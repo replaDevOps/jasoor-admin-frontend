@@ -53,7 +53,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
     });
   }, [pageSize, current, debouncedSearch, selectedStatus, selectedRole, getStaffMembers]);
 
-  const roles = rolesData?.getRoles?.filter((role) => role.name !== 'Customer') || [];
+  const roles = rolesData?.getRoles?.roles?.filter((role) => role.name !== 'Customer') || [];
 
   const total = data?.getStaffMembers?.totalCount || 0;
   const staffData =

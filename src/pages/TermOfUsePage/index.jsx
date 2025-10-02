@@ -30,14 +30,20 @@ const TermOfUsePage = () => {
             messageApi.error(t("Please add terms content"));
             return;
           }
-    
+          // get language from localStorage or i18n
+          const lang = localStorage.getItem("lang") || i18n.language || "en";
+          const isArabic = lang.toLowerCase() === "ar";
+
+          // prepare dynamic input
+          const termInput = isArabic
+          ? { arabicTerm: { content: descriptionData } }
+          : { term: { content: descriptionData } };
           if (data?.getTerms?.id) {
-            // ✅ Update existing terms
             await updateTerms({
               variables: {
                 updateTermsId: data.getTerms.id,
                 input: {
-                  term: { content: descriptionData },
+                  ...termInput,
                   ndaTerm: null,
                   policy: null,
                 },
@@ -51,7 +57,7 @@ const TermOfUsePage = () => {
             await createTerms({
               variables: {
                 input: {
-                  term: { content: descriptionData },
+                  ...termInput,
                   ndaTerm: null,
                   policy: null,
                 },
