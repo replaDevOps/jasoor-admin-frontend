@@ -47,8 +47,8 @@ query GetCountByEachCategory {
 }
 `
 const GET_BUSINESSES = gql`
-  query GetAdminBusinesses($limit: Int, $offSet: Int, $filter: BusinessFilterInput, $sort: BusinessSortInput, $search: String) {
-  getAdminBusinesses(limit: $limit, offSet: $offSet, filter: $filter, sort: $sort, search: $search) {
+query GetAdminBusinesses($limit: Int, $offSet: Int, $filter: AdminBusinessFilterInput, $search: String) {
+  getAdminBusinesses(limit: $limit, offSet: $offSet, filter: $filter, search: $search) {
     businesses {
       id
       isByTakbeer
