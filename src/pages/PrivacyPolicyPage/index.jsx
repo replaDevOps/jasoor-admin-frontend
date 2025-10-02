@@ -30,15 +30,22 @@ const PrivacyPolicyPage = () => {
             messageApi.error("Please add policy content");
             return;
           }
-    
+          // get language from localStorage or i18n
+          const lang = localStorage.getItem("lang") || i18n.language || "en";
+          const isArabic = lang.toLowerCase() === "ar";
+
+          // prepare dynamic input
+          const policyInput = isArabic
+          ? { arabicPolicy: { content: descriptionData } }
+          : { policy: { content: descriptionData } };
           if( data?.getPrivacyPolicy?.id) {
             await updateTerms({
                 variables: {
                   updateTermsId: data.getDSATerms.id,
                   input: {
                     term: null,
-                    dsaTerms: { content: descriptionData },
-                    policy: null,
+                    dsaTerms: null,
+                    ...policyInput,
                   },
                 },
                 refetchQueries: [{ query: GETPRIVACYPOLICY }],
@@ -49,9 +56,9 @@ const PrivacyPolicyPage = () => {
             await createTerms({
                 variables: {
                     input: {
-                  term: null,   // ✅ now valid JSON,   // sending only term for now
-                  ndaTerm: null,
-                  policy: { content: descriptionData },
+                    term: null,   
+                    ndaTerm: null,
+                    ...policyInput,
                     }
                 },
                 refetchQueries: [{ query: GETPRIVACYPOLICY }],

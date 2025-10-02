@@ -168,14 +168,17 @@ query GetBusinessById($getBusinessByIdId: ID!) {
 }
 `
 const GET_CATEGORIES = gql`
-query GetAllCategories($limit: Int, $offset: Int, $filter: CategoryFilter) {
-  getAllCategories(limit: $limit, offset: $offset, filter: $filter) {
-    id
+query GetAllCategories($limit: Int, $offSet: Int, $filter: CategoryFilter) {
+  getAllCategories(limit: $limit, offSet: $offSet, filter: $filter) {
+    totalcount
+    categories {
+      id
     icon
     isDigital
     name
     arabicName
     status
+    }
   }
 }
 `

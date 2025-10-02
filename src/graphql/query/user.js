@@ -226,7 +226,9 @@ query GetActiveAdminBank {
 const GETROLES = gql`
 query GetRoles($limit: Int, $offset: Int, $search: String, $isActive: Boolean) {
   getRoles(limit: $limit, offset: $offset, search: $search, isActive: $isActive) {
-    id,
+    totalCount
+    roles {
+      id,
     name,
     isActive,
     viewDashboard,
@@ -249,6 +251,7 @@ query GetRoles($limit: Int, $offset: Int, $search: String, $isActive: Boolean) {
     publishArticle,
     viewAlerts,
     manageRoles,
+    }
   }
 }
 `

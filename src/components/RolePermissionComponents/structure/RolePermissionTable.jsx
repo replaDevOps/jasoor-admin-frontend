@@ -182,7 +182,7 @@ const RolePermissionTable = () => {
     }
   };
 
-  let tableData = data?.getRoles || [];
+  let tableData = data?.getRoles?.roles || [];
   if (selectedStatus === "Active") {
     tableData = tableData.filter((role) => role.isActive);
   } else if (selectedStatus === "Inactive") {
