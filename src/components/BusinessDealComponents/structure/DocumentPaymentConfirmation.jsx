@@ -4,16 +4,18 @@ import { CheckCircleOutlined } from '@ant-design/icons'
 import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
 import { GETDEAL } from '../../../graphql/query';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 const DocumentPaymentConfirmation = ({details}) => {
+  const {t} = useTranslation()
   const uploadDocs = [
       {
-          title: "Updated Commercial Registration (CR)",
-          ...details?.busines?.documents?.find(doc => doc.title === "Commercial Registration (CR)")
+          title: t("Updated Commercial Registration (CR)"),
+          ...details?.busines?.documents?.find(doc => doc.title === t("Commercial Registration (CR)"))
       },
       {
-          title: "Notarized Ownership Transfer Letter",
+          title: t("Notarized Ownership Transfer Letter"),
           ...details?.busines?.documents?.find(doc => doc.title === "Notarized Ownership Transfer Letter")
       }
   ];
@@ -26,14 +28,14 @@ const DocumentPaymentConfirmation = ({details}) => {
         {!hasDocuments ? (
           <Col span={24}>
             <Flex justify="center" align="center" className="h-150">
-              <Text className="fs-14 text-gray">Documents not uploaded by seller yet</Text>
+              <Text className="fs-14 text-gray">{t("Documents not uploaded by seller yet")}</Text>
             </Flex>
           </Col>
         ) : (
           uploadDocs.map((item, index) =>
             item?.filePath ? (
               <Col span={24} key={index}>
-                <Text className="fw-600 text-medium-gray fs-13">{item.title}</Text>
+                <Text className="fw-600 text-medium-gray fs-13">{t(item.title)}</Text>
                 <Card className="card-cs border-gray rounded-12 mt-2">
                   <Flex justify="space-between" align="center">
                     <Flex gap={15}>
@@ -79,8 +81,8 @@ const DocumentPaymentConfirmation = ({details}) => {
             >
               <CheckCircleOutlined className="fs-14" />
               {isPaymentVerified
-                ? 'Seller marked "Payment Received"'
-                : '"Payment Received" Seller Confirmation pending'}
+                ? t('Seller marked Payment Received')
+                : t('Payment Received Seller Confirmation pending')}
             </Flex>
           </Flex>
         </Col>

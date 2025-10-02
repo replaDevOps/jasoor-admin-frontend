@@ -4,9 +4,11 @@ import { UPDATE_DEAL,UPDATE_BUSINESS} from '../../../graphql/mutation/mutations'
 import { useMutation } from '@apollo/client';
 import { GETDEAL } from '../../../graphql/query';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 const FinalDeal = ({details}) => {
+  const {t} = useTranslation()
     const [messageApi, contextHolder] = message.useMessage();
     const [updateDeals, { loading, data, error }] = useMutation(UPDATE_DEAL, {
       refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
@@ -16,13 +18,13 @@ const FinalDeal = ({details}) => {
 
     useEffect(() => {
         if (data?.updateDeal?.id) {
-            messageApi.success("Deal marked as completed successfully!");
+            messageApi.success(t("Deal marked as completed successfully!"));
         }
     }, [data?.updateDeal?.id]);
 
     useEffect(() => {
         if (error) {
-            messageApi.error(error.message || "Something went wrong!");
+            messageApi.error(error.message || t("Something went wrong!"));
         }
     }, [error]);
 
@@ -32,7 +34,7 @@ const FinalDeal = ({details}) => {
             variables: {
                 input: {
                     id: details.key,
-                    status: "COMPLETED", 
+                    status: t("COMPLETED"), 
                 },
             },
         });
@@ -62,10 +64,10 @@ const FinalDeal = ({details}) => {
                 {details?.isSellerCompleted || details?.isBuyerCompleted ? (
                   <>
                     <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
-                      <CheckCircleOutlined className="fs-14" /> Buyer marked the deal as "Finalized"
+                      <CheckCircleOutlined className="fs-14" /> {t("Buyer marked the deal as Finalized")}
                     </Flex>
                     <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
-                      <CheckCircleOutlined className="fs-14" /> Seller marked the deal as "Finalized"
+                      <CheckCircleOutlined className="fs-14" /> {t("Seller marked the deal as Finalized")}
                     </Flex>
                   </>
                 ) : (
@@ -73,30 +75,30 @@ const FinalDeal = ({details}) => {
                     {details.isDocVedifiedBuyer && (
                         <>
                       <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
-                        <CheckCircleOutlined className="fs-14" /> Buyer marked the deal as "Finalized"
+                        <CheckCircleOutlined className="fs-14" /> {t("Buyer marked the deal as Finalized")}
                       </Flex>
                       <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
-                          <CheckCircleOutlined className="fs-14" /> Waiting for seller to mark the deal as "Finalized"
+                          <CheckCircleOutlined className="fs-14" /> {t("Waiting for seller to mark the deal as Finalized")}
                         </Flex>
                       </>
                     )}
                     {details.isDocVedifiedSeller && (
                         <>
                       <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
-                        <CheckCircleOutlined className="fs-14" /> Seller marked the deal as "Finalized"
+                        <CheckCircleOutlined className="fs-14" /> {t("Seller marked the deal as Finalized")}
                       </Flex>
                         <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
-                          <CheckCircleOutlined className="fs-14" /> Waiting for buyer to mark the deal as "Finalized"
+                          <CheckCircleOutlined className="fs-14" /> {t("Waiting for buyer to mark the deal as Finalized")}
                         </Flex>
                       </>
                     )}
                     {!details.isDocVedifiedBuyer && !details.isDocVedifiedSeller && (
                       <>
                         <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
-                          <CheckCircleOutlined className="fs-14" /> Waiting for buyer to mark the deal as "Finalized"
+                          <CheckCircleOutlined className="fs-14" /> {t("Waiting for buyer to mark the deal as Finalized")}
                         </Flex>
                         <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
-                          <CheckCircleOutlined className="fs-14" /> Waiting for seller to mark the deal as "Finalized"
+                          <CheckCircleOutlined className="fs-14" /> {("Waiting for seller to mark the deal as Finalized")}
                         </Flex>
                       </>
                     )}
@@ -116,7 +118,7 @@ const FinalDeal = ({details}) => {
                         onClick={handleMarkVerified}
                         aria-labelledby='Mark Deal as Completed'
                     >
-                        Mark Deal as Completed
+                        {t("Mark Deal as Completed")}
                     </Button>
                 </Flex>
               </Flex>

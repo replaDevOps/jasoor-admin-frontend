@@ -1,4 +1,17 @@
 {
+
+
+
+
+
+
+
+
+
+
+
+
+
     "Welcome Back, Admin": "مرحبًا بك مرة أخرى، أيها المسؤول",
     "Please Sign In to access your admin dashboard and manage platform activities.": "يرجى تسجيل الدخول للوصول إلى لوحة تحكم المسؤول الخاصة بك وإدارة أنشطة المنصة.",
     "Email Address": "عنوان البريد الإلكتروني",
@@ -487,8 +500,6 @@
   "Please enter title":"الرجاء إدخال العنوان",
   "Cancel Meeting":"إلغاء الاجتماع",
   "Business Details": "تفاصيل العمل",
-
-
   "Please enter commission rate":"الرجاء إدخال سعر العمولة",
   "Please enter facebook link":"الرجاء إدخال رابط الفيسبوك",
   "Please enter instagram link":"الرجاء إدخال رابط الانستغرام",
@@ -524,9 +535,6 @@
   "Arabic Title":"العنوان العربي",
   "Preferred Date & Time":"التاريخ والوقت المفضل",
   "Schedule Date & Time":"جدولة التاريخ والوقت",
-
-
-
 "Bank status updated successfully":"تم تحديث حالة البنك بنجاح",
 "Bank account added successfully!":"تمت إضافة الحساب البنكي بنجاح!",
 "Failed to add bank account.":"فشل في إضافة حساب بنكي.",
@@ -556,6 +564,114 @@
 "Save Account":"حفظ الحساب",
 "Remove Bank Account?":"هل تريد إزالة الحساب البنكي؟",
 "Are you sure you want to delete this bank account? This action cannot be undone, and any active deals won’t be able to send payments to this account.":"هل أنت متأكد من رغبتك في حذف هذا الحساب البنكي؟ لا يمكن التراجع عن هذا الإجراء، ولن تتمكن أي صفقات نشطة من إرسال المدفوعات إلى هذا الحساب.",
-"Bank deleted successfully":"تم حذف البنك بنجاح"
+"Bank deleted successfully":"تم حذف البنك بنجاح",
+
+
+
+"Cancel Deal":"إلغاء الصفقة",
+"Commission Receipt":"إيصال العمولة",
+"Digital Sale Agreement":"اتفاقية البيع الرقمية",
+"Pay Business Amount":"دفع مبلغ الأعمال",
+"Document Confirmation":"تأكيد الوثيقة",
+"Waiting for seller to sign the sales agreement":"في انتظار البائع للتوقيع على اتفاقية البيع",
+"Waiting for buyer to sign the sales agreement":"في انتظار توقيع المشتري على اتفاقية البيع",
+"Verified":"تم التحقق منه",
+"Jusoor verification pending":"التحقق من جسور قيد الانتظار",
+"Commission Pending!":"اللجنة معلقة!",
+"Waiting for the buyer to pay the platform commission.":"في انتظار قيام المشتري بدفع عمولة المنصة.",
+"DSA Pending":"DSA في انتظار المراجعة",
+"Buyer DSA Pending":"DSA للمشتري معلق",
+"Seller DSA Pending":"طلب DSA للبائع معلق",
+"DSA Pending!":"DSA معلق!",
+"Waiting for the seller & buyer to sign the digital sale agreement.":"في انتظار توقيع البائع والمشتري على اتفاقية البيع الرقمية.",
+"Business Amount Pending!":"مبلغ العمل معلق!",
+"Waiting for the buyer to pay the seller business amount.":"في انتظار أن يقوم المشتري بدفع مبلغ العمل للبائع.",
+"Payment Confirmation Pending!":"تأكيد الدفع معلق!",
+"Waiting for the seller to transfer the document & approve the payment.":"في انتظار البائع لنقل المستند والموافقة على الدفع.",
+"Deal Pending!":"الصفقة معلقة!",
+"Deal marked as completed successfully!":"تمت الصفقة بنجاح!",
+"COMPLETED":"COMPLETED",
+"Buyer marked the deal as Finalized":"قام المشتري بوضع علامة على الصفقة بأنها نهائية",
+"Seller marked the deal as Finalized":"قام البائع بوضع علامة على الصفقة بأنها نهائية",
+"Waiting for seller to mark the deal as Finalized":"في انتظار البائع لوضع علامة على الصفقة على أنها نهائية",
+"Waiting for buyer to mark the deal as Finalized":"في انتظار المشتري لوضع علامة على الصفقة على أنها نهائية",
+"Jasoor’s Commission bank statement or screenshot":"كشف حساب بنكي أو لقطة شاشة لمفوضية جاسور",
+"Commission verified successfully!":"تم التحقق من اللجنة بنجاح!",
+"Mark as Verified":"وضع علامة على أنه تم التحقق منه",
+"Downloads Digital Sale Agreement":"تنزيلات اتفاقية البيع الرقمية",
+"This agreement outlines the final terms of the business transfer. Please review the details carefully before proceeding.":"تُحدد هذه الاتفاقية الشروط النهائية لنقل الأعمال. يُرجى مراجعة التفاصيل بعناية قبل المتابعة.",
+"Digital Sale Agreement.pdf":"اتفاقية البيع الرقمية.pdf",
+"5.3 MB":"5.3 ميجابايت",
+"Buyer accepted the Sale Agreement":"وافق المشتري على اتفاقية البيع",
+"Seller accepted the Sale Agreement":"وافق البائع على اتفاقية البيع",
+"Upload transaction receipt or screenshot":"تحميل إيصال المعاملة أو لقطة الشاشة",
+"Seller’s Bank Name":"اسم بنك البائع",
+"Seller’s IBAN":"رقم IBAN الخاص بالبائع",
+"Amount to Pay":"المبلغ المطلوب دفعه",
+"Buyer payment receipt verified successfully!":"Buyer payment receipt verified successfully!",
+"Updated Commercial Registration (CR)":"السجل التجاري المحدث (CR)",
+"Documents not uploaded by seller yet":"المستندات لم يتم تحميلها من قبل البائع بعد",
+"Seller verification Pending":"التحقق من البائع معلق",
+"Seller marked Payment Received":"البائع وضع علامة استلام الدفع",
+"Payment Received Seller Confirmation pending":"تم استلام الدفعة، تأكيد البائع معلق",
+"Notarized Ownership Transfer Letter":"خطاب نقل الملكية الموثق",
+"Mark Deal as Completed":"وضع علامة على الصفقة على أنها مكتملة",
+"Commission Pending":"اللجنة معلقة",
+"DSA pending":"DSA معلق",
+"DSA Seller Pending":"بائع DSA معلق",
+"DSA Buyer Pending":"مشتري DSA معلق",
+"Buyer Bank Dtails Pending":"تفاصيل بنك المشتري معلقة",
+"Payment Confirmation Pending":"تأكيد الدفع معلق",
+"Document Confirmation Pending":"تأكيد المستند معلق",
+"Admin Verification Pending":"التحقق الإداري معلق",
+
+
+
+
+
+
+ 
+"Al Tazaj Grill":"الطازج جريل",
+"Business Verification":"التحقق من العمل",
+"Activate":"تفعيل",
+"Inactivate":"إلغاء التفعيل",
+"A family-friendly Saudi restaurant serving traditional and modern Middle Eastern cuisine.":"مطعم سعودي عائلي يقدم المأكولات الشرق أوسطية التقليدية والحديثة.",
+"Business Stats":"إحصائيات العمل",
+"Assets":"الأصول",
+"Documents":"المستندات",
+"Offers":"العروض",
+"Revenue undefined":"الإيرادات غير معرفة",
+"Profit undefined":"الأرباح غير معرفة",
+"Profit Margin %":"هامش الربح %",
+"Capital Recovery":"استرداد رأس المال",
+"Multiples":"المضاعفات",
+"Growth Opportunity":"فرصة للنمو",
+"Post - Sale Support":"الدعم بعد البيع",
+"Support Period":"فترة الدعم",
+"Number of Session":"عدد الجلسات",
+"Response not successful: Received status code 400":"الاستجابة غير ناجحة: تم استلام رمز الحالة 400",
+"Outstanding Liabilities / Debt":"الالتزامات / الديون القائمة",
+"Liabilities name":"اسم الالتزامات",
+"Number of Items":"عدد العناصر",
+"Price":"السعر",
+"Key Asset":"الأصل الرئيسي",
+"Inventory":"المخزون",
+"Offer":"العرض",
+"Offer Date":"تاريخ العرض",
+"No Business Found":"لم يتم العثور على أي عمل",
+"Under Review":"تحت المراجعة",
+"Rows per page":"عدد الصفوف في الصفحة",
+"Reject":"يرفض",
+"Accept":"يقبل",
+"Add a New Article":"أضف مقالة جديدة",
+"This action cannot be undone. Are you sure you want to delete this article?":"لا يمكن عكس هذا الإجراء. هل أنت متأكد من رغبتك في حذف هذه المقالة؟",
+"Select Date & Time":"حدد التاريخ والوقت"
+
+
+
+
+
+
+
 
 }

@@ -91,38 +91,38 @@ const InprogressDealTable = () => {
             render: (status) => {
                 return (
                     status === 'COMMISSION_TRANSFER_FROM_BUYER_PENDING' ? (
-                        <Text className='btnpill fs-12 branded'>Commission Pending</Text>
+                        <Text className='btnpill fs-12 branded'>{t("Commission Pending")}</Text>
                     ) : 
                     status === 'COMMISSION_VERIFIED' ? (
-                        <Text className='btnpill fs-12 pending'>DSA pending</Text>
+                        <Text className='btnpill fs-12 pending'>{t("DSA pending")}</Text>
                     )
                     :
                     status === 'DSA_FROM_SELLER_PENDING' ? (
-                        <Text className='btnpill fs-12 sellerpendingstatus'>DSA Seller Pending</Text>
+                        <Text className='btnpill fs-12 sellerpendingstatus'>{t("DSA Seller Pending")}</Text>
                     )
                     :
                     status === 'DSA_FROM_BUYER_PENDING' ? (
-                        <Text className='btnpill fs-12 paybusinessamount'>DSA Buyer Pending</Text>
+                        <Text className='btnpill fs-12 paybusinessamount'>{t("DSA Buyer Pending")}</Text>
                     )
                     :
                     status === 'BANK_DETAILS_FROM_SELLER_PENDING' ? (
-                        <Text className='btnpill fs-12 paymentapprovalpending'>Buyer Bank Dtails Pending</Text>
+                        <Text className='btnpill fs-12 paymentapprovalpending'>{t("Buyer Bank Dtails Pending")}</Text>
                     )
                     :
                     status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? (
-                        <Text className='btnpill fs-12 paymentapprovalpending'>Payment Confirmation Pending</Text>
+                        <Text className='btnpill fs-12 paymentapprovalpending'>{t("Payment Confirmation Pending")}</Text>
                     )
                     :
                     status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? (
-                        <Text className='btnpill fs-12 paymentapprovalpending'>Document Confirmation Pending</Text>
+                        <Text className='btnpill fs-12 paymentapprovalpending'>{t("Document Confirmation Pending")}</Text>
                     )
                     :
                     status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? (
-                        <Text className='btnpill fs-12 paymentapprovalpending'>Admin Verification Pending</Text>
+                        <Text className='btnpill fs-12 paymentapprovalpending'>{t("Admin Verification Pending")}</Text>
                     )
                     :
                     (
-                        <Text className='btnpill fs-12 commissiontransferbuyer'>Finalize Deal</Text>
+                        <Text className='btnpill fs-12 commissiontransferbuyer'>{t("Finalize Deal")}</Text>
                     )
                 )
             }
