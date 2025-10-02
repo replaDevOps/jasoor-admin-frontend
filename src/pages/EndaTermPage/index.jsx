@@ -8,6 +8,8 @@ import { useTranslation } from "react-i18next";
   
 const EndaTermPage = () => {
   const {t, i18n}= useTranslation()
+  const lang = localStorage.getItem("lang") || i18n.language || "en";
+  const isArabic = lang.toLowerCase() === "ar";
   const TAGS = [
     { key: t("buyerName"), label: t("Buyer Name") },
     { key: t("sellerName"), label: t("Seller Name") },
@@ -17,18 +19,28 @@ const EndaTermPage = () => {
     { key: t("date"), label: t("Date") },
   ];
     const [form] = Form.useForm();
-    const [ descriptionData, setDescriptionData ] = useState('')
+    const [ descriptionData, setDescriptionData ] = useState()
     const [messageApi, contextHolder] = message.useMessage();
     const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);
     const [updateTerms, { loading: updating }] = useMutation(UPDATE_TERMS);
     const { data, loading, error } = useQuery(GETENDATERMS);
 
     useEffect(() => {
-        if (data?.getNDATerms?.term?.content) {
-          setDescriptionData(data?.getNDATerms?.ndaTerm?.content);
+      if (!data?.getNDATerms) return;
+      if (isArabic) {
+        const arabicTerm = data.getNDATerms.find(t => t.arabicNdaTerm?.content);
+        if (arabicTerm) {
+          setDescriptionData(arabicTerm.arabicNdaTerm.content);
         }
-    }, [data]);
+      } else {
+        const englishTerm = data.getNDATerms.find(t => t.ndaTerm?.content);
+        if (englishTerm) {
+          setDescriptionData(englishTerm.ndaTerm.content);
+        }
+      }
+    }, [data,isArabic]);
 
+    
     const editorRef = useRef(null);
 
     const handleDescriptionChange = (value) => {
@@ -38,29 +50,28 @@ const EndaTermPage = () => {
     const handleEditorInit = (editor) => {
         editorRef.current = editor;
     }
-
     const onFinish = async () => {
         try {
           if (!descriptionData) {
             messageApi.error(t("Please add terms content"));
             return;
           }
-          // get language from localStorage or i18n
-          const lang = localStorage.getItem("lang") || i18n.language || "en";
-          const isArabic = lang.toLowerCase() === "ar";
-
-          // prepare dynamic input
-          const termInput = isArabic
-          ? { arabicNdaTerm: { content: descriptionData } }
-          : { ndaTerm: { content: descriptionData } };
-
-          if (data?.getNDATerms?.id) {
+          const existingTermsId = isArabic
+          ? data?.getTerms?.arabicNdaTerm?.id
+          : data?.getTerms?.ndaTerm?.id;
+    
+          if (existingTermsId) {
             await updateTerms({
                 variables: {
                   updateTermsId: data.getTerms.id,
                   input: {
                     term: null,
-                    ...termInput,
+                    ...(
+                      isArabic
+                        ? { arabicNdaTerm: { content: descriptionData } }
+                        : { ndaTerm: { content: descriptionData} }
+                    ),
+                    isArabic,
                     policy: null,
                   },
                 },
@@ -74,7 +85,12 @@ const EndaTermPage = () => {
                 variables: {
                     input:{
                     term:    null,
-                    ...termInput,
+                    ...(
+                      isArabic
+                        ? { arabicNdaTerm: { content: descriptionData } }
+                        : { ndaTerm: { content: descriptionData} }
+                    ),
+                    isArabic,
                     policy: null,
                 },
             }

@@ -70,7 +70,7 @@ query GetDSATerms {
   getDSATerms {
     id
     dsaTerms
-    arabicNdaTerm
+    arabicDsaTerms
     isArabic
   }
 }

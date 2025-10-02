@@ -10,7 +10,8 @@ import { useTranslation } from "react-i18next";
 const DSATermsPage = () => {
   const [form] = Form.useForm();
   const {t, i18n}= useTranslation()
-  
+  const lang = localStorage.getItem("lang") || i18n.language || "en";
+  const isArabic = lang.toLowerCase() === "ar";
   const TAGS = [
     { key: t("buyerName"), label: t("Buyer Name") },
     { key: t("sellerName"), label: t("Seller Name") },
@@ -24,13 +25,21 @@ const DSATermsPage = () => {
   const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);
   const [updateTerms, { loading: updating }] = useMutation(UPDATE_TERMS);
   const { data, loading, error } = useQuery(GETDSATERMS);
-
   useEffect(() => {
-    if (data?.getDSATerms?.dsaTerms?.content) {
-      setDescriptionData(data?.getDSATerms?.dsaTerms?.content);
+    if (data?.length === 0) return
+    if (isArabic) {
+      const arabicDsaTerm = data?.getDSATerms?.find(t=>t.arabicDsaTerms?.content);
+      if (arabicDsaTerm) {
+        setDescriptionData(arabicDsaTerm.arabicDsaTerms.content);
+      }
+    } else{
+      const englishTerm = data?.getDSATerms?.find(t=>t.dsaTerms?.content)
+      if(englishTerm){
+        setDescriptionData(englishTerm.dsaTerms.content);
+      }
     }
-  }, [data]);
-
+  }, [data,isArabic]);
+  // useEffect(() => { console.log("Updated descriptionData:", descriptionData); }, [descriptionData]);
   const editorRef = useRef(null);
 
   const handleDescriptionChange = (value) => {
@@ -47,21 +56,20 @@ const DSATermsPage = () => {
             messageApi.error(t("Please add terms content"));
             return;
         }
-        // get language from localStorage or i18n
-        const lang = localStorage.getItem("lang") || i18n.language || "en";
-        const isArabic = lang.toLowerCase() === "ar";
+        const existingTerm = data?.getDSATerms?.find(t => t.isArabic === isArabic);
 
-        // prepare dynamic input
-        const termInput = isArabic
-        ? { arabicDsaTerms: { content: descriptionData } }
-        : { dsaTerms: { content: descriptionData } };
-        if(data?.getDSATerms?.id){
+        if(existingTerm.id){
           await updateTerms({
               variables: {
-                updateTermsId: data.getDSATerms.id,
+                updateTermsId: existingTerm.id,
                 input: {
                   term: null,
-                  ...termInput,
+                  ...(
+                    isArabic
+                      ? { arabicDsaTerms: { content: descriptionData } }
+                      : { dsaTerms: { content: descriptionData} }
+                  ),
+                  isArabic,
                   policy: null,
                 },
               },
@@ -74,7 +82,12 @@ const DSATermsPage = () => {
             variables: {
             input:{
                 term: null,
-                ...termInput,
+                ...(
+                  isArabic
+                    ? { arabicDsaTerms: { content: descriptionData } }
+                    : { dsaTerms: { content: descriptionData} }
+                ),
+                isArabic,
                 policy: null,
             },
             refetchQueries: [{ query: GETDSATERMS }],

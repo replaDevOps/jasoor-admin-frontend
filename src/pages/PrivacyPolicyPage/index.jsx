@@ -4,48 +4,66 @@ import { EditorDescription, ModuleTopHeading } from '../../components';
 import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
 import { GETPRIVACYPOLICY } from '../../graphql/query/queries';
-import { t } from 'i18next';
+import { useTranslation } from "react-i18next";
 
 const PrivacyPolicyPage = () => {
     const [form] = Form.useForm();
+    const {t, i18n}= useTranslation()
+    const lang = localStorage.getItem("lang") || i18n.language || "en";
+    const isArabic = lang.toLowerCase() === "ar";
+    
     const [ descriptionData, setDescriptionData ] = useState('')
     const [messageApi, contextHolder] = message.useMessage();
     const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);
     const [updateTerms, { loading: updating }] = useMutation(UPDATE_TERMS);
     const { data, loading, error } = useQuery(GETPRIVACYPOLICY);
 
-      useEffect(() => {
-          if (data?.getPrivacyPolicy?.policy?.content) {
-            setDescriptionData(data?.getPrivacyPolicy?.policy?.content);
-          }
-      }, [data]);
+    useEffect(() => {
+      if (data?.getPrivacyPolicy === 0) return
+      if (isArabic) {
+        const arabicPolicy = data?.getPrivacyPolicy?.find(t=>t.arabicPolicy?.content);
+        if(arabicPolicy){
+          setDescriptionData(arabicPolicy?.arabicPolicy?.content);
+        }
+      }else{
+        const englishPolicy = data?.getPrivacyPolicy?.find(t=>t.policy?.content)
+        if(englishPolicy){
+          setDescriptionData(englishPolicy?.policy?.content);
+        }
+      }
+    }, [data, isArabic]);
 
     const handleDescriptionChange = (value) =>{
         setDescriptionData(value)
     }
 
+    // useEffect(() => { console.log("Updated descriptionData:", descriptionData); }, [descriptionData]);
     const onFinish = async () => {
         try {
           if (!descriptionData) {
             messageApi.error("Please add policy content");
             return;
           }
-          // get language from localStorage or i18n
-          const lang = localStorage.getItem("lang") || i18n.language || "en";
-          const isArabic = lang.toLowerCase() === "ar";
-
           // prepare dynamic input
-          const policyInput = isArabic
-          ? { arabicPolicy: { content: descriptionData } }
-          : { policy: { content: descriptionData } };
-          if( data?.getPrivacyPolicy?.id) {
+          const existingTerm = data?.getPrivacyPolicy?.find(t => t.isArabic === isArabic);
+
+          const existingTermsId = isArabic
+            ? existingTerm?.id
+            : existingTerm?.id;
+
+          if(existingTermsId) {
             await updateTerms({
                 variables: {
-                  updateTermsId: data.getDSATerms.id,
+                  updateTermsId: existingTermsId,
                   input: {
                     term: null,
                     dsaTerms: null,
-                    ...policyInput,
+                    ...(
+                      isArabic
+                        ? { arabicPolicy: { content: descriptionData } }
+                        : { policy: { content: descriptionData} }
+                    ),
+                    isArabic,
                   },
                 },
                 refetchQueries: [{ query: GETPRIVACYPOLICY }],
@@ -55,11 +73,16 @@ const PrivacyPolicyPage = () => {
           }else{
             await createTerms({
                 variables: {
-                    input: {
+                  input: {
                     term: null,   
                     ndaTerm: null,
-                    ...policyInput,
-                    }
+                    ...(
+                      isArabic
+                        ? { arabicPolicy: { content: descriptionData } }
+                        : { policy: { content: descriptionData} }
+                    ),
+                    isArabic,
+                  }
                 },
                 refetchQueries: [{ query: GETPRIVACYPOLICY }],
                 awaitRefetchQueries: true,

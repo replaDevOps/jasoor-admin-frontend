@@ -40,7 +40,10 @@ const TermOfUsePage = () => {
             messageApi.error(t("Please add terms content"));
             return;
           }
-          if (data?.getTerms?.id) {
+          const existingTermsId = isArabic
+          ? data?.getTerms?.arabicTerm?.id
+          : data?.getTerms?.term?.id;
+          if (existingTermsId) {
             await updateTerms({
               variables: {
                 updateTermsId: data.getTerms.id,
