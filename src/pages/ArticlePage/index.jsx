@@ -59,8 +59,8 @@ const ArticlePage = () => {
             <DeleteModal 
                 visible={deleteitem}
                 onClose={()=>setDeleteItem(false)}
-                title='Are you sure?'
-                subtitle='This action cannot be undone. Are you sure you want to delete this article?'
+                title={t('Are you sure?')}
+                subtitle={t('This action cannot be undone. Are you sure you want to delete this article?')}
                 type='danger'
                 onConfirm={(refetch) => handleDelete(refetch)}
                 loading={deleting}

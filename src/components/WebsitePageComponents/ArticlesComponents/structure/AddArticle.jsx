@@ -174,7 +174,7 @@ const AddArticle = () => {
                 {
                   title: (
                     <Text className='fw-500 fs-13 text-black'>
-                      {detail ? detail?.title : 'Add a New Article'}
+                      {detail ? detail?.title : t('Add a New Article')}
                     </Text>
                   ),
                 },

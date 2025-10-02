@@ -201,7 +201,7 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
                   label={t("Description")}
                   name="description"
                   required
-                  message="Please write note"
+                  message={t("Please write note")}
                   placeholder={t("Write here....")}
                   rows={4}
                   disabled={viewnotify}

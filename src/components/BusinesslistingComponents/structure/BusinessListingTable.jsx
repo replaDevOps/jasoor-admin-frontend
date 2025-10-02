@@ -91,12 +91,12 @@ const BusinessListingTable = ({
                 return (
                     status === 'UNDER_REVIEW' ? (
                         <Space align='center'>
-                            <Text className='btnpill fs-12 pending'>Under Review</Text>
+                            <Text className='btnpill fs-12 pending'>{t("Under Review")}</Text>
                         </Space>
                     ) : status === 'INACTIVE' ? (
                         <Text className='btnpill fs-12 inactive'>Inactive</Text>
                     ) : status === 'ACTIVE' ? (
-                        <Text className='btnpill fs-12 success'>Active</Text>
+                        <Text className='btnpill fs-12 success'>{t("Active")}</Text>
                     ) : status === 'SOLD' ? (
                         <Text className='btnpill fs-12 success'>Sold</Text>
                     ) : null

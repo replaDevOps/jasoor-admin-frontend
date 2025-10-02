@@ -43,11 +43,11 @@ const CategoryTable = () => {
             render: (status) => {
                 return (
                     status === 'UNDER_REVIEW' ? (
-                        <Text className='btnpill fs-12 pending'>Pending</Text>
+                        <Text className='btnpill fs-12 pending'>{t("Pending")}</Text>
                     ) : status === 'INACTIVE' ? (
                         <Text className='btnpill fs-12 inactive'>Inactive</Text>
                     ) : status === 'ACTIVE' ? (
-                        <Text className='btnpill fs-12 success'>Active</Text>
+                        <Text className='btnpill fs-12 success'>{t("Active")}</Text>
                     ) : null
                 );
             }
@@ -189,7 +189,7 @@ const CategoryTable = () => {
                 categoryicon: item.icon,
                 categoryname: item.name,
                 arabicName: item.arabicName,
-                businesstype: item.isDigital ? 'Online Business' : 'Physical Business',
+                businesstype: item.isDigital ? t('Online Business') : t('Physical Business'),
                 status: item.status
             }));
             setCategories(mappedCategories);

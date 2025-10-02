@@ -83,8 +83,8 @@ const ArticleCards = ({setDeleteItem}) => {
                                                 <Dropdown
                                                     menu={{
                                                         items: [
-                                                            { label: <NavLink to={'/articles/add/'+art?.id}>Edit</NavLink>, key: '1' },
-                                                            { label: <NavLink onClick={(e) => {e.preventDefault();setDeleteItem(art?.id)}}>Delete</NavLink>, key: '2' },
+                                                            { label: <NavLink to={'/articles/add/'+art?.id}>{t("Edit")}</NavLink>, key: '1' },
+                                                            { label: <NavLink onClick={(e) => {e.preventDefault();setDeleteItem(art?.id)}}>{t("Delete")}</NavLink>, key: '2' },
                                                         ]
                                                     }}
                                                     trigger={['click']}

@@ -120,11 +120,11 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
       dataIndex: 'status',
       render: (status) => {
         if (status === 'verified') {
-          return <Text className="btnpill fs-12 success">Active</Text>;
+          return <Text className="btnpill fs-12 success">{t("Active")}</Text>;
         } else if (status === 'inactive') {
-          return <Text className="btnpill fs-12 inactive">Inactive</Text>;
+          return <Text className="btnpill fs-12 inactive">{t("Inactive")}</Text>;
         } else if (status === 'pending') {
-          return <Text className="btnpill fs-12 pending">Pending</Text>;
+          return <Text className="btnpill fs-12 pending">{t("Pending")}</Text>;
         }
         return null;
       }
