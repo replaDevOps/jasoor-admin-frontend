@@ -1,7 +1,6 @@
 import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Input,Typography,Space,message,Spin} from 'antd';
 import { NavLink } from "react-router-dom";
 import { useState, useEffect, useMemo } from 'react';
-import { districtItems, statusItems, typeItems } from '../../../shared';
 import { CustomPagination } from '../../Ui';
 import { ViewIdentity } from '../modals';
 import { UPDATE_USER } from '../../../graphql/mutation'
@@ -236,6 +235,34 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
           </Flex>
         );
     }
+
+    const districtItems = [
+    { key: '1', label: t('Makkah') },
+    { key: '2', label: t('Eastern') },
+    { key: '3', label: t('Al-Madinah') },
+    { key: '4', label: t('Asir') },
+    { key: '5', label: t('Tabuk') },
+    { key: '6', label: t('Najran') },
+    { key: '7', label: t('Al-Qassim') },
+    { key: '8', label: t('Hail') },
+    { key: '9', label: t('Al-Jouf') },
+    { key: '10', label: t('Al-Bahah') },
+    { key: '11', label: t('Riyadh') },
+    { key: '12', label: t('Northern Borders') },
+    { key: '13', label: t('Jazan') },
+]
+
+const typeItems = [
+    { key: '1', label: t('All') },
+    { key: '2', label: t('New') },
+    { key: '3', label: t('Old') }
+];
+
+ const statusItems = [
+    { key: '1', label: t('All') },
+    { key: '2', label: t('Active') },
+    { key: '3', label: t('Inactive') }
+];
 
     return (
         <>

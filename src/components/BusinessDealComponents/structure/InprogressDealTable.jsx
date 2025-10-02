@@ -2,19 +2,20 @@ import { Button, Col, Dropdown, Flex, Form, Row, Table ,Typography} from 'antd';
 import { SearchInput } from '../../Forms';
 import { useState, useEffect } from 'react';
 import { DownOutlined } from '@ant-design/icons';
-import { businessdealItems } from '../../../shared';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination } from '../../Ui';
 import { GETDEALS } from '../../../graphql/query/meeting'
 import { useLazyQuery } from '@apollo/client'
 import { TableLoader } from '../../Ui/TableLoader';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 
 const InprogressDealTable = () => {
+
+    const { t, i18n } = useTranslation();
     const [form] = Form.useForm();
-    const [selectedStatus, setSelectedStatus] = useState(t('Status'));
+    const [selectedStatus, setSelectedStatus] = useState(t("Status"));
     const navigate = useNavigate()
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
@@ -24,6 +25,10 @@ const InprogressDealTable = () => {
         fetchPolicy: 'network-only'
     });
 
+    useEffect(() => {
+        setSelectedStatus(t("Status"));
+    }, [i18n.language, t]);
+    
     useEffect(() => {
         getDeals({
             variables: {
@@ -128,6 +133,18 @@ const InprogressDealTable = () => {
             dataIndex: 'date',
         },
     ];
+
+    const businessdealItems = [
+    { key: '1', label: t('All') },
+    { key: '2', label: t('Document & Payment Confirmation') },
+    { key: '3', label: t('Commission Verification Pending') },
+    { key: '4', label: t('Seller Payment Verification Pending') },
+    { key: '5', label: t('Closed Deal Verification Pending') },
+    { key: '6', label: t('Payment Approval From Seller Pending') },
+    { key: '7', label: t('Bank Details From Seller Pending') },
+    { key: '8', label: t('DSA From Seller Pending') },
+    { key: '9', label: t('DSA From Buyer Pending') },
+]
 
     return (
         <>

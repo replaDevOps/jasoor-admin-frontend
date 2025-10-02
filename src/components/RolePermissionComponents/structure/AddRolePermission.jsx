@@ -208,7 +208,7 @@ return (
                 name="name"
                 className="w-100"
                 placeholder={t("Enter Role Name")}
-                rules={[{ required: true, message: "Please enter role name" }]}
+                rules={[{ required: true, message: t("Please enter role name") }]}
               />
             </Col>
             <Col span={24}>

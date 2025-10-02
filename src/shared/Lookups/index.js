@@ -79,17 +79,7 @@ const meetingItems = [
     { key: '3', label: 'Cancel Meeting'},
 ]
 
-const businessdealItems = [
-    { key: '1', label: t('All') },
-    { key: '2', label: t('Document & Payment Confirmation') },
-    { key: '3', label: t('Commission Verification Pending') },
-    { key: '4', label: t('Seller Payment Verification Pending') },
-    { key: '5', label: t('Closed Deal Verification Pending') },
-    { key: '6', label: t('Payment Approval From Seller Pending') },
-    { key: '7', label: t('Bank Details From Seller Pending') },
-    { key: '8', label: t('DSA From Seller Pending') },
-    { key: '9', label: t('DSA From Buyer Pending') },
-]
+
 
 const pushstatusItem = [
     { key: '1', label: 'All' },
@@ -142,4 +132,4 @@ const revenueLookups = [
     },
 ]
 
-export { categoriesItems, revenueLookups, priorityItems, districtItems, statusItems, typeItems,meetingItems, businessdealItems, pushstatusItem,groupItems, useGroupItem, districtselectItems, yearOp, langItems };
+export { categoriesItems, revenueLookups, priorityItems, districtItems, statusItems, typeItems,meetingItems, pushstatusItem,groupItems, useGroupItem, districtselectItems, yearOp, langItems };

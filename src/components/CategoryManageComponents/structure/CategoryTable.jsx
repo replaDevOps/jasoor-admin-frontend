@@ -1,4 +1,4 @@
-import { Button, Dropdown, Form,Image,Typography,Flex,Card,Row,Col,Input,Table } from 'antd';
+import { Button, Dropdown, Form,Image,Typography,Flex,Card,Row,Col,Input,Table, Empty } from 'antd';
 import { CustomPagination } from '../../Ui';
 import { DownOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';;
@@ -9,11 +9,13 @@ import { useQuery,useMutation } from '@apollo/client'
 import { message,Spin } from "antd";
 import { NavLink } from "react-router-dom";
 import {DeleteModal} from '../../../components/Ui'
-import { t } from 'i18next';
+// import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 
 const CategoryTable = () => {
+    const {t}=useTranslation()
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -41,11 +43,11 @@ const CategoryTable = () => {
             render: (status) => {
                 return (
                     status === 'UNDER_REVIEW' ? (
-                        <Text className='btnpill fs-12 pending'>Pending</Text>
+                        <Text className='btnpill fs-12 pending'>{t("Pending")}</Text>
                     ) : status === 'INACTIVE' ? (
                         <Text className='btnpill fs-12 inactive'>Inactive</Text>
                     ) : status === 'ACTIVE' ? (
-                        <Text className='btnpill fs-12 success'>Active</Text>
+                        <Text className='btnpill fs-12 success'>{t("Active")}</Text>
                     ) : null
                 );
             }
@@ -187,7 +189,7 @@ const CategoryTable = () => {
                 categoryicon: item.icon,
                 categoryname: item.name,
                 arabicName: item.arabicName,
-                businesstype: item.isDigital ? 'Online Business' : 'Physical Business',
+                businesstype: item.isDigital ? t('Online Business') : t('Physical Business'),
                 status: item.status
             }));
             setCategories(mappedCategories);

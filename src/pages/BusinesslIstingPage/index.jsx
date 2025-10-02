@@ -5,9 +5,10 @@ import { GET_BUSINESSES } from '../../graphql/query/business'
 import { useLazyQuery } from '@apollo/client'
 import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const BusinesslIstingPage = () => {
+  const {t} =useTranslation()
   const [page, setPage] = useState(1); 
   const [pageSize, setPageSize] = useState(10); 
   const [search, setSearch] = useState(""); 

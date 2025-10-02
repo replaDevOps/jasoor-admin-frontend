@@ -67,10 +67,10 @@ const PushNotificationTable = ({
       description: campaign.description,
       group:
         campaign.group === "NEW"
-          ? "New"
+          ? t("New")
           : campaign.group === "OLD"
-          ? "Old"
-          : "Both",
+          ? t("Old")
+          : t("Both"),
       district: campaign.district?.map((d) => ({ item: d })) || [],
       date: new Date(campaign.schedule || Date.now()).toLocaleString("en-GB", {
         day: "2-digit",

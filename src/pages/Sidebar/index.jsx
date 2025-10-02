@@ -25,7 +25,7 @@ import { FinancePage } from '../FinancePage';
 import { FaqsPage } from '../FaqsPage';
 import { Dashboard } from '../Dashboard';
 import {DSATermsPage} from '../DSATermsPage';
-import { t } from 'i18next';
+
 
 const { Header, Sider, Content } = Layout;
 const Sidebar = () => {

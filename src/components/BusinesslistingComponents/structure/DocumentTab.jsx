@@ -1,9 +1,12 @@
 import { Card, Col, Flex, Image, Row, Typography } from 'antd'
 import { useQuery } from '@apollo/client';
 import {GET_BUSINESSES_DOCUMENT_ID} from '../../../graphql/query'
+import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography
+    
 const DocumentTab = ({businessId}) => {
+    const {t} = useTranslation()
     const { loading, error, data:business } = useQuery(GET_BUSINESSES_DOCUMENT_ID, {
         variables: { getBusinessByIdId: businessId },
     });
@@ -15,7 +18,7 @@ const DocumentTab = ({businessId}) => {
             <Row gutter={[24,24]}>
                 <Col span={24}>
                     <Title level={5} className='m-0'>
-                        Documents
+                        {t("Documents")}
                     </Title>
                 </Col>
                 {

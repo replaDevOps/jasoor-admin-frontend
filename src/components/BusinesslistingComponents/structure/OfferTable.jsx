@@ -3,12 +3,15 @@ import {OFFERBYBUSINESSID} from '../../../graphql/query'
 import { useQuery } from '@apollo/client'
 import {useState} from 'react'
 import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
+
 
 const { Text } = Typography
 
+
 const offertableColumn = [
     {
-      title: 'Buyer Name',
+      title: t('Buyer Name'),
       dataIndex: 'buyername',
       render: (buyername) => {
         if (!buyername) return <Text>-</Text>;
@@ -18,11 +21,11 @@ const offertableColumn = [
       }
     },
     {
-      title: 'Business Price',
+      title: t('Business Price'),
       dataIndex: 'businessprice',
     },
     {
-      title: 'Offer Price',
+      title: t('Offer Price'),
       dataIndex: 'offerprice',
       render: (_, row) => {
         return (
@@ -42,7 +45,7 @@ const offertableColumn = [
       }
     },
     {
-      title: 'Status',
+      title: t('Status'),
       dataIndex: 'status',
       render: (status) => {
         return (
@@ -59,7 +62,7 @@ const offertableColumn = [
       }
     },
     {
-      title: 'Offer Date',
+      title: t('Offer Date'),
       dataIndex: 'offerdate',
     },
   ]
@@ -118,7 +121,7 @@ const OfferTable = (businessId) => {
         <Card className='radius-12 border-gray'>
             <Flex vertical gap={10}>
                 <Title level={5} className="m-0">
-                    Offer
+                    {t("Offer")}
                 </Title>
                 <Table
                     size="large"
