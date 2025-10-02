@@ -3,9 +3,11 @@ import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
 import { GETDEAL } from '../../../graphql/query';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 const CommissionReceiptBuyer = ({ details }) => {
+    const {t}=useTranslation()
     const commission = details?.busines
     const jasoorDoc = commission?.documents?.find(doc => doc.title === 'Jasoor Commission');
     const [messageApi, contextHolder] = message.useMessage();
@@ -15,13 +17,13 @@ const CommissionReceiptBuyer = ({ details }) => {
     });
     useEffect(() => {
         if (data?.updateDeal?.id) {
-            messageApi.success("Commission verified successfully!");
+            messageApi.success(t("Commission verified successfully!"));
         }
     }, [data?.updateDeal?.id]);
 
     useEffect(() => {
         if (error) {
-            messageApi.error(error.message || "Something went wrong!");
+            messageApi.error(error.message || t("Something went wrong!"));
         }
     }, [error]);
 
@@ -71,7 +73,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                 <Col span={24}>
                     <Flex vertical gap={6}>
                         <Text className="fw-600 text-medium-gray fs-13">
-                            Jasoor’s Commission bank statement or screenshot
+                            {t("Jasoor’s Commission bank statement or screenshot")}
                         </Text>
                         {
                             jasoorDoc && (
@@ -93,7 +95,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                             aria-labelledby='Mark as Verified'
                             disabled={!(jasoorDoc && !details?.isCommissionVerified)}
                         >
-                            Mark as Verified
+                            {t("Mark as Verified")}
                         </Button>
                     </Flex>
                 </Col>

@@ -1,8 +1,10 @@
 import { Button, Card, Col, Flex, Image, Row, Typography } from 'antd'
 import { CheckCircleOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 
 const { Text } = Typography
 const FinalDealBuyer = () => {
+    const {t} = useTranslation()
 
     return (
         <Row gutter={[16, 24]}>
@@ -32,19 +34,19 @@ const FinalDealBuyer = () => {
                 <Flex vertical gap={10}>
                     {/* design for success status */}
                     <Flex gap={5} className='badge-cs success fs-12 fit-content' align='center'>
-                        <CheckCircleOutlined className='fs-14' /> Seller marked the deal as "Finalized".
+                        <CheckCircleOutlined className='fs-14' /> {t("Seller marked the deal as Finalized")}.
                     </Flex>
 
                     {/* design for pending state */}
                     <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
-                        <CheckCircleOutlined className='fs-14' /> Waiting for seller to mark the deal as "Finalized".
+                        <CheckCircleOutlined className='fs-14' /> {t("Waiting for seller to mark the deal as Finalized")}.
                     </Flex>
                     <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
-                        <CheckCircleOutlined className='fs-14' /> Waiting for seller to mark the deal as "Finalized".
+                        <CheckCircleOutlined className='fs-14' /> {t("Waiting for seller to mark the deal as Finalized")}.
                     </Flex>
                     <Flex>
                         <Button type="button" className='btnsave bg-gray border0 text-white' aria-labelledby='Mark Deal as Completed'>
-                            Mark Deal as Completed
+                            {t("Mark Deal as Completed")}
                         </Button>
                     </Flex>
                 </Flex>

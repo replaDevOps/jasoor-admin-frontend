@@ -4,9 +4,11 @@ import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
 import { GETDEAL,ME } from '../../../graphql/query';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 const BusinessAmountReceiptBuyer = ({details}) => {
+    const {t} = useTranslation()
     const [messageApi, contextHolder] = message.useMessage();
     const sellerReceipt = details?.busines?.documents?.find(doc => doc.title === 'Buyer Payment Receipt');
 
@@ -15,10 +17,10 @@ const BusinessAmountReceiptBuyer = ({details}) => {
         });
     const banks = user?.getUser?.banks?.find(doc => doc.isActive === true)
     const businessamountrecpData = [
-        {title:'Seller’s Bank Name', desc: banks?.bankName },
-        {title:'Seller’s IBAN', desc:banks?.iban },
-        {title:'Account Holder Name',desc:banks?.accountTitle },
-        {title:'Amount to Pay', desc:details?.finalizedOffer },
+        {title:t('Seller’s Bank Name'), desc: t(banks?.bankName) },
+        {title:t('Seller’s IBAN'), desc:banks?.iban },
+        {title:t('Account Holder Name'),desc:banks?.accountTitle },
+        {title:t('Amount to Pay'), desc:details?.finalizedOffer },
     ]
     const [updateDeals, { loading: updating, data, error }] = useMutation(UPDATE_DEAL, {
         refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
@@ -26,13 +28,13 @@ const BusinessAmountReceiptBuyer = ({details}) => {
     });
     useEffect(() => {
         if (data?.updateDeal?.id) {
-            messageApi.success("Buyer payment receipt verified successfully!");
+            messageApi.success(t("Buyer payment receipt verified successfully!"));
         }
     }, [data?.updateDeal?.id]);
 
     useEffect(() => {
         if (error) {
-            messageApi.error(error.message || "Something went wrong!");
+            messageApi.error(error.message || t("Something went wrong!"));
         }
     }, [error]);
     
@@ -49,7 +51,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
     };
     const renderUploadedDoc = ({ fileName, fileSize, filePath }) => (
         <Flex vertical gap={6}>
-            <Text className="fw-600 text-medium-gray fs-13">Upload transaction receipt or screenshot</Text>
+            <Text className="fw-600 text-medium-gray fs-13">{t("Upload transaction receipt or screenshot")}</Text>
             <Card className="card-cs border-gray rounded-12">
                 <Flex justify="space-between" align="center">
                     <Flex gap={15}>
@@ -116,7 +118,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                             aria-labelledby="Mark as Verified"
                             disabled={!(sellerReceipt && !details?.isPaymentVedifiedAdmin)}
                         >
-                            Mark as Verified
+                            {t("Mark as Verified")}
                         </Button>
                     </Flex>
                 </Col>

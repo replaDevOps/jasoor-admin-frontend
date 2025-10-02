@@ -1,6 +1,5 @@
 import { Flex, Form, Table } from 'antd';
 import { SearchInput } from '../../Forms';
-import { completedealColumn } from '../../../data';
 import { CustomPagination } from '../../Ui';
 import { useState, useEffect } from 'react';
 import { GETDEALS } from '../../../graphql/query/meeting'
@@ -52,6 +51,29 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
     const handleSearch = (value) => {
         setSearchValue(value);
     };
+
+    const completedealColumn = [
+    {
+        title: t('Business Title'),
+        dataIndex: 'businessTitle',
+    },
+    {
+        title: t('Buyer Name'),
+        dataIndex: 'buyerName',
+    },
+    {
+        title: t('Seller Name'),
+        dataIndex: 'sellerName',
+    },
+    {
+        title: t('Finalized Offer'),
+        dataIndex: 'finalizedOffer',
+    },
+    {
+        title: t('Date'),
+        dataIndex: 'date',
+    },
+]
 
     return (
         <>

@@ -7,6 +7,7 @@ import { DocumentPaymentConfirmation } from './DocumentPaymentConfirmation';
 import { FinalDeal } from './FinalDeal';
 import { CommissionReceiptBuyer } from './CommissionReceiptBuyer';
 import { BusinessAmountReceiptBuyer } from './BusinessAmountReceiptBuyer';
+import { useTranslation } from 'react-i18next';
 
 const statusToStepIndex = {
     COMMISSION_TRANSFER_FROM_BUYER_PENDING: 0, // Step 1: Commission Receipt
@@ -27,6 +28,7 @@ const statusToStepIndex = {
 const { Title, Text } = Typography;
 
 const SingleInprogressSteps = ({ details, completedeal}) => {
+    const {t}= useTranslation()
     const [form] = Form.useForm();
     const initialStep = details?.status ? statusToStepIndex[details.status] || 0 : 0;
     const [activeStep, setActiveStep] = useState(initialStep);
@@ -34,25 +36,25 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
     const allSteps = [
         {
             key: '1',
-            label: 'Commission Receipt',
+            label: t('Commission Receipt'),
             content: <CommissionReceiptBuyer details={details} />,
-            status: details?.isCommissionVerified ? 'Verified' : 'Jusoor verification pending',
-            emptytitle: 'Commission Pending!',
-            emptydesc: 'Waiting for the buyer to pay the platform commission.',
+            status: details?.isCommissionVerified ? t('Verified') : t('Jusoor verification pending'),
+            emptytitle: t('Commission Pending!'),
+            emptydesc: t('Waiting for the buyer to pay the platform commission.'),
         },
         {
             key: '2',
-            label: 'Digital Sale Agreement',
+            label: t('Digital Sale Agreement'),
             content: <DigitalSaleAgreement form={form} details={details} />,
             status: !details?.isDsaSeller && details?.isDsaBuyer
-                ? 'Seller DSA Pending'
+                ? t('Seller DSA Pending')
                 : details?.isDsaSeller && !details?.isDsaBuyer
-                ? 'Buyer DSA Pending'
+                ? t('Buyer DSA Pending')
                 : details?.isDsaSeller && details?.isDsaBuyer
-                ? 'Verified'
-                : 'DSA Pending',
-            emptytitle: 'DSA Pending!',
-            emptydesc: 'Waiting for the seller & buyer to sign the digital sale agreement.',
+                ? t('Verified')
+                : t('DSA Pending'),
+            emptytitle: t('DSA Pending!'),
+            emptydesc: t('Waiting for the seller & buyer to sign the digital sale agreement.'),
         },
         // {
         //     key: '3',
@@ -64,26 +66,26 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
         // },
         {
             key: '3',
-            label: 'Pay Business Amount',
+            label: t('Pay Business Amount'),
             content: <BusinessAmountReceiptBuyer details={details} />,
-            status: details?.isPaymentVedifiedSeller && details?.isPaymentVedifiedAdmin ? 'Verified' : details?.isPaymentVedifiedSeller ? 'Jusoor verification pending' : 'Seller verification Pending',
-            emptytitle: 'Business Amount Pending!',
-            emptydesc: 'Waiting for the buyer to pay the seller business amount.',
+            status: details?.isPaymentVedifiedSeller && details?.isPaymentVedifiedAdmin ? t('Verified') : details?.isPaymentVedifiedSeller ? t('Jusoor verification pending') : t('Seller verification Pending'),
+            emptytitle: t('Business Amount Pending!'),
+            emptydesc: t('Waiting for the buyer to pay the seller business amount.'),
         },
         {
             key: '4',
-            label: 'Document Confirmation',
+            label: t('Document Confirmation'),
             content: <DocumentPaymentConfirmation details={details} />,
-            status: details?.isDocVedifiedAdmin && details?.isDocVedifiedSeller ? "Verified" : details?.isDocVedifiedSeller ? 'Jusoor verification pending': 'Seller verification pending',
-            emptytitle: 'Payment Confirmation Pending!',
-            emptydesc: 'Waiting for the seller to transfer the document & approve the payment.',
+            status: details?.isDocVedifiedAdmin && details?.isDocVedifiedSeller ? t("Verified") : details?.isDocVedifiedSeller ? t('Jusoor verification pending'): t('Seller verification pending'),
+            emptytitle: t('Payment Confirmation Pending!'),
+            emptydesc: t('Waiting for the seller to transfer the document & approve the payment.'),
         },
         {
             key: '5',
-            label: 'Finalize Deal',
+            label: t('Finalize Deal'),
             content: <FinalDeal details={details} />,
-            status: details?.isDocVedifiedAdmin ? "Verified" : 'Pending',
-            emptytitle: 'Deal Pending!',
+            status: details?.isDocVedifiedAdmin ? t("Verified") : t('Pending'),
+            emptytitle: t('Deal Pending!'),
             emptydesc: 'Waiting for the buyer & seller to finalized the deal.',
         },
     ];
@@ -101,7 +103,7 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
                         {openPanels.includes(item.key) ? (
                             <Flex align='center' gap={5}>
                                 {(item.status.toLowerCase()?.startsWith('pending')) ? (
-                                    <Text className='pending fs-10 sm-pill fw-500 fit-content'>{item?.status}</Text>
+                                    <Text className='pending fs-10 sm-pill fw-500 fit-content'>{(item?.status)}</Text>
                                 ) : (item.status.toLowerCase()?.includes('verification')) ? (
                                     <Text className='branded fs-10 sm-pill fw-500 fit-content'>{item?.status}</Text>
                                 )                                
@@ -127,10 +129,10 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
                             item?.key === '2' &&
                             <Flex vertical gap={5} className='mt-2'>
                                 <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
-                                    <CheckCircleOutlined className='fs-14' /> Waiting for seller to sign the sales agreement
+                                    <CheckCircleOutlined className='fs-14' /> {t("Waiting for seller to sign the sales agreement")}
                                 </Flex>
                                 <Flex gap={5} className='badge-cs pending fs-12 fit-content' align='center'>
-                                    <CheckCircleOutlined className='fs-14' /> Waiting for buyer to sign the sales agreement
+                                    <CheckCircleOutlined className='fs-14' /> {t("Waiting for buyer to sign the sales agreement")}
                                 </Flex>
                             </Flex> 
                         }
