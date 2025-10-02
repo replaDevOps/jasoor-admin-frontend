@@ -12,12 +12,8 @@ import { useTranslation } from 'react-i18next';
 const { Text } = Typography
 
 const InprogressDealTable = () => {
-<<<<<<< Updated upstream
-    const {t, i18n} = useTranslation()
-=======
 
-    const { t } = useTranslation();
->>>>>>> Stashed changes
+    const { t, i18n } = useTranslation();
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState(t("Status"));
     const navigate = useNavigate()
