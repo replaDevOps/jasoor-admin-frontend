@@ -44,14 +44,14 @@ const BusinessListingTable = ({
 
     const categoryItems = useMemo(() => {
         if (!data?.getAllCategories) return [];
-        return data.getAllCategories.map(cat => ({
+        return data?.getAllCategories?.categories?.map(cat => ({
             key: cat.id, 
             label: t(cat.name)
         }));
     }, [data]);
     
     const handleCategoryClick = ({ key }) => {
-        const selectedItem = categoryItems.find(item => item.key === key);
+        const selectedItem = categoryItems?.find(item => item.key === key);
         if (selectedItem) {
             setSelectedCategory(selectedItem.label);
             onFiltersChange({ categoryId: selectedItem.key });

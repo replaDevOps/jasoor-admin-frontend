@@ -24,7 +24,7 @@ const BusinesslIstingPage = () => {
         limit: pageSize,
         offSet: (page - 1) * pageSize,
         search: search || null,
-        filter: { categoryId: null, startDate: null, endDate: null, status: status || null }
+        filter: { categoryId: null, startDate: null, endDate: null, businessStatus: status || null }
       }
     });
   }, [page, pageSize, search, status, loadBusinesses]);  
@@ -34,6 +34,7 @@ const BusinesslIstingPage = () => {
   const totalPendingCount = data?.getAdminBusinesses?.totalPendingCount
 
   const handleFiltersChange = (filters) => {
+    console.log("filters",filters)
     setPage(1);
     setFilters(prev => ({
       ...prev,

@@ -168,15 +168,15 @@ mutation SendBankToBuyer($sendBankToBuyerId: ID) {
 }
 `
 const CREATE_ARTICLE = gql`
-mutation CreateArticle($title: String!, $image: String!, $body: JSON!) {
-  createArticle(title: $title, image: $image, body: $body) {
+mutation CreateArticle($input: CreateArticle) {
+  createArticle(input: $input) {
     id
   }
 }
 `
 const UPDATE_ARTICLE = gql`
-mutation UpdateArticle($updateArticleId: ID!, $title: String, $image: String, $body: JSON) {
-  updateArticle(id: $updateArticleId, title: $title, image: $image, body: $body) {
+mutation UpdateArticle($updateArticleId: ID!, $input: CreateArticle) {
+  updateArticle(id: $updateArticleId, input: $input) {
     id
   }
 }

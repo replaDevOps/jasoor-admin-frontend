@@ -7,7 +7,9 @@ query GetArticles($search: String) {
     articles {
       id
       title
+      arabicTitle
       image
+      arabicBody
       body
     }
   }
@@ -18,8 +20,10 @@ query GetArticle($getArticleId: ID!) {
   getArticle(id: $getArticleId) {
     id
     title
+    arabicTitle
     image
     body
+    arabicBody
     createdAt
   }
 }
