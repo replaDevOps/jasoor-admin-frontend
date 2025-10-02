@@ -12,6 +12,7 @@ const BusinesslIstingPage = () => {
   const [pageSize, setPageSize] = useState(10); 
   const [search, setSearch] = useState(""); 
   const [status, setStatus] = useState(null); 
+  const [filters, setFilters] = useState({});
   const navigate = useNavigate()
 
   const [loadBusinesses, { data, loading, error }] = useLazyQuery(GET_BUSINESSES, {
@@ -24,17 +25,19 @@ const BusinesslIstingPage = () => {
         limit: pageSize,
         offSet: (page - 1) * pageSize,
         search: search || null,
-        filter: { categoryId: null, startDate: null, endDate: null, businessStatus: status || null }
+        filter: { 
+          ...filters,                       
+          businessStatus: status || null     
+        }
       }
     });
-  }, [page, pageSize, search, status, loadBusinesses]);  
+  }, [page, pageSize, search, status, filters,loadBusinesses]);  
   
   const totalActiveCount = data?.getAdminBusinesses?.totalActiveCount
   const totalCount = data?.getAdminBusinesses?.totalCount
   const totalPendingCount = data?.getAdminBusinesses?.totalPendingCount
 
   const handleFiltersChange = (filters) => {
-    console.log("filters",filters)
     setPage(1);
     setFilters(prev => ({
       ...prev,
