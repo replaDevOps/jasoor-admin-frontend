@@ -11,7 +11,6 @@ const { Title,Text } = Typography
 const BusinessStatsTab = ({status}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const {t} = useTranslation()
-    
     const businessstatsData = [
         {
             id: 1,

@@ -10,11 +10,12 @@ import { useTranslation } from 'react-i18next'
 const PendingUnverifiedTabs = ({ data }) => {
     const businessId = data?.id
     const {t} = useTranslation()
+    console.log("data",data)
     const baseTabs = [
         {
             key: '1',
             label: t('Business Stats'),
-            children: <BusinessStatsTab data={data} />,
+            children: <BusinessStatsTab status={data} />,
         },
         {
             key: '2',

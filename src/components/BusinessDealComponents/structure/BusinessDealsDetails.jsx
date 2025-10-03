@@ -78,7 +78,16 @@ const BusinessDealsDetails = ({ completedeal }) => {
     },
     {
       title: "Status",
-      desc: details?.status || "Unknown",
+      desc:   details?.status === 'COMMISSION_TRANSFER_FROM_BUYER_PENDING' ? (
+        <Text>{t("Commission Pending")}</Text>) 
+        : details?.status === 'COMMISSION_VERIFIED' ? ( <Text>{t("DSA pending")}</Text>)
+        : details?.status === 'DSA_FROM_SELLER_PENDING' ? ( <Text>{t("DSA Seller Pending")}</Text>)
+        : details?.status === 'DSA_FROM_BUYER_PENDING' ? ( <Text>{t("DSA Buyer Pending")}</Text>)
+        : details?.status === 'BANK_DETAILS_FROM_SELLER_PENDING' ? ( <Text>{t("Buyer Bank Dtails Pending")}</Text>)
+        : details?.status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? ( <Text>{t("Payment Confirmation Pending")}</Text>)
+        : details?.status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? ( <Text>{t("Document Confirmation Pending")}</Text>)
+        : details?.status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? ( <Text>{t("Admin Verification Pending")}</Text>)
+        : ( <Text>{t("Finalize Deal")}</Text>)
     },
   ];
 

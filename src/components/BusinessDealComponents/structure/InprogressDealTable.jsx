@@ -24,6 +24,7 @@ const InprogressDealTable = () => {
     const [getDeals, { data, loading }] = useLazyQuery(GETDEALS, {
         fetchPolicy: 'network-only'
     });
+    console.log("inprogressdealData",data)
 
     useEffect(() => {
         setSelectedStatus(t("Status"));
@@ -68,7 +69,6 @@ const InprogressDealTable = () => {
     const handleSearch = (value) => {
         setSearchValue(value);
     };
-
     const inprogressdealColumn = [
         {
             title: t('Business Title'),
