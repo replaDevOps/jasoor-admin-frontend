@@ -844,6 +844,10 @@ body.ltr {
     background-color: var(--magenta-light) !important;
     color: var(--magenta-text) !important;
 }
+.dealcancelled{
+    background-color: var(--light-red) !important;
+    color: var(--red-1) !important;
+}
 
 .bankdetailpending{
     background-color: var(--bg-gray-light) !important;

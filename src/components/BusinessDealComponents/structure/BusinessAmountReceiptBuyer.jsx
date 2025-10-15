@@ -3,7 +3,7 @@ import { Button, Card,  Col, Flex, Image, Row, Typography } from 'antd'
 import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 import { useMutation,useQuery } from '@apollo/client';
 import { message,Spin } from "antd";
-import { GETDEAL,ME } from '../../../graphql/query';
+import { GETDEAL,GETUSERBANK } from '../../../graphql/query';
 import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
@@ -12,10 +12,11 @@ const BusinessAmountReceiptBuyer = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const sellerReceipt = details?.busines?.documents?.find(doc => doc.title === 'Buyer Payment Receipt');
 
-    const { loading, error:userError, data:user } = useQuery(ME, {
-            variables: { getUserId: details?.busines?.seller?.id },
+    const { loading, error:userError, data:banksData } = useQuery(GETUSERBANK, {
+            variables: { getUserBankId: details?.busines?.seller?.id },
         });
-    const banks = user?.getUser?.banks?.find(doc => doc.isActive === true)
+    const banks = banksData?.getUserBanks?.find(doc => doc.isActive === true)
+
     const businessamountrecpData = [
         {title:t('Seller’s Bank Name'), desc: t(banks?.bankName) },
         {title:t('Seller’s IBAN'), desc:banks?.iban },

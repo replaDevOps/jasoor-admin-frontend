@@ -191,12 +191,6 @@ query GetDeal($getDealId: ID!) {
     buyer {
       id
       name
-      banks {
-        id
-        bankName
-        iban
-        accountTitle
-      }
     }
     offer {
       id

@@ -122,6 +122,10 @@ const InprogressDealTable = () => {
                         <Text className='btnpill fs-12 paymentapprovalpending'>{t("Admin Verification Pending")}</Text>
                     )
                     :
+                    status === 'CANCEL' ? (
+                        <Text className='btnpill fs-12 dealcancelled'>{t("Canceled")}</Text>
+                    )
+                    :
                     (
                         <Text className='btnpill fs-12 commissiontransferbuyer'>{t("Finalize Deal")}</Text>
                     )

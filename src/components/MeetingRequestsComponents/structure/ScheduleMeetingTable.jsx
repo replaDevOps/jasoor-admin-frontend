@@ -1,7 +1,7 @@
-import { Button, Col, Dropdown, Flex, Form, Row, Table,Typography } from 'antd';
+import { Button, Col, Dropdown, Flex, Form, Row, Table,Typography,Modal,Input } from 'antd';
 import { NavLink } from "react-router-dom";
 import { SearchInput } from '../../Forms';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { meetingItems } from '../../../shared';
 import { CustomPagination } from '../../Ui';
@@ -12,9 +12,38 @@ import { Spin } from "antd";
 import { t } from 'i18next';
 
 const { Text } = Typography
-
+export function calculateCommission(price) {
+    let commission = 0;
+  
+    // Bracket 1: 0 - 100K → 4%
+    if (price > 0) {
+      commission += Math.min(price, 100000) * 0.04;
+    }
+  
+    // Bracket 2: 100K - 500K → 3%
+    if (price > 100000) {
+      commission += Math.min(price - 100000, 400000) * 0.03;
+    }
+  
+    // Bracket 3: 500K - 2M → 2.5%
+    if (price > 500000) {
+      commission += Math.min(price - 500000, 1500000) * 0.025;
+    }
+  
+    // Bracket 4: 2M+ → 1.5%
+    if (price > 2000000) {
+      commission += (price - 2000000) * 0.015;
+    }
+  
+    // Minimum commission rule
+    if (price < 50000 && commission < 2000) {
+      commission = 2000;
+    }
+  
+    return commission;
+  }
+  
 const ScheduleMeetingTable = () => {
-    
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState('Status');
     const [visible, setVisible] = useState(false);
@@ -22,8 +51,9 @@ const ScheduleMeetingTable = () => {
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
     const [searchValue, setSearchValue] = useState('');
-    const [updateMeeting,{ loading: updating }] = useMutation(UPDATE_BUSINESS_MEETING);
+    const [selectedOffer, setSelectedOffer] = useState(null);
 
+    const [updateMeeting,{ loading: updating }] = useMutation(UPDATE_BUSINESS_MEETING);
     const [updateOffer,{ loading: onUpdating }] = useMutation(UPDATE_OFFER,
         { refetchQueries: [ { query: GETADMINSCHEDULEMEETINGS} ], 
         awaitRefetchQueries: true, }
@@ -90,68 +120,73 @@ const ScheduleMeetingTable = () => {
         },
         {
             title: t('Action'),
-            key: "action",
-            fixed: "right",
+            key: 'action',
+            fixed: 'right',
             width: 100,
-            render: (_,row) => (
-                <Dropdown
-                    menu={{
-                        items: [
-                            
-                            { label: <NavLink onClick={async (e) => {
-                                e.preventDefault(); 
-                                setVisible(true) 
-                                try {
-                                    await updateMeeting({
-                                        variables: {
-                                            input:{
-                                                id: row.key,
-                                                status: 'HELD'
-                                            }
-                                        }
-                                    });
-                                    if (row.offerId) {
-                                        await updateOffer({
-                                          variables: {
-                                            input: {
-                                              id: row.offerId,
-                                              status: 'ACCEPTED',
-                                            },
-                                          },
-                                        });
-                                    }                                      
-                                    await refetch();
-                                } catch (err) {
-                                    console.error(err);
-                                }
-                            }}>{t("Open Deal")}</NavLink>, key: '1' },
-                            { label: <NavLink onClick={async (e) => {
-                                e.preventDefault(); 
-                                setDeleteItem(true) 
-                                try {
-                                    await updateMeeting({
-                                        variables: {
-                                            input:{
-                                                id: row.key,
-                                                status: 'HELD'
-                                            }
-                                        }
-                                    });
-                                    await refetch();
-                                } catch (err) {
-                                    console.error(err);
-                                }
-                            }}>{t("Schedule New Meeting")}</NavLink>, key: '2' },
-                        ],
-                    }}
-                    trigger={['click']}
-                >
-                    <Button aria-labelledby='action button' className="bg-transparent border0 p-0">
-                        <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
-                    </Button>
-                </Dropdown>
+            render: (_, row) => (
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      label: (
+                        <NavLink
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setVisible(true);
+                            setSelectedOffer({
+                              id: row.offerId,
+                              price: row.offerPrice,
+                              commission: row.offerCommission,
+                              meetingId: row.key,
+                            });
+                          }}
+                        >
+                          {t('Open Deal')}
+                        </NavLink>
+                      ),
+                      key: '1',
+                    },
+                    {
+                      label: (
+                        <NavLink
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            setDeleteItem(true);
+                            try {
+                              await updateMeeting({
+                                variables: {
+                                  input: {
+                                    id: row.key,
+                                    status: 'HELD',
+                                  },
+                                },
+                              });
+                              await refetch();
+                            } catch (err) {
+                              console.error(err);
+                            }
+                          }}
+                        >
+                          {t('Schedule New Meeting')}
+                        </NavLink>
+                      ),
+                      key: '2',
+                    },
+                  ],
+                }}
+                trigger={['click']}
+              >
+                <Button aria-labelledby="action button" className="bg-transparent border0 p-0">
+                  <img
+                    src="/assets/icons/dots.png"
+                    alt="dot icon"
+                    width={16}
+                    fetchPriority="high"
+                  />
+                </Button>
+              </Dropdown>
             ),
-        },
+          },
     ];
     // Apollo query
     const { data, loading, refetch } = useQuery(GETADMINSCHEDULEMEETINGS, {
@@ -166,6 +201,8 @@ const ScheduleMeetingTable = () => {
     const schedulemeetingData = (data?.getAdminScheduledMeetings?.items || []).map((item, index) => ({
         key: item.id,
         offerId:item?.offer?.id,
+        offerPrice: item?.offer?.price,
+        offerCommission: item?.offer?.commission,
         status:item?.status,
         businessTitle: item.business?.businessTitle || '-',
         email: item.requestedTo?.email || '-',
@@ -177,10 +214,7 @@ const ScheduleMeetingTable = () => {
             ? new Date(item.requestedDate).toLocaleString()
             : '-',
         businessPrice: item.business?.price
-            ? `SAR ${item.business.price.toLocaleString()}`
-            : '-',
-        offerPrice: item.offer?.price
-            ? `SAR ${item.offer.price.toLocaleString()}`
+            ? item.business.price
             : '-',
         meetLink: item.meetingLink || '',
     }));
@@ -213,6 +247,64 @@ const ScheduleMeetingTable = () => {
         refetch({ status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null, search: value });
     };
 
+    const handleDealSubmit = async () => {
+        try {
+          const values = await form.validateFields();
+    
+          // update offer price and status
+          await updateOffer({
+            variables: {
+              input: {
+                id: selectedOffer.id,
+                price: parseFloat(values.offerPrice),
+                status: 'ACCEPTED',
+              },
+            },
+          });
+    
+          // update meeting status to HELD
+          await updateMeeting({
+            variables: {
+              input: {
+                id: selectedOffer.meetingId,
+                status: 'HELD',
+              },
+            },
+          });
+    
+          setVisible(false);
+          setSelectedOffer(null);
+          refetch();
+        } catch (err) {
+          console.error(err);
+        }
+    };
+    const handlePriceChange = (e) => {
+        const value = parseFloat(e.target.value) || 0;
+        const commission = calculateCommission(value);
+        form.setFieldsValue({
+          commission: `SAR ${commission.toLocaleString()}`,
+        });
+      };
+    
+    useEffect(() => {
+    if (selectedOffer) {
+        const priceValue = parseFloat(
+        String(selectedOffer.price).replace("SAR", "").trim()
+        ) || 0;
+    
+        const commission = calculateCommission(priceValue);
+        form.setFieldsValue({
+        offerPrice: priceValue,
+        commission: `SAR ${commission.toLocaleString()}`,
+        });
+    } else {
+        // Reset form when modal closes
+        form.resetFields();
+    }
+    }, [selectedOffer, form]);
+    
+
     if (loading || updating || onUpdating) {
         return (
           <Flex justify="center" align="center" className='h-200'>
@@ -238,9 +330,9 @@ const ScheduleMeetingTable = () => {
                                 <Dropdown 
                                     menu={{ 
                                         items: meetingItems.map((item) => ({
-                      ...item,
-                      label: t(item.label), 
-                    })),
+                                    ...item,
+                                    label: t(item.label), 
+                                    })),
                                         onClick: handleStatusClick
                                     }} 
                                     trigger={['click']}
@@ -273,6 +365,39 @@ const ScheduleMeetingTable = () => {
                     onPageChange={handlePageChange}
                 />
             </Flex>
+            <Modal
+                open={visible}
+                title="Offer Details"
+                onCancel={() => {
+                    setVisible(false);
+                    setSelectedOffer(null);
+                    form.resetFields();
+                }}
+                onOk={handleDealSubmit}
+                okText="Confirm Deal"
+                cancelText="Cancel"
+                >
+                {selectedOffer && (
+                    <Form form={form} layout="vertical">
+                    <Form.Item
+                        label="Offer Price"
+                        name="offerPrice"
+                        rules={[{ required: true, message: "Enter Offer Price" }]}
+                    >
+                        <Input
+                        type="number"
+                        prefix="SAR"
+                        placeholder="Enter offer price"
+                        onChange={handlePriceChange}
+                        />
+                    </Form.Item>
+
+                    <Form.Item label="Commission" name="commission">
+                        <Input disabled />
+                    </Form.Item>
+                    </Form>
+                )}
+            </Modal>
         </>
     );
 };

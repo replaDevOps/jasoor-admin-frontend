@@ -1,27 +1,13 @@
 import { ArrowLeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from "antd";
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography,Spin } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { SingleInprogressSteps } from "./SingleInprogressSteps";
 import { GETDEAL } from "../../../graphql/query";
-import { useQuery } from "@apollo/client";
+import { useQuery,useMutation } from "@apollo/client";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
-
-const statusMap = {
-  COMMISSION_TRANSFER_FROM_BUYER_PENDING: "Buyer Commission Transfer Pending",
-  COMMISSION_VERIFIED: "Commission Verified by Admin",
-  DSA_FROM_SELLER_PENDING: "Seller DSA Pending",
-  DSA_FROM_BUYER_PENDING: "Buyer DSA Pending",
-  BANK_DETAILS_FROM_SELLER_PENDING: "Bank Details Pending from Seller",
-  SELLER_PAYMENT_VERIFICATION_PENDING: "Seller Payment Verification Pending",
-  PAYMENT_APPROVAL_FROM_SELLER_PENDING: "Payment Approval Pending from Seller",
-  DOCUMENT_PAYMENT_CONFIRMATION: "Document Payment Confirmation Pending",
-  WAITING: "Waiting for Seller Document Upload",
-  PENDING: "Pending Jasoor Verification",
-  BUYERCOMPLETED: "Buyer Completed",
-  SELLERCOMPLETED: "Seller Completed",
-  COMPLETED: "Deal Completed by Admin",
-};
+import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
+import { useEffect } from 'react';
 
 const { Title, Text } = Typography;
 const BusinessDealsDetails = ({ completedeal }) => {
@@ -39,6 +25,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
         key: data.getDeal.id, // use actual id from API
         businessTitle: data.getDeal.business?.businessTitle || "-",
         buyerName: data.getDeal.buyer?.name || "-",
+        sellerId: data.getDeal.business?.seller?.id || "-",
         sellerName: data.getDeal.business?.seller?.name || "-",
         finalizedOffer: data.getDeal.offer?.price
           ? `SAR ${data.getDeal.offer.price.toLocaleString()}`
@@ -62,7 +49,21 @@ const BusinessDealsDetails = ({ completedeal }) => {
         ndaPdfPath: data.getDeal.ndaPdfPath,
       }
     : null;
+  const [updateDeals, { loading: updating, data:updateDeal, error:dealError }] = useMutation(UPDATE_DEAL, {
+      refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
+      awaitRefetchQueries: true,
+  });
+  useEffect(() => {
+    if (updateDeal?.updateDeal?.id) {
+        messageApi.success(t("Commission verified successfully!"));
+    }
+}, [updateDeal?.updateDeal?.id]);
 
+useEffect(() => {
+    if (dealError) {
+        messageApi.error(error.message || t("Something went wrong!"));
+    }
+}, [dealError]);
   const buyerdealsData = [
     {
       title: "Seller Name",
@@ -87,11 +88,26 @@ const BusinessDealsDetails = ({ completedeal }) => {
         : details?.status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? ( <Text>{t("Payment Confirmation Pending")}</Text>)
         : details?.status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? ( <Text>{t("Document Confirmation Pending")}</Text>)
         : details?.status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? ( <Text>{t("Admin Verification Pending")}</Text>)
+        : details?.status === 'CANCEL' ? ( <Text>{t("Canceled")}</Text>)
         : ( <Text>{t("Finalize Deal")}</Text>)
     },
   ];
-
+  const handleMCancelDeal = async () => {
+    if (!details?.key) return;
+    await updateDeals({
+        variables: { input: { id: details.key, status: 'CANCEL' } },
+    });
+};
+  if (updating || loading) {
+    return (
+        <Flex justify="center" align="center" className='h-200'>
+            <Spin size="large" />
+        </Flex>
+    );
+}
   return (
+    <>
+    {contextHolder}
     <Flex vertical gap={20}>
       <Flex vertical gap={25}>
         <Breadcrumb
@@ -139,6 +155,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
           type="primary"
           className="btnsave border0 text-white bg-red"
           disabled={data?.getDeal?.business?.isSold}
+          onClick={handleMCancelDeal}
         >
           {t("Cancel Deal")}
         </Button>
@@ -176,6 +193,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
         </Flex>
       </Card>
     </Flex>
+    </>
   );
 };
 

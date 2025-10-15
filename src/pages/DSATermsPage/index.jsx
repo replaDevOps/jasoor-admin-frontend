@@ -6,20 +6,14 @@ import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
 import { GETDSATERMS } from '../../graphql/query/queries';
 import 'react-quill/dist/quill.snow.css';
 import { useTranslation } from "react-i18next";
+import { TAGS } from "../../data/tags";
 
 const DSATermsPage = () => {
   const [form] = Form.useForm();
   const {t, i18n}= useTranslation()
   const lang = localStorage.getItem("lang") || i18n.language || "en";
   const isArabic = lang.toLowerCase() === "ar";
-  const TAGS = [
-    { key: t("buyerName"), label: t("Buyer Name") },
-    { key: t("sellerName"), label: t("Seller Name") },
-    { key: t("businessName"), label: t("Business Name") },
-    { key: t("offerPrice"), label: t("Offer Price") },
-    { key: t("commission"), label: t("Commission") },
-    { key: t("date"), label: t("Date") },
-  ];
+
   const [descriptionData, setDescriptionData] = useState('');
   const [messageApi, contextHolder] = message.useMessage();
   const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);

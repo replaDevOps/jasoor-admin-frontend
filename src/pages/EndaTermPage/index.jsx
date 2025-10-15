@@ -5,19 +5,13 @@ import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
 import { GETENDATERMS } from '../../graphql/query/queries';
 import { useTranslation } from "react-i18next";
+import { TAGS } from "../../data/tags";
   
 const EndaTermPage = () => {
   const {t, i18n}= useTranslation()
   const lang = localStorage.getItem("lang") || i18n.language || "en";
   const isArabic = lang.toLowerCase() === "ar";
-  const TAGS = [
-    { key: t("buyerName"), label: t("Buyer Name") },
-    { key: t("sellerName"), label: t("Seller Name") },
-    { key: t("businessName"), label: t("Business Name") },
-    { key: t("offerPrice"), label: t("Offer Price") },
-    { key: t("commission"), label: t("Commission") },
-    { key: t("date"), label: t("Date") },
-  ];
+
     const [form] = Form.useForm();
     const [ descriptionData, setDescriptionData ] = useState()
     const [messageApi, contextHolder] = message.useMessage();
