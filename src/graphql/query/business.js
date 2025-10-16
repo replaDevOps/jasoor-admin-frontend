@@ -62,6 +62,7 @@ query GetAdminBusinesses($limit: Int, $offSet: Int, $filter: AdminBusinessFilter
       price
       isStatsVerified
       capitalRecovery
+      isSold
       category {
         name
       }
@@ -83,6 +84,7 @@ query GetBusinessById($getBusinessByIdId: ID!) {
     totalViews
     business {
       id
+      isSold
     businessTitle
     description
     price
@@ -121,6 +123,7 @@ query GetBusinessById($getBusinessByIdId: ID!) {
     totalViews
     business {
       id
+      isSold
     assets {
       id
       isActive
@@ -157,6 +160,7 @@ query GetBusinessById($getBusinessByIdId: ID!) {
     totalViews
     business {
       id
+      isSold
       documents {
       id
       title

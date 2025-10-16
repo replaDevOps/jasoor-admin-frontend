@@ -87,7 +87,7 @@ useEffect(() => {
         : details?.status === 'BANK_DETAILS_FROM_SELLER_PENDING' ? ( <Text>{t("Buyer Bank Dtails Pending")}</Text>)
         : details?.status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? ( <Text>{t("Payment Confirmation Pending")}</Text>)
         : details?.status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? ( <Text>{t("Document Confirmation Pending")}</Text>)
-        : details?.status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? ( <Text>{t("Admin Verification Pending")}</Text>)
+        : details?.status === 'DOCUMENT_PAYM\ENT_CONFIRMATION' ? ( <Text>{t("Admin Verification Pending")}</Text>)
         : details?.status === 'CANCEL' ? ( <Text>{t("Canceled")}</Text>)
         : ( <Text>{t("Finalize Deal")}</Text>)
     },
