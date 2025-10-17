@@ -1,7 +1,7 @@
 import { Col, Flex, Row, Typography } from 'antd'
 import { BusinessCategoryDonut, BusinessListBarChart, DashboardCards, ListingPriceBar, ListingRevenueBar } from '../../components'
 import { useQuery } from '@apollo/client';
-import {ME} from '../../graphql/query'
+import { ME } from '../../graphql/query'
 import { t } from 'i18next';
 
 const { Text, Title } = Typography

@@ -198,6 +198,22 @@ const CategoryTable = () => {
         }
     }, [data]);
 
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+          refetch({
+            limit: pageSize,
+            offSet: (current - 1) * pageSize,
+            filter: {
+              isDigital: selectedCategory,
+              name: searchName,
+              status: selectedStatus
+            }
+          });
+        }, 500); // wait 0.5s after typing stops
+      
+        return () => clearTimeout(delayDebounce);
+    }, [searchName, selectedCategory, selectedStatus, pageSize, current]);
+
     // Pagination change
     const handlePageChange = (page, size) => {
         setCurrent(page);
@@ -271,13 +287,7 @@ const CategoryTable = () => {
           messageApi.error(err.message || t("Something went wrong"));
         }
     });
-    if (isLoading || deleting) {
-        return (
-          <Flex justify="center" align="center" className='h-200'>
-            <Spin size="large" />
-          </Flex>
-        );
-    }
+
     return (
         <>
         {contextHolder}
@@ -295,6 +305,7 @@ const CategoryTable = () => {
                                     prefix={<img src="/assets/icons/search.png" alt='search icon' width={14} fetchPriority="high" />}
                                     allowClear
                                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
+                                    value={searchName || ""} 
                                     onChange={(e) => handleSearch(e.target.value.trim())}
                                     />
                                 </Col>
@@ -351,10 +362,10 @@ const CategoryTable = () => {
                         scroll={{ x: 1000 }}
                         rowHoverable={false}
                         pagination={false}
-                        loading={isLoading}
+                        loading={isLoading || deleting || updating} // ✅ loader only on table
                     />
                     <CustomPagination 
-                        total={data.getAllCategories?.totalcount}
+                        total={data?.getAllCategories?.totalcount}
                         current={current}
                         pageSize={pageSize}
                         onPageChange={handlePageChange}

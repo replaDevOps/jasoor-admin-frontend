@@ -57,13 +57,13 @@ const BusinessDealsDetails = ({ completedeal }) => {
     if (updateDeal?.updateDeal?.id) {
         messageApi.success(t("Commission verified successfully!"));
     }
-}, [updateDeal?.updateDeal?.id]);
+  }, [updateDeal?.updateDeal?.id]);
 
-useEffect(() => {
-    if (dealError) {
-        messageApi.error(error.message || t("Something went wrong!"));
-    }
-}, [dealError]);
+  useEffect(() => {
+      if (dealError) {
+          messageApi.error(error.message || t("Something went wrong!"));
+      }
+  }, [dealError]);
   const buyerdealsData = [
     {
       title: "Seller Name",
@@ -97,7 +97,7 @@ useEffect(() => {
     await updateDeals({
         variables: { input: { id: details.key, status: 'CANCEL' } },
     });
-};
+  };
   if (updating || loading) {
     return (
         <Flex justify="center" align="center" className='h-200'>

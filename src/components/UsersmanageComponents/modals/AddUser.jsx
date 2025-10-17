@@ -34,7 +34,6 @@ const AddUser = ({visible,onClose,edititem}) => {
         }
     },[visible,edititem])
 
-
     const onFinish = async () => {
         try {
             const formData = form.getFieldsValue(true);
@@ -159,7 +158,7 @@ const AddUser = ({visible,onClose,edititem}) => {
         name: t('Najran'),
         value: 'najran'
     }
-]
+    ]
     
     return (
         <>

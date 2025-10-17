@@ -8,7 +8,6 @@ import { CustomPagination } from '../../Ui';
 import { UPDATE_BUSINESS_MEETING,UPDATE_OFFER } from '../../../graphql/mutation'
 import { GETADMINSCHEDULEMEETINGS } from '../../../graphql/query/meeting'
 import { useQuery,useMutation } from '@apollo/client'
-import { Spin } from "antd";
 import { t } from 'i18next';
 
 const { Text } = Typography
@@ -54,10 +53,7 @@ const ScheduleMeetingTable = () => {
     const [selectedOffer, setSelectedOffer] = useState(null);
 
     const [updateMeeting,{ loading: updating }] = useMutation(UPDATE_BUSINESS_MEETING);
-    const [updateOffer,{ loading: onUpdating }] = useMutation(UPDATE_OFFER,
-        { refetchQueries: [ { query: GETADMINSCHEDULEMEETINGS} ], 
-        awaitRefetchQueries: true, }
-    );
+    const [updateOffer,{ loading: onUpdating }] = useMutation(UPDATE_OFFER);
     const schedulemeetingColumn = ( setVisible, setDeleteItem ) =>  [
         {
             title: t('Business Title'),
@@ -194,7 +190,7 @@ const ScheduleMeetingTable = () => {
             limit: pageSize,
             offset: (current - 1) * pageSize,
             search: searchValue,
-            status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null
+            status: null
         },
         fetchPolicy: 'network-only'
     });
@@ -202,6 +198,7 @@ const ScheduleMeetingTable = () => {
         key: item.id,
         offerId:item?.offer?.id,
         offerPrice: item?.offer?.price,
+        buyerName: item.requestedTo?.name,
         offerCommission: item?.offer?.commission,
         status:item?.status,
         businessTitle: item.business?.businessTitle || '-',
@@ -303,15 +300,6 @@ const ScheduleMeetingTable = () => {
         form.resetFields();
     }
     }, [selectedOffer, form]);
-    
-
-    if (loading || updating || onUpdating) {
-        return (
-          <Flex justify="center" align="center" className='h-200'>
-            <Spin size="large" />
-          </Flex>
-        );
-    }
 
     return (
         <>
@@ -357,6 +345,7 @@ const ScheduleMeetingTable = () => {
                     scroll={{ x: 2300 }}
                     rowHoverable={false}
                     pagination={false}
+                    loading={loading || updating || onUpdating}
                 />
                 <CustomPagination 
                     total={total}

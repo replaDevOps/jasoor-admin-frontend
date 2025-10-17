@@ -47,8 +47,18 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
         limit: pageSize,
         offset: (current - 1) * pageSize,
         search: debouncedSearch || null,
-        isActive: selectedStatus === 'Active' ? true : selectedStatus === 'Inactive' ? false : null,
-        role: selectedRole === 'All' || selectedRole === 'Role' ? null : selectedRole
+        status:
+        selectedStatus === 'Active'
+          ? 'verified'
+          : selectedStatus === 'Inactive'
+          ? 'inactive'
+          : selectedStatus === 'Pending'
+          ? 'pending'
+          : null,
+      roleId:
+        selectedRole === 'All' || selectedRole === 'Role'
+          ? null
+          : roles.find((r) => r.name === selectedRole)?.id || null
       }
     });
   }, [pageSize, current, debouncedSearch, selectedStatus, selectedRole, getStaffMembers]);

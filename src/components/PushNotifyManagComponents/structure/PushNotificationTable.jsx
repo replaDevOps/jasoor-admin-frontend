@@ -31,8 +31,8 @@ const PushNotificationTable = ({
   useEffect(() => {
     const handler = setTimeout(() => {
       let status = null;
-      if (selectedStatus === "Schedule") status = true;
-      else if (selectedStatus === "Send") status = false;
+      if (selectedStatus === "Schedule") status = false;
+      else if (selectedStatus === "Send") status = true;
       else if (selectedStatus === "All") status = null;
 
       fetchCampaigns({

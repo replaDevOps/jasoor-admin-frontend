@@ -1,6 +1,6 @@
 import { Card, Col, Flex, Form, Row, Table } from 'antd';
 import { MyDatepicker, SearchInput } from '../../Forms';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { CustomPagination } from '../../Ui';
 import moment from 'moment';
 import dayjs from 'dayjs';
@@ -14,7 +14,9 @@ const FinanceTable = () => {
     const [dateRange, setDateRange] = useState();
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
-    const { data, loading, error } = useQuery(GET_COMPLETED_DEALS, {
+    const [searchText, setSearchText] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
+    const { data, loading, error,refetch } = useQuery(GET_COMPLETED_DEALS, {
         variables: {
             limit: pageSize,
             offset: (current - 1) * pageSize,
@@ -52,6 +54,23 @@ const FinanceTable = () => {
             dataIndex: "dateTime",
         },
     ];
+    useEffect(() => {
+        const handler = setTimeout(() => {
+          setDebouncedSearch(searchText);
+        }, 400);
+        return () => clearTimeout(handler);
+    }, [searchText]);
+    useEffect(() => {
+        refetch({
+          limit: pageSize,
+          offset: (current - 1) * pageSize,
+          filter: {
+            startDate: dateRange ? dayjs(dateRange[0]).format('YYYY-MM-DD') : null,
+            endDate: dateRange ? dayjs(dateRange[1]).format('YYYY-MM-DD') : null,
+            search: debouncedSearch || null
+          }
+        });
+    }, [dateRange, debouncedSearch, pageSize, current, refetch]);
 
     const total = data?.getCompletedDeals?.totalCount;
     const financeData = data?.getCompletedDeals?.deals.map(deal => ({
@@ -80,6 +99,11 @@ const FinanceTable = () => {
                                     placeholder={t('Search')}
                                     prefix={<img src='/assets/icons/search.png' width={14} alt='search icon' fetchPriority="high" />}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
+                                    value={searchText}
+                                    onChange={(e) => {
+                                        setSearchText(e.target.value.trim());
+                                        setCurrent(1); // reset to first page
+                                    }}
                                 />
                             </Col>
                             <Col lg={{span: 7}} md={{span: 12}} span={24}>

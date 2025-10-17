@@ -1253,8 +1253,12 @@ body.ltr {
     width: 90% !important;
 }
 
-
-
+.sold-status {
+    background-color: #f0f0f0; /* light gray background */
+    color: #000000;            /* black text */
+    padding: 0.55rem 1rem;
+    border-radius: 8px;     /* pill shape */
+}
 
 /* smaller font on mobile */
 @media (max-width: 700px){

@@ -18,7 +18,7 @@ import { ScheduleMeeting } from "../modal";
 import { UPDATE_BUSINESS_MEETING } from "../../../graphql/mutation";
 import { GETADMINPENDINGMEETINGS } from "../../../graphql/query/meeting";
 import { useQuery, useMutation } from "@apollo/client";
-import { message, Spin } from "antd";
+import { message } from "antd";
 import { t } from "i18next";
 
 const { Text } = Typography;
@@ -152,7 +152,7 @@ const MeetingRequestTable = () => {
       limit: pageSize,
       offset: (current - 1) * pageSize,
       search: searchValue,
-      status: selectedStatus !== "Status" ? selectedStatus.toUpperCase() : null,
+      status: null,
     },
     fetchPolicy: "network-only",
   });
@@ -222,13 +222,6 @@ const MeetingRequestTable = () => {
       },
     }
   );
-  if (loading || updating) {
-    return (
-      <Flex justify="center" align="center" className="h-200">
-        <Spin size="large" />
-      </Flex>
-    );
-  }
 
   return (
     <>
@@ -285,6 +278,7 @@ const MeetingRequestTable = () => {
           scroll={{ x: 2300 }}
           rowHoverable={false}
           pagination={true}
+          loading={loading || updating}
         />
         <CustomPagination
           total={total}
