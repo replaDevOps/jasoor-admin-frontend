@@ -9,10 +9,10 @@ import { useTranslation } from "react-i18next";
 import { TAGS } from "../../data/tags";
 
 const DSATermsPage = () => {
-  const [form] = Form.useForm();
   const {t, i18n}= useTranslation()
   const lang = localStorage.getItem("lang") || i18n.language || "en";
   const isArabic = lang.toLowerCase() === "ar";
+  const [form] = Form.useForm();
 
   const [descriptionData, setDescriptionData] = useState('');
   const [messageApi, contextHolder] = message.useMessage();
