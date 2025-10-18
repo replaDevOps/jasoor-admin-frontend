@@ -3,7 +3,7 @@ import { BusinesslistCards, BusinessListingTable, ModuleTopHeading } from '../..
 import { PlusOutlined } from '@ant-design/icons';
 import { GET_BUSINESSES } from '../../graphql/query/business'
 import { useLazyQuery } from '@apollo/client'
-import React, { useState,useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -16,7 +16,7 @@ const BusinesslIstingPage = () => {
   const [filters, setFilters] = useState({});
   const navigate = useNavigate()
 
-  const [loadBusinesses, { data, loading, error }] = useLazyQuery(GET_BUSINESSES, {
+  const [loadBusinesses, { data, loading }] = useLazyQuery(GET_BUSINESSES, {
     fetchPolicy: 'network-only',
   });
 
@@ -27,8 +27,8 @@ const BusinesslIstingPage = () => {
         offSet: (page - 1) * pageSize,
         search: search || null,
         filter: { 
-          ...filters,                       
-          businessStatus: status || null     
+          ...filters,
+          businessStatus: status || null
         }
       }
     });
