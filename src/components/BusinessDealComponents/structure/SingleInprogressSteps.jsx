@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Flex, Typography, Steps, Collapse, Form } from 'antd';
 import { CheckCircleOutlined, CheckOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { DigitalSaleAgreement } from './DigitalSaleAgreement';
-import { BankAccountDetails } from './BankAccountDetails';
 import { DocumentPaymentConfirmation } from './DocumentPaymentConfirmation';
 import { FinalDeal } from './FinalDeal';
 import { CommissionReceiptBuyer } from './CommissionReceiptBuyer';
@@ -27,7 +26,7 @@ const statusToStepIndex = {
 
 const { Title, Text } = Typography;
 
-const SingleInprogressSteps = ({ details, completedeal}) => {
+const SingleInprogressSteps = ({ details }) => {
     const {t}= useTranslation()
     const [form] = Form.useForm();
     const initialStep = details?.status ? statusToStepIndex[details.status] || 0 : 0;
@@ -56,14 +55,6 @@ const SingleInprogressSteps = ({ details, completedeal}) => {
             emptytitle: t('DSA Pending!'),
             emptydesc: t('Waiting for the seller & buyer to sign the digital sale agreement.'),
         },
-        // {
-        //     key: '3',
-        //     label: 'Bank Account Details',
-        //     content: <BankAccountDetails details={details} />,
-        //     status:  'Send',
-        //     emptytitle: 'Bank Details Pending!',
-        //     emptydesc: 'Waiting for the seller to choose the bank account.',
-        // },
         {
             key: '3',
             label: t('Pay Business Amount'),

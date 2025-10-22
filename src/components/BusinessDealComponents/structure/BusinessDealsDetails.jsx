@@ -7,7 +7,6 @@ import { useQuery,useMutation } from "@apollo/client";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
 import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
-import { useEffect } from 'react';
 
 const { Title, Text } = Typography;
 const BusinessDealsDetails = ({ completedeal }) => {
@@ -15,7 +14,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const { id } = useParams();
   const navigate = useNavigate();
-  const { loading, error, data } = useQuery(GETDEAL, {
+  const { loading, data } = useQuery(GETDEAL, {
     variables: { getDealId: id },
     skip: !id, // skip if no id
   });
@@ -49,21 +48,21 @@ const BusinessDealsDetails = ({ completedeal }) => {
         ndaPdfPath: data.getDeal.ndaPdfPath,
       }
     : null;
-  const [updateDeals, { loading: updating, data:updateDeal, error:dealError }] = useMutation(UPDATE_DEAL, {
+  const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
       refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
       awaitRefetchQueries: true,
-  });
-  useEffect(() => {
-    if (updateDeal?.updateDeal?.id) {
-        messageApi.success(t("Commission verified successfully!"));
-    }
-  }, [updateDeal?.updateDeal?.id]);
-
-  useEffect(() => {
-      if (dealError) {
-          messageApi.error(error.message || t("Something went wrong!"));
+      onCompleted: (data) => {
+        if (data?.updateDeal?.status === 'CANCEL') {
+          messageApi.success(t("Deal cancelled successfully!"));
+        } else {
+          messageApi.success(t("Deal updated successfully!"));
+        }
+      },
+      onError: (error) => {
+        messageApi.error(error.message || t("Something went wrong!"));
       }
-  }, [dealError]);
+  });
+  
   const buyerdealsData = [
     {
       title: "Seller Name",
@@ -87,7 +86,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
         : details?.status === 'BANK_DETAILS_FROM_SELLER_PENDING' ? ( <Text>{t("Buyer Bank Dtails Pending")}</Text>)
         : details?.status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? ( <Text>{t("Payment Confirmation Pending")}</Text>)
         : details?.status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? ( <Text>{t("Document Confirmation Pending")}</Text>)
-        : details?.status === 'DOCUMENT_PAYM\ENT_CONFIRMATION' ? ( <Text>{t("Admin Verification Pending")}</Text>)
+        : details?.status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? ( <Text>{t("Admin Verification Pending")}</Text>)
         : details?.status === 'CANCEL' ? ( <Text>{t("Canceled")}</Text>)
         : ( <Text>{t("Finalize Deal")}</Text>)
     },
@@ -98,7 +97,8 @@ const BusinessDealsDetails = ({ completedeal }) => {
         variables: { input: { id: details.key, status: 'CANCEL' } },
     });
   };
-  if (updating || loading) {
+
+  if (loading) {
     return (
         <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
@@ -153,9 +153,16 @@ const BusinessDealsDetails = ({ completedeal }) => {
         <Button
           aria-labelledby="Cancel Deal"
           type="primary"
-          className="btnsave border0 text-white bg-red"
-          disabled={data?.getDeal?.business?.isSold}
+          className={`btnsave border0 text-white ${(data?.getDeal?.business?.isSold || details?.status === 'CANCEL') ? '' : 'bg-red'}`}
+          disabled={data?.getDeal?.business?.isSold || details?.status === 'CANCEL'}
           onClick={handleMCancelDeal}
+          loading={updating}
+          style={(data?.getDeal?.business?.isSold || details?.status === 'CANCEL') ? {
+            backgroundColor: '#d9d9d9',
+            borderColor: '#d9d9d9',
+            color: 'rgba(0, 0, 0, 0.25)',
+            cursor: 'not-allowed',
+          } : {}}
         >
           {t("Cancel Deal")}
         </Button>
@@ -186,10 +193,21 @@ const BusinessDealsDetails = ({ completedeal }) => {
               ))}
             </Row>
           </div>
-          <SingleInprogressSteps
-            details={details}
-            completedeal={completedeal}
-          />
+          {details?.status === 'CANCEL' ? (
+            <Flex vertical justify="center" align="center" gap={10} style={{ padding: '40px 20px', opacity: 0.6 }}>
+              <Title level={4} className="m-0 text-red">
+                {t("This deal has been cancelled")}
+              </Title>
+              <Text className="fs-14 text-gray text-center">
+                {t("All activities for this deal have been stopped. No further actions can be taken.")}
+              </Text>
+            </Flex>
+          ) : (
+            <SingleInprogressSteps
+              details={details}
+              completedeal={completedeal}
+            />
+          )}
         </Flex>
       </Card>
     </Flex>

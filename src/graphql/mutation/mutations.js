@@ -150,6 +150,7 @@ const UPDATE_DEAL = gql`
 mutation UpdateDeal($input: UpdateDealInput!) {
   updateDeal(input: $input) {
     id
+    status
   }
 }
 `
