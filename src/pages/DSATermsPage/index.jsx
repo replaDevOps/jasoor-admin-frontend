@@ -18,7 +18,7 @@ const DSATermsPage = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);
   const [updateTerms, { loading: updating }] = useMutation(UPDATE_TERMS);
-  const { data, loading, error } = useQuery(GETDSATERMS);
+  const { data, loading } = useQuery(GETDSATERMS);
   useEffect(() => {
     if (data?.length === 0) return
     if (isArabic) {
@@ -33,7 +33,7 @@ const DSATermsPage = () => {
       }
     }
   }, [data,isArabic]);
-  // useEffect(() => { console.log("Updated descriptionData:", descriptionData); }, [descriptionData]);
+  
   const editorRef = useRef(null);
 
   const handleDescriptionChange = (value) => {
@@ -52,7 +52,7 @@ const DSATermsPage = () => {
         }
         const existingTerm = data?.getDSATerms?.find(t => t.isArabic === isArabic);
 
-        if(existingTerm.id){
+        if(existingTerm?.id){
           await updateTerms({
               variables: {
                 updateTermsId: existingTerm.id,
@@ -74,22 +74,22 @@ const DSATermsPage = () => {
         }else{
           await createTerms({
             variables: {
-            input:{
-                term: null,
-                ...(
-                  isArabic
-                    ? { arabicDsaTerms: { content: descriptionData } }
-                    : { dsaTerms: { content: descriptionData} }
-                ),
-                isArabic,
-                policy: null,
+              input:{
+                  term: null,
+                  ...(
+                    isArabic
+                      ? { arabicDsaTerms: { content: descriptionData } }
+                      : { dsaTerms: { content: descriptionData} }
+                  ),
+                  isArabic,
+                  policy: null,
+              },
             },
             refetchQueries: [{ query: GETDSATERMS }],
-              awaitRefetchQueries: true,
-        }
-      });
-      messageApi.success(t("Terms created successfully!"));
-      }          
+            awaitRefetchQueries: true,
+          });
+          messageApi.success(t("DSA Terms created successfully!"));
+        }          
     } catch (err) {
         console.error(err);
         messageApi.error(t("Failed to save terms"));
@@ -122,7 +122,7 @@ const DSATermsPage = () => {
     }
   };
 
-  if (creating || loading || updating) {
+  if (loading) {
       return (
           <Flex justify="center" align="center" className='h-200'>
               <Spin size="large" />
@@ -136,7 +136,13 @@ const DSATermsPage = () => {
           <Flex vertical gap={20}>
               <Flex justify='space-between' align='center'>
                   <ModuleTopHeading level={4} name={t('DSA Terms')} />
-                  <Button onClick={onFinish} aria-labelledby='Save' type='button' className='btnsave border0 text-white brand-bg'>
+                  <Button 
+                      onClick={onFinish} 
+                      aria-labelledby='Save' 
+                      type='button' 
+                      className='btnsave border0 text-white brand-bg'
+                      loading={creating || updating}
+                  >
                       {t("Save")}
                   </Button>
               </Flex>

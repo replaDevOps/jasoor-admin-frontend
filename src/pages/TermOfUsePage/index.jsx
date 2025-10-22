@@ -16,19 +16,22 @@ const TermOfUsePage = () => {
     const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);
     const [updateTerms, { loading: updating }] = useMutation(UPDATE_TERMS);
     // call GETTERMSOFUSE
-    const { data, loading, error } = useQuery(GETTERMSOFUSE);
+    const { data } = useQuery(GETTERMSOFUSE);
+
     useEffect(() => {
-      if(isArabic){
-        if (data?.getTerms?.arabicTerm?.content) {
-          setDescriptionData(data?.getTerms?.arabicTerm?.content);
-        }
-      }else{
-        if (data?.getTerms?.term?.content) {
-          setDescriptionData(data?.getTerms?.term?.content);
-        }
+    if (!data?.getTerms) return;
+    if (isArabic) {
+      const arabicTerm = data.getTerms.find(t => t.arabicTerm?.content);
+      if (arabicTerm) {
+        setDescriptionData(arabicTerm.arabicTerm.content);
       }
-        
-    }, [data]);
+    } else {
+      const englishTerm = data.getTerms.find(t => t.term?.content);
+      if (englishTerm) {
+        setDescriptionData(englishTerm.term.content);
+      }
+    }
+  }, [data,isArabic]);
 
     const handleDescriptionChange = (value) =>{
         setDescriptionData(value)
@@ -36,17 +39,19 @@ const TermOfUsePage = () => {
 
     const onFinish = async () => {
         try {
-          if (!descriptionData) {
+          if (!descriptionData || descriptionData.trim().length === 0) {
             messageApi.error(t("Please add terms content"));
             return;
           }
-          const existingTermsId = isArabic
-          ? data?.getTerms?.arabicTerm?.id
-          : data?.getTerms?.term?.id;
-          if (existingTermsId) {
+          
+          // Find existing term based on language
+          const existingTerms = data?.getTerms?.find(t => t.isArabic === isArabic);
+          
+          if (existingTerms?.id) {
+            // Update existing terms
             await updateTerms({
               variables: {
-                updateTermsId: data.getTerms.id,
+                updateTermsId: existingTerms.id,
                 input: {
                   ...(
                     isArabic
@@ -63,7 +68,7 @@ const TermOfUsePage = () => {
             });
             messageApi.success(t("Terms updated successfully!"));
           } else {
-            // ✅ Create new terms
+            // Create new terms
             await createTerms({
               variables: {
                 input: {
@@ -89,21 +94,19 @@ const TermOfUsePage = () => {
         }
       };
 
-    if (creating || loading || updating) {
-        return (
-            <Flex justify="center" align="center" className='h-200'>
-                <Spin size="large" />
-            </Flex>
-        );
-    }
-
     return (
         <>
         {contextHolder}
         <Flex vertical gap={20}>
             <Flex justify='space-between' align='center'>
                 <ModuleTopHeading level={4}  name={t('Terms of Use')} />
-                <Button onClick={onFinish} aria-labelledby='Save' type='button' className='btnsave border0 text-white brand-bg'>
+                <Button 
+                    onClick={onFinish} 
+                    aria-labelledby='Save' 
+                    type='button' 
+                    className='btnsave border0 text-white brand-bg'
+                    loading={creating || updating}
+                >
                     {t("Save")}
                 </Button>
             </Flex>
@@ -111,7 +114,6 @@ const TermOfUsePage = () => {
                 <Form
                     layout='vertical'
                     form={form}
-                    // onFinish={onFinish} 
                     requiredMark={false}
                 >
                     <EditorDescription

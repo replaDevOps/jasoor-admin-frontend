@@ -16,7 +16,7 @@ const EndaTermPage = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [createTerms, { loading: creating }] = useMutation(CREATE_TERMS);
   const [updateTerms, { loading: updating }] = useMutation(UPDATE_TERMS);
-  const { data, loading, error } = useQuery(GETENDATERMS);
+  const { data, loading } = useQuery(GETENDATERMS);
 
   useEffect(() => {
     if (!data?.getNDATerms) return;
@@ -45,18 +45,18 @@ const EndaTermPage = () => {
   }
   const onFinish = async () => {
       try {
-        if (!descriptionData) {
+        if (!descriptionData || descriptionData.trim().length === 0) {
           messageApi.error(t("Please add terms content"));
           return;
         }
-        const existingTermsId = isArabic
-        ? data?.getTerms?.arabicNdaTerm?.id
-        : data?.getTerms?.ndaTerm?.id;
+        
+        // Find existing term based on language
+        const existingTerm = data?.getNDATerms?.find(t => t.isArabic === isArabic);
   
-        if (existingTermsId) {
+        if (existingTerm?.id) {
           await updateTerms({
               variables: {
-                updateTermsId: data.getTerms.id,
+                updateTermsId: existingTerm.id,
                 input: {
                   term: null,
                   ...(
@@ -68,7 +68,7 @@ const EndaTermPage = () => {
                   policy: null,
                 },
               },
-              refetchQueries: [{ query: GETTERMSOFUSE }],
+              refetchQueries: [{ query: GETENDATERMS }],
               awaitRefetchQueries: true,
             });
             messageApi.success(t("E-NDA Terms updated successfully!"));
@@ -76,8 +76,8 @@ const EndaTermPage = () => {
         else{
           await createTerms({
               variables: {
-                  input:{
-                  term:    null,
+                input:{
+                  term: null,
                   ...(
                     isArabic
                       ? { arabicNdaTerm: { content: descriptionData } }
@@ -85,10 +85,12 @@ const EndaTermPage = () => {
                   ),
                   isArabic,
                   policy: null,
+                },
               },
-          }
-        });
-        messageApi.success(t("E-NDA Terms created successfully!"));
+              refetchQueries: [{ query: GETENDATERMS }],
+              awaitRefetchQueries: true,
+          });
+          messageApi.success(t("E-NDA Terms created successfully!"));
         }
       } catch (err) {
         console.error(err);
@@ -122,7 +124,7 @@ const EndaTermPage = () => {
       }
   };
 
-  if (creating || loading|| updating) {
+  if (loading) {
       return (
           <Flex justify="center" align="center" className='h-200'>
               <Spin size="large" />
@@ -136,7 +138,13 @@ const EndaTermPage = () => {
         <Flex vertical gap={20}>
               <Flex justify='space-between' align='center'>
                   <ModuleTopHeading level={4} name={t('E-NDA Terms')} />
-                  <Button onClick={onFinish} aria-labelledby='Save' type='button' className='btnsave border0 text-white brand-bg'>
+                  <Button 
+                      onClick={onFinish} 
+                      aria-labelledby='Save' 
+                      type='button' 
+                      className='btnsave border0 text-white brand-bg'
+                      loading={creating || updating}
+                  >
                       {t("Save")}
                   </Button>
               </Flex>

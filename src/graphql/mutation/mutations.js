@@ -206,11 +206,11 @@ mutation DeleteFAQ($deleteFaqId: ID!) {
 }
 `
 const CREATE_TERMS = gql`
-mutation CreateTerms($input: TermsInput) {
-  createTerms(input: $input) {
-    id
+  mutation CreateTerms($input: TermsInput) {
+    createTerms(input: $input) {
+      id
+    }
   }
-}
 `
 const UPDATE_TERMS = gql`
 mutation UpdateTerms($updateTermsId: ID!, $input: TermsInput) {

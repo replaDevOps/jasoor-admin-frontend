@@ -1,4 +1,4 @@
-import { Button, Col, Flex, Row, Typography, message } from 'antd'
+import { Button, Col, Flex, Row, message } from 'antd'
 import { CheckCircleOutlined } from '@ant-design/icons'
 import { UPDATE_DEAL,UPDATE_BUSINESS} from '../../../graphql/mutation/mutations';
 import { useMutation } from '@apollo/client';
@@ -6,7 +6,6 @@ import { GETDEAL } from '../../../graphql/query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const { Text } = Typography
 const FinalDeal = ({details}) => {
   const {t} = useTranslation()
     const [messageApi, contextHolder] = message.useMessage();
