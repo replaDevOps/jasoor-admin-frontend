@@ -6,6 +6,7 @@ import { PendingUnverifiedTabs } from './PendingUnverifiedTabs';
 import {GET_BUSINESSES_STATS_BY_ID} from '../../../graphql/query'
 import { UPDATE_BUSINESS } from '../../../graphql/mutation'
 import { useMutation,useQuery } from '@apollo/client';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const { Text, Title } = Typography;
@@ -16,27 +17,47 @@ const SingleviewBusinesslist = () => {
     const { id } = useParams();
     const [messageApi, contextHolder] = message.useMessage();
 
-    const { loading, error, data:business } = useQuery(GET_BUSINESSES_STATS_BY_ID, {
+        const { loading, data:business } = useQuery(GET_BUSINESSES_STATS_BY_ID, {
         variables: { getBusinessByIdId: id },
         skip: !id, // skip if no id
     });
     
     const data = business?.getBusinessById?.business;
-    const [updateBusiness,{ loading: updating }] = useMutation(UPDATE_BUSINESS, {
-        refetchQueries: [
-          {
-            query: GET_BUSINESSES_STATS_BY_ID,
-            variables: { getBusinessByIdId: id }, // make sure you pass the current business id
-          },
-        ],
-        awaitRefetchQueries: true,
-        onCompleted: () => {
-            messageApi.success(t("Stats changed successfully!"));
-          },
-          onError: (err) => {
-            messageApi.error(err.message || t("Something went wrong!"));
-          },
-    });
+        const [updateBusiness] = useMutation(UPDATE_BUSINESS, {
+                refetchQueries: [
+                    {
+                        query: GET_BUSINESSES_STATS_BY_ID,
+                        variables: { getBusinessByIdId: id },
+                    },
+                ],
+                awaitRefetchQueries: true,
+        });
+
+        // Local per-button loading to avoid spinning all actions at once
+        const [actionLoading, setActionLoading] = useState(null); // 'reject' | 'accept' | 'inactivate' | 'activate' | null
+
+        const handleStatusChange = async (nextStatus, actionKey) => {
+                setActionLoading(actionKey);
+                try {
+                        await updateBusiness({
+                                variables: {
+                                        input: { id, businessStatus: nextStatus },
+                                },
+                        });
+                        // Distinct success messages per action
+                        const successMap = {
+                                reject: t('Business rejected successfully'),
+                                accept: t('Business approved successfully'),
+                                inactivate: t('Business inactivated successfully'),
+                                activate: t('Business activated successfully'),
+                        };
+                        messageApi.success(successMap[actionKey] || t('Status changed successfully'));
+                } catch (err) {
+                        messageApi.error(err.message || t('Something went wrong!'));
+                } finally {
+                        setActionLoading(null);
+                }
+        };
     if (loading) {
         return (
           <Flex justify="center" align="center" className='h-200'>
@@ -83,28 +104,16 @@ const SingleviewBusinesslist = () => {
                 <Flex gap={10}>
                     <Button
                         className="btncancel"
-                        loading={updating}
-                        onClick={() =>
-                            updateBusiness({
-                                variables: {
-                                    input: { id, businessStatus: 'REJECT' },
-                                },
-                            })
-                        }
+                        loading={actionLoading === 'reject'}
+                        onClick={() => handleStatusChange('REJECT', 'reject')}
                         aria-labelledby='Reject'
                     >
                         {t("Reject")}
                     </Button>
                     <Button
                         className="btnsave border0 bg-green text-white"
-                        loading={updating}
-                        onClick={() =>
-                            updateBusiness({
-                                variables: {
-                                    input: { id, businessStatus: 'ACTIVE' },
-                                },
-                            })
-                        }
+                        loading={actionLoading === 'accept'}
+                        onClick={() => handleStatusChange('ACTIVE', 'accept')}
                         aria-labelledby='Accept'
                     >
                         {t("Accept")}
@@ -113,14 +122,8 @@ const SingleviewBusinesslist = () => {
                 ) : data?.businessStatus === 'ACTIVE' ? (
                     <Button
                         className="btnsave border0 bg-red text-white"
-                        loading={updating}
-                        onClick={() =>
-                            updateBusiness({
-                                variables: {
-                                    input: { id, businessStatus: 'INACTIVE' },
-                                },
-                            })
-                        }
+                        loading={actionLoading === 'inactivate'}
+                        onClick={() => handleStatusChange('INACTIVE', 'inactivate')}
                         aria-labelledby='Inactivate'
                     >
                         {t("Inactivate")}
@@ -128,14 +131,8 @@ const SingleviewBusinesslist = () => {
                 ) : data?.businessStatus === 'INACTIVE' ? (
                     <Button
                         className="btnsave border0 bg-green text-white"
-                        loading={updating}
-                        onClick={() =>
-                            updateBusiness({
-                                variables: {
-                                    input: { id, businessStatus: 'ACTIVE', },
-                                },
-                            })
-                        }
+                        loading={actionLoading === 'activate'}
+                        onClick={() => handleStatusChange('ACTIVE', 'activate')}
                         aria-labelledby='Activate'
                     >
                         {t("Activate")}

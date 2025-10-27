@@ -7,11 +7,11 @@ import { meetingItems } from '../../../shared';
 import { CustomPagination } from '../../Ui';
 import { UPDATE_BUSINESS_MEETING,UPDATE_OFFER } from '../../../graphql/mutation'
 import { GETADMINSCHEDULEMEETINGS } from '../../../graphql/query/meeting'
-import { useQuery,useMutation } from '@apollo/client'
+import { useLazyQuery,useMutation } from '@apollo/client'
 import { t } from 'i18next';
 
 const { Text } = Typography
-export function calculateCommission(price) {
+function calculateCommission(price) {
     let commission = 0;
   
     // Bracket 1: 0 - 100K → 4%
@@ -46,7 +46,6 @@ const ScheduleMeetingTable = () => {
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState('Status');
     const [visible, setVisible] = useState(false);
-    const [deleteItem, setDeleteItem] = useState(false);
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
     const [searchValue, setSearchValue] = useState('');
@@ -54,7 +53,7 @@ const ScheduleMeetingTable = () => {
 
     const [updateMeeting,{ loading: updating }] = useMutation(UPDATE_BUSINESS_MEETING);
     const [updateOffer,{ loading: onUpdating }] = useMutation(UPDATE_OFFER);
-    const schedulemeetingColumn = ( setVisible, setDeleteItem ) =>  [
+  const schedulemeetingColumn = ( setVisible ) =>  [
         {
             title: t('Business Title'),
             dataIndex: 'businessTitle',
@@ -147,7 +146,7 @@ const ScheduleMeetingTable = () => {
                         <NavLink
                           onClick={async (e) => {
                             e.preventDefault();
-                            setDeleteItem(true);
+                            // No-op: previously used a local delete state which is now removed
                             try {
                               await updateMeeting({
                                 variables: {
@@ -157,7 +156,14 @@ const ScheduleMeetingTable = () => {
                                   },
                                 },
                               });
-                              await refetch();
+                              await fetchScheduledMeetings({
+                                variables: {
+                                  limit: pageSize,
+                                  offset: (current - 1) * pageSize,
+                                  search: searchValue,
+                                  status: computeStatusVar(),
+                                },
+                              });
                             } catch (err) {
                               console.error(err);
                             }
@@ -184,17 +190,31 @@ const ScheduleMeetingTable = () => {
             ),
           },
     ];
-    // Apollo query
-    const { data, loading, refetch } = useQuery(GETADMINSCHEDULEMEETINGS, {
-        variables: {
-            limit: pageSize,
-            offset: (current - 1) * pageSize,
-            search: searchValue,
-            status: null
-        },
-        fetchPolicy: 'network-only'
+  // Apollo lazy query
+  const [fetchScheduledMeetings, { data, loading }] = useLazyQuery(GETADMINSCHEDULEMEETINGS, {
+    fetchPolicy: 'network-only'
+  });
+
+  // map UI-selected status to API variable
+  const computeStatusVar = () => {
+    if (selectedStatus === 'Pending') return 'APPROVED';
+    if (selectedStatus === 'Cancel Meeting') return 'CANCELED';
+    if (selectedStatus === 'All' || selectedStatus === 'Status') return null;
+    return null;
+  };
+
+  useEffect(() => {
+    fetchScheduledMeetings({
+      variables: {
+        limit: pageSize,
+        offset: (current - 1) * pageSize,
+        search: searchValue,
+        status: computeStatusVar(),
+      },
     });
-    const schedulemeetingData = (data?.getAdminScheduledMeetings?.items || []).map((item, index) => ({
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageSize, current, searchValue, selectedStatus]);
+  const schedulemeetingData = (data?.getAdminScheduledMeetings?.items || []).map((item) => ({
         key: item.id,
         offerId:item?.offer?.id,
         offerPrice: item?.offer?.price,
@@ -216,33 +236,23 @@ const ScheduleMeetingTable = () => {
         meetLink: item.meetingLink || '',
     }));
 
-    const total = data?.getAdminPendingMeetings?.totalCount || 0;
+  const total = data?.getAdminScheduledMeetings?.totalCount || 0;
 
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
     };
     
-    const handleStatusClick = ({ key }) => {
-        const selectedItem = meetingItems.find(item => item.key === key);
-        if (selectedItem) {
-            setSelectedStatus(selectedItem.label);
-            if( selectedItem.label === 'Pending' ){
-                refetch({ status: 'APPROVED' });
-            }
-            else if (selectedItem.label === 'Cancel Meeting' ){
-                refetch({ status: 'CANCELED', search: searchValue });
-            }else if (selectedItem.label === 'All') {
-                refetch({ status: null });
-            }
-            // refetch({ status: selectedItem.label.toUpperCase(), search: searchValue });
-        }
-    };
+  const handleStatusClick = ({ key }) => {
+    const selectedItem = meetingItems.find(item => item.key === key);
+    if (selectedItem) {
+      setSelectedStatus(selectedItem.label);
+    }
+  };
 
-    const handleSearch = (value) => {
-        setSearchValue(value);
-        refetch({ status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null, search: value });
-    };
+  const handleSearch = (value) => {
+    setSearchValue(value);
+  };
 
     const handleDealSubmit = async () => {
         try {
@@ -271,7 +281,14 @@ const ScheduleMeetingTable = () => {
     
           setVisible(false);
           setSelectedOffer(null);
-          refetch();
+          fetchScheduledMeetings({
+            variables: {
+              limit: pageSize,
+              offset: (current - 1) * pageSize,
+              search: searchValue,
+              status: computeStatusVar(),
+            },
+          });
         } catch (err) {
           console.error(err);
         }
@@ -336,9 +353,9 @@ const ScheduleMeetingTable = () => {
                         </Col>
                     </Row>
                 </Form>
-                <Table
+        <Table
                     size='large'
-                    columns={schedulemeetingColumn(setVisible,setDeleteItem)}
+          columns={schedulemeetingColumn(setVisible)}
                     dataSource={schedulemeetingData}
                     className='pagination table-cs table'
                     showSorterTooltip={false}
