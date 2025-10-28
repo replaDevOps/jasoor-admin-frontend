@@ -25,7 +25,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   // Roles query (normal useQuery, no debounce needed)
-  const { loading: rolesLoading, data: rolesData } = useQuery(GETROLES);
+  const { data: rolesData } = useQuery(GETROLES);
 
   // ✅ UseLazyQuery for staff members
   const [getStaffMembers, { loading, data }] = useLazyQuery(GETSTAFFMEMBERS, {
@@ -99,11 +99,11 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
     }
   };
 
-  const [updateUser, { loading: updating }] = useMutation(UPDATE_USER, {
+  const [updateUser] = useMutation(UPDATE_USER, {
     refetchQueries: [{ query: GETSTAFFMEMBERS }],
     awaitRefetchQueries: true
   });
-  const [deleteUser, { loading: deleting }] = useMutation(DELETE_USER, {
+  const [deleteUser] = useMutation(DELETE_USER, {
     refetchQueries: [{ query: GETSTAFFMEMBERS }],
     awaitRefetchQueries: true
   });

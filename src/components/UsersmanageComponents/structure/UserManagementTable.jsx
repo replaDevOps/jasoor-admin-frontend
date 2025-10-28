@@ -1,17 +1,17 @@
 import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Input,Typography,Space,message,Spin} from 'antd';
 import { NavLink } from "react-router-dom";
 import { useState, useEffect, useMemo } from 'react';
-import { CustomPagination } from '../../Ui';
+import { CustomPagination, DeleteModal } from '../../Ui';
 import { ViewIdentity } from '../modals';
-import { UPDATE_USER } from '../../../graphql/mutation'
+import { UPDATE_USER, DELETE_USER } from '../../../graphql/mutation'
 import { USERS } from '../../../graphql/query/user';
 import { useLazyQuery,useMutation } from '@apollo/client'
 import { DownOutlined } from '@ant-design/icons';
 import { t } from 'i18next';
 
-
 const { Text } = Typography
 const UserManagementTable = ({setVisible,setEditItem}) => {
+
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -22,6 +22,8 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
     const [searchText, setSearchText] = useState("");
     const [viewmodal, setViewModal] = useState(false)
     const [viewstate, SetViewState] = useState(null)
+    const [deleteVisible, setDeleteVisible] = useState(false)
+    const [selectedUserId, setSelectedUserId] = useState(null)
     const [messageApi, contextHolder] = message.useMessage();
 
     const [loadUsers, { data, loading }] = useLazyQuery(USERS, {
@@ -65,6 +67,22 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                     filter
                 }
             });
+        }
+    });
+
+    const [deleteUser, { loading: deleting }] = useMutation(DELETE_USER, {
+        onCompleted: () => {
+            messageApi.success(t('User deleted successfully!'));
+            loadUsers({
+                variables: {
+                    limit: pageSize,
+                    offset: (current - 1) * pageSize,
+                    filter
+                }
+            });
+        },
+        onError: (err) => {
+            messageApi.error(err.message || t('Something went wrong!'));
         }
     });
 
@@ -163,7 +181,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                     ]
                                 ),
                                 { 
-                                    label: <NavLink onClick={(e) => { e.preventDefault(); }}>{t("Delete")}</NavLink>, 
+                                    label: <NavLink onClick={(e) => { e.preventDefault(); setSelectedUserId(row.key); setDeleteVisible(true); }}>{t("Delete")}</NavLink>, 
                                     key: '3' 
                                 },
                                 { 
@@ -335,6 +353,24 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                 visible={viewmodal}
                 viewstate={viewstate}
                 onClose={()=>{setViewModal(false);SetViewState(null)}}
+            />
+
+            <DeleteModal
+                visible={deleteVisible}
+                onClose={() => setDeleteVisible(false)}
+                title={t('Are you sure?')}
+                subtitle={t('This action cannot be undone. Are you sure you want to delete this user?')}
+                type='danger'
+                loading={deleting}
+                onConfirm={async () => {
+                    try {
+                        await deleteUser({ variables: { deleteUserId: selectedUserId } });
+                        setDeleteVisible(false);
+                        setSelectedUserId(null);
+                    } catch {
+                        // message handled in onError
+                    }
+                }}
             />
         </>
     );

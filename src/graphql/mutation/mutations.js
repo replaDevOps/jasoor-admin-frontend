@@ -225,6 +225,11 @@ mutation DeleteTerms($deleteTermsId: ID!) {
   deleteTerms(id: $deleteTermsId)
 }
 `
+const DELETE_USER = gql`
+mutation DeleteUser($deleteUserId: ID) {
+  deleteUser(id: $deleteUserId)
+}
+`
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -260,4 +265,5 @@ export {
   DELETE_ARTICLE,
   DELETE_FAQ,
   DELETE_TERMS,
+  DELETE_USER,
 }
