@@ -1,6 +1,27 @@
 import { Form, Input } from 'antd';
+import { useEffect, useRef } from 'react';
 import './index.css'
-export const SearchInput = ({withoutForm, name, label, tooltip, type, size, disabled, required, message, value, placeholder, textArea, validator, ...props }) => {
+export const SearchInput = ({withoutForm, name, tooltip, type, size, disabled, required, message, value, placeholder, textArea, validator, debounceMs = 400, onChange, ...props }) => {
+    const timerRef = useRef(null);
+
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
+                timerRef.current = null;
+            }
+        }
+    }, []);
+
+    const handleDebouncedChange = (e) => {
+        const nextVal = e?.target?.value ?? '';
+        if (!onChange) return;
+        if (timerRef.current) clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+            // pass a synthetic event-like object to keep existing handlers working
+            onChange({ target: { value: nextVal } });
+        }, debounceMs);
+    };
     return (
         <>
             {
@@ -9,6 +30,7 @@ export const SearchInput = ({withoutForm, name, label, tooltip, type, size, disa
                         <Input.TextArea
                             placeholder={placeholder || ''}
                             value={value || ''}
+                            onChange={handleDebouncedChange}
                             {...props}
                             disabled={disabled || false}
                             className='searchinputno'
@@ -19,6 +41,7 @@ export const SearchInput = ({withoutForm, name, label, tooltip, type, size, disa
                             value={value || ''}
                             size={size || 'middle'}
                             disabled={disabled || false}
+                            onChange={handleDebouncedChange}
                             {...props}
                             className='searchinputno'
                             />:
@@ -28,6 +51,7 @@ export const SearchInput = ({withoutForm, name, label, tooltip, type, size, disa
                             value={value || ''}
                             size={size || 'middle'}
                             disabled={disabled || false}
+                            onChange={handleDebouncedChange}
                             {...props}
                             className='searchinputno'
                         />
@@ -54,6 +78,7 @@ export const SearchInput = ({withoutForm, name, label, tooltip, type, size, disa
                             <Input.TextArea
                                 placeholder={placeholder || ''}
                                 value={value || ''}
+                                onChange={handleDebouncedChange}
                                 {...props}
                                 disabled={disabled || false}
                             /> :
@@ -63,6 +88,7 @@ export const SearchInput = ({withoutForm, name, label, tooltip, type, size, disa
                                 value={value || ''}
                                 size={size || 'middle'}
                                 disabled={disabled || false}
+                                onChange={handleDebouncedChange}
                                 {...props}
                                 />:
                             <Input
@@ -71,6 +97,7 @@ export const SearchInput = ({withoutForm, name, label, tooltip, type, size, disa
                                 value={value || ''}
                                 size={size || 'middle'}
                                 disabled={disabled || false}
+                                onChange={handleDebouncedChange}
                                 {...props}
                             />
                     }

@@ -1,6 +1,6 @@
 import { Button, Card, Col, Dropdown, Flex, Form, Row, Typography,Spin,message } from 'antd';
 import { SearchInput } from '../../../Forms';
-import { useState,useRef } from 'react';
+import { useState } from 'react';
 import { CustomPagination } from '../../../Ui';
 import { NavLink } from 'react-router-dom';
 import {GETARTICLES} from '../../../../graphql/query/queries'
@@ -29,20 +29,11 @@ const ArticleCards = ({setDeleteItem}) => {
         ? data?.getArticles?.articles?.filter(article => article.isArabic)
         : data?.getArticles?.articles?.filter(article => !article.isArabic)
       ) || [];
-      
-    const searchTimeout = useRef(null);
 
     const handleSearchChange = (e) => {
         const value = e.target.value;
-
-        if (searchTimeout.current) {
-            clearTimeout(searchTimeout.current);
-        }
-
-        searchTimeout.current = setTimeout(() => {
-            refetch({ search: value });
-            setCurrent(1); // reset pagination
-        }, 500); // 500ms delay
+        refetch({ search: value });
+        setCurrent(1); // reset pagination
     };
 
     if (loading) {
@@ -67,7 +58,8 @@ const ArticleCards = ({setDeleteItem}) => {
                                         placeholder={t('Search')}
                                         prefix={<img src='/assets/icons/search.png' alt='search icon' fetchPriority='high' width={14} />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
-                                        onChange={handleSearchChange} 
+                                        onChange={handleSearchChange}
+                                        debounceMs={400}
                                     />
                                 </Flex>
                             </Col>

@@ -1,6 +1,6 @@
 import { Button, Card, Dropdown, Flex, Form, Table,message,Spin } from 'antd';
 import { SearchInput } from '../../../Forms';
-import { useState,useRef } from 'react';
+import { useState } from 'react';
 import { CustomPagination, DeleteModal } from '../../../Ui';
 import {GETFAQ} from '../../../../graphql/query/queries'
 import {DELETE_FAQ} from '../../../../graphql/mutation/mutations'
@@ -18,7 +18,7 @@ const FaqsTable = ({setVisible,setEditItem}) => {
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
 
-    const  {data, loading , error,refetch:refetchFaqs} = useQuery(GETFAQ,{
+    const  {data, loading , refetch:refetchFaqs} = useQuery(GETFAQ,{
         variables: { search: "" },
     });
     const [deleteFAQ, { loading: deleting }] = useMutation(DELETE_FAQ,{
@@ -83,19 +83,10 @@ const FaqsTable = ({setVisible,setEditItem}) => {
         setCurrent(page);
         setPageSize(size);
     };
-    const searchTimeout = useRef(null);
-
     const handleSearchChange = (e) => {
         const value = e.target.value;
-
-        if (searchTimeout.current) {
-            clearTimeout(searchTimeout.current);
-        }
-
-        searchTimeout.current = setTimeout(() => {
-            refetchFaqs({ search: value });
-            setCurrent(1); // reset pagination
-        }, 500); // 500ms delay
+        refetchFaqs({ search: value });
+        setCurrent(1); // reset pagination
     };
     if (loading || deleting) {
         return (
@@ -117,7 +108,8 @@ const FaqsTable = ({setVisible,setEditItem}) => {
                                 placeholder={t('Search')}
                                 prefix={<img src='/assets/icons/search.png' alt='search icon' fetchPriority='high' width={14} />}
                                 className='border-light-gray pad-x ps-0 radius-8 fs-13'
-                                onChange={handleSearchChange} 
+                                onChange={handleSearchChange}
+                                debounceMs={400}
                             />
                         </Flex>
                     </Form>

@@ -246,6 +246,7 @@ const RolePermissionTable = () => {
                     }
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
                     onChange={(e) => handleSearch(e.target.value.trim())}
+                    debounceMs={400}
                   />
                   <Dropdown
                     menu={{

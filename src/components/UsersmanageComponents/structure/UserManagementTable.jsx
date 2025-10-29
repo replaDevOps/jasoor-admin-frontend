@@ -1,7 +1,8 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Input,Typography,Space,message,Spin} from 'antd';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Typography,Space,message,Spin} from 'antd';
 import { NavLink } from "react-router-dom";
 import { useState, useEffect, useMemo } from 'react';
 import { CustomPagination, DeleteModal } from '../../Ui';
+import { SearchInput } from '../../Forms';
 import { ViewIdentity } from '../modals';
 import { UPDATE_USER, DELETE_USER } from '../../../graphql/mutation'
 import { USERS } from '../../../graphql/query/user';
@@ -281,18 +282,18 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
             <Flex vertical gap={20}>
                 <Form form={form} layout="vertical">
                     <Row gutter={[16, 16]}>
-                            <Col span={6}>
-                                <Input
+                            <Col span={24}>
+                                <Flex gap={5} wrap>
+
+                                <SearchInput
                                     name='name'
                                     placeholder={t('Search')}
                                     prefix={<img src='/assets/icons/search.png' width={14} alt='search icon' fetchPriority="high"/>}
                                     allowClear
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
                                     onChange={(e) => handleSearch(e.target.value.trim())}
+                                    debounceMs={400}
                                 />
-                            </Col>
-                            <Col span={14}>
-                                <Flex gap={5} wrap>
                                     <Dropdown menu={{ items: districtItems, onClick: handleDistrictClick }}>
                                         <Button aria-labelledby='filter district'  className="btncancel px-3 filter-bg fs-13 text-black">
                                             <Flex justify="space-between" align="center" gap={30}>

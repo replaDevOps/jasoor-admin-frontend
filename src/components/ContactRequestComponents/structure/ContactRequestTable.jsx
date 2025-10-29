@@ -98,6 +98,7 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem, setRefetch 
                     prefix={<img src="/assets/icons/search.png" width={14} alt="search icon" fetchPriority="high" />}
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
                     onChange={(e) => setSearchValue(e.target.value)}
+                    debounceMs={400}
                   />
                   <Dropdown
                     menu={{

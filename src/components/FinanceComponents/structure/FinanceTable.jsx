@@ -15,7 +15,6 @@ const FinanceTable = () => {
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
     const [searchText, setSearchText] = useState('');
-    const [debouncedSearch, setDebouncedSearch] = useState('');
     const { data, loading, error,refetch } = useQuery(GET_COMPLETED_DEALS, {
         variables: {
             limit: pageSize,
@@ -55,22 +54,16 @@ const FinanceTable = () => {
         },
     ];
     useEffect(() => {
-        const handler = setTimeout(() => {
-          setDebouncedSearch(searchText);
-        }, 400);
-        return () => clearTimeout(handler);
-    }, [searchText]);
-    useEffect(() => {
         refetch({
           limit: pageSize,
           offset: (current - 1) * pageSize,
           filter: {
             startDate: dateRange ? dayjs(dateRange[0]).format('YYYY-MM-DD') : null,
             endDate: dateRange ? dayjs(dateRange[1]).format('YYYY-MM-DD') : null,
-            search: debouncedSearch || null
+            search: searchText || null
           }
         });
-    }, [dateRange, debouncedSearch, pageSize, current, refetch]);
+    }, [dateRange, searchText, pageSize, current, refetch]);
 
     const total = data?.getCompletedDeals?.totalCount;
     const financeData = data?.getCompletedDeals?.deals.map(deal => ({
@@ -104,6 +97,7 @@ const FinanceTable = () => {
                                         setSearchText(e.target.value.trim());
                                         setCurrent(1); // reset to first page
                                     }}
+                                    debounceMs={400}
                                 />
                             </Col>
                             <Col lg={{span: 7}} md={{span: 12}} span={24}>

@@ -21,7 +21,6 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
   const [searchText, setSearchText] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   // Roles query (normal useQuery, no debounce needed)
@@ -32,21 +31,13 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
     fetchPolicy: 'network-only'
   });
 
-  // ✅ Debounce search input (400ms)
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearch(searchText);
-    }, 400);
-    return () => clearTimeout(handler);
-  }, [searchText]);
-
-  // ✅ Fetch staff members when filters, pagination, or debouncedSearch changes
+  // ✅ Fetch staff members when filters, pagination, or searchText changes
   useEffect(() => {
     getStaffMembers({
       variables: {
         limit: pageSize,
         offset: (current - 1) * pageSize,
-        search: debouncedSearch || null,
+        search: searchText || null,
         status:
         selectedStatus === 'Active'
           ? 'verified'
@@ -61,7 +52,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
           : roles.find((r) => r.name === selectedRole)?.id || null
       }
     });
-  }, [pageSize, current, debouncedSearch, selectedStatus, selectedRole, getStaffMembers]);
+  }, [pageSize, current, searchText, selectedStatus, selectedRole, getStaffMembers]);
 
   const roles = rolesData?.getRoles?.roles?.filter((role) => role.name !== 'Customer') || [];
 
@@ -260,6 +251,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                     prefix={<img src="/assets/icons/search.png" width={14} alt="search icon" fetchPriority="high" />}
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
                     onChange={(e) => handleSearch(e.target.value.trim())}
+                    debounceMs={400}
                   />
                   <Dropdown menu={{ items: roleItems, onClick: handleCategoryClick }} trigger={['click']}>
                     <Button aria-labelledby="filter role" className="btncancel px-3 filter-bg fs-13 text-black">
