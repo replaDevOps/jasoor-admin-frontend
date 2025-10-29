@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { cities } from '../../../data'
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../../../graphql/mutation/login";
+import { UPDATE_USER } from "../../../graphql/mutation";
 import imageCompression from 'browser-image-compression';
 import { t } from 'i18next'
 
@@ -17,9 +18,10 @@ const AddUser = ({visible,onClose,edititem}) => {
     const [frontFileName, setFrontFileName] = useState("");
     const [backFileName, setBackFileName] = useState("");
     const [passportFileName, setPassportFileName] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
     const [documents, setDocuments] = useState([]);
-    const [createUser, { loading:userLoading, error }] = useMutation(CREATE_USER);
+    const [createUser, { loading:userLoading }] = useMutation(CREATE_USER);
+    const [updateUser, { loading: updating }] = useMutation(UPDATE_USER);
 
     useEffect(()=>{
         if(visible && edititem){
@@ -32,27 +34,33 @@ const AddUser = ({visible,onClose,edititem}) => {
                 phoneNo: edititem?.mobileno
             })
         }
-    },[visible,edititem])
+    },[visible,edititem,form])
 
     const onFinish = async () => {
         try {
             const formData = form.getFieldsValue(true);
-            const input = {
+            const basePayload = {
                 name: formData.fullName,
                 email: formData.email.toLowerCase(),
                 district: formData.district,
                 city: formData.city,
                 phone: formData.phoneNo,
-                password: formData.password,
+                password: formData.password && String(formData.password).trim().length > 0 ? formData.password : undefined,
                 documents: documents.length > 0 ? documents : undefined,
             };
-    
-            const { data } = await createUser({ variables: { input } });
-    
-            messageApi.success(t("Account created successfully!"));
-            // redirect or reset form
-            form.resetFields();
-        } catch (err) {
+
+            if (edititem) {
+                // Update existing user
+                const input = { id: edititem.key, ...basePayload };
+                await updateUser({ variables: { input } });
+                messageApi.success(t("Account updated successfully!"));
+            } else {
+                // Create new user
+                await createUser({ variables: { input: basePayload } });
+                messageApi.success(t("Account created successfully!"));
+                form.resetFields();
+            }
+        } catch {
             messageApi.error(t("Failed to create user. Please try again."));
         }finally {
             onClose();
@@ -71,7 +79,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                 });
             }
             const formData = new FormData();
-            formData.append('file', file);
+            formData.append('file', compressedFile);
         
             // Call your upload API
             const res = await fetch('https://verify.jusoor-sa.co/upload', {
@@ -174,7 +182,7 @@ const AddUser = ({visible,onClose,edititem}) => {
                     <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
                         {t("Cancel")}
                     </Button>
-                    <Button aria-labelledby='submit button' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
+                    <Button aria-labelledby='submit button' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()} loading={userLoading || updating}>
                         {edititem? t('Update'):t('Save')}
                     </Button>
                 </Flex>
@@ -366,17 +374,17 @@ const AddUser = ({visible,onClose,edititem}) => {
                                 type="password"
                                 name="password"
                                 size='large'
-                                required
-                                message={()=>{}}
-                                placeholder={t('Enter Password')}
-                                validator={({ getFieldValue }) => ({
+                                placeholder={t('Enter password')}
+                                required={!edititem}
+                                message={t('Please enter password')}
+                                validator={() => ({
                                     validator: (_, value) => {
+                                        // Optional in edit mode; only validate complexity when provided
+                                        if (!value) return Promise.resolve();
                                         const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
-                                        if (!reg.test(value)) {
-                                            return Promise.reject(new Error(t('Password should contain at least 8 characters, one uppercase letter, one number, one special character')));
-                                        } else {
-                                            return Promise.resolve();
-                                        }
+                                        return reg.test(value)
+                                            ? Promise.resolve()
+                                            : Promise.reject(new Error(t('Password should contain at least 8 characters, one uppercase letter, one number, one special character')));
                                     }
                                 })}
                             />
@@ -388,16 +396,17 @@ const AddUser = ({visible,onClose,edititem}) => {
                                 name="confirmationPassword"
                                 size='large'
                                 dependencies={['password']}
-                                required
-                                message={t('Please enter confirm password')}
-                                placeholder={t('Enter Confirm Password')}
+                                placeholder={t('Enter confirm password')}
+                                required={!edititem}
+                                message={t('Please confirm your password')}
                                 rules={[
                                     ({ getFieldValue }) => ({
                                         validator(_, value) {
-                                            if (!value || getFieldValue('password') === value) {
-                                                return Promise.resolve();
-                                            }
-                                            return Promise.reject(new Error(t('The password that you entered do not match!')));
+                                            // Optional in edit mode unless provided; if provided, must match
+                                            if (!value) return Promise.resolve();
+                                            return getFieldValue('password') === value
+                                                ? Promise.resolve()
+                                                : Promise.reject(new Error(t('The password that you entered do not match!')));
                                         },
                                     }),
                                 ]}
