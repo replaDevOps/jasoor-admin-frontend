@@ -8,6 +8,7 @@ import { CREATE_USER } from "../../../graphql/mutation/login";
 import { UPDATE_USER } from "../../../graphql/mutation";
 import imageCompression from 'browser-image-compression';
 import { t } from 'i18next'
+import { USERS } from '../../../graphql/query'
 
 const { Title } = Typography
 const AddUser = ({visible,onClose,edititem}) => {
@@ -21,7 +22,9 @@ const AddUser = ({visible,onClose,edititem}) => {
     const [, setLoading] = useState(false);
     const [documents, setDocuments] = useState([]);
     const [createUser, { loading:userLoading }] = useMutation(CREATE_USER);
-    const [updateUser, { loading: updating }] = useMutation(UPDATE_USER);
+    const [updateUser, { loading: updating }] = useMutation(UPDATE_USER, {
+        refetchQueries: [ { query: USERS } ]
+    });
 
     useEffect(()=>{
         if(visible && edititem){
