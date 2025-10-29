@@ -22,7 +22,7 @@ const BusinessListingTable = ({
     setSearch,
     setStatus
 }) => {
-    const { data, loading:isLoading, error } = useQuery(GET_CATEGORIES);
+    const { data } = useQuery(GET_CATEGORIES);
     const [form] = Form.useForm();
     const [selectedStatus, setSelectedStatus] = useState('Status');
     const [selectedCategory, setSelectedCategory] = useState('Category');
