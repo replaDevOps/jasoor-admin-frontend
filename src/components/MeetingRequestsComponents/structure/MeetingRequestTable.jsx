@@ -115,8 +115,15 @@ const MeetingRequestTable = () => {
   };
 
   const [updateMeeting, { loading: updating }] = useMutation(UPDATE_BUSINESS_MEETING, {
-    refetchQueries: [{ query: GETADMINPENDINGMEETINGS }],
-    awaitRefetchQueries: true,
+    refetchQueries: [{ 
+      query: GETADMINPENDINGMEETINGS,
+      variables: {
+        limit: pageSize,
+        offset: (current - 1) * pageSize,
+        search: searchValue,
+        status: computeStatusVar(),
+      },
+    }],
     onCompleted: () => messageApi.success("Status changed successfully!"),
     onError: (err) => messageApi.error(err.message || "Something went wrong!"),
   });
@@ -276,7 +283,7 @@ const MeetingRequestTable = () => {
           scroll={{ x: 3100 }}
           rowHoverable={false}
           pagination={false}
-          loading={loading || updating}
+          loading={loading}
         />
 
         <CustomPagination
@@ -315,6 +322,7 @@ const MeetingRequestTable = () => {
         onClose={() => setVisible(false)}
         meetingId={selectedMeetingId}
         updateMeeting={updateMeeting}
+        loading={updating}
       />
     </>
   );

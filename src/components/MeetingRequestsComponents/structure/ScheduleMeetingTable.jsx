@@ -227,8 +227,8 @@ const ScheduleMeetingTable = () => {
         sellerName: item.business?.seller?.name || '-',
         sellerEmail: item.business?.seller?.email || '-',
         sellerPhoneNumber: item.business?.seller?.phone || '-',
-        scheduleDateTime: item.requestedDate
-            ? new Date(item.requestedDate).toLocaleString()
+        scheduleDateTime: item.adminAvailabilityDate
+            ? new Date(item.adminAvailabilityDate).toLocaleString()
             : '-',
         businessPrice: item.business?.price
             ? item.business.price

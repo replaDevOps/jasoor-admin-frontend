@@ -3,7 +3,7 @@ import { MyDatepicker, MyInput } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
 
 const { Title, Text } = Typography
-const ScheduleMeeting = ({visible,onClose,meetingId, updateMeeting}) => {
+const ScheduleMeeting = ({visible,onClose,meetingId, updateMeeting, loading}) => {
     const [form] = Form.useForm();
     const handleSendInvitation = async () => {
         try {
@@ -22,11 +22,11 @@ const ScheduleMeeting = ({visible,onClose,meetingId, updateMeeting}) => {
                         id: meetingId,
                         status: "APPROVED",
                         meetingLink: link,
-                        requestedDate: scheduleDateTime
+                        adminAvailabilityDate: scheduleDateTime
                     }
                 }
             });
-
+            form.resetFields();
             onClose()
         } catch (err) {
             console.error(err);
@@ -47,7 +47,7 @@ const ScheduleMeeting = ({visible,onClose,meetingId, updateMeeting}) => {
                 <Button
                     className='btnsave border0 text-white brand-bg'
                     onClick={handleSendInvitation}
-                    // loading={loading}
+                    loading={loading}
                     aria-labelledby='Send Meeting Invitation'
                 >
                     Send Meeting Invitation
@@ -88,6 +88,7 @@ const ScheduleMeeting = ({visible,onClose,meetingId, updateMeeting}) => {
                             label='Meeting Time'
                             name='time'
                             className='w-100'
+                            disabledHours={() => [1,2,3,4,5,6,7,8]}
                         />
                     </Col>
                     <Col span={24}>

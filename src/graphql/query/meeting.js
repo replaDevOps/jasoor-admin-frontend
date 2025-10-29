@@ -64,6 +64,7 @@ query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType,$lim
           phone
         }
       }
+      adminAvailabilityDate
       requestedTo {
         id
         name
