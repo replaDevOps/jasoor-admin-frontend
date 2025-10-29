@@ -97,6 +97,8 @@ const BusinessListingTable = ({
                         <Text className='btnpill fs-12 inactive'>Inactive</Text>
                     ) : status === 'ACTIVE' ? (
                         <Text className='btnpill fs-12 success'>{t("Active")}</Text>
+                    ) : status === 'REJECT' ? (
+                        <Text className='btnpill fs-12 inactive'>{t("Rejected")}</Text>
                     ) : status === 'SOLD' ? (
                         <Text className='btnpill fs-12 sold-status'>Sold</Text>
                     ) : null

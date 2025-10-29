@@ -8,20 +8,37 @@ import { CommissionReceiptBuyer } from './CommissionReceiptBuyer';
 import { BusinessAmountReceiptBuyer } from './BusinessAmountReceiptBuyer';
 import { useTranslation } from 'react-i18next';
 
-const statusToStepIndex = {
-    COMMISSION_TRANSFER_FROM_BUYER_PENDING: 0, // Step 1: Commission Receipt
-    COMMISSION_VERIFIED: 0, // still step 1
-    DSA_FROM_SELLER_PENDING: 1, // Step 2: Digital Sale Agreement
-    DSA_FROM_BUYER_PENDING: 1, // Step 2: Digital Sale Agreement
-    BANK_DETAILS_FROM_SELLER_PENDING: 2, // Step 3: Bank Account Details
-    SELLER_PAYMENT_VERIFICATION_PENDING: 3, // Step 4: Pay Business Amount
-    PAYMENT_APPROVAL_FROM_SELLER_PENDING: 3, // Step 4: Pay Business Amount
-    DOCUMENT_PAYMENT_CONFIRMATION: 4, // Step 5: Document & Payment Confirmation
-    WAITING: 4, // Step 5
-    BUYERCOMPLETED: 5, // Step 6: Finalize Deal
-    SELLERCOMPLETED: 5, // Step 6
-    COMPLETED: 5, // Step 6
-    PENDING: 0, // default first step
+// Calculate current step based on boolean flags instead of status string
+const calculateCurrentStep = (details) => {
+    if (!details) return 0;
+    
+    // Step 5: Finalize Deal - Both buyer and seller completed
+    if (details.isBuyerCompleted && details.isSellerCompleted) {
+        return 4; // Index 4 = Step 5
+    }
+    
+    // Step 4: Document Confirmation - Payment verified by both seller and admin
+    if (details.isDocVedifiedSeller && details.isDocVedifiedAdmin) {
+        return 4; // Index 4 = Step 5 (moved to final)
+    }
+    
+    // Step 3: Pay Business Amount - Payment verified by both seller and admin
+    if (details.isPaymentVedifiedSeller && details.isPaymentVedifiedAdmin) {
+        return 3; // Index 3 = Step 4
+    }
+    
+    // Step 2: Digital Sale Agreement - Both DSA signed
+    if (details.isDsaSeller && details.isDsaBuyer) {
+        return 2; // Index 2 = Step 3
+    }
+    
+    // Step 1: Commission Receipt - Commission verified
+    if (details.isCommissionVerified) {
+        return 1; // Index 1 = Step 2
+    }
+    
+    // Default: Step 0 (Commission Receipt pending)
+    return 0;
 };
 
 const { Title, Text } = Typography;
@@ -29,7 +46,7 @@ const { Title, Text } = Typography;
 const SingleInprogressSteps = ({ details }) => {
     const {t}= useTranslation()
     const [form] = Form.useForm();
-    const initialStep = details?.status ? statusToStepIndex[details.status] || 0 : 0;
+    const initialStep = calculateCurrentStep(details);
     const [activeStep, setActiveStep] = useState(initialStep);
 
     const allSteps = [

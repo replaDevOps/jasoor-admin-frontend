@@ -94,6 +94,14 @@ query GetDeals($limit: Int, $offset: Int, $search: String, $status: String, $isC
         name
       }
     }
+    isBuyerCompleted
+    isCommissionUploaded
+    isCommissionVerified
+    isDocVedifiedBuyer
+    isDsaBuyer
+    isDsaSeller
+    isPaymentVedifiedSeller
+    isSellerCompleted
     buyer {
       name
     }

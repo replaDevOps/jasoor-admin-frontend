@@ -11,6 +11,48 @@ import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 
+// Helper function to determine status display based on boolean flags
+const getStatusFromBooleans = (deal) => {
+    // Check for cancellation first
+    if (deal.status === 'CANCEL') {
+        return { key: 'CANCEL', label: 'Canceled', className: 'dealcancelled' };
+    }
+    
+    // Step 5: Finalize Deal - Both buyer and seller completed
+    if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+        return { key: 'COMPLETED', label: 'Completed', className: 'success' };
+    }
+    
+    // Step 4: Document Confirmation - Waiting for admin/seller verification
+    if (deal.isPaymentVedifiedSeller) {
+        return { key: 'DOCUMENT_CONFIRMATION', label: 'Document Confirmation Pending', className: 'paymentapprovalpending' };
+    }
+    
+    // Step 3: Pay Business Amount - Waiting for payment verification
+    if (deal.isDsaSeller && deal.isDsaBuyer) {
+        return { key: 'PAYMENT_PENDING', label: 'Payment Confirmation Pending', className: 'paymentapprovalpending' };
+    }
+    
+    // Step 2: Digital Sale Agreement
+    if (deal.isCommissionVerified) {
+        if (!deal.isDsaSeller && !deal.isDsaBuyer) {
+            return { key: 'DSA_PENDING', label: 'DSA Pending', className: 'pending' };
+        } else if (!deal.isDsaSeller) {
+            return { key: 'DSA_SELLER_PENDING', label: 'DSA Seller Pending', className: 'sellerpendingstatus' };
+        } else if (!deal.isDsaBuyer) {
+            return { key: 'DSA_BUYER_PENDING', label: 'DSA Buyer Pending', className: 'paybusinessamount' };
+        }
+    }
+    
+    // Step 1: Commission Receipt
+    if (!deal.isCommissionVerified) {
+        return { key: 'COMMISSION_PENDING', label: 'Commission Pending', className: 'branded' };
+    }
+    
+    // Default fallback
+    return { key: 'PENDING', label: 'Pending', className: 'pending' };
+};
+
 const InprogressDealTable = () => {
 
     const { t, i18n } = useTranslation();
@@ -24,7 +66,6 @@ const InprogressDealTable = () => {
     const [getDeals, { data, loading }] = useLazyQuery(GETDEALS, {
         fetchPolicy: 'network-only'
     });
-    console.log("inprogressdealData",data)
 
     useEffect(() => {
         setSelectedStatus(t("Status"));
@@ -48,7 +89,7 @@ const InprogressDealTable = () => {
         buyerName: item?.buyer?.name || '-',
         sellerName: item?.business?.seller?.name || '-',
         finalizedOffer: item?.offer?.price ? `SAR ${item?.offer?.price?.toLocaleString()}` : '-',
-        status: item?.status || 0,
+        statusInfo: getStatusFromBooleans(item), // Use boolean-based status
         date:item?.createdAt ? new Date(item?.createdAt).toLocaleDateString() : '-',
     }));
 
@@ -88,48 +129,13 @@ const InprogressDealTable = () => {
         },
         {
             title: t('Status'),
-            dataIndex: 'status',
-            render: (status) => {
+            dataIndex: 'statusInfo',
+            render: (statusInfo) => {
                 return (
-                    status === 'COMMISSION_TRANSFER_FROM_BUYER_PENDING' ? (
-                        <Text className='btnpill fs-12 branded'>{t("Commission Pending")}</Text>
-                    ) : 
-                    status === 'COMMISSION_VERIFIED' ? (
-                        <Text className='btnpill fs-12 pending'>{t("DSA pending")}</Text>
-                    )
-                    :
-                    status === 'DSA_FROM_SELLER_PENDING' ? (
-                        <Text className='btnpill fs-12 sellerpendingstatus'>{t("DSA Seller Pending")}</Text>
-                    )
-                    :
-                    status === 'DSA_FROM_BUYER_PENDING' ? (
-                        <Text className='btnpill fs-12 paybusinessamount'>{t("DSA Buyer Pending")}</Text>
-                    )
-                    :
-                    status === 'BANK_DETAILS_FROM_SELLER_PENDING' ? (
-                        <Text className='btnpill fs-12 paymentapprovalpending'>{t("Buyer Bank Dtails Pending")}</Text>
-                    )
-                    :
-                    status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? (
-                        <Text className='btnpill fs-12 paymentapprovalpending'>{t("Payment Confirmation Pending")}</Text>
-                    )
-                    :
-                    status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? (
-                        <Text className='btnpill fs-12 paymentapprovalpending'>{t("Document Confirmation Pending")}</Text>
-                    )
-                    :
-                    status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? (
-                        <Text className='btnpill fs-12 paymentapprovalpending'>{t("Admin Verification Pending")}</Text>
-                    )
-                    :
-                    status === 'CANCEL' ? (
-                        <Text className='btnpill fs-12 dealcancelled'>{t("Canceled")}</Text>
-                    )
-                    :
-                    (
-                        <Text className='btnpill fs-12 commissiontransferbuyer'>{t("Finalize Deal")}</Text>
-                    )
-                )
+                    <Text className={`btnpill fs-12 ${statusInfo.className}`}>
+                        {t(statusInfo.label)}
+                    </Text>
+                );
             }
         },
         {

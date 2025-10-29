@@ -8,6 +8,41 @@ import { message } from "antd";
 import { useTranslation } from "react-i18next";
 import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
 
+// Helper function to get status display from boolean flags
+const getStatusDisplay = (deal) => {
+    if (!deal) return "Pending";
+    
+    if (deal.status === 'CANCEL') return 'Canceled';
+    
+    if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+        return 'Completed';
+    }
+    
+    if (deal.isPaymentVedifiedSeller) {
+        return 'Document Confirmation Pending';
+    }
+    
+    if (deal.isDsaSeller && deal.isDsaBuyer) {
+        return 'Payment Confirmation Pending';
+    }
+    
+    if (deal.isCommissionVerified) {
+        if (!deal.isDsaSeller && !deal.isDsaBuyer) {
+            return 'DSA Pending';
+        } else if (!deal.isDsaSeller) {
+            return 'DSA Seller Pending';
+        } else if (!deal.isDsaBuyer) {
+            return 'DSA Buyer Pending';
+        }
+    }
+    
+    if (!deal.isCommissionVerified) {
+        return 'Commission Pending';
+    }
+    
+    return 'Pending';
+};
+
 const { Title, Text } = Typography;
 const BusinessDealsDetails = ({ completedeal }) => {
   const { t } = useTranslation();
@@ -78,17 +113,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
     },
     {
       title: "Status",
-      desc:   details?.status === 'COMMISSION_TRANSFER_FROM_BUYER_PENDING' ? (
-        <Text>{t("Commission Pending")}</Text>) 
-        : details?.status === 'COMMISSION_VERIFIED' ? ( <Text>{t("DSA pending")}</Text>)
-        : details?.status === 'DSA_FROM_SELLER_PENDING' ? ( <Text>{t("DSA Seller Pending")}</Text>)
-        : details?.status === 'DSA_FROM_BUYER_PENDING' ? ( <Text>{t("DSA Buyer Pending")}</Text>)
-        : details?.status === 'BANK_DETAILS_FROM_SELLER_PENDING' ? ( <Text>{t("Buyer Bank Dtails Pending")}</Text>)
-        : details?.status === 'SELLER_PAYMENT_VERIFICATION_PENDING' ? ( <Text>{t("Payment Confirmation Pending")}</Text>)
-        : details?.status === 'PAYMENT_APPROVAL_FROM_SELLER_PENDING' ? ( <Text>{t("Document Confirmation Pending")}</Text>)
-        : details?.status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? ( <Text>{t("Admin Verification Pending")}</Text>)
-        : details?.status === 'CANCEL' ? ( <Text>{t("Canceled")}</Text>)
-        : ( <Text>{t("Finalize Deal")}</Text>)
+      desc: <Text>{t(getStatusDisplay(data?.getDeal))}</Text>
     },
   ];
   const handleMCancelDeal = async () => {
