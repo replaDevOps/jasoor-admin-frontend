@@ -10,34 +10,43 @@ query GetAdminMeetingCounts {
 }
 `
 const GETADMINPENDINGMEETINGS = gql`
-query GetAdminPendingMeetings($search: String, $status: MeetingFilterType, $limit: Int, $offset: Int) {
-  getAdminPendingMeetings(search: $search, status: $status, limit: $limit, offset: $offset) {
-    totalCount
-    items {
-      id
-      business {
-        businessTitle
-        price
-        seller {
+  query GetAdminPendingMeetings($search: String, $status: MeetingFilterType, $limit: Int, $offset: Int) {
+    getAdminPendingMeetings(search: $search, status: $status, limit: $limit, offset: $offset) {
+      totalCount
+      items {
+        id
+        business {
+          businessTitle
+          price
+          seller {
+            id
+            name
+            email
+            phone
+          }
+        }
+        requestedTo {
           name
           email
           phone
+          id
         }
+        requestedBy {
+          name
+          id
+        }
+        requestedDate
+        requestedEndDate
+        receiverAvailabilityDate
+        offer {
+          price
+        }
+        status
       }
-      requestedTo {
-        name
-        email
-        phone
-      }
-      requestedDate
-      offer {
-        price
-      }
-      status
     }
   }
-}
 `
+
 const GETADMINSCHEDULEMEETINGS = gql`
 query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType,$limit: Int, $offset: Int) {
   getAdminScheduledMeetings(search: $search, status: $status,limit: $limit, offset: $offset) {

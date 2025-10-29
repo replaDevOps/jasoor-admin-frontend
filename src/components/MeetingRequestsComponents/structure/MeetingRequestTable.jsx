@@ -20,6 +20,7 @@ import { UPDATE_BUSINESS_MEETING } from "../../../graphql/mutation";
 import { GETADMINPENDINGMEETINGS } from "../../../graphql/query/meeting";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { t } from "i18next";
+import dayjs from "dayjs";
 
 const { Text } = Typography;
 
@@ -27,6 +28,99 @@ const MeetingRequestTable = () => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedMeetingId, setSelectedMeetingId] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState("Status");
+  const [visible, setVisible] = useState(false);
+  const [deleteItem, setDeleteItem] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
+  const [current, setCurrent] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
+
+  const [fetchPendingMeetings, { data, loading }] = useLazyQuery(
+    GETADMINPENDINGMEETINGS,
+    { fetchPolicy: "network-only" }
+  );
+
+  const computeStatusVar = () => {
+    if (selectedStatus === "Pending") return "REQUESTED";
+    if (selectedStatus === "Cancel Meeting") return "REJECTED";
+    if (selectedStatus === "All" || selectedStatus === "Status") return null;
+    return null;
+  };
+
+  useEffect(() => {
+    fetchPendingMeetings({
+      variables: {
+        limit: pageSize,
+        offset: (current - 1) * pageSize,
+        search: searchValue,
+        status: computeStatusVar(),
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageSize, current, searchValue, selectedStatus]);
+
+  // 🧩 Mapping data for Ant Design Table
+  const mainmeetingreqData =
+    data?.getAdminPendingMeetings?.items?.map((item) => {
+      const isSeller = item.business?.seller?.id === item.requestedBy?.id;
+      const requestedDate = item.requestedDate ? dayjs(item.requestedDate) : null;
+      const requestedEndDate = item.requestedEndDate ? dayjs(item.requestedEndDate) : null;
+      const receiverAvailabilityDate = item.receiverAvailabilityDate
+        ? dayjs(item.receiverAvailabilityDate)
+        : null;
+      return {
+        key: item.id,
+        businessTitle: item.business?.businessTitle || "-",
+        buyerName: isSeller ? item?.requestedTo?.name || "-" : item?.requestedBy?.name || "-",
+        email: item.requestedTo?.email || "-",
+        phoneNumber: item.requestedTo?.phone || "-",
+        sellerName: item.business?.seller?.name || "-",
+        sellerEmail: item.business?.seller?.email || "-",
+        sellerPhoneNumber: item.business?.seller?.phone || "-",
+        buyerTime: !isSeller ? `${requestedDate?.format("DD MMM YYYY, hh:mm A")} - ${requestedEndDate?.format(
+          "hh:mm A"
+        )}` : requestedDate
+          ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
+          : "-",
+        sellerTime: isSeller ? `${requestedDate?.format("DD MMM YYYY, hh:mm A")} - ${requestedEndDate?.format(
+          "hh:mm A"
+        )}` : requestedDate
+          ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
+          : "-",
+        businessPrice: item.business?.price
+          ? `SAR ${item.business.price.toLocaleString()}`
+          : "-",
+        offerPrice: item.offer?.price
+          ? `SAR ${item.offer.price.toLocaleString()}`
+          : "-",
+        meetLink: item.meetingLink || "",
+        status: item.status || "-",
+      };
+    }) || [];
+
+  const total = data?.getAdminPendingMeetings?.totalCount || 0;
+
+  const handlePageChange = (page, size) => {
+    setCurrent(page);
+    setPageSize(size);
+  };
+
+  const handleStatusClick = ({ key }) => {
+    const selectedItem = meetingItems.find((item) => item.key === key);
+    if (selectedItem) setSelectedStatus(selectedItem.label);
+  };
+
+  const handleSearch = (value) => {
+    setSearchValue(value);
+  };
+
+  const [updateMeeting, { loading: updating }] = useMutation(UPDATE_BUSINESS_MEETING, {
+    refetchQueries: [{ query: GETADMINPENDINGMEETINGS }],
+    awaitRefetchQueries: true,
+    onCompleted: () => messageApi.success("Status changed successfully!"),
+    onError: (err) => messageApi.error(err.message || "Something went wrong!"),
+  });
+
   const meetingreqColumn = (setVisible, setDeleteItem) => [
     {
       title: t("Business Title"),
@@ -37,28 +131,32 @@ const MeetingRequestTable = () => {
       dataIndex: "buyerName",
     },
     {
-      title: t("Email"),
+      title: t("Buyer Email"),
       dataIndex: "email",
     },
     {
-      title: t("Phone Number"),
+      title: t("Buyer Phone"),
       dataIndex: "phoneNumber",
+    },
+    {
+      title: t("Preferred Date & Time (Buyer)"),
+      dataIndex: "buyerTime",
     },
     {
       title: t("Seller Name"),
       dataIndex: "sellerName",
     },
     {
-      title: t("Email"),
+      title: t("Seller Email"),
       dataIndex: "sellerEmail",
     },
     {
-      title: t("Phone Number"),
+      title: t("Seller Phone"),
       dataIndex: "sellerPhoneNumber",
     },
     {
-      title: t("Preferred Date & Time"),
-      dataIndex: "scheduleDateTime",
+      title: t("Preferred Date & Time (Seller)"),
+      dataIndex: "sellerTime",
     },
     {
       title: t("Business Price"),
@@ -85,7 +183,7 @@ const MeetingRequestTable = () => {
       fixed: "right",
       width: 100,
       render: (_, row) => {
-        if (row.status !== "ACCEPTED") return null; // only show dropdown for REQUESTED
+        if (row.status !== "ACCEPTED") return null;
 
         return (
           <Dropdown
@@ -123,127 +221,27 @@ const MeetingRequestTable = () => {
             }}
             trigger={["click"]}
           >
-            <Button
-              aria-labelledby="action button"
-              className="bg-transparent border0 p-0"
-            >
-              <img
-                src="/assets/icons/dots.png"
-                alt="dots icon"
-                width={16}
-                fetchPriority="high"
-              />
+            <Button className="bg-transparent border0 p-0">
+              <img src="/assets/icons/dots.png" alt="dots icon" width={16} />
             </Button>
           </Dropdown>
         );
       },
     },
   ];
-  const [selectedStatus, setSelectedStatus] = useState("Status");
-  const [visible, setVisible] = useState(false);
-  const [deleteItem, setDeleteItem] = useState(false);
-  const [pageSize, setPageSize] = useState(10);
-  const [current, setCurrent] = useState(1);
-  const [searchValue, setSearchValue] = useState("");
-    // Apollo lazy query for better control over pagination/search/status
-    const [fetchPendingMeetings, { data, loading }] = useLazyQuery(
-      GETADMINPENDINGMEETINGS,
-      { fetchPolicy: "network-only" }
-    );
-
-    // map UI-selected status to API variable for pending meetings
-    const computeStatusVar = () => {
-      if (selectedStatus === "Pending") return "REQUESTED";
-      if (selectedStatus === "Cancel Meeting") return "REJECTED";
-      if (selectedStatus === "All" || selectedStatus === "Status") return null;
-      return null;
-    };
-
-    useEffect(() => {
-      fetchPendingMeetings({
-        variables: {
-          limit: pageSize,
-          offset: (current - 1) * pageSize,
-          search: searchValue,
-          status: computeStatusVar(),
-        },
-      });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageSize, current, searchValue, selectedStatus]);
-  const mainmeetingreqData = (data?.getAdminPendingMeetings?.items || []).map(
-    (item) => ({
-      key: item.id,
-      businessTitle: item.business?.businessTitle || "-",
-      buyerName: item.requestedTo?.name || "-",
-      email: item.requestedTo?.email || "-",
-      phoneNumber: item.requestedTo?.phone || "-",
-      sellerName: item.business?.seller?.name || "-",
-      sellerEmail: item.business?.seller?.email || "-",
-      sellerPhoneNumber: item.business?.seller?.phone || "-",
-      scheduleDateTime: item.requestedDate
-        ? new Date(item.requestedDate).toLocaleString()
-        : "-",
-      businessPrice: item.business?.price
-        ? `SAR ${item.business.price.toLocaleString()}`
-        : "-",
-      offerPrice: item.offer?.price
-        ? `SAR ${item.offer.price.toLocaleString()}`
-        : "-",
-      meetLink: item.meetingLink || "",
-      status: item.status || "-",
-    })
-  );
-
-  const total = data?.getAdminPendingMeetings?.totalCount || 0;
-
-  const handlePageChange = (page, size) => {
-    setCurrent(page);
-    setPageSize(size);
-  };
-
-  const handleStatusClick = ({ key }) => {
-    const selectedItem = meetingItems.find((item) => item.key === key);
-    if (selectedItem) {
-      setSelectedStatus(selectedItem.label);
-    }
-  };
-
-  const handleSearch = (value) => {
-    setSearchValue(value);
-  };
-  const [updateMeeting, { loading: updating }] = useMutation(
-    UPDATE_BUSINESS_MEETING,
-    {
-      refetchQueries: [{ query: GETADMINPENDINGMEETINGS }],
-      awaitRefetchQueries: true,
-      onCompleted: () => {
-        messageApi.success("Stats changed successfully!");
-      },
-      onError: (err) => {
-        messageApi.error(err.message || "Something went wrong!");
-      },
-    }
-  );
 
   return (
     <>
       {contextHolder}
       <Flex vertical gap={20}>
         <Form form={form} layout="vertical">
-          <Row gutter={[16, 16]} align={"middle"} justify={"space-between"}>
+          <Row gutter={[16, 16]} align="middle" justify="space-between">
             <Col lg={24} md={24} sm={24} xs={24}>
               <Flex gap={5} wrap>
                 <SearchInput
                   name="name"
                   placeholder={t("Search")}
-                  prefix={
-                    <img
-                      src="/assets/icons/search.png"
-                      width={14}
-                      alt="search icon"
-                      fetchPriority="high"
-                    />
-                  }
+                  prefix={<img src="/assets/icons/search.png" width={14} alt="search" />}
                   className="border-light-gray pad-x ps-0 radius-8 fs-13"
                   onChange={(e) => handleSearch(e.target.value)}
                 />
@@ -251,16 +249,13 @@ const MeetingRequestTable = () => {
                   menu={{
                     items: meetingItems.map((item) => ({
                       ...item,
-                      label: t(item.label), 
+                      label: t(item.label),
                     })),
                     onClick: handleStatusClick,
                   }}
                   trigger={["click"]}
                 >
-                  <Button
-                    aria-labelledby="filter status"
-                    className="btncancel px-3 filter-bg fs-13 text-black"
-                  >
+                  <Button className="btncancel px-3 filter-bg fs-13 text-black">
                     <Flex justify="space-between" align="center" gap={30}>
                       {t(selectedStatus)}
                       <DownOutlined />
@@ -271,17 +266,19 @@ const MeetingRequestTable = () => {
             </Col>
           </Row>
         </Form>
+
         <Table
           size="large"
           columns={meetingreqColumn(setVisible, setDeleteItem)}
-          dataSource={mainmeetingreqData} 
+          dataSource={mainmeetingreqData}
           className="pagination table-cs table"
           showSorterTooltip={false}
-          scroll={{ x: 2300 }}
+          scroll={{ x: 3100 }}
           rowHoverable={false}
-            pagination={false}
+          pagination={false}
           loading={loading || updating}
         />
+
         <CustomPagination
           total={total}
           current={current}
@@ -289,6 +286,7 @@ const MeetingRequestTable = () => {
           onPageChange={handlePageChange}
         />
       </Flex>
+
       <DeleteModal
         visible={deleteItem}
         onClose={() => setDeleteItem(false)}
@@ -305,16 +303,17 @@ const MeetingRequestTable = () => {
                 },
               },
             });
-            setDeleteItem(false); // close modal after success
+            setDeleteItem(false);
           } catch (err) {
             console.error(err);
           }
         }}
       />
+
       <ScheduleMeeting
         visible={visible}
         onClose={() => setVisible(false)}
-        meetingId={selectedMeetingId} // store this in state when clicking "Schedule Meeting"
+        meetingId={selectedMeetingId}
         updateMeeting={updateMeeting}
       />
     </>
