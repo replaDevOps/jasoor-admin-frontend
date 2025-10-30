@@ -110,7 +110,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                     )}
                 </Col>
 
-                <Col span={24}>
+                {/* <Col span={24}>
                     <Flex>
                         <Button
                             type="primary"
@@ -122,7 +122,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                             {t("Mark as Verified")}
                         </Button>
                     </Flex>
-                </Col>
+                </Col> */}
             </Row>
         </>
     )

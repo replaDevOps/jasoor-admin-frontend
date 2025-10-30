@@ -13,9 +13,13 @@ const getStatusDisplay = (deal) => {
     if (!deal) return "Pending";
     
     if (deal.status === 'CANCEL') return 'Canceled';
-    
-    if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+
+    if (deal.isBuyerCompleted && deal.isSellerCompleted && deal.status === 'COMPLETED') {
         return 'Completed';
+    }
+
+    if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+        return 'Jusoor Verification Pending';
     }
     
     if (deal.isPaymentVedifiedSeller) {
@@ -113,7 +117,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
     },
     {
       title: "Status",
-      desc: <Text>{t(getStatusDisplay(data?.getDeal))}</Text>
+      desc: t(getStatusDisplay(data?.getDeal)),
     },
   ];
   const handleMCancelDeal = async () => {
@@ -201,17 +205,23 @@ const BusinessDealsDetails = ({ completedeal }) => {
                   <Flex vertical gap={3}>
                     <Text className="text-gray fs-14">{t(list?.title)}</Text>
                     {list?.title === "Status" ? (
-                      list.desc === "In-progress" ? (
-                        <Text className="brand-bg text-white fs-12 sm-pill">
-                          {list?.desc}
-                        </Text>
-                      ) : (
-                        <Text className="bg-green text-white fs-12 sm-pill">
-                          {list?.desc}
-                        </Text>
-                      )
+                      (() => {
+                        const statusText = getStatusDisplay(data?.getDeal);
+                        const isCompleted = statusText === 'Completed';
+                        const isCanceled = statusText === 'Canceled';
+                        
+                        return (
+                          <Text className={`fs-12 sm-pill ${
+                            isCompleted ? 'success' : 
+                            isCanceled ? 'dealcancelled' : 
+                            'pending'
+                          }`}>
+                            {list?.desc}
+                          </Text>
+                        );
+                      })()
                     ) : (
-                      <Text className="fs-12 fw-500">{list?.desc}</Text>
+                      <Text className="fs-12 fw-500 ">{list?.desc}</Text>
                     )}
                   </Flex>
                 </Col>

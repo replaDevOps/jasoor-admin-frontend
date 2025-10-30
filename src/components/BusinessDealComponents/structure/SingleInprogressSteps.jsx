@@ -12,33 +12,56 @@ import { useTranslation } from 'react-i18next';
 const calculateCurrentStep = (details) => {
     if (!details) return 0;
     
-    // Step 5: Finalize Deal - Both buyer and seller completed
-    if (details.isBuyerCompleted && details.isSellerCompleted) {
+    // Step 5: Finalize Deal - Both buyer and seller completed (or buyer completed waiting for seller)
+    if (details.isBuyerCompleted || (details.isSellerCompleted && details.isBuyerCompleted)) {
         return 4; // Index 4 = Step 5
     }
     
-    // Step 4: Document Confirmation - Payment verified by both seller and admin
-    if (details.isDocVedifiedSeller && details.isDocVedifiedAdmin) {
-        return 4; // Index 4 = Step 5 (moved to final)
-    }
-    
-    // Step 3: Pay Business Amount - Payment verified by both seller and admin
-    if (details.isPaymentVedifiedSeller && details.isPaymentVedifiedAdmin) {
+    // Step 4: Document Confirmation - Payment verified by seller
+    if (details.isPaymentVedifiedSeller) {
         return 3; // Index 3 = Step 4
     }
     
-    // Step 2: Digital Sale Agreement - Both DSA signed
+    // Step 3: Pay Business Amount - Both DSA signed
     if (details.isDsaSeller && details.isDsaBuyer) {
         return 2; // Index 2 = Step 3
     }
     
-    // Step 1: Commission Receipt - Commission verified
+    // Step 2: Digital Sale Agreement - Commission verified
     if (details.isCommissionVerified) {
         return 1; // Index 1 = Step 2
     }
     
-    // Default: Step 0 (Commission Receipt pending)
-    return 0;
+    // Step 1: Commission Receipt - Waiting for commission upload or verification
+    return 0; // Default: Step 0 (Commission Receipt)
+};
+
+// Check if a step should be enabled/unlocked based on boolean flags
+const isStepEnabled = (stepIndex, details) => {
+    if (!details) return stepIndex === 0; // Only first step enabled if no details
+    
+    // Check if deal is cancelled
+    if (details.status === 'CANCEL') return false;
+    
+    switch (stepIndex) {
+        case 0: // Commission Receipt - Always accessible
+            return true;
+            
+        case 1: // Digital Sale Agreement - Enabled after commission verified
+            return details.isCommissionVerified;
+            
+        case 2: // Pay Business Amount - Enabled after both DSAs signed
+            return details.isDsaSeller && details.isDsaBuyer;
+            
+        case 3: // Document Confirmation - Enabled after payment verified by seller
+            return details.isPaymentVedifiedSeller;
+            
+        case 4: // Finalize Deal - Enabled after seller verifies payment/documents
+            return details.isSellerCompleted && details.isBuyerCompleted;
+            
+        default:
+            return false;
+    }
 };
 
 const { Title, Text } = Typography;
@@ -54,7 +77,12 @@ const SingleInprogressSteps = ({ details }) => {
             key: '1',
             label: t('Commission Receipt'),
             content: <CommissionReceiptBuyer details={details} />,
-            status: details?.isCommissionVerified ? t('Verified') : t('Jusoor verification pending'),
+            enabled: isStepEnabled(0, details),
+            status: details?.isCommissionVerified 
+                ? t('Verified') 
+                : details?.isCommissionUploaded 
+                ? t('Commission Verification Pending')
+                : t('Commission Pending'),
             emptytitle: t('Commission Pending!'),
             emptydesc: t('Waiting for the buyer to pay the platform commission.'),
         },
@@ -62,13 +90,14 @@ const SingleInprogressSteps = ({ details }) => {
             key: '2',
             label: t('Digital Sale Agreement'),
             content: <DigitalSaleAgreement form={form} details={details} />,
-            status: !details?.isDsaSeller && details?.isDsaBuyer
-                ? t('Seller DSA Pending')
-                : details?.isDsaSeller && !details?.isDsaBuyer
-                ? t('Buyer DSA Pending')
-                : details?.isDsaSeller && details?.isDsaBuyer
+            enabled: isStepEnabled(1, details),
+            status: details?.isDsaSeller && details?.isDsaBuyer
                 ? t('Verified')
-                : t('DSA Pending'),
+                : !details?.isDsaSeller && !details?.isDsaBuyer
+                ? t('Seller & Buyer DSA Pending')
+                : !details?.isDsaSeller
+                ? t('Seller DSA Pending')
+                : t('Buyer DSA Pending'),
             emptytitle: t('DSA Pending!'),
             emptydesc: t('Waiting for the seller & buyer to sign the digital sale agreement.'),
         },
@@ -76,7 +105,10 @@ const SingleInprogressSteps = ({ details }) => {
             key: '3',
             label: t('Pay Business Amount'),
             content: <BusinessAmountReceiptBuyer details={details} />,
-            status: details?.isPaymentVedifiedSeller && details?.isPaymentVedifiedAdmin ? t('Verified') : details?.isPaymentVedifiedSeller ? t('Jusoor verification pending') : t('Seller verification Pending'),
+            enabled: isStepEnabled(2, details),
+            status: details?.isPaymentVedifiedSeller 
+                ? t('Verified') 
+                : t('Payment Verification Pending'),
             emptytitle: t('Business Amount Pending!'),
             emptydesc: t('Waiting for the buyer to pay the seller business amount.'),
         },
@@ -84,7 +116,12 @@ const SingleInprogressSteps = ({ details }) => {
             key: '4',
             label: t('Document Confirmation'),
             content: <DocumentPaymentConfirmation details={details} />,
-            status: details?.isDocVedifiedAdmin && details?.isDocVedifiedSeller ? t("Verified") : details?.isDocVedifiedSeller ? t('Jusoor verification pending'): t('Seller verification pending'),
+            enabled: isStepEnabled(3, details),
+            status: details?.isDocVedifiedBuyer
+                ? t("Verified") 
+                : details?.isPaymentVedifiedSeller
+                ? t('Document Verification Pending')
+                : t('Seller verification pending'),
             emptytitle: t('Payment Confirmation Pending!'),
             emptydesc: t('Waiting for the seller to transfer the document & approve the payment.'),
         },
@@ -92,9 +129,14 @@ const SingleInprogressSteps = ({ details }) => {
             key: '5',
             label: t('Finalize Deal'),
             content: <FinalDeal details={details} />,
-            status: details?.isDocVedifiedAdmin ? t("Verified") : t('Pending'),
+            enabled: isStepEnabled(4, details),
+            status: (details?.isBuyerCompleted && details?.isSellerCompleted && details?.status === 'COMPLETED')
+                ? t("Completed")
+                : details?.isBuyerCompleted && details?.isSellerCompleted
+                ? t('Waiting for Jusoor to complete the deal')
+                : t('Finalizing Deal'),
             emptytitle: t('Deal Pending!'),
-            emptydesc: 'Waiting for the buyer & seller to finalized the deal.',
+            emptydesc: t('Waiting for the buyer & seller to finalized the deal.'),
         },
     ];
     const [openPanels, setOpenPanels] = useState(
@@ -105,27 +147,27 @@ const SingleInprogressSteps = ({ details }) => {
         steps.map((item) => ({
             key: item.key,
             label: (
-                <Flex justify='space-between' align='center'>
-                    <span className='custom-step-title fw-600 fs-15'>{item.label}</span>
+                <Flex justify='space-between' align='center' style={!item.enabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}}>
+                    <span className={`custom-step-title fw-600 fs-15 ${!item.enabled ? 'disabled' : ''}`} style={!item.enabled ? { color: '#999' } : {}}>
+                        {item.label}
+                    </span>
                     <span className='collapse-indicator'>
                         {openPanels.includes(item.key) ? (
                             <Flex align='center' gap={5}>
-                                {(item.status.toLowerCase()?.startsWith('pending')) ? (
-                                    <Text className='pending fs-10 sm-pill fw-500 fit-content'>{(item?.status)}</Text>
-                                ) : (item.status.toLowerCase()?.includes('verification')) ? (
-                                    <Text className='branded fs-10 sm-pill fw-500 fit-content'>{item?.status}</Text>
-                                )                                
-                                : (
+                                {item.status.toLowerCase() === 'verified' || item.status.toLowerCase() === 'completed' ? (
                                     <Text className='success fs-10 sm-pill fw-500 fit-content'>{item?.status}</Text>
+                                ) : (
+                                    <Text className='pending fs-10 sm-pill fw-500 fit-content' style={!item.enabled ? { backgroundColor: '#e0e0e0', color: '#999' } : {}}>{item?.status}</Text>
                                 )}
-                                <UpOutlined />
+                                <UpOutlined style={!item.enabled ? { color: '#999' } : {}} />
                             </Flex>
                         ) : (
-                            <DownOutlined />
+                            <DownOutlined style={!item.enabled ? { color: '#999' } : {}} />
                         )}
                     </span>
                 </Flex>
             ),
+            disabled: !item.enabled, // Disable expansion for locked steps
             children: (
                 item?.content === null || item?.content === '' ? (
                     <>
@@ -156,10 +198,11 @@ const SingleInprogressSteps = ({ details }) => {
     const stepsProgress = allSteps.map((item, index) => ({
         key: item.label,
         title: (
-            <span className={`custom-step-title ${activeStep >= index ? 'completed' : ''}`}>
+            <span className={`custom-step-title ${activeStep >= index ? 'completed' : ''} ${!item.enabled ? 'disabled' : ''}`}>
                 {item.label}
             </span>
         ),
+        disabled: !item.enabled, // Disable clicking on locked steps
     }));
 
     return (
@@ -169,14 +212,27 @@ const SingleInprogressSteps = ({ details }) => {
                 current={activeStep}
                 items={stepsProgress}
                 responsive={true}
-                progressDot={(dot, { index }) => (
-                    <span className={`custom-dot ${activeStep > index ? 'completed' : ''} ${activeStep === index ? 'active' : ''}`}>
-                        {activeStep > index ? <CheckOutlined /> : dot}
-                    </span>
-                )}
+                progressDot={(dot, { index }) => {
+                    const isDisabled = !allSteps[index]?.enabled;
+                    return (
+                        <span 
+                            className={`custom-dot ${activeStep > index ? 'completed' : ''} ${activeStep === index ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`}
+                            style={isDisabled ? { 
+                                opacity: 0.4, 
+                                filter: 'grayscale(100%)',
+                                color: '#999'
+                            } : {}}
+                        >
+                            {activeStep > index ? <CheckOutlined /> : dot}
+                        </span>
+                    );
+                }}
                 onChange={(current) => {
-                    setActiveStep(current);
-                    setOpenPanels([allSteps[current].key]);
+                    // Only allow navigation to enabled steps
+                    if (allSteps[current]?.enabled) {
+                        setActiveStep(current);
+                        setOpenPanels([allSteps[current].key]);
+                    }
                 }}
             />
             <Form form={form} layout='vertical'>
@@ -194,11 +250,17 @@ const SingleInprogressSteps = ({ details }) => {
 
     // Modified to accept specific step list
     function handleCollapseChange(keys, stepsList) {
-        setOpenPanels(keys);
-        if (keys.length > 0) {
-            const lastKey = keys[keys.length - 1];
+        // Filter out disabled steps from the keys
+        const enabledKeys = keys.filter(key => {
+            const step = stepsList.find(s => s.key === key);
+            return step?.enabled;
+        });
+        
+        setOpenPanels(enabledKeys);
+        if (enabledKeys.length > 0) {
+            const lastKey = enabledKeys[enabledKeys.length - 1];
             const stepIndex = stepsList.findIndex(step => step.key === lastKey);
-            if (stepIndex !== -1) {
+            if (stepIndex !== -1 && stepsList[stepIndex]?.enabled) {
                 setActiveStep(stepIndex);
             }
         }

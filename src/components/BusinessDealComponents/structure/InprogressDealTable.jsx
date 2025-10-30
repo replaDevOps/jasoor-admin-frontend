@@ -18,38 +18,42 @@ const getStatusFromBooleans = (deal) => {
         return { key: 'CANCEL', label: 'Canceled', className: 'dealcancelled' };
     }
     
-    // Step 5: Finalize Deal - Both buyer and seller completed
-    if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+    // Step 5: Finalize Deal - Both buyer and seller completed (GREEN)
+    if (deal.isBuyerCompleted && deal.isSellerCompleted && deal.status === 'COMPLETED') {
         return { key: 'COMPLETED', label: 'Completed', className: 'success' };
     }
+
+    if (deal.isBuyerCompleted && deal.isSellerCompleted ) {
+        return { key: 'JUSOOR_VERIFICATION_PENDING', label: 'Jusoor Verification Pending', className: 'pending' };
+    }
     
-    // Step 4: Document Confirmation - Waiting for admin/seller verification
+    // Step 4: Document Confirmation - Waiting for admin/seller verification (YELLOW - PENDING)
     if (deal.isPaymentVedifiedSeller) {
-        return { key: 'DOCUMENT_CONFIRMATION', label: 'Document Confirmation Pending', className: 'paymentapprovalpending' };
+        return { key: 'DOCUMENT_CONFIRMATION', label: 'Document Confirmation Pending', className: 'pending' };
     }
     
-    // Step 3: Pay Business Amount - Waiting for payment verification
+    // Step 3: Pay Business Amount - Waiting for payment verification (YELLOW - PENDING)
     if (deal.isDsaSeller && deal.isDsaBuyer) {
-        return { key: 'PAYMENT_PENDING', label: 'Payment Confirmation Pending', className: 'paymentapprovalpending' };
+        return { key: 'PAYMENT_PENDING', label: 'Payment Confirmation Pending', className: 'pending' };
     }
     
-    // Step 2: Digital Sale Agreement
+    // Step 2: Digital Sale Agreement (YELLOW - PENDING)
     if (deal.isCommissionVerified) {
         if (!deal.isDsaSeller && !deal.isDsaBuyer) {
             return { key: 'DSA_PENDING', label: 'DSA Pending', className: 'pending' };
         } else if (!deal.isDsaSeller) {
-            return { key: 'DSA_SELLER_PENDING', label: 'DSA Seller Pending', className: 'sellerpendingstatus' };
+            return { key: 'DSA_SELLER_PENDING', label: 'DSA Seller Pending', className: 'pending' };
         } else if (!deal.isDsaBuyer) {
-            return { key: 'DSA_BUYER_PENDING', label: 'DSA Buyer Pending', className: 'paybusinessamount' };
+            return { key: 'DSA_BUYER_PENDING', label: 'DSA Buyer Pending', className: 'pending' };
         }
     }
     
-    // Step 1: Commission Receipt
+    // Step 1: Commission Receipt (YELLOW - PENDING)
     if (!deal.isCommissionVerified) {
-        return { key: 'COMMISSION_PENDING', label: 'Commission Pending', className: 'branded' };
+        return { key: 'COMMISSION_PENDING', label: 'Commission Pending', className: 'pending' };
     }
     
-    // Default fallback
+    // Default fallback (YELLOW - PENDING)
     return { key: 'PENDING', label: 'Pending', className: 'pending' };
 };
 
