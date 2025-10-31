@@ -47,9 +47,11 @@ const getStatusFromBooleans = (deal) => {
             return { key: 'DSA_BUYER_PENDING', label: 'DSA Buyer Pending', className: 'pending' };
         }
     }
-    
+    if(!deal?.isCommissionVerified && deal?.isCommissionUploaded ){
+        return{ key: 'COMMISSION_VERIFICATION_PENDING', label: 'Commission Verification Pending', className: 'pending' };
+    }
     // Step 1: Commission Receipt (YELLOW - PENDING)
-    if (!deal.isCommissionVerified) {
+    if (deal.isCommissionUploaded) {
         return { key: 'COMMISSION_PENDING', label: 'Commission Pending', className: 'pending' };
     }
     

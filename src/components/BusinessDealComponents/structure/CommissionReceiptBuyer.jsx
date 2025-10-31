@@ -79,7 +79,7 @@ const CommissionReceiptBuyer = ({ details }) => {
                             jasoorDoc && (
                                 renderUploadedDoc({
                                     fileName: jasoorDoc?.title,
-                                    fileSize: "5.3 MB",
+                                    // fileSize: "5.3 MB",
                                     filePath: jasoorDoc?.filePath,
                                 })
                             )

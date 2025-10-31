@@ -40,7 +40,11 @@ const getStatusDisplay = (deal) => {
         }
     }
     
-    if (!deal.isCommissionVerified) {
+    if(!deal?.isCommissionVerified && deal?.isCommissionUploaded ){
+        return'Commission Verification Pending';
+    }
+    // Step 1: Commission Receipt (YELLOW - PENDING)
+    if (deal.isCommissionUploaded) {
         return 'Commission Pending';
     }
     
@@ -75,6 +79,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
         busines: data.getDeal.business || "-",
         banks: data.getDeal.buyer?.banks || "-",
         isCommissionVerified: data.getDeal.isCommissionVerified,
+        isCommissionUploaded: data.getDeal.isCommissionUploaded,
         isDocVedifiedSeller: data.getDeal.isDocVedifiedSeller,
         isDocVedifiedAdmin: data.getDeal.isDocVedifiedAdmin,
         isPaymentVedifiedSeller: data.getDeal.isPaymentVedifiedSeller,

@@ -104,7 +104,7 @@ const BusinessAmountReceiptBuyer = ({details}) => {
                         sellerReceipt && (
                         renderUploadedDoc({
                             fileName: sellerReceipt?.title,
-                            fileSize: "5.3 MB",
+                            // fileSize: "5.3 MB",
                             filePath: sellerReceipt?.filePath,
                         })
                     )}

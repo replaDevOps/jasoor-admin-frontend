@@ -173,6 +173,7 @@ query GetDeal($getDealId: ID!) {
     isDocVedifiedBuyer
     isSellerCompleted
     isBuyerCompleted
+    isCommissionUploaded
     createdAt
     ndaPdfPath
     business {
