@@ -33,6 +33,8 @@ const GETADMINPENDINGMEETINGS = gql`
         }
         requestedBy {
           name
+          email
+          phone
           id
         }
         requestedDate
@@ -57,7 +59,6 @@ query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType,$lim
       business {
         businessTitle
         price
-        
         seller {
           name
           email
@@ -70,6 +71,12 @@ query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType,$lim
         name
         email
         phone
+      }
+      requestedBy {
+        name
+        email
+        phone
+        id
       }
       requestedDate
       offer {

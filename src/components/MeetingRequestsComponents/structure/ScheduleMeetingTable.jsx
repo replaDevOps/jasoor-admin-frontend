@@ -214,16 +214,19 @@ const ScheduleMeetingTable = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageSize, current, searchValue, selectedStatus]);
-  const schedulemeetingData = (data?.getAdminScheduledMeetings?.items || []).map((item) => ({
+  const schedulemeetingData = (data?.getAdminScheduledMeetings?.items || []).map((item) => {
+    const isSeller = item.business?.seller?.id === item.requestedBy?.id;
+
+    return {  
         key: item.id,
         offerId:item?.offer?.id,
         offerPrice: item?.offer?.price,
-        buyerName: item.requestedTo?.name,
+        buyerName: isSeller ? item?.requestedTo?.name || "-" : item?.requestedBy?.name || "-",
         offerCommission: item?.offer?.commission,
         status:item?.status,
         businessTitle: item.business?.businessTitle || '-',
-        email: item.requestedTo?.email || '-',
-        phoneNumber: item.requestedTo?.phone || '-',
+        email: isSeller ? item?.requestedTo?.email : item?.requestedBy?.email || '-',
+        phoneNumber: isSeller ? item?.requestedTo?.phone : item?.requestedBy?.phone || '-',
         sellerName: item.business?.seller?.name || '-',
         sellerEmail: item.business?.seller?.email || '-',
         sellerPhoneNumber: item.business?.seller?.phone || '-',
@@ -234,7 +237,7 @@ const ScheduleMeetingTable = () => {
             ? item.business.price
             : '-',
         meetLink: item.meetingLink || '',
-    }));
+    }});
 
   const total = data?.getAdminScheduledMeetings?.totalCount || 0;
 

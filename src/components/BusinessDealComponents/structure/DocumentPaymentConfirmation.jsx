@@ -1,9 +1,5 @@
-import React, { useEffect } from 'react'
-import { Button, Card, Col, Flex, Image, Row, Typography, message,Spin  } from 'antd'
-import { CheckCircleOutlined } from '@ant-design/icons'
-import { UPDATE_DEAL} from '../../../graphql/mutation/mutations';
-import { useMutation } from '@apollo/client';
-import { GETDEAL } from '../../../graphql/query';
+import { Card, Col, Flex, Image, Row, Typography } from 'antd'
+import { CheckCircleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
