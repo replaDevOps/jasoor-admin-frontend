@@ -29,21 +29,26 @@ const ME = gql`
 }
 `
 const USERS = gql`
-query GetUsers($limit: Int, $offset: Int, $filter: UserFilterInput) {
-  getUsers(limit: $limit, offset: $offset, filter: $filter) {
-    totalCount
-    users {
-      id
-      name
-      email
-      phone
-      district
-      city
-      status
-      type
+  query GetUsers($limit: Int, $offset: Int, $filter: UserFilterInput) {
+    getUsers(limit: $limit, offset: $offset, filter: $filter) {
+      totalCount
+      users {
+        id
+        name
+        email
+        phone
+        district
+        city
+        status
+        type
+        documents {
+          fileName
+          id
+          title
+        }
+      }
     }
   }
-}
 `
 const CUSTOMER = gql`
 query GetCustomers {

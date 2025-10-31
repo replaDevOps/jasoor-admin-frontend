@@ -5,7 +5,6 @@ import { t } from 'i18next'
 const { Title } = Typography
 const ViewIdentity = ({visible,onClose,viewstate}) => {
 
-
     return (
         <Modal
             title={null}
@@ -27,7 +26,6 @@ const ViewIdentity = ({visible,onClose,viewstate}) => {
                 </Flex> 
                 <Flex gap={10}>
                     {
-                        // if you want to show dynamic data then you can add (viewstate) state before map method
                         ['idcardback.png','idcardback.png']?.map((img,index)=>
                             <div className='viewimg'>
                                 <Image key={index} src={'/assets/images/'+img} alt='image' fetchPriority="high" width={100} height={80} className='object-cover' />
