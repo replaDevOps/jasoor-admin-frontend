@@ -243,6 +243,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
         mobileno: user.phone,
         type: user.type,
         status: user.status,
+        documents: user.documents
     })) || [];
 
     const total = data?.getUsers?.totalCount;

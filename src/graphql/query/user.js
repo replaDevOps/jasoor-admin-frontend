@@ -43,6 +43,7 @@ const USERS = gql`
         type
         documents {
           fileName
+          filePath
           id
           title
         }
