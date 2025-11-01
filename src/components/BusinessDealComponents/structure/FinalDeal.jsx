@@ -61,7 +61,7 @@ const FinalDeal = ({details}) => {
               <Flex vertical gap={10}>
               <Col span={24}>
               <Flex vertical gap={10}>
-                {details?.isSellerCompleted || details?.isBuyerCompleted ? (
+                {details?.isSellerCompleted && details?.isBuyerCompleted ? (
                   <>
                     <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
                       <CheckCircleOutlined className="fs-14" /> {t("Buyer marked the deal as Finalized")}
@@ -72,7 +72,7 @@ const FinalDeal = ({details}) => {
                   </>
                 ) : (
                   <>
-                    {details.isDocVedifiedBuyer && (
+                    {(details?.isBuyerCompleted && details?.isDocVedifiedBuyer) && (
                         <>
                       <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
                         <CheckCircleOutlined className="fs-14" /> {t("Buyer marked the deal as Finalized")}
@@ -82,17 +82,7 @@ const FinalDeal = ({details}) => {
                         </Flex>
                       </>
                     )}
-                    {details.isDocVedifiedSeller && (
-                        <>
-                      <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
-                        <CheckCircleOutlined className="fs-14" /> {t("Seller marked the deal as Finalized")}
-                      </Flex>
-                        <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
-                          <CheckCircleOutlined className="fs-14" /> {t("Waiting for buyer to mark the deal as Finalized")}
-                        </Flex>
-                      </>
-                    )}
-                    {!details.isDocVedifiedBuyer && !details.isDocVedifiedSeller && (
+                    {(!details?.isBuyerCompleted && !details?.isDocVedifiedBuyer) && (
                       <>
                         <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
                           <CheckCircleOutlined className="fs-14" /> {t("Waiting for buyer to mark the deal as Finalized")}

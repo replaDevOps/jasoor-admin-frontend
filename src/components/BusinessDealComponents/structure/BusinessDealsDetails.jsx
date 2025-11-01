@@ -18,11 +18,15 @@ const getStatusDisplay = (deal) => {
         return 'Completed';
     }
 
-    if (deal.isBuyerCompleted && deal.isSellerCompleted) {
-        return 'Jusoor Verification Pending';
+    if (deal.isBuyerCompleted && deal.isSellerCompleted ) {
+        return 'Awaiting Deal Closure';
     }
     
-    if (deal.isPaymentVedifiedSeller) {
+    if (deal.isBuyerCompleted && deal.isDocVedifiedBuyer) {
+        return 'Finalizing Deal';
+    }
+
+    if (!deal.isPaymentVedifiedSeller) {
         return 'Document Confirmation Pending';
     }
     
