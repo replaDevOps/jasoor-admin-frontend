@@ -56,7 +56,7 @@ const getStatusFromBooleans = (deal) => {
     }
     
     // Default fallback (YELLOW - PENDING)
-    return { key: 'PENDING', label: 'Pending', className: 'pending' };
+    return { key: 'PENDING', label: 'Commission Pending', className: 'pending' };
 };
 
 const InprogressDealTable = () => {

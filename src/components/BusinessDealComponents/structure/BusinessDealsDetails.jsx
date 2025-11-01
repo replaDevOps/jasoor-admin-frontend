@@ -48,7 +48,7 @@ const getStatusDisplay = (deal) => {
         return 'Commission Pending';
     }
     
-    return 'Pending';
+    return 'Commission Pending';
 };
 
 const { Title, Text } = Typography;
