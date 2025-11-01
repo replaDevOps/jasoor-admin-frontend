@@ -4,7 +4,6 @@ import { t } from 'i18next'
 
 const { Title } = Typography
 const ViewIdentity = ({visible,onClose,viewstate}) => {
-    console.log("viewstate",viewstate)
     return (
         <Modal
             title={null}
