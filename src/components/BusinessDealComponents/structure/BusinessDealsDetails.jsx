@@ -27,7 +27,7 @@ const getStatusDisplay = (deal) => {
     }
 
     if (deal.isDsaSeller && deal.isDsaBuyer) {
-        return 'Payment Confirmation Pending';
+        return 'Payment Verification Pending';
     }
     
     if (deal.isCommissionVerified) {

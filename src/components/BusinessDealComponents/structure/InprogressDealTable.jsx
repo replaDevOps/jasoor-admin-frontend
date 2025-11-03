@@ -34,7 +34,7 @@ const getStatusFromBooleans = (deal) => {
     
     // Step 3: Pay Business Amount - Waiting for payment verification (YELLOW - PENDING)
     if (deal.isDsaSeller && deal.isDsaBuyer) {
-        return { key: 'PAYMENT_PENDING', label: 'Payment Confirmation Pending', className: 'pending' };
+        return { key: 'PAYMENT_PENDING', label: 'Payment Verification Pending', className: 'pending' };
     }
     
     // Step 2: Digital Sale Agreement (YELLOW - PENDING)
