@@ -27,13 +27,16 @@ const getStatusFromBooleans = (deal) => {
         return { key: 'JUSOOR_VERIFICATION_PENDING', label: 'Jusoor Verification Pending', className: 'pending' };
     }
     
-    if (deal.isPaymentVedifiedSeller) {
+    if (deal.isBuyerCompleted && deal.isDocVedifiedBuyer) {
         return { key: 'DOCUMENT_CONFIRMATION', label: 'Finalizing Deal', className: 'pending' };
     }
 
+    if (!deal.isDocVedifiedSeller && deal.isPaymentVedifiedSeller) {
+        return { key: 'DOCUMENT_CONFIRMATION_PENDING', label: 'Document Confirmation Pending', className: 'pending' };
+    }
     
     // Step 3: Pay Business Amount - Waiting for payment verification (YELLOW - PENDING)
-    if (deal.isDsaSeller && deal.isDsaBuyer) {
+    if (deal.isDsaSeller && deal.isDsaBuyer && !deal.isPaymentVedifiedSeller) {
         return { key: 'PAYMENT_PENDING', label: 'Payment Verification Pending', className: 'pending' };
     }
     
