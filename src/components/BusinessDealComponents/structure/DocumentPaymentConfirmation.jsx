@@ -44,7 +44,7 @@ const DocumentPaymentConfirmation = ({details}) => {
                       />
                       <Flex vertical>
                         <Text className="fs-13 text-gray">{item?.title}</Text>
-                        <Text className="fs-13 text-gray">5.3 MB</Text>
+                        {/* <Text className="fs-13 text-gray">5.3 MB</Text> */}
                       </Flex>
                     </Flex>
                     <a href={item.filePath} target="_blank" rel="noopener noreferrer">

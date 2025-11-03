@@ -143,6 +143,8 @@ const BusinessDealsDetails = ({ completedeal }) => {
         </Flex>
     );
 }
+
+console.log("details", details);
   return (
     <>
     {contextHolder}
@@ -191,11 +193,11 @@ const BusinessDealsDetails = ({ completedeal }) => {
         <Button
           aria-labelledby="Cancel Deal"
           type="primary"
-          className={`btnsave border0 text-white ${(data?.getDeal?.business?.isSold || details?.status === 'CANCEL') ? '' : 'bg-red'}`}
-          disabled={data?.getDeal?.business?.isSold || details?.status === 'CANCEL'}
+          className={`btnsave border0 text-white ${(data?.getDeal?.busines?.isSold || details?.status === 'CANCEL') ? '' : 'bg-red'}`}
+          disabled={data?.getDeal?.busines?.isSold || details?.status === 'CANCEL'}
           onClick={handleMCancelDeal}
           loading={updating}
-          style={(data?.getDeal?.business?.isSold || details?.status === 'CANCEL') ? {
+          style={(data?.getDeal?.busines?.isSold || details?.status === 'CANCEL') ? {
             backgroundColor: '#d9d9d9',
             borderColor: '#d9d9d9',
             color: 'rgba(0, 0, 0, 0.25)',

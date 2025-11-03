@@ -143,6 +143,7 @@ const SingleInprogressSteps = ({ details }) => {
         details ? allSteps.slice(0, initialStep + 1).map(step => step.key) : ['1']
     );
 
+    console.log('allSteps', details);
     const getStepItems = (steps) =>
         steps.map((item) => ({
             key: item.key,

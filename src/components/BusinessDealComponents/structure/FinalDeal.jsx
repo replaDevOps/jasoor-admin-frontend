@@ -11,7 +11,6 @@ const FinalDeal = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [updateDeals, { loading, data, error }] = useMutation(UPDATE_DEAL, {
       refetchQueries: [ { query: GETDEAL, variables: { getDealId: details?.key } } ],
-      awaitRefetchQueries: true,
     });
     const [updateBusiness] = useMutation(UPDATE_BUSINESS);
 

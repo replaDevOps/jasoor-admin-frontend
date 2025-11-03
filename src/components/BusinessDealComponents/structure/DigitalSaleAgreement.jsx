@@ -11,8 +11,6 @@ import {
   Spin,
 } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
-import { UPDATE_DEAL } from "../../../graphql/mutation/mutations";
-import { useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
@@ -47,7 +45,7 @@ const DigitalSaleAgreement = ({ details }) => {
                   <Text className="fs-13 text-gray">
                     {t("Digital Sale Agreement.pdf")}
                   </Text>
-                  <Text className="fs-13 text-gray">{t("5.3 MB")}</Text>
+                  {/* <Text className="fs-13 text-gray">{t("5.3 MB")}</Text> */}
                 </Flex>
               </Flex>
               <a
