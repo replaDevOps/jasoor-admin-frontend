@@ -32,7 +32,7 @@ const getStatusFromBooleans = (deal) => {
     }
 
     if (!deal.isDocVedifiedSeller && deal.isPaymentVedifiedSeller) {
-        return { key: 'DOCUMENT_CONFIRMATION_PENDING', label: 'Document Confirmation Pending', className: 'pending' };
+        return { key: 'DOCUMENT_CONFIRMATION_PENDING', label: 'Document Verification Pending', className: 'pending' };
     }
     
     // Step 3: Pay Business Amount - Waiting for payment verification (YELLOW - PENDING)
