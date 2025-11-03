@@ -216,7 +216,7 @@ const ScheduleMeetingTable = () => {
   }, [pageSize, current, searchValue, selectedStatus]);
   const schedulemeetingData = (data?.getAdminScheduledMeetings?.items || []).map((item) => {
     const isSeller = item.business?.seller?.id === item.requestedBy?.id;
-
+    
     return {  
         key: item.id,
         offerId:item?.offer?.id,

@@ -60,6 +60,7 @@ query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType,$lim
         businessTitle
         price
         seller {
+          id
           name
           email
           phone
