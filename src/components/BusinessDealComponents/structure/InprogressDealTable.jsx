@@ -24,7 +24,7 @@ const getStatusFromBooleans = (deal) => {
     }
 
     if (deal.isBuyerCompleted && deal.isSellerCompleted ) {
-        return { key: 'JUSOOR_VERIFICATION_PENDING', label: 'Jusoor Verification Pending', className: 'pending' };
+        return { key: 'JUSOOR_VERIFICATION_PENDING', label: 'Awaiting Deal Closure', className: 'pending' };
     }
     
     if (deal.isBuyerCompleted && deal.isDocVedifiedBuyer) {
