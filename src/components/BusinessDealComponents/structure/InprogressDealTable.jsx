@@ -31,10 +31,6 @@ const getStatusFromBooleans = (deal) => {
         return { key: 'DOCUMENT_CONFIRMATION', label: 'Finalizing Deal', className: 'pending' };
     }
 
-    // Step 4: Document Confirmation - Waiting for admin/seller verification (YELLOW - PENDING)
-    if (deal.isDsaSeller && deal.isDsaBuyer && !deal.isPaymentVedifiedSeller) {
-        return { key: 'DOCUMENT_CONFIRMATION', label: 'Finalizing Deal', className: 'pending' };
-    }
     
     // Step 3: Pay Business Amount - Waiting for payment verification (YELLOW - PENDING)
     if (deal.isDsaSeller && deal.isDsaBuyer) {

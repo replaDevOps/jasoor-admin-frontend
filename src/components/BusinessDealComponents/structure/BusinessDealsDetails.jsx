@@ -26,10 +26,6 @@ const getStatusDisplay = (deal) => {
         return 'Finalizing Deal';
     }
 
-    if (!deal.isPaymentVedifiedSeller) {
-        return 'Document Confirmation Pending';
-    }
-    
     if (deal.isDsaSeller && deal.isDsaBuyer) {
         return 'Payment Confirmation Pending';
     }
