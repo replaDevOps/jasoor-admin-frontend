@@ -57,6 +57,7 @@ query GetAdminScheduledMeetings($search: String, $status: MeetingFilterType,$lim
       id
       meetingLink
       business {
+        id
         businessTitle
         price
         seller {

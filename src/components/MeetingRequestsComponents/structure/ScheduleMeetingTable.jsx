@@ -5,7 +5,7 @@ import { useState,useEffect } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { meetingItems } from '../../../shared';
 import { CustomPagination } from '../../Ui';
-import { UPDATE_BUSINESS_MEETING,UPDATE_OFFER } from '../../../graphql/mutation'
+import { UPDATE_BUSINESS_MEETING,UPDATE_OFFER,CREATE_OFFER } from '../../../graphql/mutation'
 import { GETADMINSCHEDULEMEETINGS } from '../../../graphql/query/meeting'
 import { useLazyQuery,useMutation } from '@apollo/client'
 import { t } from 'i18next';
@@ -53,6 +53,7 @@ const ScheduleMeetingTable = () => {
 
     const [updateMeeting,{ loading: updating }] = useMutation(UPDATE_BUSINESS_MEETING);
     const [updateOffer,{ loading: onUpdating }] = useMutation(UPDATE_OFFER);
+    const [createOffer] = useMutation(CREATE_OFFER);
   const schedulemeetingColumn = ( setVisible ) =>  [
         {
             title: t('Business Title'),
@@ -133,6 +134,7 @@ const ScheduleMeetingTable = () => {
                               price: row.offerPrice,
                               commission: row.offerCommission,
                               meetingId: row.key,
+                              businessId: row.businessId,
                             });
                           }}
                         >
@@ -202,7 +204,6 @@ const ScheduleMeetingTable = () => {
     if (selectedStatus === 'All' || selectedStatus === 'Status') return null;
     return null;
   };
-
   useEffect(() => {
     fetchScheduledMeetings({
       variables: {
@@ -221,6 +222,7 @@ const ScheduleMeetingTable = () => {
         key: item.id,
         offerId:item?.offer?.id,
         offerPrice: item?.offer?.price,
+        businessId: item?.business?.id,
         buyerName: isSeller ? item?.requestedTo?.name || "-" : item?.requestedBy?.name || "-",
         offerCommission: item?.offer?.commission,
         status:item?.status,
@@ -252,25 +254,48 @@ const ScheduleMeetingTable = () => {
       setSelectedStatus(selectedItem.label);
     }
   };
-
+  
   const handleSearch = (value) => {
     setSearchValue(value);
   };
+          console.log('Selected Offer:', selectedOffer);
 
     const handleDealSubmit = async () => {
         try {
           const values = await form.validateFields();
+          const offerPrice = parseFloat(values.offerPrice);
+          
+          console.log('Selected Offer:', selectedOffer);
     
-          // update offer price and status
-          await updateOffer({
-            variables: {
-              input: {
-                id: selectedOffer.id,
-                price: parseFloat(values.offerPrice),
-                status: 'ACCEPTED',
+          // Check if offer exists
+          if (selectedOffer.id) {
+            // Update existing offer
+            await updateOffer({
+              variables: {
+                input: {
+                  id: selectedOffer.id,
+                  price: offerPrice,
+                  status: 'ACCEPTED',
+                },
               },
-            },
-          });
+            });
+          } else {
+            // Create new offer if offerId doesn't exist (only businessId and price)
+            if (!selectedOffer.businessId) {
+              console.error('Business ID is missing!');
+              throw new Error('Business ID is required to create an offer');
+            }
+            
+            await createOffer({
+              variables: {
+                input: {
+                  businessId: selectedOffer.businessId,
+                  price: offerPrice,
+                  status: 'ACCEPTED',
+                },
+              },
+            });
+          }
     
           // update meeting status to HELD
           await updateMeeting({
@@ -356,22 +381,22 @@ const ScheduleMeetingTable = () => {
                         </Col>
                     </Row>
                 </Form>
-        <Table
-                    size='large'
-          columns={schedulemeetingColumn(setVisible)}
-                    dataSource={schedulemeetingData}
-                    className='pagination table-cs table'
-                    showSorterTooltip={false}
-                    scroll={{ x: 2300 }}
-                    rowHoverable={false}
-                    pagination={false}
-                    loading={loading || updating || onUpdating}
+                <Table
+                  size='large'
+                  columns={schedulemeetingColumn(setVisible)}
+                  dataSource={schedulemeetingData}
+                  className='pagination table-cs table'
+                  showSorterTooltip={false}
+                  scroll={{ x: 2300 }}
+                  rowHoverable={false}
+                  pagination={false}
+                  loading={loading || updating || onUpdating}
                 />
                 <CustomPagination 
-                    total={total}
-                    current={current}
-                    pageSize={pageSize}
-                    onPageChange={handlePageChange}
+                  total={total}
+                  current={current}
+                  pageSize={pageSize}
+                  onPageChange={handlePageChange}
                 />
             </Flex>
             <Modal
