@@ -44,7 +44,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  authLink.concat(httpLink) // make sure auth applies to http
+  authLink.concat(httpLink)
 );
 
 // Error Handling Link (Detect expired token)

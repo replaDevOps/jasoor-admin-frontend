@@ -1,4 +1,4 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Typography,Space,message,Spin} from 'antd';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Typography,message } from 'antd';
 import { NavLink } from "react-router-dom";
 import { useState, useEffect, useMemo } from 'react';
 import { CustomPagination, DeleteModal } from '../../Ui';
@@ -97,7 +97,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
             dataIndex: 'email',
         },
         {
-            title: t('District'),
+            title: t('Region'),
             dataIndex: 'district',
         },
         {
@@ -285,7 +285,6 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                     <Row gutter={[16, 16]}>
                             <Col span={24}>
                                 <Flex gap={5} wrap>
-
                                 <SearchInput
                                     name='name'
                                     placeholder={t('Search')}
