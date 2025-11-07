@@ -208,23 +208,22 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
         setPageSize(size);
     };
 
-    const handleStatusClick = ({ key }) => {
-        
+    const handleStatusClick = (key) => {
         const selectedItem = statusItems.find(item => String(item.id) === String(key));
         if (selectedItem) setSelectedStatus(selectedItem.name);
     };
 
-    const handleCategoryClick = ({ key }) => {
+    const handleCategoryClick = (key) => {
         const selectedItem = typeItems.find(item => String(item.id) === String(key));
         if (selectedItem) setSelectedCategory(selectedItem.name);
     };
 
-    const handleDistrictClick = ({ key }) => {
+    const handleDistrictClick = (key) => {
         const selectedItem = districtItems.find(item => String(item.id) === String(key));
         if (selectedItem) setSelectedDistrict(selectedItem.name);
     };
 
-    const handleCityClick = ({ key }) => {
+    const handleCityClick = (key) => {
         const selectedItem = districtItems.find(item => String(item.id) === String(key));
         if (selectedItem) setSelectedCity(selectedItem.name);
     };    
@@ -272,9 +271,9 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
     ];
 
     const statusItems = [
-        { id: '1', name: t('All') },
-        { id: '2', name: t('Active') },
-        { id: '3', name: t('Inactive') }
+        { id: '1', name: t('Active') },
+        { id: '2', name: t('Inactive') },
+        { id: '3', name: t('Pending') }
     ];
 
     return (
