@@ -36,14 +36,11 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
         if (selectedCategory === 'Old') createdType = 'old';
         if (selectedCategory === 'New') createdType = 'new';
 
-        let isActive = null;
-        if (selectedStatus === 'Active') isActive = true;
-        if (selectedStatus === 'Inactive') isActive = false;
 
         return {
             city: selectedCity || null,
             district: selectedDistrict || null,
-            isActive,
+            status: selectedStatus || null,
             name: searchText || null,
             createdType
         };
@@ -202,15 +199,9 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
         },
     ];
 
-    // ----------------- Handlers -----------------
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
-    };
-
-    const handleStatusClick = (key) => {
-        const selectedItem = statusItems.find(item => String(item.id) === String(key));
-        if (selectedItem) setSelectedStatus(selectedItem.name);
     };
 
     const handleCategoryClick = (key) => {
@@ -271,9 +262,9 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
     ];
 
     const statusItems = [
-        { id: '1', name: t('Active') },
-        { id: '2', name: t('Inactive') },
-        { id: '3', name: t('Pending') }
+        { id: 'verified', name: t('Active') },
+        { id: 'inactive', name: t('Inactive') },
+        { id: 'pending', name: t('Pending') }
     ];
 
     return (
@@ -319,7 +310,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                 <MySelect
                                     withoutForm
                                     options={statusItems}
-                                    onChange={handleStatusClick}
+                                    onChange={(e) => setSelectedStatus(e)}
                                     placeholder={t("Status")}
                                     allowClear
                                 />
