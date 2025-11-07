@@ -2,18 +2,18 @@ import { Button, Card, Col, Dropdown, Flex, Form, Row, Table ,Typography,message
 import { NavLink } from "react-router-dom";
 import { useState, useEffect, useMemo } from 'react';
 import { CustomPagination, DeleteModal } from '../../Ui';
-import { SearchInput } from '../../Forms';
+import { MySelect, SearchInput } from '../../Forms';
 import { ViewIdentity } from '../modals';
 import { UPDATE_USER, DELETE_USER } from '../../../graphql/mutation'
 import { USERS } from '../../../graphql/query/user';
 import { useLazyQuery,useMutation } from '@apollo/client'
-import { DownOutlined } from '@ant-design/icons';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 const UserManagementTable = ({setVisible,setEditItem}) => {
 
     const [form] = Form.useForm();
+    const { t } = useTranslation();
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
@@ -209,28 +209,29 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
     };
 
     const handleStatusClick = ({ key }) => {
-        const selectedItem = statusItems.find(item => String(item.key) === String(key));
-        if (selectedItem) setSelectedStatus(selectedItem.label);
+        
+        const selectedItem = statusItems.find(item => String(item.id) === String(key));
+        if (selectedItem) setSelectedStatus(selectedItem.name);
     };
 
     const handleCategoryClick = ({ key }) => {
-        const selectedItem = typeItems.find(item => String(item.key) === String(key));
-        if (selectedItem) setSelectedCategory(selectedItem.label);
+        const selectedItem = typeItems.find(item => String(item.id) === String(key));
+        if (selectedItem) setSelectedCategory(selectedItem.name);
     };
 
     const handleDistrictClick = ({ key }) => {
-        const selectedItem = districtItems.find(item => String(item.key) === String(key));
-        if (selectedItem) setSelectedDistrict(selectedItem.label);
+        const selectedItem = districtItems.find(item => String(item.id) === String(key));
+        if (selectedItem) setSelectedDistrict(selectedItem.name);
     };
 
     const handleCityClick = ({ key }) => {
-        const selectedItem = districtItems.find(item => String(item.key) === String(key));
-        if (selectedItem) setSelectedCity(selectedItem.label);
+        const selectedItem = districtItems.find(item => String(item.id) === String(key));
+        if (selectedItem) setSelectedCity(selectedItem.name);
     };    
 
     const handleSearch = (value) => {
         setSearchText(value);
-        setCurrent(1); // reset to first page when searching
+        setCurrent(1);
     };
 
     // ----------------- Data Mapping -----------------
@@ -249,31 +250,31 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
     const total = data?.getUsers?.totalCount;
 
     const districtItems = [
-        { key: '1', label: t('Makkah') },
-        { key: '2', label: t('Eastern') },
-        { key: '3', label: t('Al-Madinah') },
-        { key: '4', label: t('Asir') },
-        { key: '5', label: t('Tabuk') },
-        { key: '6', label: t('Najran') },
-        { key: '7', label: t('Al-Qassim') },
-        { key: '8', label: t('Hail') },
-        { key: '9', label: t('Al-Jouf') },
-        { key: '10', label: t('Al-Bahah') },
-        { key: '11', label: t('Riyadh') },
-        { key: '12', label: t('Northern Borders') },
-        { key: '13', label: t('Jazan') },
+        { id: '1', name: t('Makkah') },
+        { id: '2', name: t('Eastern') },
+        { id: '3', name: t('Al-Madinah') },
+        { id: '4', name: t('Asir') },
+        { id: '5', name: t('Tabuk') },
+        { id: '6', name: t('Najran') },
+        { id: '7', name: t('Al-Qassim') },
+        { id: '8', name: t('Hail') },
+        { id: '9', name: t('Al-Jouf') },
+        { id: '10', name: t('Al-Bahah') },
+        { id: '11', name: t('Riyadh') },
+        { id: '12', name: t('Northern Borders') },
+        { id: '13', name: t('Jazan') },
     ]
 
     const typeItems = [
-        { key: '1', label: t('All') },
-        { key: '2', label: t('New') },
-        { key: '3', label: t('Old') }
+        { id: '1', name: t('All') },
+        { id: '2', name: t('New') },
+        { id: '3', name: t('Old') }
     ];
 
     const statusItems = [
-        { key: '1', label: t('All') },
-        { key: '2', label: t('Active') },
-        { key: '3', label: t('Inactive') }
+        { id: '1', name: t('All') },
+        { id: '2', name: t('Active') },
+        { id: '3', name: t('Inactive') }
     ];
 
     return (
@@ -294,38 +295,35 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                     onChange={(e) => handleSearch(e.target.value.trim())}
                                     debounceMs={400}
                                 />
-                                    <Dropdown menu={{ items: districtItems, onClick: handleDistrictClick }}>
-                                        <Button aria-labelledby='filter district'  className="btncancel px-3 filter-bg fs-13 text-black">
-                                            <Flex justify="space-between" align="center" gap={30}>
-                                                {selectedDistrict || t("District")}
-                                                <DownOutlined />
-                                            </Flex>
-                                        </Button>
-                                    </Dropdown>
-                                    <Dropdown menu={{ items: districtItems, onClick: handleCityClick }}>
-                                        <Button aria-labelledby='filter city' className="btncancel px-3 filter-bg fs-13 text-black">
-                                            <Flex justify="space-between" align="center" gap={30}>
-                                                {selectedCity || t("City")}
-                                                <DownOutlined />
-                                            </Flex>
-                                        </Button>
-                                    </Dropdown>
-                                    <Dropdown menu={{ items: typeItems, onClick: handleCategoryClick }}>
-                                        <Button aria-labelledby='filter type' className="btncancel px-3 filter-bg fs-13 text-black">
-                                            <Flex justify="space-between" align="center" gap={30}>
-                                                {selectedCategory || t("Type")}
-                                                <DownOutlined />
-                                            </Flex>
-                                        </Button>
-                                    </Dropdown>
-                                    <Dropdown menu={{ items: statusItems, onClick: handleStatusClick }}>
-                                        <Button aria-labelledby='filter status' className="btncancel px-3 filter-bg fs-13 text-black">
-                                            <Flex justify="space-between" align="center" gap={30}>
-                                                {selectedStatus || t("Status")}
-                                                <DownOutlined />
-                                            </Flex>
-                                        </Button>
-                                    </Dropdown>
+                                <MySelect
+                                    withoutForm
+                                    options={districtItems}
+                                    onChange={handleDistrictClick}
+                                    placeholder={t("District")}
+                                    allowClear
+                                    style={{ minWidth: 150 }}
+                                />
+                                <MySelect
+                                    withoutForm
+                                    options={districtItems}
+                                    onChange={handleCityClick} 
+                                    placeholder={t("City")}
+                                    allowClear
+                                />
+                                <MySelect
+                                    withoutForm
+                                    options={typeItems}
+                                    onChange={handleCategoryClick}
+                                    placeholder={t("Type")}
+                                    allowClear
+                                />
+                                <MySelect
+                                    withoutForm
+                                    options={statusItems}
+                                    onChange={handleStatusClick}
+                                    placeholder={t("Status")}
+                                    allowClear
+                                />
                                 </Flex>
                             </Col>
                         </Row>
