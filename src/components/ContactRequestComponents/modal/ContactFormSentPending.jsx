@@ -8,13 +8,13 @@ import { message } from "antd";
 import { t } from 'i18next';
 
 const { Title } = Typography
-const ContactFormSentPending = ({visible,onClose,sendview,viewitem,refetchTable}) => {
+const ContactFormSentPending = ({visible,onClose,sendview,viewitem}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm()
-    const [updateContactUs, { loading: updating }] = useMutation(UPDATE_CONTACT_US, {
+    const [updateContactUs] = useMutation(UPDATE_CONTACT_US, {
+        refetchQueries: ['GetAllContactUs'],
         onCompleted: () => {
             messageApi.success(t('Response sent successfully!'));
-          if(refetchTable) refetchTable(); // call the function safely
             onClose();
         },
         onError: (err) => {

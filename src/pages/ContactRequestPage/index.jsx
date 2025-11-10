@@ -8,7 +8,6 @@ const ContactRequestPage = () => {
     const [ visible, setVisible ] = useState(false)
     const [ sendview, setSendView ] = useState(false)
     const [ viewitem, setViewItem ] = useState(null)
-    const [refetchTable, setRefetchTable] = useState(null);
 
     return (
         <>
@@ -17,8 +16,8 @@ const ContactRequestPage = () => {
                     <ModuleTopHeading level={4} name={t('Contact Requests')} />
                 </Col>
                 <Col span={24}>
-                    <ContactRequestTable {...{setVisible,setSendView,setViewItem}}
-                    setRefetch={setRefetchTable}  
+                    <ContactRequestTable 
+                        {...{setVisible,setSendView,setViewItem}}
                     />
                 </Col>
             </Row>
@@ -27,7 +26,6 @@ const ContactRequestPage = () => {
                 sendview={sendview}
                 viewitem={viewitem}
                 onClose={()=>{setVisible(false);setSendView(false);setViewItem(null)}}
-                refetch={refetchTable}
             />
 
         </>

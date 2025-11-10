@@ -32,17 +32,12 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
     });
 
     const filter = useMemo(() => {
-        let createdType = null;
-        if (selectedCategory === 'Old') createdType = 'old';
-        if (selectedCategory === 'New') createdType = 'new';
-
-
         return {
             city: selectedCity || null,
             district: selectedDistrict || null,
             status: selectedStatus || null,
             name: searchText || null,
-            createdType
+            createdType: selectedCategory || null
         };
     }, [selectedCity, selectedDistrict, selectedStatus, selectedCategory, searchText]);
 
@@ -204,11 +199,6 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
         setPageSize(size);
     };
 
-    const handleCategoryClick = (key) => {
-        const selectedItem = typeItems.find(item => String(item.id) === String(key));
-        if (selectedItem) setSelectedCategory(selectedItem.name);
-    };
-
     const handleDistrictClick = (key) => {
         const selectedItem = districtItems.find(item => String(item.id) === String(key));
         if (selectedItem) setSelectedDistrict(selectedItem.name);
@@ -256,9 +246,8 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
     ]
 
     const typeItems = [
-        { id: '1', name: t('All') },
-        { id: '2', name: t('New') },
-        { id: '3', name: t('Old') }
+        { id: 'new', name: t('New') },
+        { id: 'old', name: t('Old') }
     ];
 
     const statusItems = [
@@ -303,7 +292,7 @@ const UserManagementTable = ({setVisible,setEditItem}) => {
                                 <MySelect
                                     withoutForm
                                     options={typeItems}
-                                    onChange={handleCategoryClick}
+                                    onChange={(e) => setSelectedCategory(e)}
                                     placeholder={t("Type")}
                                     allowClear
                                 />

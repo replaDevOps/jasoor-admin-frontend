@@ -10,7 +10,7 @@ import { t } from 'i18next';
 
 const { Text } = Typography;
 
-const ContactRequestTable = ({ setVisible, setSendView, setViewItem, setRefetch }) => {
+const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
 
@@ -19,7 +19,7 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem, setRefetch 
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
 
-  const [fetchContacts, { data, loading, refetch }] = useLazyQuery(GET_ALL_CONTACT_US, {
+  const [fetchContacts, { data, loading }] = useLazyQuery(GET_ALL_CONTACT_US, {
     fetchPolicy: 'network-only',
   });
 
@@ -33,10 +33,6 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem, setRefetch 
       },
     });
   }, [pageSize, current, selectedStatus]); 
-
-  useEffect(() => {
-    if (setRefetch) setRefetch(refetch);
-  }, [refetch, setRefetch]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
