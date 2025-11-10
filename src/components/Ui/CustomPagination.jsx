@@ -6,7 +6,7 @@ const CustomPagination = ({
   pageSize,
   current,
   onPageChange,
-  pageSizeOptions = [10, 20, 30, 50], // includes 30 per your request
+  pageSizeOptions = [10, 20, 30, 50], 
 }) => {
   if (!total || total <= pageSize) return null;
 

@@ -10,7 +10,7 @@ import { t } from 'i18next';
 const { Title } = Typography
 const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
     const [selectedRole, setSelectedRole] = useState(null);
-    const { loading, data } = useQuery(GETROLES, {
+    const { data } = useQuery(GETROLES, {
         variables: {
             limit: null,
             offset: null,
@@ -18,7 +18,7 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
             isActive: true
         },
         fetchPolicy: "network-only",
-        skip: !visible // 👈 Skip until modal is visible
+        skip: !visible
     });
     const roles = data?.getRoles?.roles || [];
 
@@ -69,7 +69,7 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
               email: values.email,
               phone: values.phoneNo || null,
               password: values.password,
-              roleId: selectedRole // this will now be the role id
+              roleId: selectedRole 
             }
           }
         });

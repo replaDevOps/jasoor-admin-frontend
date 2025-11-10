@@ -185,14 +185,7 @@ const RolePermissionTable = () => {
     }
   };
 
-  let tableData = data?.getRoles?.roles || [];
-  if (selectedStatus === "Active") {
-    tableData = tableData.filter((role) => role.isActive);
-  } else if (selectedStatus === "Inactive") {
-    tableData = tableData.filter((role) => !role.isActive);
-  }
-
-  const total = tableData.length;
+  const total = data?.getRoles?.totalCount || 0;
 
   const handlePageChange = (page, size) => {
     setCurrent(page);
@@ -276,13 +269,9 @@ const RolePermissionTable = () => {
           <Table
             size="large"
             columns={rolepermissionColumn(setDeleteItem, navigate)}
-            dataSource={tableData.slice(
-              (current - 1) * pageSize,
-              current * pageSize
-            )}
+            dataSource={data?.getRoles?.roles || []}
             className="pagination table-cs table"
             showSorterTooltip={false}
-            scroll={{ x: 1000 }}
             rowHoverable={false}
             pagination={false}
             loading={{
