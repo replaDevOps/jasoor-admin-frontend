@@ -106,7 +106,7 @@ const AddRolePermission = () => {
         return options.every(opt => selectedPermissions[category]?.[opt]);
     };
 
-    const [updateRole,{ loading: updating }] = useMutation(UPDATE_ROLE, {
+    const [updateRole] = useMutation(UPDATE_ROLE, {
         refetchQueries: [ 'GetRoles' ],
         onCompleted: () => {
             messageApi.success(t("Stats changed successfully!"));

@@ -95,9 +95,9 @@ const ArticleCards = ({setDeleteItem}) => {
                                             <div>
                                                 <div className='w-100 card-img-2 mb-2 radius-12'>
                                                     {isArabic?
-                                                    <img src={art?.img} width={'100%'} height={'100%'} className='object-cover object-top radius-12' alt="image" fetchPriority="high"/>
+                                                    <img src={art?.image} width={'100%'} height={'100%'} className='object-cover object-top radius-12' alt="image" fetchPriority="high"/>
                                                     :
-                                                    <img src={art?.img} width={'100%'} height={'100%'} className='object-cover object-top radius-12' alt="image" fetchPriority="high"/>
+                                                    <img src={art?.image} width={'100%'} height={'100%'} className='object-cover object-top radius-12' alt="image" fetchPriority="high"/>
                                                 }
                                                 </div>
                                                 <Paragraph 
