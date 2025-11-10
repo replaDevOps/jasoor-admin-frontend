@@ -29,8 +29,7 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
     if (visible && (edititem || viewnotify)) {
       const source = edititem || viewnotify;
       const rawDate = source?.date;
-      const parsedDate = moment(rawDate, "DD-MM-YYYY hh:mm A", true);
-
+      const parsedDate = moment(rawDate);
       form.setFieldsValue({
         title: source?.title || "",
         group: source?.group?.toUpperCase() || "",
