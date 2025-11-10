@@ -1,7 +1,8 @@
-import {Suspense, useState, useEffect } from 'react'
+import {Suspense, useState, useEffect, useContext } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { SyncOutlined } from '@ant-design/icons'
 import { Image, Space } from 'antd'
+import { AuthContext } from '../context/AuthContext'
 
 import {Sidebar} from '../pages/Sidebar';
 import { ForgotPassword, LoginPage } from '../pages'
@@ -15,11 +16,16 @@ const Fallback = () => (
   </div>
 )
 
-const isLoggedIn = () => !!localStorage.getItem('accessToken')
-
 const ProtectedRoute = ({ children }) => {
   const location = useLocation()
-  if (!isLoggedIn()) {
+  const { isLoggedIn, isInitializing } = useContext(AuthContext)
+  
+  // Show loading state while initializing auth (token recovery in progress)
+  if (isInitializing) {
+    return <Fallback />
+  }
+  
+  if (!isLoggedIn) {
     return <Navigate to='/login' state={{ from: location }} replace />
   }
   return children
@@ -27,7 +33,7 @@ const ProtectedRoute = ({ children }) => {
 
 
 const RouteF = () => {
-  const [auth, setAuth] = useState(isLoggedIn())
+  const { isLoggedIn } = useContext(AuthContext)
   const [ws, setWs] = useState(null)
 
   // useEffect(() => {
@@ -78,7 +84,7 @@ const RouteF = () => {
         />
 
         {/* Fallback */}
-        <Route path='*' element={isLoggedIn() ? <Navigate to='/' replace /> : <Navigate to='/login' replace />} />
+        <Route path='*' element={isLoggedIn ? <Navigate to='/' replace /> : <Navigate to='/login' replace />} />
         </Routes>
     </Suspense>
 

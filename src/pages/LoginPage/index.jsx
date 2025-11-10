@@ -6,16 +6,18 @@ import { LOGIN } from "../../graphql/mutation/login";
 import {GET_SETTINGS} from '../../graphql/query';
 import { useNavigate } from "react-router-dom";
 import { MyInput } from "../../components";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { DownOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import { AuthContext } from "../../context/AuthContext";
 
 const { Title, Text, Paragraph } = Typography;
 const LoginPage = () => {
     const {t, i18n}= useTranslation()
     const navigate = useNavigate()
+    const { login } = useContext(AuthContext);
     const [messageApi, contextHolder] = message.useMessage();
-    const [loginUser, { loading, error }] = useMutation(LOGIN);
+    const [loginUser] = useMutation(LOGIN);
     const [form] = Form.useForm();
     const [selectedLang, setSelectedLang] = useState({
         key: "1",
@@ -48,12 +50,12 @@ const LoginPage = () => {
         try {
         const email = values.email.toLowerCase(); // convert to lowercase
         const password = values.password;
-          const { data,error } = await loginUser({ variables: { email, password } });
+          const { data } = await loginUser({ variables: { email, password } });
       
-          if (data?.login?.token) {
-            // store token/id
-            localStorage.setItem("accessToken", data.login.token);
-            localStorage.setItem("userId", data.login.user.id);   
+          if (data?.login?.token && data?.login?.refreshToken) {
+            // Use the new token management system
+            login(data.login.token, data.login.refreshToken, data.login.user);
+            
             const settingsResult = await getSeetings();
             const backendLang = settingsResult?.data?.getSetting?.language?.toLowerCase();
 
@@ -70,7 +72,6 @@ const LoginPage = () => {
 
             messageApi.success("Login successful!");
             navigate("/")
-            // compute destination safely (it could be a string or Location object)
           } else {
             messageApi.error("Login failed: Invalid credentials");
           }

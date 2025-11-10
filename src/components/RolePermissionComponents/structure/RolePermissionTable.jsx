@@ -1,4 +1,4 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Typography } from 'antd';
+import { Button, Card, Col, Dropdown, Flex, Form, message, Row, Table, Typography } from 'antd';
 import { SearchInput } from '../../Forms';
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from 'react';
@@ -12,6 +12,8 @@ import { t } from 'i18next';
 
 const { Text } = Typography
 const RolePermissionTable = () => {
+
+  const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState("Status");
   const navigate = useNavigate();
@@ -83,6 +85,7 @@ const RolePermissionTable = () => {
       fixed: "right",
       width: 100,
       render: (_, row) => {
+        console.log(row, "rolename");
         if (row.rolename === "Customer") return null;
         return (
           <Dropdown
@@ -93,7 +96,7 @@ const RolePermissionTable = () => {
                     <NavLink
                       onClick={(e) => {
                         e.preventDefault();
-                        navigate("/addrolepermission/" + row.key);
+                        navigate("/addrolepermission/" + row.id);
                       }}
                     >
                       {t("Edit")}
@@ -106,7 +109,7 @@ const RolePermissionTable = () => {
                     <NavLink
                       onClick={() => {
                         setDeleteItem(true);
-                        setRoleId(row.key);
+                        setRoleId(row.id);
                       }}
                     >
                       {t("Delete")}
@@ -122,7 +125,7 @@ const RolePermissionTable = () => {
                         await updateRole({
                           variables: {
                             input: {
-                              id: row.key,
+                              id: row.id,
                               isActive: !row.isActive,
                             },
                           },
@@ -227,6 +230,7 @@ const RolePermissionTable = () => {
 
   return (
     <>
+      {contextHolder}
       <Card className="radius-12 border-gray">
         <Flex vertical gap={20}>
           <Form form={form} layout="vertical">

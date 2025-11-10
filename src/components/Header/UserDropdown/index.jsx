@@ -1,52 +1,37 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import { Button, Card, Dropdown, Flex, Spin, Space, Typography,message, Avatar } from 'antd'
-import { useNavigate } from 'react-router-dom';
 import { useMutation,useQuery } from '@apollo/client';
 import { LOGOUT } from '../../../graphql/mutation/login';
 import {ME} from '../../../graphql/query'
-
+import { AuthContext } from '../../../context/AuthContext';
+import { getUserId } from '../../../shared/tokenManager';
 import { client } from '../../../config';
 import { t } from 'i18next';
 
 const UserDropdown = ()=> {
-  const userId = localStorage.getItem("userId"); 
+  const userId = getUserId(); 
+  const { logout: contextLogout } = useContext(AuthContext);
   const [messageApi, contextHolder] = message.useMessage();
-  const [user, setUser] = useState(null)
-  const navigate = useNavigate()
 
-  const { data, loading:isLoading, refetch } = useQuery(ME, {
+  const { data } = useQuery(ME, {
     variables: { getUserId:userId },
     skip: !userId,
     fetchPolicy: "network-only",
   });
   
-  const [logout, { loading }] = useMutation(LOGOUT, {
+  const [logoutMutation, { loading }] = useMutation(LOGOUT, {
     onCompleted: () => {
-      localStorage.removeItem("accessToken"); 
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("userId");
       client.resetStore(); 
-      window.location.reload();
+      contextLogout();
       },
-    onError: (err) => messageApi.error("Logout error:", err)
+    onError: (err) => {
+      // Even if server logout fails, clean up locally
+      console.error("Server logout error:", err);
+      messageApi.error("Logout error, but will clear local session");
+      contextLogout();
+    }
   });
   
-  const handleLogout = () => {
-    logout(); 
-  };
-
-  const items = [
-    {
-      key: 'setting',
-      label: <Text className='fw-500'>{'Settings'}</Text>,
-      onClick: () => navigate('/setting', { state: { user } }),
-    },
-    {
-      key: 'logout',
-      label: (<Text className='fw-500' >{'Logout'}</Text>),
-      onClick: handleLogout,
-    },
-  ];
 
   const dropdownContent = (
     <Card className='radius-12 shadow-c card-cs'>
@@ -63,7 +48,7 @@ const UserDropdown = ()=> {
         <Button className='btnsave w-100'
           type='primary' 
           loading={loading}
-          onClick={logout}
+          onClick={logoutMutation}
           aria-labelledby='logout'
           >
             {t("Logout")}
@@ -72,13 +57,6 @@ const UserDropdown = ()=> {
     </Card>
   );
 
-  if (isLoading || loading) {
-    return (
-        <Flex justify="center" align="center" className='h-200'>
-            <Spin size="large" />
-        </Flex>
-    );
-  }
   return (
     <>
     {contextHolder}
@@ -90,8 +68,8 @@ const UserDropdown = ()=> {
       >
         <Flex align='center' gap={5}>
           <Flex vertical gap={0} align='end'>
-            <Typography.Text strong className='fs-12'>{data?.getUser?.name.charAt(0).toUpperCase()+data?.getUser?.name.slice(1)}</Typography.Text>
-            <Typography.Text className='text-gray fs-12'>{data?.getUser?.role?.name}</Typography.Text>
+            <Typography.Text strong className='fs-12'>{data?.getUser?.name.charAt(0).toUpperCase()+data?.getUser?.name.slice(1) || "N/A"}</Typography.Text>
+            <Typography.Text className='text-gray fs-12'>{data?.getUser?.role?.name || "N/A"}</Typography.Text>
           </Flex>
           <Avatar size={40} className='fs-16 text-white fw-bold brand-bg textuppercase'>
             {data?.getUser?.name?.charAt(0).toUpperCase()}

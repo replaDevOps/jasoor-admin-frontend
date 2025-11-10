@@ -19,7 +19,7 @@ const AddRolePermission = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [selectedPermissions, setSelectedPermissions] = useState({});
     const { id } = useParams()
-    const { loading, error, data } = useQuery(GETROLE, { variables: { getRoleId: id },skip: !id, });
+    const { data } = useQuery(GETROLE, { variables: { getRoleId: id },skip: !id, });
     const detail = data?.getRole
     const [createRole] = useMutation(CREATE_ROLE);
     const backendToFrontendMap = {
@@ -129,7 +129,11 @@ const AddRolePermission = () => {
             ...buildPermissionsFromBackend(selectedPermissions)
         };
       if(id){
-        updateRole({ variables: { input } });
+        updateRole({ variables: { 
+          id: id,
+          ...input
+         } 
+        });
       }else{
         createRole({ variables: { input } });
         // redirect to /rolepermission

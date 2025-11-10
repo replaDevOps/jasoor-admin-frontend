@@ -1,4 +1,4 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography, message } from 'antd';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography } from 'antd';
 import { SearchInput } from '../../Forms';
 import { useState, useEffect } from 'react';
 import { DownOutlined } from '@ant-design/icons';
@@ -11,7 +11,6 @@ import { t } from 'i18next';
 const { Text } = Typography;
 
 const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
-  const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
 
   const [selectedStatus, setSelectedStatus] = useState('Status');
@@ -81,7 +80,6 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
 
   return (
     <>
-      {contextHolder}
       <Card className="radius-12 border-gray">
         <Flex vertical gap={20}>
           <Form form={form} layout="vertical">

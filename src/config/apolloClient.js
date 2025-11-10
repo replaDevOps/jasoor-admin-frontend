@@ -3,6 +3,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { getAccessToken } from "../shared/tokenManager";
 
 const API_URL = "https://verify.jusoor-sa.co/graphql";
 
@@ -14,11 +15,11 @@ const httpLink = createHttpLink({
 
 // Auth Link (Attaches token)
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("accessToken");
+  const token = getAccessToken();
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer${token}` : "",
+      authorization: token ? `Bearer ${token}` : "",
     },
   };
 });
@@ -28,8 +29,11 @@ const wsLink = new WebSocketLink({
   uri: "wss://verify.jusoor-sa.co/subscriptions",
   options: {
     reconnect: true,
-    connectionParams: {
-      authorization: `Bearer${localStorage.getItem("accessToken")}`,
+    connectionParams: () => {
+      const token = getAccessToken();
+      return {
+        authorization: token ? `Bearer ${token}` : "",
+      };
     },
   },
 });
@@ -48,18 +52,25 @@ const splitLink = split(
 );
 
 // Error Handling Link (Detect expired token)
-const errorLink = onError(({ graphQLErrors }) => {
+const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
       console.error("[GraphQL Error]:", err.message);
       if (
         err.message?.includes("Token is invalid or expired") ||
-        err.message?.includes("Invalid token or authentication failed")
+        err.message?.includes("Invalid token or authentication failed") ||
+        err.message?.includes("Unauthorized") ||
+        err.extensions?.code === "UNAUTHENTICATED"
       ) {
-        localStorage.clear();
-        window.location.href = "/";
+        // Token refresh will be handled by tokenRefreshService
+        // Don't clear tokens here, let the refresh service handle it
+        console.warn("⚠️ Authentication error detected - token may need refresh");
       }
     }
+  }
+  
+  if (networkError) {
+    console.error("[Network Error]:", networkError);
   }
 });
 

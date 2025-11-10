@@ -12,11 +12,26 @@ export const LOGIN = gql`
     mutation Login($password: String!, $email: String) {
   login(password: $password, email: $email) {
     token
+    refreshToken
     user {
       id
+      status
     }
   }
 }
+`
+
+export const REFRESH_TOKEN = gql`
+  mutation RefreshToken($token: String!) {
+    refreshToken(token: $token) {
+      token
+      refreshToken
+      user {
+        id
+        status
+      }
+    }
+  }
 `
 
 export const LOGOUT = gql`
