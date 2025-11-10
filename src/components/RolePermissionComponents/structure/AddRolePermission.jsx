@@ -107,12 +107,7 @@ const AddRolePermission = () => {
     };
 
     const [updateRole,{ loading: updating }] = useMutation(UPDATE_ROLE, {
-        refetchQueries: [ {
-            query: GETROLE,
-            variables: { getRoleId: id }, 
-          },
-        ],
-        awaitRefetchQueries: true,
+        refetchQueries: [ 'GetRoles' ],
         onCompleted: () => {
             messageApi.success(t("Stats changed successfully!"));
           },
@@ -120,7 +115,6 @@ const AddRolePermission = () => {
             messageApi.error(err.message || t("Something went wrong!"));
           },
     });
-
       
     const onFinish = (values) => {
         const input = {
@@ -130,13 +124,12 @@ const AddRolePermission = () => {
         };
       if(id){
         updateRole({ variables: { 
-          id: id,
-          ...input
+          input
          } 
         });
+        navigate("/rolepermission");
       }else{
         createRole({ variables: { input } });
-        // redirect to /rolepermission
         navigate("/rolepermission");
     }
 };  

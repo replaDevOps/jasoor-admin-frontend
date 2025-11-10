@@ -200,8 +200,7 @@ const RolePermissionTable = () => {
   };
 
   const [deleteRole, { loading: onDeleteing }] = useMutation(DELETE_ROLE, {
-    refetchQueries: [{ query: GETROLES }],
-    awaitRefetchQueries: true,
+    refetchQueries: [ GETROLES],
     onCompleted: () => {
       messageApi.success("Role deleted successfully!");
     },
@@ -211,8 +210,7 @@ const RolePermissionTable = () => {
   });
 
   const [updateRole, { loading: updating }] = useMutation(UPDATE_ROLE, {
-    refetchQueries: [{ query: GETROLES }],
-    awaitRefetchQueries: true,
+    refetchQueries: [ GETROLES],
     onCompleted: () => {
       messageApi.success("Status changed successfully!");
     },
@@ -290,6 +288,7 @@ const RolePermissionTable = () => {
       <DeleteModal
         visible={deleteItem}
         onClose={() => setDeleteItem(false)}
+        loading={onDeleteing}
         title="Are you sure?"
         subtitle="This action cannot be undone. Are you sure you want to delete this Role?"
         type="danger"

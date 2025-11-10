@@ -10,10 +10,11 @@ const TOKEN_CONFIG = {
   // User data expiry (same as refresh token)
   USER_DATA_EXPIRY: 234 / 24, // 234 hours in days (9.75 days)
   
-  // Cookie options - secure only in production (HTTPS)
+  // Cookie options - more permissive for localhost, secure for production
   SECURE_OPTIONS: {
     secure: window.location.protocol === 'https:', // Only use secure flag on HTTPS
-    sameSite: 'strict', // CSRF protection
+    sameSite: window.location.hostname === 'localhost' ? 'lax' : 'strict', // Lax on localhost, strict in production
+    path: '/', // Ensure cookies are available across all paths
   }
 };
 
@@ -93,7 +94,20 @@ export const setAuthTokens = (accessToken, refreshToken, user) => {
       });
     }
 
-    // Set token refresh timestamp
+    // IMPORTANT: Only set tokenIssuedAt on initial login, not on refresh
+    // This tracks when the REFRESH token was first issued, not when access token was refreshed
+    const existingIssuedAt = Cookies.get("tokenIssuedAt");
+    if (!existingIssuedAt) {
+      // First time login - set the issue timestamp
+      Cookies.set("tokenIssuedAt", new Date().toISOString(), {
+        expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
+      });
+      console.log('📅 Token issue timestamp set (first login)');
+    } else {
+      console.log('📅 Token issue timestamp preserved (token refresh)');
+    }
+
+    // Set when the access token was last refreshed (for 8-minute check)
     Cookies.set("tokenRefreshedAt", new Date().toISOString(), {
       expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
     });
@@ -169,22 +183,19 @@ export const hasRefreshToken = () => {
  */
 export const clearAuthTokens = () => {
   try {
-    // Remove all auth-related cookies (using new encrypted names)
+    // Remove all auth-related cookies
     Cookies.remove("_at"); // access token
     Cookies.remove("_rt"); // refresh token
     Cookies.remove("userId");
     Cookies.remove("userStatus");
-    Cookies.remove("tokenRefreshedAt");
+    Cookies.remove("tokenRefreshedAt"); // Last refresh time
+    Cookies.remove("tokenIssuedAt"); // Token issue time (IMPORTANT!)
     
-    // Also remove old cookie names for backward compatibility
-    Cookies.remove("_at");
-    Cookies.remove("_rt");
-    
-    // Clear localStorage as fallback
+    // Clear localStorage as fallback (backward compatibility)
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     
-    console.log('🗑️ Auth tokens cleared');
+    console.log('🗑️ All auth tokens and timestamps cleared');
     return true;
   } catch (error) {
     console.error("Error clearing auth tokens:", error);
@@ -197,20 +208,28 @@ export const clearAuthTokens = () => {
  * @returns {boolean} True if refresh token is expired
  */
 export const isRefreshTokenExpired = () => {
-  const lastRefresh = Cookies.get("tokenRefreshedAt");
+  const tokenIssuedAt = Cookies.get("tokenIssuedAt"); // Use ISSUE time, not refresh time
   
-  if (!lastRefresh) {
+  if (!tokenIssuedAt) {
+    console.warn("⚠️ No tokenIssuedAt found - considering token expired");
     return true; // No timestamp means token is expired
   }
 
   try {
-    const lastRefreshTime = new Date(lastRefresh);
+    const issuedTime = new Date(tokenIssuedAt);
     const now = new Date();
-    const hoursSinceRefresh = (now - lastRefreshTime) / (1000 * 60 * 60);
+    const hoursSinceIssue = (now - issuedTime) / (1000 * 60 * 60);
+
+    console.log('🕐 Refresh token age check:', {
+      issuedAt: issuedTime.toISOString(),
+      hoursSinceIssue: hoursSinceIssue.toFixed(2),
+      maxHours: 233,
+      isExpired: hoursSinceIssue > 233
+    });
 
     // Refresh token expires in 234 hours
     // Consider it expired if more than 233 hours have passed (1 hour buffer)
-    return hoursSinceRefresh > 233;
+    return hoursSinceIssue > 233;
   } catch (error) {
     console.error("Error checking refresh token expiry:", error);
     return true; // On error, consider it expired to be safe
@@ -268,7 +287,7 @@ export const updateAccessToken = (newAccessToken) => {
       ...TOKEN_CONFIG.SECURE_OPTIONS,
     });
 
-    // Update refresh timestamp
+    // Update refresh timestamp (NOT issue timestamp!)
     Cookies.set("tokenRefreshedAt", new Date().toISOString(), {
       expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
     });
@@ -278,4 +297,35 @@ export const updateAccessToken = (newAccessToken) => {
     console.error("Error updating access token:", error);
     return false;
   }
+};
+
+/**
+ * Diagnostic function to log all token-related information
+ * Use this to debug token expiry issues
+ */
+export const debugTokenInfo = () => {
+  const tokenIssuedAt = Cookies.get("tokenIssuedAt");
+  const tokenRefreshedAt = Cookies.get("tokenRefreshedAt");
+  const hasAccess = !!getAccessToken();
+  const hasRefresh = !!getRefreshToken();
+  
+  const info = {
+    hasAccessToken: hasAccess,
+    hasRefreshToken: hasRefresh,
+    tokenIssuedAt: tokenIssuedAt || 'NOT SET',
+    tokenRefreshedAt: tokenRefreshedAt || 'NOT SET',
+    userId: getUserId(),
+    userStatus: getUserStatus(),
+  };
+
+  if (tokenIssuedAt) {
+    const issued = new Date(tokenIssuedAt);
+    const hoursSinceIssue = (new Date() - issued) / (1000 * 60 * 60);
+    info.hoursSinceIssue = hoursSinceIssue.toFixed(2);
+    info.daysUntilExpiry = ((234 - hoursSinceIssue) / 24).toFixed(2);
+    info.isExpired = hoursSinceIssue > 233;
+  }
+
+  console.log('🔍 Token Debug Info:', info);
+  return info;
 };

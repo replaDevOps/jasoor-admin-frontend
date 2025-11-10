@@ -80,7 +80,6 @@ const RouteF = () => {
   return (
     <Suspense fallback={<Fallback />}>
       <Routes>
-        {/* Public Routes - Redirect to dashboard if already logged in */}
         <Route 
           path='/login' 
           element={
@@ -97,18 +96,15 @@ const RouteF = () => {
             </PublicRoute>
           } 
         />
-
-        {/* Protected */}
         <Route
           path='/*'
           element={
             <ProtectedRoute>
-              <Sidebar />  {/* Sidebar renders entire protected app with its own routes inside */}
+              <Sidebar /> 
             </ProtectedRoute>
           }
         />
 
-        {/* Fallback */}
         <Route path='*' element={isLoggedIn ? <Navigate to='/' replace /> : <Navigate to='/login' replace />} />
         </Routes>
     </Suspense>

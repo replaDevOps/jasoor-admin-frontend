@@ -131,6 +131,14 @@ export const ensureValidToken = async () => {
     return false;
   }
 
+  // Check if refresh token itself is expired (time-based check)
+  if (isRefreshTokenExpired()) {
+    console.error("🚨 Refresh token has expired (time-based) - logging out");
+    clearAuthTokens();
+    window.dispatchEvent(new CustomEvent('forceLogout'));
+    return false;
+  }
+
   if (!isAuthenticated()) {
     // Access token missing but refresh token exists - try to recover
     console.log("⚠️ Access token missing, attempting recovery...");

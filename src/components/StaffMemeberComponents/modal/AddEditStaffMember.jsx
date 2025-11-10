@@ -3,13 +3,12 @@ import { MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
 import { useEffect,useState } from 'react'
 import { GETROLES,GETSTAFFMEMBERS } from '../../../graphql/query';
-import { CREATE_STAFF_MEMBER } from '../../../graphql/mutation';
+import { CREATE_STAFF_MEMBER, UPDATE_USER } from '../../../graphql/mutation';
 import { useQuery,useMutation } from '@apollo/client';
 import { t } from 'i18next';
 
 const { Title } = Typography
 const AddEditStaffMember = ({visible,onClose,edititem}) => {
-
 
     const [messageApi, contextHolder] = message.useMessage();
     const [selectedRole, setSelectedRole] = useState(null);
@@ -38,7 +37,19 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
             form.resetFields()
         }
     },[visible,edititem])
-
+    const [ updateUser, { loading: updating } ] = useMutation(UPDATE_USER, {
+        refetchQueries: [ GETSTAFFMEMBERS ],
+        onCompleted: () => {
+            setTimeout(() => {
+                messageApi.success(t('Staff member updated successfully!'));
+                onClose();
+            }, 0);
+        },
+        onError: (err) => {
+          console.error(err);
+          // maybe show error toast
+        }
+    })
     const [createUser, { loading: creating }] = useMutation(CREATE_STAFF_MEMBER, {
         refetchQueries: [ GETSTAFFMEMBERS ],
         onCompleted: () => {
@@ -60,19 +71,37 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
       };
       
     const handleFinish = (values) => {
-        createUser({
-          variables: {
+        const roleId = values.assignRole;
+
+        if (edititem) {
+        updateUser({
+            variables: {
             input: {
-              name: values.fullName,
-              email: values.email,
-              phone: values.phoneNo || null,
-              password: values.password,
-              roleId: selectedRole 
-            }
-          }
+                id: edititem.key,
+                name: values.fullName,
+                email: values.email,
+                phone: values.phoneNo || null,
+                roleId,
+                ...(values.password ? { password: values.password } : {}),
+            },
+            },
         });
         form.resetFields();
-      };
+        } else {
+        createUser({
+            variables: {
+            input: {
+                name: values.fullName,
+                email: values.email,
+                phone: values.phoneNo || null,
+                password: values.password,
+                roleId,
+            },
+            },
+        });
+        form.resetFields();
+        }
+    };
     return (
         <>
         {contextHolder}
@@ -150,7 +179,7 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
                                 type='password'
                                 label={t('Password')}
                                 name='password'
-                                required
+                                required={!edititem}
                                 message={t('Enter password')}
                                 placeholder={t('Enter password')}
                             />
