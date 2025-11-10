@@ -75,9 +75,6 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
       ? values.district.map((d) => (d.value ? d.value : d)) // handle MySelect returning objects or strings
       : [];
 
-    // Ensure group matches GraphQL enum
-    // let groupEnum = values.group.toUpperCase(); // e.g., 'NEW', 'OLD', 'BOTH'
-
     campaign({
       variables: {
         title: values.title,
