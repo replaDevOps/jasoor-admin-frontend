@@ -27,23 +27,26 @@ const useGroupItem = ()=>{
     return groupselectItem
 }
 
-const districtselectItems = [
-    { id: 1, name: t('All District')},
-    { id: 2, name: t('Makkah')},
-    { id: 3, name: t('Eastern')},
-    { id: 4, name: t('Al-Madinah')},
-    { id: 5, name: t('Asir')},
-    { id: 6, name: t('Tabuk')},
-    { id: 7, name: t('Najran')},
-    { id: 8, name: t('Al-Qassim')},
-    { id: 9, name: t('Hail')},
-    { id: 10, name: t('Al-Jouf')},
-    { id: 11, name: t('Al-Bahah')},
-    { id: 12, name: t('Riyadh')},
-    { id: 13, name: t('Northern Borders')},
-    { id: 14, name: t('Jazan')},
-]
-
+const useDistrictItem = ()=> {
+    const { t } = useTranslation() 
+    const districtselectItem = [
+        { id: 1, name: t('All District')},
+        { id: 2, name: t('Makkah')},
+        { id: 3, name: t('Eastern')},
+        { id: 4, name: t('Al-Madinah')},
+        { id: 5, name: t('Asir')},
+        { id: 6, name: t('Tabuk')},
+        { id: 7, name: t('Najran')},
+        { id: 8, name: t('Al-Qassim')},
+        { id: 9, name: t('Hail')},
+        { id: 10, name: t('Al-Jouf')},
+        { id: 11, name: t('Al-Bahah')},
+        { id: 12, name: t('Riyadh')},
+        { id: 13, name: t('Northern Borders')},
+        { id: 14, name: t('Jazan')},
+    ]
+    return districtselectItem
+} 
 
 const districtItems = [
     { key: '1', label: t('Makkah') },
@@ -132,4 +135,4 @@ const revenueLookups = [
     },
 ]
 
-export { categoriesItems, revenueLookups, priorityItems, districtItems, statusItems, typeItems,meetingItems, pushstatusItem,groupItems, useGroupItem, districtselectItems, yearOp, langItems };
+export { categoriesItems, revenueLookups, priorityItems, districtItems, statusItems, typeItems,meetingItems, pushstatusItem,groupItems, useGroupItem, useDistrictItem, yearOp, langItems };

@@ -2,7 +2,7 @@ import { Button, Col, Divider, Flex, Form, Modal, Row, Typography } from "antd";
 import { MyDatepicker, MyInput, MySelect } from "../../Forms";
 import { CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { districtselectItems, useGroupItem } from "../../../shared";
+import { useDistrictItem, useGroupItem } from "../../../shared";
 import moment from "moment";
 import { CREATE_CAMPAIGN } from "../../../graphql/mutation";
 import { useMutation } from "@apollo/client";
@@ -14,6 +14,7 @@ const { Title } = Typography;
 const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
 
   const groupselectItem = useGroupItem()
+  const districtselectItems = useDistrictItem()
   const [messageApi, contextHolder] = message.useMessage();
   const [searchValue, setSearchValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -175,10 +176,7 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
                   required
                   message={t("Please choose district")}
                   placeholder={t("Choose district")}
-                  options={districtselectItems.map((item) => ({
-                    ...item,
-                    name: t(item.name), 
-                  }))}
+                  options={districtselectItems}
                   disabled={viewnotify}
                 />
               </Col>
