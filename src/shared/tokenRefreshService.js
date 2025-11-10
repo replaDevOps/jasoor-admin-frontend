@@ -6,6 +6,7 @@ import {
   clearAuthTokens,
   shouldRefreshToken,
   isAuthenticated,
+  isRefreshTokenExpired,
 } from "./tokenManager";
 
 /**
@@ -50,17 +51,22 @@ export const refreshAccessToken = async () => {
   const refreshToken = getRefreshToken();
 
   if (!refreshToken) {
-    console.error("No refresh token available");
+    console.error("❌ No refresh token available - cannot refresh");
     clearAuthTokens();
+    // Trigger logout event
+    window.dispatchEvent(new CustomEvent('forceLogout'));
     return null;
   }
 
   isRefreshing = true;
+  console.log("🔄 Attempting to refresh access token...");
 
   try {
     const { data } = await client.mutate({
       mutation: REFRESH_TOKEN,
       variables: { token: refreshToken },
+      // Don't use cache for refresh token mutation
+      fetchPolicy: 'no-cache',
     });
 
     if (data?.refreshToken?.token) {
@@ -73,19 +79,35 @@ export const refreshAccessToken = async () => {
       onTokenRefreshed(newAccessToken);
 
       isRefreshing = false;
+      console.log("✅ Token refreshed successfully");
       return newAccessToken;
     } else {
-      throw new Error("Invalid refresh token response");
+      throw new Error("Invalid refresh token response - no token in response");
     }
   } catch (error) {
-    console.error("Token refresh failed:", error);
+    console.error("❌ Token refresh failed:", error.message || error);
     
-    // Clear auth data and redirect to login
+    // Check if it's a refresh token expiration error
+    const isTokenExpired = 
+      error.message?.includes("Token is invalid or expired") ||
+      error.message?.includes("jwt expired") ||
+      error.message?.includes("refresh token") ||
+      error.graphQLErrors?.[0]?.message?.includes("expired");
+
+    if (isTokenExpired) {
+      console.error("🚨 Refresh token has expired - user must login again");
+    }
+    
+    // Clear auth data
     clearAuthTokens();
     isRefreshing = false;
     
+    // Trigger logout event to update UI
+    window.dispatchEvent(new CustomEvent('forceLogout'));
+    
     // Only redirect if we're not already on login page
     if (window.location.pathname !== "/login" && window.location.pathname !== "/") {
+      console.log("🔄 Redirecting to login page...");
       window.location.href = "/";
     }
     
@@ -98,11 +120,26 @@ export const refreshAccessToken = async () => {
  * @returns {Promise<boolean>} True if token was refreshed successfully
  */
 export const ensureValidToken = async () => {
-  if (!isAuthenticated()) {
+  // First check if we have any tokens at all
+  const hasRefresh = !!getRefreshToken();
+  
+  if (!hasRefresh) {
+    console.error("❌ No refresh token - cannot ensure valid token");
+    clearAuthTokens();
+    // Trigger logout event
+    window.dispatchEvent(new CustomEvent('forceLogout'));
     return false;
   }
 
+  if (!isAuthenticated()) {
+    // Access token missing but refresh token exists - try to recover
+    console.log("⚠️ Access token missing, attempting recovery...");
+    const newToken = await refreshAccessToken();
+    return !!newToken;
+  }
+
   if (shouldRefreshToken()) {
+    console.log("⏰ Token is old, refreshing...");
     const newToken = await refreshAccessToken();
     return !!newToken;
   }
@@ -118,8 +155,9 @@ export const ensureValidToken = async () => {
 export const initializeAuth = async () => {
   const hasAccess = isAuthenticated();
   const hasRefresh = !!getRefreshToken();
+  const refreshExpired = isRefreshTokenExpired();
 
-  console.log('🔐 Initializing auth...', { hasAccess, hasRefresh });
+  console.log('🔐 Initializing auth...', { hasAccess, hasRefresh, refreshExpired });
 
   // Case 1: No tokens at all - user not logged in
   if (!hasAccess && !hasRefresh) {
@@ -127,7 +165,15 @@ export const initializeAuth = async () => {
     return false;
   }
 
-  // Case 2: Has access token - check if needs refresh
+  // Case 2: Refresh token is expired - logout
+  if (refreshExpired) {
+    console.error('🚨 Refresh token has expired - user must login again');
+    clearAuthTokens();
+    window.dispatchEvent(new CustomEvent('forceLogout'));
+    return false;
+  }
+
+  // Case 3: Has access token - check if needs refresh
   if (hasAccess) {
     console.log('✅ Access token found');
     if (shouldRefreshToken()) {
@@ -138,9 +184,9 @@ export const initializeAuth = async () => {
     return true;
   }
 
-  // Case 3: Access token missing but refresh token exists
+  // Case 4: Access token missing but refresh token exists and is valid
   // This happens when user comes back after access token expired (>10 min)
-  if (!hasAccess && hasRefresh) {
+  if (!hasAccess && hasRefresh && !refreshExpired) {
     console.log('⚠️ Access token missing but refresh token exists - attempting recovery...');
     const newToken = await refreshAccessToken();
     if (newToken) {
@@ -174,6 +220,8 @@ export const startAutoRefresh = async () => {
   
   if (!isAuth) {
     console.log('❌ Auth initialization failed - not starting auto-refresh');
+    // Trigger logout event
+    window.dispatchEvent(new CustomEvent('forceLogout'));
     return false;
   }
 
@@ -181,12 +229,30 @@ export const startAutoRefresh = async () => {
 
   // Check token every 3 minutes (ensures we catch 8-minute threshold)
   autoRefreshInterval = setInterval(async () => {
-    if (isAuthenticated()) {
-      console.log("🔄 Auto-refresh check...");
-      await ensureValidToken();
-    } else {
-      // Stop auto-refresh if user is not authenticated
-      console.log('⚠️ No longer authenticated - stopping auto-refresh');
+    const hasRefresh = !!getRefreshToken();
+    const hasAccess = isAuthenticated();
+    
+    console.log("🔄 Auto-refresh check...", { hasAccess, hasRefresh });
+    
+    // If both tokens are missing, stop auto-refresh and logout
+    if (!hasRefresh) {
+      console.error('🚨 No refresh token found - stopping auto-refresh and logging out');
+      stopAutoRefresh();
+      clearAuthTokens();
+      // Trigger logout event
+      window.dispatchEvent(new CustomEvent('forceLogout'));
+      
+      if (window.location.pathname !== "/login" && window.location.pathname !== "/") {
+        window.location.href = "/";
+      }
+      return;
+    }
+    
+    // Try to ensure we have a valid token
+    const isValid = await ensureValidToken();
+    
+    if (!isValid) {
+      console.error('⚠️ Token validation failed - stopping auto-refresh');
       stopAutoRefresh();
     }
   }, 3 * 60 * 1000); // 3 minutes

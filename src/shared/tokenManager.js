@@ -193,6 +193,31 @@ export const clearAuthTokens = () => {
 };
 
 /**
+ * Check if refresh token is expired based on timestamp
+ * @returns {boolean} True if refresh token is expired
+ */
+export const isRefreshTokenExpired = () => {
+  const lastRefresh = Cookies.get("tokenRefreshedAt");
+  
+  if (!lastRefresh) {
+    return true; // No timestamp means token is expired
+  }
+
+  try {
+    const lastRefreshTime = new Date(lastRefresh);
+    const now = new Date();
+    const hoursSinceRefresh = (now - lastRefreshTime) / (1000 * 60 * 60);
+
+    // Refresh token expires in 234 hours
+    // Consider it expired if more than 233 hours have passed (1 hour buffer)
+    return hoursSinceRefresh > 233;
+  } catch (error) {
+    console.error("Error checking refresh token expiry:", error);
+    return true; // On error, consider it expired to be safe
+  }
+};
+
+/**
  * Check if access token is about to expire (within 2 minutes)
  * This helps prevent failed requests due to token expiration
  * Backend config: Access token = 10 minutes, triggers refresh at 8 minutes

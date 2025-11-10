@@ -1,11 +1,21 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_USER = gql`
-    mutation CreateUser($input: UserInput!) {
+  mutation CreateUser($input: UserInput!) {
     createUser(input: $input) {
-        id
+      id
+    }
   }
-}
+`
+
+export const CREATE_STAFF_MEMBER = gql`
+  mutation CreateStaff($input: UserInput!) {
+    createStaff(input: $input) {
+      staff {
+        id
+      }
+    }
+  }
 `
 
 export const LOGIN = gql`

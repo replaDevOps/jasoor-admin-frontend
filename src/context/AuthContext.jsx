@@ -41,9 +41,20 @@ export const AuthProvider = ({ children }) => {
 
     initAuth();
 
+    // Listen for forced logout events (from Apollo error handler)
+    const handleForceLogout = () => {
+      console.log('🚨 Force logout event received');
+      setIsLoggedIn(false);
+      setUserData({});
+      stopAutoRefresh();
+    };
+
+    window.addEventListener('forceLogout', handleForceLogout);
+
     // Cleanup on unmount
     return () => {
       stopAutoRefresh();
+      window.removeEventListener('forceLogout', handleForceLogout);
     };
   }, []);
 

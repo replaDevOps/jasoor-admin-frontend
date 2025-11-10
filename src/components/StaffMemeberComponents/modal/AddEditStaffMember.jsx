@@ -1,14 +1,17 @@
-import { Button, Col, Divider, Flex, Form, Modal, Row, Typography } from 'antd'
+import { Button, Col, Divider, Flex, Form, message, Modal, Row, Typography } from 'antd'
 import { MyInput, MySelect } from '../../Forms'
 import { CloseOutlined } from '@ant-design/icons'
 import { useEffect,useState } from 'react'
 import { GETROLES,GETSTAFFMEMBERS } from '../../../graphql/query';
-import { CREATE_USER } from '../../../graphql/mutation';
+import { CREATE_STAFF_MEMBER } from '../../../graphql/mutation';
 import { useQuery,useMutation } from '@apollo/client';
 import { t } from 'i18next';
 
 const { Title } = Typography
-const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
+const AddEditStaffMember = ({visible,onClose,edititem}) => {
+
+
+    const [messageApi, contextHolder] = message.useMessage();
     const [selectedRole, setSelectedRole] = useState(null);
     const { data } = useQuery(GETROLES, {
         variables: {
@@ -36,18 +39,13 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
         }
     },[visible,edititem])
 
-    const [createUser, { loading: creating }] = useMutation(CREATE_USER, {
-        refetchQueries: [ {
-            query: GETSTAFFMEMBERS 
-          },
-        ],
-        awaitRefetchQueries: true,
+    const [createUser, { loading: creating }] = useMutation(CREATE_STAFF_MEMBER, {
+        refetchQueries: [ GETSTAFFMEMBERS ],
         onCompleted: () => {
-          // maybe show success toast
-          if (typeof refetchStaff === 'function') {
-            refetchStaff();
-          }
-          onClose();
+            setTimeout(() => {
+                messageApi.success(t('Staff member created successfully!'));
+                onClose();
+            }, 0);
         },
         onError: (err) => {
           console.error(err);
@@ -73,8 +71,11 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
             }
           }
         });
+        form.resetFields();
       };
     return (
+        <>
+        {contextHolder}
         <Modal
             title={null}
             open={visible}
@@ -86,7 +87,7 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
                     <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
                         {t("Cancel")}
                     </Button>
-                    <Button aria-labelledby='Save' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()}>
+                    <Button aria-labelledby='Save' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()} loading={creating} >
                         {t("Save")}
                     </Button>
                 </Flex>
@@ -159,6 +160,7 @@ const AddEditStaffMember = ({visible,onClose,edititem,refetchStaff}) => {
             </div>
             <Divider className='my-2 bg-light-brand' />
         </Modal>
+        </>
     )
 }
 

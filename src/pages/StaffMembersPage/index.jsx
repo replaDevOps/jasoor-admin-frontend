@@ -8,7 +8,6 @@ const StaffMembersPage = () => {
 
     const [ visible, setVisible ] = useState(false)
     const [ edititem, setEditItem ] = useState(null)
-    const [refetchStaff, setRefetchStaff] = useState(null);
 
     return (
         <>
@@ -22,14 +21,13 @@ const StaffMembersPage = () => {
                     </Flex>
                 </Col>
                 <Col span={24}>
-                    <StaffMemberTable {...{setVisible,setEditItem}} setRefetchStaff={setRefetchStaff}/>
+                    <StaffMemberTable {...{setVisible,setEditItem}} />
                 </Col>
             </Row>
             <AddEditStaffMember 
                 visible={visible}
                 edititem={edititem}
                 onClose={()=>{setVisible(false);setEditItem(null)}}
-                refetchStaff={refetchStaff}
             />
         </>
     )

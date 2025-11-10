@@ -31,16 +31,27 @@ const ProtectedRoute = ({ children }) => {
   return children
 }
 
+// Public Route - Redirects to dashboard if already logged in
+const PublicRoute = ({ children }) => {
+  const { isLoggedIn, isInitializing } = useContext(AuthContext)
+  
+  // Show loading state while initializing auth
+  if (isInitializing) {
+    return <Fallback />
+  }
+  
+  // If user is already logged in, redirect to dashboard
+  if (isLoggedIn) {
+    return <Navigate to='/' replace />
+  }
+  
+  return children
+}
+
 
 const RouteF = () => {
   const { isLoggedIn } = useContext(AuthContext)
   const [ws, setWs] = useState(null)
-
-  // useEffect(() => {
-  //   const onAuth = () => setAuth(isLoggedIn())
-  //   window.addEventListener('authChanged', onAuth)
-  //   return () => window.removeEventListener('authChanged', onAuth)
-  // }, [])
 
   const url = import.meta.env.VITE_WS_URL
   useEffect(() => {
@@ -69,9 +80,23 @@ const RouteF = () => {
   return (
     <Suspense fallback={<Fallback />}>
       <Routes>
-        {/* Public */}
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/forgotpassword' element={<ForgotPassword />} />
+        {/* Public Routes - Redirect to dashboard if already logged in */}
+        <Route 
+          path='/login' 
+          element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          } 
+        />
+        <Route 
+          path='/forgotpassword' 
+          element={
+            <PublicRoute>
+              <ForgotPassword />
+            </PublicRoute>
+          } 
+        />
 
         {/* Protected */}
         <Route
