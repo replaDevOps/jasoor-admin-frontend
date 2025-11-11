@@ -12,9 +12,8 @@ import { t } from "i18next";
 
 const { Title } = Typography;
 const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
-
-  const groupselectItem = useGroupItem()
-  const districtselectItems = useDistrictItem()
+  const groupselectItem = useGroupItem();
+  const districtselectItems = useDistrictItem();
   const [messageApi, contextHolder] = message.useMessage();
   const [searchValue, setSearchValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);

@@ -3,7 +3,7 @@ import { SearchInput } from "../../Forms";
 import { pushnotifyColumn } from "../../../data";
 import { useState, useEffect } from "react";
 import { DownOutlined } from "@ant-design/icons";
-import {  groupItems, pushstatusItem } from "../../../shared";
+import { groupItems, pushstatusItem } from "../../../shared";
 import { CustomPagination } from "../../Ui";
 import { GET_CAMPAIGNS } from "../../../graphql/query";
 import { TableLoader } from "../../Ui/TableLoader";
@@ -40,7 +40,10 @@ const PushNotificationTable = ({
           filter: {
             search: searchValue || null,
             district: selectedDistrict || null,
-            group: selectedCategory ? selectedCategory.toUpperCase() : null,
+            group:
+              selectedCategory === "ALL"
+                ? null
+                : selectedCategory.toUpperCase() || null,
             status,
             limit: pageSize,
             offset: (current - 1) * pageSize,
@@ -111,20 +114,20 @@ const PushNotificationTable = ({
     }
   };
   const districtItems = [
-    { key: '1', label: t('Makkah') },
-    { key: '2', label: t('Eastern') },
-    { key: '3', label: t('Al-Madinah') },
-    { key: '4', label: t('Asir') },
-    { key: '5', label: t('Tabuk') },
-    { key: '6', label: t('Najran') },
-    { key: '7', label: t('Al-Qassim') },
-    { key: '8', label: t('Hail') },
-    { key: '9', label: t('Al-Jouf') },
-    { key: '10', label: t('Al-Bahah') },
-    { key: '11', label: t('Riyadh') },
-    { key: '12', label: t('Northern Borders') },
-    { key: '13', label: t('Jazan') },
-]
+    { key: "1", label: t("Makkah") },
+    { key: "2", label: t("Eastern") },
+    { key: "3", label: t("Al-Madinah") },
+    { key: "4", label: t("Asir") },
+    { key: "5", label: t("Tabuk") },
+    { key: "6", label: t("Najran") },
+    { key: "7", label: t("Al-Qassim") },
+    { key: "8", label: t("Hail") },
+    { key: "9", label: t("Al-Jouf") },
+    { key: "10", label: t("Al-Bahah") },
+    { key: "11", label: t("Riyadh") },
+    { key: "12", label: t("Northern Borders") },
+    { key: "13", label: t("Jazan") },
+  ];
 
   return (
     <Card className="radius-12 border-gray">
@@ -171,7 +174,7 @@ const PushNotificationTable = ({
                 <Dropdown
                   menu={{
                     // items: districtItems,
-                     items: districtItems.map((item) => ({
+                    items: districtItems.map((item) => ({
                       key: String(item.key),
                       label: t(item.label),
                     })),
@@ -192,7 +195,7 @@ const PushNotificationTable = ({
                 <Dropdown
                   menu={{
                     // items: pushstatusItem,
-                     items: pushstatusItem.map((item) => ({
+                    items: pushstatusItem.map((item) => ({
                       key: String(item.key),
                       label: t(item.label),
                     })),
