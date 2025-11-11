@@ -1281,6 +1281,18 @@ body.ltr {
   height: 400px !important;
 }
 
+.searchinputno {
+  width: auto !important;
+  border: 1px solid #d9d9d9;
+  background: #ffffff;
+}
+
+.searchinputno.ant-input-outlined:hover,
+.searchinputno.ant-input-outlined:focus,
+.searchinputno.ant-input-outlined:focus-within {
+  border-color: #4373e6 !important;
+}
+
 .cross-position {
   position: absolute;
   top: 8px;

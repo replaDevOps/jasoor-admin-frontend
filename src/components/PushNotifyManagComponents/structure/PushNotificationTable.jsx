@@ -101,6 +101,7 @@ const PushNotificationTable = ({
             <Col lg={24} md={24} sm={24} xs={24}>
               <Flex gap={5} wrap>
                 <SearchInput
+                  withoutForm
                   name="name"
                   placeholder={t("Search")}
                   prefix={
