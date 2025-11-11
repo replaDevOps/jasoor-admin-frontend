@@ -1,9 +1,14 @@
 import { Button, Card, Col, Dropdown, Flex, Form, Row, Table } from "antd";
-import { SearchInput } from "../../Forms";
+import { MySelect, SearchInput } from "../../Forms";
 import { pushnotifyColumn } from "../../../data";
 import { useState, useEffect } from "react";
 import { DownOutlined } from "@ant-design/icons";
-import { groupItems, pushstatusItem } from "../../../shared";
+import {
+  groupItems,
+  pushstatusItem,
+  useDistrictItem,
+  useGroupItem,
+} from "../../../shared";
 import { CustomPagination } from "../../Ui";
 import { GET_CAMPAIGNS } from "../../../graphql/query";
 import { TableLoader } from "../../Ui/TableLoader";
@@ -16,6 +21,8 @@ const PushNotificationTable = ({
   setEditItem,
   setDeleteItem,
 }) => {
+  const districtselectItem = useDistrictItem();
+  const groupselectItem = useGroupItem();
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -30,21 +37,13 @@ const PushNotificationTable = ({
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      let status = null;
-      if (selectedStatus === "Schedule") status = false;
-      else if (selectedStatus === "Send") status = true;
-      else if (selectedStatus === "All") status = null;
-
       fetchCampaigns({
         variables: {
           filter: {
             search: searchValue || null,
             district: selectedDistrict || null,
-            group:
-              selectedCategory === "ALL"
-                ? null
-                : selectedCategory.toUpperCase() || null,
-            status,
+            group: selectedCategory?.toUpperCase() || null,
+            status: selectedStatus,
             limit: pageSize,
             offset: (current - 1) * pageSize,
           },
@@ -92,42 +91,7 @@ const PushNotificationTable = ({
     setCurrent(page);
     setPageSize(size);
   };
-
-  const handleStatusClick = ({ key }) => {
-    const selectedItem = pushstatusItem.find((item) => item.key === key);
-    if (selectedItem) {
-      setSelectedStatus(selectedItem.label);
-    }
-  };
-
-  const handleCategoryClick = ({ key }) => {
-    const selectedItem = groupItems.find((item) => item.key === key);
-    if (selectedItem) {
-      setSelectedCategory(selectedItem.label);
-    }
-  };
-
-  const handleDistrictClick = ({ key }) => {
-    const selectedItem = districtItems.find((item) => item.key === key);
-    if (selectedItem) {
-      setSelectedDistrict(selectedItem.label);
-    }
-  };
-  const districtItems = [
-    { key: "1", label: t("Makkah") },
-    { key: "2", label: t("Eastern") },
-    { key: "3", label: t("Al-Madinah") },
-    { key: "4", label: t("Asir") },
-    { key: "5", label: t("Tabuk") },
-    { key: "6", label: t("Najran") },
-    { key: "7", label: t("Al-Qassim") },
-    { key: "8", label: t("Hail") },
-    { key: "9", label: t("Al-Jouf") },
-    { key: "10", label: t("Al-Bahah") },
-    { key: "11", label: t("Riyadh") },
-    { key: "12", label: t("Northern Borders") },
-    { key: "13", label: t("Jazan") },
-  ];
+  console.log("category", selectedCategory, selectedDistrict, selectedStatus);
 
   return (
     <Card className="radius-12 border-gray">
@@ -151,68 +115,30 @@ const PushNotificationTable = ({
                   onChange={(e) => setSearchValue(e.target.value)}
                   debounceMs={400}
                 />
-                <Dropdown
-                  menu={{
-                    items: groupItems.map((item) => ({
-                      key: String(item.key),
-                      label: t(item.label),
-                    })),
-                    onClick: handleCategoryClick,
-                  }}
-                  trigger={["click"]}
-                >
-                  <Button
-                    aria-labelledby="filter category"
-                    className="btncancel px-3 filter-bg fs-13 text-black"
-                  >
-                    <Flex justify="space-between" align="center" gap={30}>
-                      {selectedCategory || t("Category")}
-                      <DownOutlined />
-                    </Flex>
-                  </Button>
-                </Dropdown>
-                <Dropdown
-                  menu={{
-                    // items: districtItems,
-                    items: districtItems.map((item) => ({
-                      key: String(item.key),
-                      label: t(item.label),
-                    })),
-                    onClick: handleDistrictClick,
-                  }}
-                  trigger={["click"]}
-                >
-                  <Button
-                    aria-labelledby="filter district"
-                    className="btncancel px-3 filter-bg fs-13 text-black"
-                  >
-                    <Flex justify="space-between" align="center" gap={30}>
-                      {selectedDistrict || t("District")}
-                      <DownOutlined />
-                    </Flex>
-                  </Button>
-                </Dropdown>
-                <Dropdown
-                  menu={{
-                    // items: pushstatusItem,
-                    items: pushstatusItem.map((item) => ({
-                      key: String(item.key),
-                      label: t(item.label),
-                    })),
-                    onClick: handleStatusClick,
-                  }}
-                  trigger={["click"]}
-                >
-                  <Button
-                    aria-labelledby="filter status"
-                    className="btncancel px-3 filter-bg fs-13 text-black"
-                  >
-                    <Flex justify="space-between" align="center" gap={30}>
-                      {selectedStatus || t("Status")}
-                      <DownOutlined />
-                    </Flex>
-                  </Button>
-                </Dropdown>
+                <MySelect
+                  withoutForm
+                  name="category"
+                  placeholder={t("Category")}
+                  options={groupselectItem}
+                  onChange={(value) => setSelectedCategory(value)}
+                  allowClear
+                />
+                <MySelect
+                  withoutForm
+                  name="district"
+                  placeholder={t("District")}
+                  options={districtselectItem}
+                  onChange={(value) => setSelectedDistrict(value)}
+                  allowClear
+                />
+                <MySelect
+                  withoutForm
+                  name="status"
+                  placeholder={t("Status")}
+                  options={pushstatusItem}
+                  onChange={(value) => setSelectedStatus(value)}
+                  allowClear
+                />
               </Flex>
             </Col>
           </Row>
@@ -228,7 +154,7 @@ const PushNotificationTable = ({
           dataSource={pushnotifyData}
           className="pagination table-cs table"
           showSorterTooltip={false}
-          scroll={{ x: 1000 }}
+          scroll={{ x: 1300 }}
           rowHoverable={false}
           pagination={false}
           loading={{

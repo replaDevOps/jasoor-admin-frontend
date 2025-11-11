@@ -1,4 +1,12 @@
-import { Button, Dropdown, Flex, Space, Tooltip, Typography } from "antd";
+import {
+  Button,
+  Dropdown,
+  Flex,
+  Popover,
+  Space,
+  Tooltip,
+  Typography,
+} from "antd";
 import { NavLink } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
 import { priorityItems } from "../shared";
@@ -82,131 +90,169 @@ const offertableColumn = [
 ];
 
 const categoryStatsProfColumn = (handleInputChange) => [
-
-    {
-        title: t('Region Name'),
-        dataIndex: 'regionname',
-    },
-    {
-        title: '2024',
-        dataIndex: 'value2024',
-        render: (value, record, index) => (
-            <MyInput
-                withoutForm
-                placeholder="Enter avg profit"
-                value={value}
-                onChange={(e) => handleInputChange(e.target.value, index, 'value2024')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" alt="currency symbol" width={14} fetchPriority="high"/>}
-                className="w-100"
-            />
-        ),
-    },
-    {
-        title: '2023',
-        dataIndex: 'value2023',
-        render: (value, record, index) => (
-            <MyInput
-                withoutForm
-                placeholder="Enter avg profit"
-                value={value}
-                onChange={(e) => handleInputChange(e.target.value, index, 'value2023')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" alt="currency symbol" width={14} fetchPriority="high" />}
-                className="w-100"
-            />
-        ),
-    },
-    {
-        title: '2022',
-        dataIndex: 'value2022',
-        render: (value, record, index) => (
-            <MyInput
-                withoutForm
-                placeholder="Enter avg profit"
-                value={value}
-                onChange={(e) => handleInputChange(e.target.value, index, 'value2022')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" alt="currency symbol" width={14} fetchPriority="high" />}
-                className="w-100"
-            />
-        ),
-    },
-    {
-        title: '2021',
-        dataIndex: 'value2021',
-        render: (value, record, index) => (
-            <MyInput
-                withoutForm
-                placeholder="Enter avg profit"
-                value={value}
-                onChange={(e) => handleInputChange(e.target.value, index, 'value2021')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" alt="currency symbol" width={14} fetchPriority="high" />}
-                className="w-100"
-            />
-        )
-    },
-    {
-        title: t('Local Business Growth'),
-        dataIndex: 'localbusinessgrowth',
-        render: (value, record, index) => (
-            <MyInput
-                withoutForm
-                placeholder="Enter avg profit"
-                value={value}
-                onChange={(e) => handleInputChange(e.target.value, index, 'localbusinessgrowth')}
-                addonBefore={<img src="/assets/icons/reyal-g.png" alt="currency symbol" width={14} fetchPriority="high" />}
-                className="w-100"
-            />
-        )
-    },
-    {
-        title: t('Population Density'),
-        dataIndex: 'populationdensity',
-        render: (value, record, index) => (
-            <MySelect
-                withoutForm
-                placeholder="Select Density"
-                value={value}
-                onChange={(value) => handleInputChange(value, index, 'populationdensity')}
-                options={priorityItems}
-            />
-        )
-    },
-    {
-        title: t('Industry Demand'),
-        dataIndex: 'industrydemand',
-        render: (value, record, index) => (
-            <MySelect
-                withoutForm
-                placeholder="Select Demand"
-                value={value}
-                onChange={(value) => handleInputChange(value, index, 'industrydemand')}
-                options={priorityItems}
-            />
-        )
-    },
-]
+  {
+    title: t("Region Name"),
+    dataIndex: "regionname",
+  },
+  {
+    title: "2024",
+    dataIndex: "value2024",
+    render: (value, record, index) => (
+      <MyInput
+        withoutForm
+        placeholder="Enter avg profit"
+        value={value}
+        onChange={(e) => handleInputChange(e.target.value, index, "value2024")}
+        addonBefore={
+          <img
+            src="/assets/icons/reyal-g.png"
+            alt="currency symbol"
+            width={14}
+            fetchPriority="high"
+          />
+        }
+        className="w-100"
+      />
+    ),
+  },
+  {
+    title: "2023",
+    dataIndex: "value2023",
+    render: (value, record, index) => (
+      <MyInput
+        withoutForm
+        placeholder="Enter avg profit"
+        value={value}
+        onChange={(e) => handleInputChange(e.target.value, index, "value2023")}
+        addonBefore={
+          <img
+            src="/assets/icons/reyal-g.png"
+            alt="currency symbol"
+            width={14}
+            fetchPriority="high"
+          />
+        }
+        className="w-100"
+      />
+    ),
+  },
+  {
+    title: "2022",
+    dataIndex: "value2022",
+    render: (value, record, index) => (
+      <MyInput
+        withoutForm
+        placeholder="Enter avg profit"
+        value={value}
+        onChange={(e) => handleInputChange(e.target.value, index, "value2022")}
+        addonBefore={
+          <img
+            src="/assets/icons/reyal-g.png"
+            alt="currency symbol"
+            width={14}
+            fetchPriority="high"
+          />
+        }
+        className="w-100"
+      />
+    ),
+  },
+  {
+    title: "2021",
+    dataIndex: "value2021",
+    render: (value, record, index) => (
+      <MyInput
+        withoutForm
+        placeholder="Enter avg profit"
+        value={value}
+        onChange={(e) => handleInputChange(e.target.value, index, "value2021")}
+        addonBefore={
+          <img
+            src="/assets/icons/reyal-g.png"
+            alt="currency symbol"
+            width={14}
+            fetchPriority="high"
+          />
+        }
+        className="w-100"
+      />
+    ),
+  },
+  {
+    title: t("Local Business Growth"),
+    dataIndex: "localbusinessgrowth",
+    render: (value, record, index) => (
+      <MyInput
+        withoutForm
+        placeholder="Enter avg profit"
+        value={value}
+        onChange={(e) =>
+          handleInputChange(e.target.value, index, "localbusinessgrowth")
+        }
+        addonBefore={
+          <img
+            src="/assets/icons/reyal-g.png"
+            alt="currency symbol"
+            width={14}
+            fetchPriority="high"
+          />
+        }
+        className="w-100"
+      />
+    ),
+  },
+  {
+    title: t("Population Density"),
+    dataIndex: "populationdensity",
+    render: (value, record, index) => (
+      <MySelect
+        withoutForm
+        placeholder="Select Density"
+        value={value}
+        onChange={(value) =>
+          handleInputChange(value, index, "populationdensity")
+        }
+        options={priorityItems}
+      />
+    ),
+  },
+  {
+    title: t("Industry Demand"),
+    dataIndex: "industrydemand",
+    render: (value, record, index) => (
+      <MySelect
+        withoutForm
+        placeholder="Select Demand"
+        value={value}
+        onChange={(value) => handleInputChange(value, index, "industrydemand")}
+        options={priorityItems}
+      />
+    ),
+  },
+];
 
 const completedealColumn = [
-    {
-        title: t('Business Title'),
-        dataIndex: 'businessTitle',
-    },
-    {
-        title: t('Buyer Name'),
-        dataIndex: 'buyerName',
-    },
-    {
-        title: t('Seller Name'),
-        dataIndex: 'sellerName',
-    },
-    {
-        title: t('Finalized Offer'),
-        dataIndex: 'finalizedOffer',
-    },
-    {
-        title: t('Date'),
-        dataIndex: 'date',
-    },
-]
+  {
+    title: t("Business Title"),
+    dataIndex: "businessTitle",
+  },
+  {
+    title: t("Buyer Name"),
+    dataIndex: "buyerName",
+  },
+  {
+    title: t("Seller Name"),
+    dataIndex: "sellerName",
+  },
+  {
+    title: t("Finalized Offer"),
+    dataIndex: "finalizedOffer",
+  },
+  {
+    title: t("Date"),
+    dataIndex: "date",
+  },
+];
 
 const pushnotifyColumn = ({
   setVisible,
@@ -250,18 +296,45 @@ const pushnotifyColumn = ({
     },
   },
   {
-    title: t("District"),
+    title: t("Regions"),
     dataIndex: "district",
     render: (district) => {
-      return Array.isArray(district) ? (
+      if (!Array.isArray(district) || district.length === 0) return null;
+
+      const visibleCount = 3;
+      const visibleItems = district.slice(0, visibleCount);
+      const extraCount = district.length - visibleCount;
+
+      return (
         <Flex gap={5} align="center" wrap>
-          {district?.map((list, i) => (
-            <Text key={i} className="sm-pill border-gray fs-12 ">
+          {visibleItems.map((list, i) => (
+            <Text key={i} className="sm-pill border-gray fs-12">
               {list?.item}
             </Text>
           ))}
+          {extraCount > 0 && (
+            <Popover
+              content={
+                <Flex direction="column" gap={5}>
+                  {district.map((d, idx) => (
+                    <Text key={idx} className="sm-pill border-gray fs-12">
+                      {d?.item}
+                    </Text>
+                  ))}
+                </Flex>
+              }
+              title="All Regions"
+            >
+              <Text
+                className="sm-pill border-gray fs-12"
+                style={{ cursor: "pointer" }}
+              >
+                +{extraCount} more
+              </Text>
+            </Popover>
+          )}
         </Flex>
-      ) : null;
+      );
     },
   },
   {
@@ -348,7 +421,6 @@ const pushnotifyColumn = ({
     ),
   },
 ];
-
 
 export {
   postsaleColumn,
