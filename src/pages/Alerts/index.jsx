@@ -1,50 +1,115 @@
-import { Row, Col, Flex, Card, Typography } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Row, Col, Card, Typography, Spin } from "antd";
+import { Flex } from "../../components";
 import { ModuleTopHeading } from "../../components";
 import { GET_ALERTS } from "../../graphql/query";
 import { MARK_AS_READ } from "../../graphql/mutation";
-import { useMutation, useQuery } from "@apollo/client";
-import { Spin } from "antd";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { t } from "i18next";
+import Cookies from "js-cookie";
 
 const { Text, Title } = Typography;
 const Alerts = () => {
-  const userId = localStorage.getItem("userId");
-  const { data, loading, refetch } = useQuery(GET_ALERTS, {
-    variables: { userId },
-    skip: !userId,
-    fetchPolicy: "network-only",
-  });
+  const userId = Cookies.get("userId");
+  const LIMIT = 10;
 
-  const [markAsRead] = useMutation(MARK_AS_READ, refetch());
+  const [groups, setGroups] = useState([]); // aggregated groups from paginated API
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  // Mark single notification as read
-  const handleMarkAsRead = (id) => {
-    markAsRead({ variables: { markNotificationAsReadId: id } });
+  const loaderRef = useRef(null);
+
+  const [loadAlerts, { called, loading, fetchMore, refetch }] = useLazyQuery(
+    GET_ALERTS,
+    {
+      fetchPolicy: "network-only",
+      onCompleted: (res) => {
+        const fetchedGroups = res?.getAlerts?.groups || [];
+        const total = res?.getAlerts?.count || 0;
+        setGroups(fetchedGroups);
+        setOffset(fetchedGroups.length);
+        setHasMore(fetchedGroups.length < total);
+      },
+    }
+  );
+
+  // trigger initial load when userId becomes available
+  useEffect(() => {
+    if (!userId) return;
+    if (!called) {
+      loadAlerts({ variables: { userId, offset: 0, limit: LIMIT } });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
+
+  const [markAsRead] = useMutation(MARK_AS_READ);
+
+  const handleMarkAsRead = async (id) => {
+    try {
+      await markAsRead({ variables: { markNotificationAsReadId: id } });
+      // simplest: refetch full list after marking read to keep grouping consistent
+      if (typeof refetch === "function") {
+        const res = await refetch({ userId, offset: 0, limit: offset });
+        const fetchedGroups = res?.data?.getAlerts?.groups || [];
+        setGroups(fetchedGroups);
+        setOffset(fetchedGroups.length);
+      }
+    } catch (err) {
+      console.error("markAsRead failed", err);
+    }
   };
-  if (loading) {
+
+  const loadMore = async () => {
+    if (!hasMore || loadingMore) return;
+    setLoadingMore(true);
+    try {
+      // if the lazy query hasn't been called yet, trigger initial load
+      if (!called) {
+        await loadAlerts({ variables: { userId, offset: 0, limit: LIMIT } });
+        return;
+      }
+
+      const res = await fetchMore({
+        variables: { userId, offset: offset, limit: LIMIT },
+      });
+      const newGroups = res?.data?.getAlerts?.groups || [];
+      const total = res?.data?.getAlerts?.count || 0;
+      setGroups((prev) => [...prev, ...newGroups]);
+      setOffset((prev) => prev + newGroups.length);
+      const newHasMore = offset + newGroups.length < total;
+      setHasMore(newHasMore);
+    } catch (err) {
+      console.error("fetchMore error", err);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  // IntersectionObserver to trigger loadMore
+  useEffect(() => {
+    if (!loaderRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          loadMore();
+        }
+      },
+      { root: null, rootMargin: "200px" }
+    );
+    observer.observe(loaderRef.current);
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaderRef.current, hasMore, loading]);
+
+  if (loading && groups.length === 0) {
     return (
       <Flex justify="center" align="center" className="h-200">
         <Spin size="large" />
       </Flex>
     );
   }
-  const alertsData =
-    data?.getAlerts?.map((day, index) => ({
-      key: index,
-      date: new Date(day.time).toLocaleDateString(), // format like '02/07/2025'
-      alertsdetails: day.notifications.map((notif, i) => ({
-        key: i,
-        title: notif.name || "Notification",
-        desc: notif.message,
-        time: new Date(notif.createdAt).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        id: notif.id,
-        isRead: notif.isRead,
-      })),
-    })) || [];
-  console.log(alertsData);
+
   return (
     <>
       <Row gutter={[24, 24]}>
@@ -53,26 +118,50 @@ const Alerts = () => {
         </Col>
         <Col span={24}>
           <Card className="overflow-style">
-            {alertsData?.map((alert, index) => (
-              <Flex vertical className="mt-2" key={index}>
-                <Text>{alert?.date}</Text>
-                {alert?.alertsdetails.map((details, i) => (
-                  <Flex vertical className="mt-2 ml-15" gap={4} key={i}>
+            {groups?.map((day, index) => (
+              <Flex vertical className="mt-2" key={`${day.time}-${index}`}>
+                <Text>{new Date(day.time).toLocaleDateString()}</Text>
+                {day?.notifications?.map((notif) => (
+                  <Flex vertical className="mt-2 ml-15" gap={4} key={notif.id}>
                     <Flex justify="space-between">
                       <Title level={5} className="m-0 fw-500">
-                        {" "}
-                        {t(details?.title)}
+                        {t(notif?.name || "Notification")}
                       </Title>
-                      <Text className="text-gray fs-12"> {details?.time}</Text>
+                      <Text className="text-gray fs-12">
+                        {new Date(notif.createdAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </Text>
                     </Flex>
                     <Text className="text-justify text-gray">
-                      {t(details.desc.split(":")[0]) +
-                        details?.desc.split(":")[1]}
+                      {t(notif.message)}
                     </Text>
+                    {/* optional action to mark as read */}
+                    {!notif.isRead && (
+                      <div>
+                        <a onClick={() => handleMarkAsRead(notif.id)}>
+                          {t("Mark as read")}
+                        </a>
+                      </div>
+                    )}
                   </Flex>
                 ))}
               </Flex>
             ))}
+
+            {/* loader sentinel */}
+            <div ref={loaderRef} style={{ height: 1 }} />
+
+            {loadingMore && (
+              <Flex justify="center" className="mt-2">
+                <Spin />
+              </Flex>
+            )}
+
+            {!hasMore && groups.length === 0 && (
+              <Text className="text-gray">{t("No alerts found")}</Text>
+            )}
           </Card>
         </Col>
       </Row>

@@ -415,15 +415,18 @@ const GET_NOTIFICATIONS = gql`
   }
 `;
 const GET_ALERTS = gql`
-  query Notifications($userId: ID) {
-    getAlerts(userId: $userId) {
-      time
-      notifications {
-        id
-        isRead
-        message
-        name
-        createdAt
+  query Notifications($userId: ID, $offset: Int, $limit: Int) {
+    getAlerts(userId: $userId, offset: $offset, limit: $limit) {
+      count
+      groups {
+        notifications {
+          id
+          isRead
+          message
+          name
+          createdAt
+        }
+        time
       }
     }
   }
