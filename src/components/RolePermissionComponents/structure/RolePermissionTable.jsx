@@ -1,18 +1,27 @@
-import { Button, Card, Col, Dropdown, Flex, Form, message, Row, Table, Typography } from 'antd';
-import { SearchInput } from '../../Forms';
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Flex,
+  Form,
+  message,
+  Row,
+  Table,
+  Typography,
+} from "antd";
+import { MySelect, SearchInput } from "../../Forms";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState, useEffect, useCallback } from 'react';
-import { DownOutlined } from '@ant-design/icons';
-import { CustomPagination, DeleteModal } from '../../Ui';
-import { GETROLES } from '../../../graphql/query/user';
-import { UPDATE_ROLE, DELETE_ROLE } from '../../../graphql/mutation';
-import { useLazyQuery, useMutation } from '@apollo/client';
-import { TableLoader } from '../../Ui/TableLoader';
-import { t } from 'i18next';
+import { useState, useEffect, useCallback } from "react";
+import { CustomPagination, DeleteModal } from "../../Ui";
+import { GETROLES } from "../../../graphql/query/user";
+import { UPDATE_ROLE, DELETE_ROLE } from "../../../graphql/mutation";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { TableLoader } from "../../Ui/TableLoader";
+import { t } from "i18next";
 
-const { Text } = Typography
+const { Text } = Typography;
 const RolePermissionTable = () => {
-
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState("Status");
@@ -159,9 +168,8 @@ const RolePermissionTable = () => {
   ];
 
   const statusItems = [
-    { key: "1", label: t("All") },
-    { key: "2", label: t("Active") },
-    { key: "3", label: t("Inactive") },
+    { id: "2", name: t("Active") },
+    { id: "3", name: t("Inactive") },
   ];
 
   const handleStatusClick = ({ key }) => {
@@ -200,7 +208,7 @@ const RolePermissionTable = () => {
   };
 
   const [deleteRole, { loading: onDeleteing }] = useMutation(DELETE_ROLE, {
-    refetchQueries: [ GETROLES],
+    refetchQueries: [GETROLES],
     onCompleted: () => {
       messageApi.success("Role deleted successfully!");
     },
@@ -209,8 +217,8 @@ const RolePermissionTable = () => {
     },
   });
 
-  const [updateRole, { loading: updating }] = useMutation(UPDATE_ROLE, {
-    refetchQueries: [ GETROLES],
+  const [updateRole] = useMutation(UPDATE_ROLE, {
+    refetchQueries: [GETROLES],
     onCompleted: () => {
       messageApi.success("Status changed successfully!");
     },
@@ -229,6 +237,7 @@ const RolePermissionTable = () => {
               <Col lg={24} md={12} sm={24} xs={24}>
                 <Flex gap={5} wrap>
                   <SearchInput
+                    withoutForm
                     name="name"
                     placeholder={t("Search")}
                     prefix={
@@ -240,26 +249,20 @@ const RolePermissionTable = () => {
                       />
                     }
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
-                    onChange={(e) => handleSearch(e.target.value.trim())}
+                    onChange={(e) => handleSearch(e.target)}
                     debounceMs={400}
+                    allowClear
                   />
-                  <Dropdown
-                    menu={{
-                      items: statusItems,
-                      onClick: handleStatusClick,
+                  <MySelect
+                    withoutForm
+                    name="status"
+                    placeholder={t("Status")}
+                    options={statusItems}
+                    onChange={(value) => {
+                      setSelectedStatus(value);
                     }}
-                    trigger={["click"]}
-                  >
-                    <Button
-                      aria-labelledby="filter status"
-                      className="btncancel px-3 filter-bg fs-13 text-black"
-                    >
-                      <Flex justify="space-between" align="center" gap={30}>
-                        {t(selectedStatus)}
-                        <DownOutlined />
-                      </Flex>
-                    </Button>
-                  </Dropdown>
+                    allowClear
+                  />
                 </Flex>
               </Col>
             </Row>

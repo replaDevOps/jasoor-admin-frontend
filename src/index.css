@@ -547,7 +547,7 @@ body.ltr {
 }
 
 .btnsave {
-  padding: 0.7rem 1.9rem;
+  padding: 0.6rem 1.2rem;
   height: auto !important;
   box-shadow: none !important;
   font-size: 0.8rem;
@@ -555,7 +555,7 @@ body.ltr {
   border: 1px solid var(--brand-color);
 }
 .btncancel {
-  padding: 0.7rem 1.9rem;
+  padding: 0.6rem 1.2rem;
   height: auto !important;
   color: var(--black-color) !important;
   box-shadow: none !important;
@@ -1243,6 +1243,10 @@ body.ltr {
 
 .min-w-150 {
   min-width: 130px !important;
+}
+
+.min-w-180 {
+  min-width: 180px !important;
 }
 
 .h-80 {

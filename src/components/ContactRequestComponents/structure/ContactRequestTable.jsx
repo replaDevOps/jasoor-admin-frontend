@@ -1,25 +1,35 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography } from 'antd';
-import { SearchInput } from '../../Forms';
-import { useState, useEffect } from 'react';
-import { DownOutlined } from '@ant-design/icons';
-import { CustomPagination } from '../../Ui';
-import { GET_ALL_CONTACT_US } from '../../../graphql/query/user';
-import { useLazyQuery } from '@apollo/client';
-import { TableLoader } from '../../Ui/TableLoader';
-import { t } from 'i18next';
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Flex,
+  Form,
+  Row,
+  Table,
+  Tooltip,
+  Typography,
+} from "antd";
+import { MySelect, SearchInput } from "../../Forms";
+import { useState, useEffect } from "react";
+import { CustomPagination } from "../../Ui";
+import { GET_ALL_CONTACT_US } from "../../../graphql/query/user";
+import { useLazyQuery } from "@apollo/client";
+import { TableLoader } from "../../Ui/TableLoader";
+import { t } from "i18next";
 
 const { Text } = Typography;
 
 const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
   const [form] = Form.useForm();
 
-  const [selectedStatus, setSelectedStatus] = useState('Status');
-  const [searchValue, setSearchValue] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState("Status");
+  const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
 
   const [fetchContacts, { data, loading }] = useLazyQuery(GET_ALL_CONTACT_US, {
-    fetchPolicy: 'network-only',
+    fetchPolicy: "network-only",
   });
 
   useEffect(() => {
@@ -28,10 +38,15 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
         limit: pageSize,
         offset: (current - 1) * pageSize,
         search: searchValue,
-        status: selectedStatus === 'Send' ? true : selectedStatus === 'Pending' ? false : null,
+        status:
+          selectedStatus === "Send"
+            ? true
+            : selectedStatus === "Pending"
+            ? false
+            : null,
       },
     });
-  }, [pageSize, current, selectedStatus]); 
+  }, [pageSize, current, selectedStatus]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -40,7 +55,12 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
           limit: pageSize,
           offset: (current - 1) * pageSize,
           search: searchValue,
-          status: selectedStatus === 'Send' ? true : selectedStatus === 'Pending' ? false : null,
+          status:
+            selectedStatus === "Send"
+              ? true
+              : selectedStatus === "Pending"
+              ? false
+              : null,
         },
       });
     }, 400);
@@ -49,15 +69,17 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
   }, [searchValue]);
 
   const total = data?.getAllContactUs?.totalCount || 0;
-  const contactreqData = (data?.getAllContactUs?.contactUs || []).map((item) => ({
-    key: item.id,
-    name: item.name,
-    email: item.email,
-    msgPreview: item.message,
-    answer: item.answer || 'No answer yet',
-    date: new Date(item?.createdAt).toLocaleDateString(),
-    status: item.isResponded ? 1 : 0,
-  }));
+  const contactreqData = (data?.getAllContactUs?.contactUs || []).map(
+    (item) => ({
+      key: item.id,
+      name: item.name,
+      email: item.email,
+      msgPreview: item.message,
+      answer: item.answer || "No answer yet",
+      date: new Date(item?.createdAt).toLocaleDateString(),
+      status: item.isResponded ? 1 : 0,
+    })
+  );
 
   const handlePageChange = (page, size) => {
     setCurrent(page);
@@ -65,18 +87,9 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
   };
 
   const statusItems = [
-    { key: '1', label: t('All') },
-    { key: '2', label: t('Send') },
-    { key: '3', label: t('Pending') },
+    { id: "2", name: t("Send") },
+    { id: "3", name: t("Pending") },
   ];
-
-  const handleStatusClick = ({ key }) => {
-    const selectedItem = statusItems.find((item) => item.key === key);
-    if (selectedItem) {
-      setSelectedStatus(selectedItem.label);
-      setCurrent(1); 
-    }
-  };
 
   return (
     <>
@@ -87,27 +100,31 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
               <Col xl={18} lg={16} md={24} sm={24} xs={24}>
                 <Flex gap={5} wrap>
                   <SearchInput
+                    withoutForm
                     name="name"
                     placeholder={t("Search")}
-                    prefix={<img src="/assets/icons/search.png" width={14} alt="search icon" fetchPriority="high" />}
+                    prefix={
+                      <img
+                        src="/assets/icons/search.png"
+                        width={14}
+                        alt="search icon"
+                        fetchPriority="high"
+                      />
+                    }
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
                     onChange={(e) => setSearchValue(e.target.value)}
                     debounceMs={400}
+                    allowClear
                   />
-                  <Dropdown
-                    menu={{
-                      items: statusItems,
-                      onClick: handleStatusClick,
-                    }}
-                    trigger={['click']}
-                  >
-                    <Button aria-labelledby="filter status" className="btncancel px-3 filter-bg fs-13 text-black">
-                      <Flex justify="space-between" align="center" gap={30}>
-                        {t(selectedStatus)}
-                        <DownOutlined />
-                      </Flex>
-                    </Button>
-                  </Dropdown>
+                  <MySelect
+                    withoutForm
+                    name="status"
+                    value={selectedStatus}
+                    placeholder={t("Status")}
+                    options={statusItems}
+                    onChange={(e) => setSelectedStatus(e)}
+                    allowClear
+                  />
                 </Flex>
               </Col>
             </Row>
@@ -116,34 +133,37 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
             size="large"
             columns={[
               {
-                title: t('Full Name'),
-                dataIndex: 'name',
+                title: t("Full Name"),
+                dataIndex: "name",
               },
               {
-                title: t('Email'),
-                dataIndex: 'email',
+                title: t("Email"),
+                dataIndex: "email",
               },
               {
-                title: t('Massage Preview'),
-                dataIndex: 'msgPreview',
+                title: t("Massage Preview"),
+                dataIndex: "msgPreview",
                 render: (msgPreview) => {
-                  const words = msgPreview?.split(' ') || [];
-                  const previewText = words.slice(0, 5).join(' ');
+                  const words = msgPreview?.split(" ") || [];
+                  const previewText = words.slice(0, 5).join(" ");
                   const showEllipsis = words.length > 5;
                   return (
                     <Tooltip title={msgPreview}>
-                      <Text>{previewText}{showEllipsis ? '...' : ''}</Text>
+                      <Text>
+                        {previewText}
+                        {showEllipsis ? "..." : ""}
+                      </Text>
                     </Tooltip>
                   );
                 },
               },
               {
-                title: t('Date'),
-                dataIndex: 'date',
+                title: t("Date"),
+                dataIndex: "date",
               },
               {
-                title: t('Reply Status'),
-                dataIndex: 'status',
+                title: t("Reply Status"),
+                dataIndex: "status",
                 render: (status) =>
                   status === 1 ? (
                     <Text className="btnpill fs-12 success">Sent</Text>
@@ -152,9 +172,9 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
                   ),
               },
               {
-                title: t('Action'),
-                key: 'action',
-                fixed: 'right',
+                title: t("Action"),
+                key: "action",
+                fixed: "right",
                 width: 100,
                 render: (_, row) =>
                   row.status !== 1 ? (
@@ -186,7 +206,12 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
               spinning: loading,
             }}
           />
-          <CustomPagination total={total} current={current} pageSize={pageSize} onPageChange={handlePageChange} />
+          <CustomPagination
+            total={total}
+            current={current}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+          />
         </Flex>
       </Card>
     </>

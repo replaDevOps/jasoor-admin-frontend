@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import { Card, Flex, Form, Image, Tooltip, Typography } from 'antd'
-import { ModuleTopHeading } from '../../PageComponents'
-import { SingleFileUpload } from '../../Forms';
-import imageCompression from 'browser-image-compression';
-import { t } from 'i18next';
+import { useState } from "react";
+import { Card, Flex, Form, Image, Tooltip, Typography } from "antd";
+import { ModuleTopHeading } from "../../PageComponents";
+import { SingleFileUpload } from "../../Forms";
+import imageCompression from "browser-image-compression";
+import { t } from "i18next";
 
-const { Title, Text } = Typography
+const { Title, Text } = Typography;
 const UploadSupportDocStep = ({ data, setData }) => {
   const [form] = Form.useForm();
   const [uploading, setUploading] = useState(false);
@@ -15,7 +15,7 @@ const UploadSupportDocStep = ({ data, setData }) => {
     try {
       let compressedFile = file;
 
-      if (file.type.startsWith('image/')) {
+      if (file.type.startsWith("image/")) {
         compressedFile = await imageCompression(file, {
           maxSizeMB: 1,
           maxWidthOrHeight: 1024,
@@ -24,14 +24,14 @@ const UploadSupportDocStep = ({ data, setData }) => {
       }
 
       const formData = new FormData();
-      formData.append('file', compressedFile);
+      formData.append("file", compressedFile);
 
       const res = await fetch("https://verify.jusoor-sa.co/upload", {
-        method: 'POST',
+        method: "POST",
         body: formData,
       });
 
-      if (!res.ok) throw new Error('Upload failed');
+      if (!res.ok) throw new Error("Upload failed");
 
       const data = await res.json();
 
@@ -42,7 +42,7 @@ const UploadSupportDocStep = ({ data, setData }) => {
       };
     } catch (err) {
       console.error(err);
-      message.error('Failed to upload file');
+      message.error("Failed to upload file");
       throw err;
     } finally {
       setUploading(false);
@@ -55,12 +55,14 @@ const UploadSupportDocStep = ({ data, setData }) => {
       const fileInfo = await uploadFileToServer(file);
       const updatedDocs = [...data.documents];
       updatedDocs[0] = {
-        title: 'Commercial Registration (CR)',
+        title: "Commercial Registration (CR)",
         ...fileInfo,
       };
       setData((prev) => {
         const updated = { ...prev, documents: updatedDocs };
-        return JSON.stringify(updated) !== JSON.stringify(prev) ? updated : prev;
+        return JSON.stringify(updated) !== JSON.stringify(prev)
+          ? updated
+          : prev;
       });
     } catch {
       // error handled in uploadFileToServer
@@ -73,7 +75,7 @@ const UploadSupportDocStep = ({ data, setData }) => {
       // Upload all files in parallel
       const uploadedFiles = await Promise.all(files.map(uploadFileToServer));
       const otherDocs = uploadedFiles.map((fileInfo) => ({
-        title: 'Supporting Document',
+        title: "Supporting Document",
         ...fileInfo,
       }));
 
@@ -85,7 +87,9 @@ const UploadSupportDocStep = ({ data, setData }) => {
             ...otherDocs,
           ],
         };
-        return JSON.stringify(updated) !== JSON.stringify(prev) ? updated : prev;
+        return JSON.stringify(updated) !== JSON.stringify(prev)
+          ? updated
+          : prev;
       });
     } catch {
       // error handled in uploadFileToServer
@@ -94,33 +98,51 @@ const UploadSupportDocStep = ({ data, setData }) => {
 
   return (
     <>
-      <Flex justify='space-between' className='mb-3' gap={5} wrap align='flex-start'>
+      <Flex
+        justify="space-between"
+        className="mb-3"
+        gap={5}
+        wrap
+        align="flex-start"
+      >
         <Flex vertical gap={1}>
-          <ModuleTopHeading level={4} name={t('Upload supporting documents')} />
-          <Text className='text-gray'>{t("Verified data builds buyer confidence.")}</Text>
+          <ModuleTopHeading level={4} name={t("Upload supporting documents")} />
+          <Text className="text-gray">
+            {t("Verified data builds buyer confidence.")}
+          </Text>
         </Flex>
-        <Flex className='pill-round' gap={8} align='center'>
-          <Image src="/assets/icons/info-b.png" fetchPriority="high" preview={false} width={16} alt="info-icon" />
-          <Text className='fs-12 text-sky'>{t("For any query, contact us on +966 543 543 654")}</Text>
+        <Flex className="pill-round" gap={8} align="center">
+          <Image
+            src="/assets/icons/info-b.png"
+            fetchPriority="high"
+            preview={false}
+            width={16}
+            alt="info-icon"
+          />
+          <Text className="fs-12 text-sky">
+            {t("For any query, contact us on +966 543 543 654")}
+          </Text>
         </Flex>
       </Flex>
 
       <Form layout="vertical" form={form} requiredMark={false}>
-        <Card className="bg-transparent radius-12 border-gray mb-3">
+        <Card className="radius-12 border-gray mb-3">
           <Flex vertical gap={5} className="w-100">
             <Flex vertical>
               <Title level={5} className="m-0 fw-500">
                 {t("Commercial Registration (CR)")}
               </Title>
               <Text className="text-gray">
-                {t("Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file.")}
+                {t(
+                  "Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file."
+                )}
               </Text>
             </Flex>
             <Flex className="w-100">
               <SingleFileUpload
                 form={form}
-                name={'uploadcr'}
-                title={t('Upload')}
+                name={"uploadcr"}
+                title={t("Upload")}
                 onUpload={handleSingleFileUpload}
                 uploading={uploading}
                 multiple={false}
@@ -129,24 +151,31 @@ const UploadSupportDocStep = ({ data, setData }) => {
           </Flex>
         </Card>
 
-        <Card className="bg-transparent radius-12 border-gray mb-3">
+        <Card className="radius-12 border-gray mb-3">
           <Flex vertical gap={5} className="w-100">
             <Flex vertical>
               <Title level={5} className="m-0 fw-500">
-                {t("Upload Other Supporting Documents")}{' '}
+                {t("Upload Other Supporting Documents")}{" "}
                 <Tooltip title="Info">
-                  <img src="/assets/icons/info-outline.png" width={14} alt='info icon' fetchPriority="high" />
+                  <img
+                    src="/assets/icons/info-outline.png"
+                    width={14}
+                    alt="info icon"
+                    fetchPriority="high"
+                  />
                 </Tooltip>
               </Title>
               <Text className="text-gray">
-                {t("Accepted formats: PDF, JPG, PNG, DOCX, XLSX. Max size: 10MB per file.")}
+                {t(
+                  "Accepted formats: PDF, JPG, PNG, DOCX, XLSX. Max size: 10MB per file."
+                )}
               </Text>
             </Flex>
             <Flex className="w-100">
               <SingleFileUpload
                 form={form}
-                name={'uploadmult'}
-                title={t('Upload')}
+                name={"uploadmult"}
+                title={t("Upload")}
                 onUpload={handleMultipleFileUpload}
                 uploading={uploading}
                 multiple={true}
@@ -159,4 +188,4 @@ const UploadSupportDocStep = ({ data, setData }) => {
   );
 };
 
-export {UploadSupportDocStep}
+export { UploadSupportDocStep };

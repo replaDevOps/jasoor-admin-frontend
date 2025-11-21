@@ -10,9 +10,8 @@ import {
   message,
 } from "antd";
 import { NavLink } from "react-router-dom";
-import { SearchInput } from "../../Forms";
+import { MySelect, SearchInput } from "../../Forms";
 import { useEffect, useState } from "react";
-import { DownOutlined } from "@ant-design/icons";
 import { meetingItems } from "../../../shared";
 import { CustomPagination, DeleteModal } from "../../Ui";
 import { ScheduleMeeting } from "../modal";
@@ -63,28 +62,42 @@ const MeetingRequestTable = () => {
   const mainmeetingreqData =
     data?.getAdminPendingMeetings?.items?.map((item) => {
       const isSeller = item.business?.seller?.id === item.requestedBy?.id;
-      const requestedDate = item.requestedDate ? dayjs(item.requestedDate) : null;
-      const requestedEndDate = item.requestedEndDate ? dayjs(item.requestedEndDate) : null;
+      const requestedDate = item.requestedDate
+        ? dayjs(item.requestedDate)
+        : null;
+      const requestedEndDate = item.requestedEndDate
+        ? dayjs(item.requestedEndDate)
+        : null;
       const receiverAvailabilityDate = item.receiverAvailabilityDate
         ? dayjs(item.receiverAvailabilityDate)
         : null;
       return {
         key: item.id,
         businessTitle: item.business?.businessTitle || "-",
-        buyerName: isSeller ? item?.requestedTo?.name || "-" : item?.requestedBy?.name || "-",
-        email: isSeller ? item?.requestedTo?.email || "-" : item?.requestedBy?.email || "-",
-        phoneNumber: isSeller ? item?.requestedTo?.phone || "-" : item?.requestedBy?.phone || "-",
+        buyerName: isSeller
+          ? item?.requestedTo?.name || "-"
+          : item?.requestedBy?.name || "-",
+        email: isSeller
+          ? item?.requestedTo?.email || "-"
+          : item?.requestedBy?.email || "-",
+        phoneNumber: isSeller
+          ? item?.requestedTo?.phone || "-"
+          : item?.requestedBy?.phone || "-",
         sellerName: item.business?.seller?.name || "-",
         sellerEmail: item.business?.seller?.email || "-",
         sellerPhoneNumber: item.business?.seller?.phone || "-",
-        buyerTime: !isSeller ? `${requestedDate?.format("DD MMM YYYY, hh:mm A")} - ${requestedEndDate?.format(
-          "hh:mm A"
-        )}` : requestedDate
+        buyerTime: !isSeller
+          ? `${requestedDate?.format(
+              "DD MMM YYYY, hh:mm A"
+            )} - ${requestedEndDate?.format("hh:mm A")}`
+          : requestedDate
           ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
           : "-",
-        sellerTime: isSeller ? `${requestedDate?.format("DD MMM YYYY, hh:mm A")} - ${requestedEndDate?.format(
-          "hh:mm A"
-        )}` : requestedDate
+        sellerTime: isSeller
+          ? `${requestedDate?.format(
+              "DD MMM YYYY, hh:mm A"
+            )} - ${requestedEndDate?.format("hh:mm A")}`
+          : requestedDate
           ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
           : "-",
         businessPrice: item.business?.price
@@ -105,28 +118,29 @@ const MeetingRequestTable = () => {
     setPageSize(size);
   };
 
-  const handleStatusClick = ({ key }) => {
-    const selectedItem = meetingItems.find((item) => item.key === key);
-    if (selectedItem) setSelectedStatus(selectedItem.label);
-  };
-
   const handleSearch = (value) => {
     setSearchValue(value);
   };
 
-  const [updateMeeting, { loading: updating }] = useMutation(UPDATE_BUSINESS_MEETING, {
-    refetchQueries: [{ 
-      query: GETADMINPENDINGMEETINGS,
-      variables: {
-        limit: pageSize,
-        offset: (current - 1) * pageSize,
-        search: searchValue,
-        status: computeStatusVar(),
-      },
-    }],
-    onCompleted: () => messageApi.success("Status changed successfully!"),
-    onError: (err) => messageApi.error(err.message || "Something went wrong!"),
-  });
+  const [updateMeeting, { loading: updating }] = useMutation(
+    UPDATE_BUSINESS_MEETING,
+    {
+      refetchQueries: [
+        {
+          query: GETADMINPENDINGMEETINGS,
+          variables: {
+            limit: pageSize,
+            offset: (current - 1) * pageSize,
+            search: searchValue,
+            status: computeStatusVar(),
+          },
+        },
+      ],
+      onCompleted: () => messageApi.success("Status changed successfully!"),
+      onError: (err) =>
+        messageApi.error(err.message || "Something went wrong!"),
+    }
+  );
 
   const meetingreqColumn = (setVisible, setDeleteItem) => [
     {
@@ -244,31 +258,31 @@ const MeetingRequestTable = () => {
         <Form form={form} layout="vertical">
           <Row gutter={[16, 16]} align="middle" justify="space-between">
             <Col lg={24} md={24} sm={24} xs={24}>
-              <Flex gap={5} wrap>
+              <Flex gap={5}>
                 <SearchInput
+                  withoutForm
                   name="name"
                   placeholder={t("Search")}
-                  prefix={<img src="/assets/icons/search.png" width={14} alt="search" />}
+                  prefix={
+                    <img
+                      src="/assets/icons/search.png"
+                      width={14}
+                      alt="search"
+                    />
+                  }
                   className="border-light-gray pad-x ps-0 radius-8 fs-13"
                   onChange={(e) => handleSearch(e.target.value)}
+                  allowClear
                 />
-                <Dropdown
-                  menu={{
-                    items: meetingItems.map((item) => ({
-                      ...item,
-                      label: t(item.label),
-                    })),
-                    onClick: handleStatusClick,
-                  }}
-                  trigger={["click"]}
-                >
-                  <Button className="btncancel px-3 filter-bg fs-13 text-black">
-                    <Flex justify="space-between" align="center" gap={30}>
-                      {t(selectedStatus)}
-                      <DownOutlined />
-                    </Flex>
-                  </Button>
-                </Dropdown>
+                <MySelect
+                  withoutForm
+                  name="status"
+                  placeholder={t("Status")}
+                  options={meetingItems}
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e)}
+                  allowClear
+                />
               </Flex>
             </Col>
           </Row>

@@ -1,14 +1,8 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table } from "antd";
+import { Card, Col, Flex, Form, Row, Table } from "antd";
 import { MySelect, SearchInput } from "../../Forms";
 import { pushnotifyColumn } from "../../../data";
 import { useState, useEffect } from "react";
-import { DownOutlined } from "@ant-design/icons";
-import {
-  groupItems,
-  pushstatusItem,
-  useDistrictItem,
-  useGroupItem,
-} from "../../../shared";
+import { pushstatusItem, useDistrictItem, useGroupItem } from "../../../shared";
 import { CustomPagination } from "../../Ui";
 import { GET_CAMPAIGNS } from "../../../graphql/query";
 import { TableLoader } from "../../Ui/TableLoader";
@@ -119,7 +113,7 @@ const PushNotificationTable = ({
                 <MySelect
                   withoutForm
                   name="category"
-                  placeholder={t("Category")}
+                  placeholder={t("Group")}
                   options={groupselectItem}
                   onChange={(value) => setSelectedCategory(value)}
                   allowClear

@@ -71,9 +71,8 @@ const typeItems = [
 ];
 
 const meetingItems = [
-  { key: "1", label: "All" },
-  { key: "2", label: "Pending" },
-  { key: "3", label: "Cancel Meeting" },
+  { id: "2", name: "Pending" },
+  { id: "3", name: "Cancel Meeting" },
 ];
 
 const pushstatusItem = [

@@ -1,12 +1,12 @@
-import { Flex, Select, Pagination } from 'antd';
-import { t } from 'i18next';
+import { Flex, Select, Pagination } from "antd";
+import { t } from "i18next";
 
 const CustomPagination = ({
   total,
   pageSize,
   current,
   onPageChange,
-  pageSizeOptions = [10, 20, 30, 50], 
+  pageSizeOptions = [10, 20, 30, 50],
 }) => {
   if (!total || total <= pageSize) return null;
 
@@ -31,6 +31,8 @@ const CustomPagination = ({
         current={current}
         pageSize={pageSize}
         total={total}
+        // 1. HIDES the built-in dropdown
+        showSizeChanger={false}
         // AntD Pagination onChange signature is (page, pageSize)
         onChange={(page, newPageSize) => onPageChange(page, newPageSize)}
         showLessItems

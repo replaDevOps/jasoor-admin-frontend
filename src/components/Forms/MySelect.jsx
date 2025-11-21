@@ -39,6 +39,7 @@ export const MySelect = ({
       rules={[
         {
           required,
+          whitespace: true,
           message,
         },
       ]}

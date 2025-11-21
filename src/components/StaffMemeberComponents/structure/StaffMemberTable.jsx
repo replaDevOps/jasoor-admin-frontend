@@ -1,27 +1,37 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Typography, message } from 'antd';
-import { SearchInput } from '../../Forms';
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Flex,
+  Form,
+  Row,
+  Table,
+  Typography,
+  message,
+} from "antd";
+import { MySelect, SearchInput } from "../../Forms";
 import { NavLink } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import { DownOutlined } from '@ant-design/icons';
-import { CustomPagination, DeleteModal } from '../../Ui';
-import { UPDATE_USER, DELETE_USER } from '../../../graphql/mutation';
-import { GETSTAFFMEMBERS, GETROLES } from '../../../graphql/query';
-import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
-import { TableLoader } from '../../Ui/TableLoader';
-import { t } from 'i18next';
+import { useState, useEffect } from "react";
+import { DownOutlined } from "@ant-design/icons";
+import { CustomPagination, DeleteModal } from "../../Ui";
+import { UPDATE_USER, DELETE_USER } from "../../../graphql/mutation";
+import { GETSTAFFMEMBERS, GETROLES } from "../../../graphql/query";
+import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
+import { TableLoader } from "../../Ui/TableLoader";
+import { t } from "i18next";
 
 const { Text } = Typography;
 
 const StaffMemberTable = ({ setVisible, setEditItem }) => {
-  
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [selectedStatus, setSelectedStatus] = useState(t('Status'));
-  const [selectedRole, setSelectedRole] = useState(t('Role'));
+  const [selectedStatus, setSelectedStatus] = useState(t("Status"));
+  const [selectedRole, setSelectedRole] = useState(t("Role"));
   const [deleteitem, setDeleteItem] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   // Roles query (normal useQuery, no debounce needed)
@@ -29,7 +39,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
 
   // ✅ UseLazyQuery for staff members
   const [getStaffMembers, { loading, data }] = useLazyQuery(GETSTAFFMEMBERS, {
-    fetchPolicy: 'network-only'
+    fetchPolicy: "network-only",
   });
 
   // ✅ Fetch staff members when filters, pagination, or searchText changes
@@ -40,30 +50,38 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
         offset: (current - 1) * pageSize,
         search: searchText || null,
         status:
-        selectedStatus === 'Active'
-          ? 'verified'
-          : selectedStatus === 'Inactive'
-          ? 'inactive'
-          : selectedStatus === 'Pending'
-          ? 'pending'
-          : null,
-      roleId:
-        selectedRole === 'All' || selectedRole === 'Role'
-          ? null
-          : roles.find((r) => r.name === selectedRole)?.id || null
-      }
+          selectedStatus === "Active"
+            ? "verified"
+            : selectedStatus === "Inactive"
+            ? "inactive"
+            : selectedStatus === "Pending"
+            ? "pending"
+            : null,
+        roleId:
+          selectedRole === "All" || selectedRole === "Role"
+            ? null
+            : roles.find((r) => r.name === selectedRole)?.id || null,
+      },
     });
-  }, [pageSize, current, searchText, selectedStatus, selectedRole, getStaffMembers]);
+  }, [
+    pageSize,
+    current,
+    searchText,
+    selectedStatus,
+    selectedRole,
+    getStaffMembers,
+  ]);
 
-  const roles = rolesData?.getRoles?.roles?.filter((role) => role.name !== 'Customer') || [];
+  const roles =
+    rolesData?.getRoles?.roles?.filter((role) => role.name !== "Customer") ||
+    [];
 
   const total = data?.getStaffMembers?.totalCount || 0;
-  const staffData =
-    data?.getStaffMembers?.users?.map((user) => ({
-      ...user,
-      key: user.id,
-      role: user.role?.name || 'N/A'
-    }));
+  const staffData = data?.getStaffMembers?.users?.map((user) => ({
+    ...user,
+    key: user.id,
+    role: user.role?.name || "N/A",
+  }));
 
   const handlePageChange = (page, size) => {
     setCurrent(page);
@@ -93,51 +111,53 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
 
   const [updateUser] = useMutation(UPDATE_USER, {
     refetchQueries: [{ query: GETSTAFFMEMBERS }],
-    awaitRefetchQueries: true
+    awaitRefetchQueries: true,
   });
   const [deleteUser] = useMutation(DELETE_USER, {
     refetchQueries: [GETSTAFFMEMBERS],
     awaitRefetchQueries: true,
     onCompleted: () => {
-      messageApi.success(t('Staff member deleted successfully!'));
+      messageApi.success(t("Staff member deleted successfully!"));
     },
   });
 
   const staffmemberColumn = (setVisible, setDeleteItem, setEditItem) => [
     {
-      title: t('Name'),
-      dataIndex: 'name'
+      title: t("Name"),
+      dataIndex: "name",
     },
     {
-      title: t('Email'),
-      dataIndex: 'email'
+      title: t("Email"),
+      dataIndex: "email",
     },
     {
-      title: t('Phone'),
-      dataIndex: 'phone'
+      title: t("Phone"),
+      dataIndex: "phone",
     },
     {
-      title: t('Role'),
-      dataIndex: 'role'
+      title: t("Role"),
+      dataIndex: "role",
     },
     {
-      title: t('Status'),
-      dataIndex: 'status',
+      title: t("Status"),
+      dataIndex: "status",
       render: (status) => {
-        if (status === 'verified') {
+        if (status === "verified") {
           return <Text className="btnpill fs-12 success">{t("Active")}</Text>;
-        } else if (status === 'inactive') {
-          return <Text className="btnpill fs-12 inactive">{t("Inactive")}</Text>;
-        } else if (status === 'pending') {
+        } else if (status === "inactive") {
+          return (
+            <Text className="btnpill fs-12 inactive">{t("Inactive")}</Text>
+          );
+        } else if (status === "pending") {
           return <Text className="btnpill fs-12 pending">{t("Pending")}</Text>;
         }
         return null;
-      }
+      },
     },
     {
-      title: t('Action'),
-      key: 'action',
-      fixed: 'right',
+      title: t("Action"),
+      key: "action",
+      fixed: "right",
       width: 100,
       render: (_, row) => {
         const handleUpdateStatus = async (newStatus) => {
@@ -146,28 +166,28 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
               variables: {
                 input: {
                   id: row.key,
-                  status: newStatus
-                }
-              }
+                  status: newStatus,
+                },
+              },
             });
-            messageApi.success(t('Staff member updated successfully!'));
+            messageApi.success(t("Staff member updated successfully!"));
           } catch (err) {
-            messageApi.error(err.message || t('Something went wrong!'));
+            messageApi.error(err.message || t("Something went wrong!"));
           }
         };
 
-        let actionLabel = '';
-        let nextStatus = '';
+        let actionLabel = "";
+        let nextStatus = "";
 
-        if (row.status === 'pending') {
-          actionLabel = t('Verify');
-          nextStatus = 'verified';
-        } else if (row.status === 'verified') {
-          actionLabel = t('Inactive');
-          nextStatus = 'inactive';
-        } else if (row.status === 'inactive') {
-          actionLabel = t('Active');
-          nextStatus = 'verified';
+        if (row.status === "pending") {
+          actionLabel = t("Verify");
+          nextStatus = "verified";
+        } else if (row.status === "verified") {
+          actionLabel = t("Inactive");
+          nextStatus = "inactive";
+        } else if (row.status === "inactive") {
+          actionLabel = t("Active");
+          nextStatus = "verified";
         }
 
         return (
@@ -186,7 +206,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                       {t("Edit")}
                     </NavLink>
                   ),
-                  key: '1'
+                  key: "1",
                 },
                 {
                   label: (
@@ -199,7 +219,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                       {actionLabel}
                     </NavLink>
                   ),
-                  key: '2'
+                  key: "2",
                 },
                 {
                   label: (
@@ -213,31 +233,38 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                       {t("Delete")}
                     </NavLink>
                   ),
-                  key: '3'
-                }
-              ]
+                  key: "3",
+                },
+              ],
             }}
-            trigger={['click']}
+            trigger={["click"]}
           >
-            <Button aria-labelledby="action button" className="bg-transparent border0 p-0">
-              <img src="/assets/icons/dots.png" alt="dot icon" width={16} fetchPriority="high" />
+            <Button
+              aria-labelledby="action button"
+              className="bg-transparent border0 p-0"
+            >
+              <img
+                src="/assets/icons/dots.png"
+                alt="dot icon"
+                width={16}
+                fetchPriority="high"
+              />
             </Button>
           </Dropdown>
         );
-      }
-    }
+      },
+    },
   ];
 
   const statusItems = [
-    { key: '1', label: t('All') },
-    { key: '2', label: t('Active') },
-    { key: '3', label: t('Inactive') }
+    { id: "2", name: t("Active") },
+    { id: "3", name: t("Inactive") },
   ];
 
   const roleItems =
     roles?.map((role) => ({
-      key: role?.id,
-      label: t(role?.name)
+      id: role?.id,
+      name: t(role?.name),
     })) || [];
 
   return (
@@ -246,33 +273,56 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
       <Card className="radius-12 border-gray">
         <Flex vertical gap={20}>
           <Form form={form} layout="vertical">
-            <Row gutter={[16, 16]} align={'middle'} justify={'space-between'}>
+            <Row gutter={[16, 16]} align={"middle"} justify={"space-between"}>
               <Col xl={18} lg={16} md={24} sm={24} xs={24}>
                 <Flex gap={5} wrap>
                   <SearchInput
+                    withoutForm
+                    allowClear
                     name="name"
                     placeholder={t("Search")}
-                    prefix={<img src="/assets/icons/search.png" width={14} alt="search icon" fetchPriority="high" />}
+                    prefix={
+                      <img
+                        src="/assets/icons/search.png"
+                        width={14}
+                        alt="search icon"
+                        fetchPriority="high"
+                      />
+                    }
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
                     onChange={(e) => handleSearch(e.target.value.trim())}
                     debounceMs={400}
                   />
-                  <Dropdown menu={{ items: roleItems, onClick: handleCategoryClick }} trigger={['click']}>
-                    <Button aria-labelledby="filter role" className="btncancel px-3 filter-bg fs-13 text-black">
-                      <Flex justify="space-between" align="center" gap={30}>
-                        {selectedRole}
-                        <DownOutlined />
-                      </Flex>
-                    </Button>
-                  </Dropdown>
-                  <Dropdown menu={{ items: statusItems, onClick: handleStatusClick }} trigger={['click']}>
-                    <Button aria-labelledby="filter status" className="btncancel px-3 filter-bg fs-13 text-black">
-                      <Flex justify="space-between" align="center" gap={30}>
-                        {selectedStatus}
-                        <DownOutlined />
-                      </Flex>
-                    </Button>
-                  </Dropdown>
+                  <MySelect
+                    withoutForm
+                    name="role"
+                    placeholder={t("Role")}
+                    options={roleItems}
+                    onChange={(value) => {
+                      const selected = roles.find((r) => r.id === value);
+                      if (selected) {
+                        setSelectedRole(selected.name);
+                        setCurrent(1);
+                      }
+                    }}
+                    allowClear
+                  />
+                  <MySelect
+                    withoutForm
+                    name="status"
+                    placeholder={t("Status")}
+                    options={statusItems}
+                    onChange={(value) => {
+                      const selectedItem = statusItems.find(
+                        (item) => item.id === value
+                      );
+                      if (selectedItem) {
+                        setSelectedStatus(selectedItem.name);
+                        setCurrent(1); // reset to first page
+                      }
+                    }}
+                    allowClear
+                  />
                 </Flex>
               </Col>
             </Row>
@@ -288,22 +338,29 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
             pagination={false}
             loading={{
               ...TableLoader,
-              spinning: loading
+              spinning: loading,
             }}
           />
-          <CustomPagination total={total} current={current} pageSize={pageSize} onPageChange={handlePageChange} />
+          <CustomPagination
+            total={total}
+            current={current}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+          />
         </Flex>
       </Card>
       <DeleteModal
         visible={deleteitem}
         onClose={() => setDeleteItem(false)}
         title={t("Are you sure?")}
-        subtitle={t("This action cannot be undone. Are you sure you want to delete this staff member?")}
+        subtitle={t(
+          "This action cannot be undone. Are you sure you want to delete this staff member?"
+        )}
         type="danger"
         onConfirm={() => {
           if (selectedUserId) {
             deleteUser({
-              variables: { deleteUserId: selectedUserId }
+              variables: { deleteUserId: selectedUserId },
             });
           }
           setDeleteItem(false);

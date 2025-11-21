@@ -9,6 +9,7 @@ import { useMutation } from "@apollo/client";
 import { message } from "antd";
 import { GET_CAMPAIGNS } from "../../../graphql/query";
 import { t } from "i18next";
+import dayjs from "dayjs";
 
 const { Title } = Typography;
 const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
@@ -85,6 +86,42 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
     });
   };
 
+  const range = (start, end) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+
+  const disabledDate = (current) => {
+    return current && current < dayjs().startOf("day");
+  };
+
+  const disabledTime = (current) => {
+    if (!current || !current.isSame(dayjs(), "day")) {
+      return {};
+    }
+
+    return {
+      disabledHours: () => range(0, dayjs().hour()),
+      disabledMinutes: (selectedHour) => {
+        if (selectedHour === dayjs().hour()) {
+          return range(0, dayjs().minute());
+        }
+        return [];
+      },
+      disabledSeconds: (selectedHour, selectedMinute) => {
+        if (
+          selectedHour === dayjs().hour() &&
+          selectedMinute === dayjs().minute()
+        ) {
+          return range(0, dayjs().second());
+        }
+        return [];
+      },
+    };
+  };
   return (
     <>
       {contextHolder}
@@ -166,11 +203,11 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
               <Col span={24}>
                 <MySelect
                   mode="multiple"
-                  label={t("District")}
+                  label={t("Regions")}
                   name="district"
                   required
-                  message={t("Please choose district")}
-                  placeholder={t("Choose district")}
+                  message={t("Please choose regions")}
+                  placeholder={t("Choose regions")}
                   options={districtselectItems}
                   disabled={viewnotify}
                 />
@@ -186,6 +223,8 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
                   placeholder={t("Select Date & Time")}
                   format="DD-MM-YYYY hh:mm A"
                   disabled={viewnotify}
+                  disabledDate={disabledDate}
+                  disabledTime={disabledTime}
                 />
               </Col>
               <Col span={24}>

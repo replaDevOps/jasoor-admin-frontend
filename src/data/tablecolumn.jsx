@@ -286,13 +286,7 @@ const pushnotifyColumn = ({
     title: t("Group"),
     dataIndex: "group",
     render: (group) => {
-      return group === "New" ? (
-        <Text className="btnpill fs-12 branded">{group}</Text>
-      ) : group === "Old" ? (
-        <Text className="btnpill fs-12 inactive">{group}</Text>
-      ) : (
-        <Text className="btnpill fs-12 success">{group}</Text>
-      );
+      return <Text>{group}</Text>;
     },
   },
   {
@@ -342,13 +336,13 @@ const pushnotifyColumn = ({
     dataIndex: "date",
   },
   {
-    title: t("Reply Status"),
+    title: t("Status"),
     dataIndex: "status",
     render: (status) => {
       return status === 1 ? (
         <Text className="btnpill fs-12 success">Sent</Text>
       ) : (
-        <Text className="btnpill fs-12 inactive">Schedule</Text>
+        <Text className="btnpill fs-12 branded">Schedule</Text>
       );
     },
   },
