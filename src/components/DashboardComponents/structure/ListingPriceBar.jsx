@@ -11,7 +11,6 @@ const ListingPriceBar = () => {
   
     // Prepare chart series and categories dynamically
     const counts = data?.getBusinessByPriceTier.map((item) => item.count) || [];
-    const categories = data?.getBusinessByPriceTier.map((item) => item.priceTier) || [];
   
     // Optionally calculate dynamic Y-axis max
     const maxCount = Math.max(...counts, 10); // fallback to 10 if all zero

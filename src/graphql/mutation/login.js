@@ -109,8 +109,6 @@ export const UPDATEBANK = gql`
 
 export const MARK_AS_READ = gql`
 mutation MarkNotificationAsRead($markNotificationAsReadId: ID!) {
-  markNotificationAsRead(id: $markNotificationAsReadId) {
-    id
-  }
+  markNotificationAsRead(id: $markNotificationAsReadId)
 }
 `

@@ -83,7 +83,7 @@ const Sidebar = () => {
 
   const menuItems = useMemo(() => [
     getItem(t('Dashboard'), '1'), 
-    getItem(t('Business listing'), '2'),
+    getItem(t('Business Listing'), '2'),
     getItem(t('Categories Management'), '3'),
     getItem(t('User Management'), '4'),
     getItem(t('Meeting Requests'), '5'),

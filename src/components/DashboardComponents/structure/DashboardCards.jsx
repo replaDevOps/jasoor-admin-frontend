@@ -2,21 +2,11 @@ import { Card, Col, Flex, Row, Typography } from 'antd'
 import { ModuleTopHeading } from '../../PageComponents'
 import { GET_BUSINESS_STATS } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
-import { message,Spin } from "antd";
 import { t } from 'i18next';
 
 const { Title, Text } = Typography
 const DashboardCards = () => {
-    const { data, loading, error } = useQuery(GET_BUSINESS_STATS);
-
-    // Show loader while fetching
-    if (loading) {
-      return (
-        <Flex justify="center" align="center" className='h-200'>
-          <Spin size="large" />
-        </Flex>
-      );
-    }
+    const { data, error } = useQuery(GET_BUSINESS_STATS);
   
     if (error) {
       return (
@@ -52,7 +42,7 @@ const DashboardCards = () => {
         id: 4,
         icon: 'dc-4.png',
         title: stats.scheduleMeetings || 0,
-        subtitle: 'Schedule Meeting',
+        subtitle: 'Scheduled Meetings',
       },
     ];
 

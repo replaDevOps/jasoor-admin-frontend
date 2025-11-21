@@ -414,6 +414,11 @@ const GET_NOTIFICATIONS = gql`
     }
   }
 `;
+const GET_NOTIFICATION_COUNT = gql`
+  query Query {
+  getNotificationCount
+}
+`;
 const GET_ALERTS = gql`
   query Notifications($userId: ID, $offset: Int, $limit: Int) {
     getAlerts(userId: $userId, offset: $offset, limit: $limit) {
@@ -477,6 +482,7 @@ export {
   GET_SETTINGS,
   GET_CAMPAIGNS,
   GET_NOTIFICATIONS,
+  GET_NOTIFICATION_COUNT,
   GET_ALERTS,
   GETUSERACTIVEBANK,
   CUSTOMER,

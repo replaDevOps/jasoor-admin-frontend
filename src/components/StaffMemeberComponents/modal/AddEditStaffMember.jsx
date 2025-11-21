@@ -170,7 +170,9 @@ const AddEditStaffMember = ({visible,onClose,edititem}) => {
                             label={t("Assign Role")}
                             name="assignRole"
                             options={roles.map(role => ({ name: t(role.name), id: role.id }))}
-                            value={selectedRole }
+                            value={selectedRole}
+                            required
+                            message={t('Select role')}
                             onChange={handleRoleChange}   // ✅ correct
                         />
                         </Col>

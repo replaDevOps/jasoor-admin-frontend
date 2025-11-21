@@ -146,7 +146,13 @@ const SingleviewBusinesslist = () => {
                                 <Flex vertical gap={10}>
                                     <Flex gap={5} align='center'>
                                         <Text className='fs-12 text-gray border-gray p-2 radius-8'>{data?.category.name}</Text>
-                                        <Text className='fs-12 text-gray border-gray p-2 radius-8'>{data?.foundedDate}</Text>
+                                        <Text className='fs-12 text-gray border-gray p-2 radius-8'>
+                                        {data?.foundedDate ? new Date(data.foundedDate).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: 'numeric'
+                                            }) : '-'}
+                                    </Text>
                                     </Flex>
                                     <Flex justify='space-between' align='center' gap={5}>
                                         <Title level={4} className="m-0 fw-600">

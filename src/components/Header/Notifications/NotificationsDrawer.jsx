@@ -1,7 +1,5 @@
-import { Drawer, Button, Avatar, List, Typography } from "antd"
-import {
-    DeleteOutlined
-} from '@ant-design/icons'
+import { useEffect } from "react"
+import { Drawer, Avatar, List, Typography } from "antd"
 import { MARK_AS_READ } from '../../../graphql/mutation';
 import {GET_NOTIFICATIONS} from '../../../graphql/query'
 import { useMutation,useQuery } from '@apollo/client';
@@ -10,7 +8,7 @@ import { t } from "i18next";
 const { Text } = Typography
 const NotificationsDrawer= ({visible, onClose})=>{
     const userId = localStorage.getItem("userId"); 
-    const { data, loading } = useQuery(GET_NOTIFICATIONS, {
+    const { data } = useQuery(GET_NOTIFICATIONS, {
         variables: { userId },
         skip: !userId,
         fetchPolicy: "network-only",
@@ -22,18 +20,24 @@ const NotificationsDrawer= ({visible, onClose})=>{
     } );
     
       // Mark single notification as read
-      const handleMarkAsRead = (id) => {
-        markAsRead({ variables: { markNotificationAsReadId: id } });
-      };
+      // const handleMarkAsRead = (id) => {
+      //   markAsRead({ variables: { markNotificationAsReadId: id } });
+      // };
+
+      useEffect(() => {
+        if (visible) {
+          markAsRead({ variables: { markNotificationAsReadId: userId } });
+        }
+      }, [visible]);
     
       // Mark all notifications as read
-      const handleClearAll = () => {
-        if (data?.getNotifications?.count) {
-          data.getNotifications?.notifications.forEach((notif) =>
-            markAsRead({ variables: { markNotificationAsReadId: notif.id } })
-          );
-        }
-      };
+      // const handleClearAll = () => {
+      //   if (data?.getNotifications?.count) {
+      //     data.getNotifications?.notifications.forEach((notif) =>
+      //       markAsRead({ variables: { markNotificationAsReadId: notif.id } })
+      //     );
+      //   }
+      // };
     
     return (
         <Drawer
@@ -42,17 +46,17 @@ const NotificationsDrawer= ({visible, onClose})=>{
             open={visible}
             destroyOnClose
             width={500}
-            footer={
-                <Button 
-                    block 
-                    className="btnsave py-2"
-                    type="primary"
-                    onClick={handleClearAll}
-                    aria-labelledby='Clear all'
-                >
-                    {t("Clear All")}
-                </Button>
-            }
+            // footer={
+            //     <Button 
+            //         block 
+            //         className="btnsave py-2"
+            //         type="primary"
+            //         onClick={handleClearAll}
+            //         aria-labelledby='Clear all'
+            //     >
+            //         {t("Clear All")}
+            //     </Button>
+            // }
         >
          <List
             itemLayout="horizontal"
@@ -60,12 +64,12 @@ const NotificationsDrawer= ({visible, onClose})=>{
             renderItem={(item) => (
               <List.Item
                 actions={[
-                  <Button
-                    type="text"
-                    icon={<DeleteOutlined />}
-                    onClick={() => handleMarkAsRead(item.id)}
-                    aria-labelledby='Delete button'
-                  />,
+                  // <Button
+                  //   type="text"
+                  //   icon={<DeleteOutlined />}
+                  //   onClick={() => handleMarkAsRead(item.id)}
+                  //   aria-labelledby='Delete button'
+                  // />,
                 ]}
               >
                 <List.Item.Meta

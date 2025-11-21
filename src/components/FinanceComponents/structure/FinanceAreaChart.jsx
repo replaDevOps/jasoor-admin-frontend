@@ -3,7 +3,7 @@ import { Card, Flex, Typography, Dropdown, Button } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import ReactApexChart from 'react-apexcharts';
 import { yearOp } from '../../../shared';
-import {GET_FINANCE_GRAPH} from '../../../graphql/query';
+import {GET_FINANCE_GRAPH,GET_FINANCE_COUNT} from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 import { ModuleTopHeading } from '../../PageComponents';
 import { t } from 'i18next';
@@ -12,7 +12,9 @@ const { Title } = Typography;
 
 const FinanceAreaChart = () => {
   const [selectedStatus, setSelectedStatus] = useState('2025');
-
+  const { data:count, loading:isLoading, error:fainanceError } = useQuery(GET_FINANCE_COUNT, {fetchPolicy: 'cache-and-network',});
+  const total = count?.getFinanceCount?.totalPrice
+   
   const { data, loading, error } = useQuery(GET_FINANCE_GRAPH, {
     variables: { year: Number(selectedStatus) },
     fetchPolicy: 'cache-and-network',
@@ -61,7 +63,7 @@ const FinanceAreaChart = () => {
             <Flex justify='space-between' align='center' wrap gap={10}>
                 <Flex vertical gap={3}>
                     <ModuleTopHeading level={4} name={t('Revenue')} />
-                    <Title level={4} className='fw-600 text-black m-0'>SAR 120,784</Title>
+                    <Title level={4} className='fw-600 text-black m-0'>{total}</Title>
                 </Flex>
                 <Dropdown
                     menu={{

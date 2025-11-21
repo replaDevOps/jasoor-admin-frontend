@@ -11,18 +11,23 @@ const { Title,Text } = Typography
 const BusinessStatsTab = ({status}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const {t} = useTranslation()
+    const capitalRecoveryText =
+  status?.capitalRecovery > 12
+    ? `${Math.floor(status.capitalRecovery / 12)} Year(s)`
+    : `${status?.capitalRecovery} Month(s)`;
+
     const businessstatsData = [
         {
             id: 1,
             icon:'/assets/icons/rev.png',
             title: status?.revenue,
-            subtitle: t(`Revenue ${(status?.revenueTime)}`),
+            subtitle: t(`Revenue ${(status?.revenueTime)} Months`),
         },
         {
             id: 2,
             icon:'/assets/icons/pro.png',
             title:status?.profit,
-            subtitle: t(`Profit ${(status?.profittime)}`),
+            subtitle: t(`Profit ${(status?.profittime)} Months`),
         },
         {
             id: 3,
@@ -39,7 +44,7 @@ const BusinessStatsTab = ({status}) => {
         {
             id: 5,
             icon:'/assets/icons/cap-re.png',
-            title:status?.capitalRecovery,
+            title:capitalRecoveryText,
             subtitle: t('Capital Recovery')
         },
         {
@@ -71,6 +76,7 @@ const BusinessStatsTab = ({status}) => {
             messageApi.error(err.message || t("Something went wrong!"));
           },
     });
+
   return (
     <>
     {contextHolder}

@@ -105,6 +105,7 @@ const AddNewCategory = () => {
         if(id && editdata){
             form.setFieldsValue({
                 title: editdata?.name,
+                arabicTitle: editdata?.arabicName,
                 category: editdata?.isDigital ? "Digital" : "Physical",
             })
         }else{

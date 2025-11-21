@@ -51,6 +51,7 @@ query GetAdminBusinesses($limit: Int, $offSet: Int, $filter: AdminBusinessFilter
   getAdminBusinesses(limit: $limit, offSet: $offSet, filter: $filter, search: $search) {
     businesses {
       id
+      reference
       isByTakbeer
       isSaved
       createdAt
@@ -68,6 +69,9 @@ query GetAdminBusinesses($limit: Int, $offSet: Int, $filter: AdminBusinessFilter
       }
       savedBy {
         id
+      }
+      seller {
+        name
       }
     }
     totalCount
@@ -193,6 +197,7 @@ query GetCategoryById($getCategoryByIdId: ID!) {
     id
     isDigital
     name
+    arabicName
     status
     icon
     growthRecords {

@@ -21,7 +21,7 @@ const BusinesslistCards = ({totalActiveCount,totalCount,totalPendingCount}) => {
             id:3,
             icon:'pbl.png',
             title:totalPendingCount,
-            subtitle:'Total Pending Lisitng',
+            subtitle:'Total Pending Listng',
         },
     ]
 

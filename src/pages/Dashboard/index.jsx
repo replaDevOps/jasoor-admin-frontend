@@ -1,4 +1,4 @@
-import { Col, Flex, Row, Typography } from 'antd'
+import { Col, Flex, Row, Typography,Spin } from 'antd'
 import { BusinessCategoryDonut, BusinessListBarChart, DashboardCards, ListingPriceBar, ListingRevenueBar } from '../../components'
 import { useQuery } from '@apollo/client';
 import { ME } from '../../graphql/query'
@@ -11,8 +11,6 @@ const Dashboard = () => {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
   };
   
   const today = new Date().toLocaleDateString('en-US', options); 
@@ -23,7 +21,14 @@ const Dashboard = () => {
     skip: !userId,
     fetchPolicy: "network-only",
   });
-  
+      // Show loader while fetching
+      if (isLoading) {
+        return (
+          <Flex justify="center" align="center" className='h-100'>
+            <Spin size="large" />
+          </Flex>
+        );
+      }
   return (
     <div>
       <Flex vertical gap={24}>

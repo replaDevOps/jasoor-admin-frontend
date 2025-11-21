@@ -93,7 +93,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
                 <Table
                     size="large"
                     columns={completedealColumn}
-                    dataSource={completedealData.slice((current - 1) * pageSize, current * pageSize)}
+                    dataSource={completedealData}
                     className="pagination table-cs table"
                     showSorterTooltip={false}
                     scroll={{ x: 1200 }}

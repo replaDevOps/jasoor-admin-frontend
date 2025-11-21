@@ -28,6 +28,7 @@ const BusinessDetailStep = ({ data, setData }) => {
 
 
   const handleFormChange = (_, allValues) => {
+    setSelectedDistrict(allValues.district?.toLowerCase() || null);
       const selected = categories.find(c => c.name === allValues.category);
       const id = selected?.id;
 
@@ -64,6 +65,9 @@ const BusinessDetailStep = ({ data, setData }) => {
     if (data.categoryId) {
       const cat = categories.find(cat => cat.id === data.categoryId);
       setSelectedCategory(cat);
+    }
+    if (data.district) {
+      setSelectedDistrict(data.district.toLowerCase());
     }
   }, [data]);
 
@@ -151,11 +155,11 @@ const BusinessDetailStep = ({ data, setData }) => {
 
             <Col xs={24} sm={24} md={12}>
               <MySelect
-                label={t("District")}
+                label={t("Region")}
                 name="district"
                 required
-                message={t("Choose district")}
-                placeholder={t("Choose district")}
+                message={t("Choose region")}
+                placeholder={t("Choose region")}
                 options={district}
                 onChange={(val) => setSelectedDistrict(val)}
               />

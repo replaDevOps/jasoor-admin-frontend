@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Row, Col, Card, Typography, Spin } from "antd";
-import { Flex } from "../../components";
+import { Row, Col, Card, Typography, Spin,Flex } from "antd";
 import { ModuleTopHeading } from "../../components";
 import { GET_ALERTS } from "../../graphql/query";
 import { MARK_AS_READ } from "../../graphql/mutation";

@@ -32,9 +32,9 @@ const DocumentTab = ({businessId}) => {
                                             <Text className='fs-13 text-gray'>
                                                 {items?.title}
                                             </Text>
-                                            <Text className='fs-13 text-gray'>
+                                            {/* <Text className='fs-13 text-gray'>
                                                 5.3 MB
-                                            </Text>
+                                            </Text> */}
                                         </Flex>
                                     </Flex>
                                     <a href={items?.filePath} target="_blank" rel="noopener noreferrer">

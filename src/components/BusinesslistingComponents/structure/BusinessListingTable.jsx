@@ -67,6 +67,10 @@ const BusinessListingTable = ({
       
     const columns =[
         {
+            title: t('Ref ID'),
+            render:(_,record)=>record?.reference
+        },
+        {
             title: t('Business Title'),
             dataIndex: 'businessTitle',
         },

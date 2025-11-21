@@ -119,7 +119,7 @@ const FinanceTable = () => {
                     <Table
                         size='large'
                         columns={financeColumn}
-                        dataSource={financeData.slice((current - 1) * pageSize, current * pageSize)}
+                        dataSource={financeData}
                         className='pagination table-cs table'
                         showSorterTooltip={false}
                         scroll={{ x: 1000 }}

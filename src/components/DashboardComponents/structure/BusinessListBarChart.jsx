@@ -5,7 +5,6 @@ import { ModuleTopHeading } from '../../PageComponents';
 import { MyDatepicker } from '../../Forms';
 import { GET_BUSINESS_STATS_GRAPH } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
-import { Spin } from "antd";
 import moment from 'moment';
 import { t } from 'i18next';
 
@@ -15,7 +14,7 @@ const BusinessListBarChart = () => {
 
     const [selectedYear, setSelectedYear] = useState(moment());
 
-    const { data, loading, error, refetch } = useQuery(GET_BUSINESS_STATS_GRAPH, {
+    const { data, refetch } = useQuery(GET_BUSINESS_STATS_GRAPH, {
         variables: { year: selectedYear.year() }, // get year as number
       });
       const maxCount = Math.max(...(data?.getBusinessStatsGraph?.monthlyStats.map((m) => m.businessCount) || [0]));
@@ -35,7 +34,7 @@ const BusinessListBarChart = () => {
       const chartData = {
         series: [
             {
-              name: t("Avg. Annual Profit"),
+              name: t("Total Businesses"),
               data: data?.getBusinessStatsGraph?.monthlyStats.map((m) => m.businessCount) || Array(12).fill(0),
             },
           ],
@@ -72,14 +71,6 @@ const BusinessListBarChart = () => {
       useEffect(() => {
         refetch({ year: selectedYear.year() });
       }, [selectedYear, refetch]);
-
-      if (loading) {
-        return (
-          <Flex justify="center" align="center" className='h-200'>
-            <Spin size="large" />
-          </Flex>
-        );
-      }
 
   return (
     <Card className='radius-12 border-gray'>

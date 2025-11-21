@@ -79,7 +79,6 @@ const OfferTable = (businessId) => {
           limit: pagination.pageSize,
           offSet: (pagination.current - 1) * pagination.pageSize,
           search: "",
-          status: ""
         },
         fetchPolicy: "cache-and-network"
     })
@@ -134,7 +133,6 @@ const OfferTable = (businessId) => {
                     pagination={false}
                 />
             </Flex>
-            {total > 0 ? (
             <Col span={24} className='mt-3'>
                 <Row justify="space-between" align="middle">
                     <Col span={6}>
@@ -167,13 +165,6 @@ const OfferTable = (businessId) => {
                     </Col>
                 </Row>
             </Col>
-            ) : (
-            <Row>
-                <Col span={24} className='text-center mt-4'>
-                    <Text>{t('No Business Found')}</Text>
-                </Col>
-            </Row>
-            )}
         </Card>
     )
 }

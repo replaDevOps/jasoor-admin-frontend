@@ -96,8 +96,11 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
     awaitRefetchQueries: true
   });
   const [deleteUser] = useMutation(DELETE_USER, {
-    refetchQueries: [{ query: GETSTAFFMEMBERS }],
-    awaitRefetchQueries: true
+    refetchQueries: [GETSTAFFMEMBERS],
+    awaitRefetchQueries: true,
+    onCompleted: () => {
+      messageApi.success(t('Staff member deleted successfully!'));
+    },
   });
 
   const staffmemberColumn = (setVisible, setDeleteItem, setEditItem) => [
@@ -147,7 +150,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                 }
               }
             });
-            messageApi.success(t('User status updated successfully!'));
+            messageApi.success(t('Staff member updated successfully!'));
           } catch (err) {
             messageApi.error(err.message || t('Something went wrong!'));
           }
@@ -163,7 +166,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
           actionLabel = t('Inactive');
           nextStatus = 'inactive';
         } else if (row.status === 'inactive') {
-          actionLabel = t('Verify');
+          actionLabel = t('Active');
           nextStatus = 'verified';
         }
 
