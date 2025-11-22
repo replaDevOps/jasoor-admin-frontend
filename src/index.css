@@ -873,7 +873,7 @@ body.ltr {
   font-size: 13px;
   border-radius: 7px;
   border: 1px solid var(--border-gray);
-  background-color: transparent;
+  background-color: #fff !important;
 }
 
 .tabs-fill .ant-tabs-tab-active {

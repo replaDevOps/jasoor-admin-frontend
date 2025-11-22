@@ -1,427 +1,731 @@
-import { Button, Col, Divider, Flex, Form, Modal, Radio, Row, Select, Space, Typography, Upload,message } from 'antd'
-import { MyInput, MySelect } from '../../Forms'
-import { CloseOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
-import { cities } from '../../../data'
+import {
+  Button,
+  Col,
+  Divider,
+  Flex,
+  Form,
+  Modal,
+  Radio,
+  Row,
+  Select,
+  Space,
+  Typography,
+  Upload,
+  message,
+} from "antd";
+import { MyInput, MySelect } from "../../Forms";
+import { CloseOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { cities } from "../../../data";
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../../../graphql/mutation/login";
 import { UPDATE_USER } from "../../../graphql/mutation";
-import imageCompression from 'browser-image-compression';
-import { t } from 'i18next'
-import { USERS } from '../../../graphql/query'
+import imageCompression from "browser-image-compression";
+import { t } from "i18next";
+import { USERS } from "../../../graphql/query";
 
-const { Title } = Typography
-const AddUser = ({visible,onClose,edititem}) => {
-    const [messageApi, contextHolder] = message.useMessage();
-    const [form] = Form.useForm()
-    const [selectedDistrict, setSelectedDistrict] = useState(null);
-    const [idType, setIdType] = useState("national_id");
-    const [frontFileName, setFrontFileName] = useState("");
-    const [backFileName, setBackFileName] = useState("");
-    const [passportFileName, setPassportFileName] = useState("");
-    const [, setLoading] = useState(false);
-    const [documents, setDocuments] = useState([]);
-    const [createUser, { loading:userLoading }] = useMutation(CREATE_USER);
-    const [updateUser, { loading: updating }] = useMutation(UPDATE_USER, {
-        refetchQueries: [ { query: USERS } ]
-    });
+const { Title } = Typography;
+const AddUser = ({ visible, onClose, edititem }) => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const [form] = Form.useForm();
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [idType, setIdType] = useState("national_id");
+  const [frontFileName, setFrontFileName] = useState("");
+  const [backFileName, setBackFileName] = useState("");
+  const [passportFileName, setPassportFileName] = useState("");
+  const [, setLoading] = useState(false);
+  const [documents, setDocuments] = useState([]);
+  const [uploadErrors, setUploadErrors] = useState({
+    front: "",
+    back: "",
+    passport: "",
+  });
+  const [createUser, { loading: userLoading }] = useMutation(CREATE_USER);
+  const [updateUser, { loading: updating }] = useMutation(UPDATE_USER, {
+    refetchQueries: [{ query: USERS }],
+  });
 
-    useEffect(()=>{
-        if(visible && edititem){
-            form.setFieldsValue({
-                id:edititem.key,
-                fullName: edititem?.fullname,
-                email: edititem?.email,
-                district: edititem?.district,
-                city: edititem?.city,
-                phoneNo: edititem?.mobileno
-            })
-        }
-    },[visible,edititem,form])
+  // Helper function to reset all form data
+  const resetFormData = () => {
+    form.resetFields();
+    setSelectedDistrict(null);
+    setIdType("national_id");
+    setFrontFileName("");
+    setBackFileName("");
+    setPassportFileName("");
+    setDocuments([]);
+    setUploadErrors({ front: "", back: "", passport: "" });
+  };
 
-    const onFinish = async () => {
-        try {
-            const formData = form.getFieldsValue(true);
-            const basePayload = {
-                name: formData.fullName,
-                email: formData.email.toLowerCase(),
-                district: formData.district,
-                city: formData.city,
-                phone: formData.phoneNo,
-                password: formData.password && String(formData.password).trim().length > 0 ? formData.password : undefined,
-                documents: documents.length > 0 ? documents : undefined,
-            };
+  // Handle modal close
+  const handleClose = () => {
+    resetFormData();
+    onClose();
+  };
 
-            if (edititem) {
-                // Update existing user
-                const input = { id: edititem.key, ...basePayload };
-                await updateUser({ variables: { input } });
-                messageApi.success(t("Account updated successfully!"));
-            } else {
-                // Create new user
-                await createUser({ variables: { input: basePayload } });
-                messageApi.success(t("Account created successfully!"));
-                form.resetFields();
-            }
-        } catch {
-            messageApi.error(t("Failed to create user. Please try again."));
-        }finally {
-            onClose();
-        }
-    };
-
-    const handleUpload = async ({ file,title }) => {
-        try {
-            setLoading(true); 
-            let compressedFile = file;
-            if (file.type.startsWith('image/')) {
-                compressedFile = await imageCompression(file, {
-                  maxSizeMB: 1,
-                  maxWidthOrHeight: 1024,
-                  useWebWorker: true,
-                });
-            }
-            const formData = new FormData();
-            formData.append('file', compressedFile);
-        
-            // Call your upload API
-            const res = await fetch('https://verify.jusoor-sa.co/upload', {
-                method: 'POST',
-                body: formData,
-            });
-        
-            if (!res.ok) throw new Error('Upload failed');
-            const data = await res.json();
-        
-            // Update documents state for front side
-            setDocuments(prevDocs => {
-                // Remove existing 'front' doc if any
-                // Add new
-                const filtered = prevDocs.filter(doc => doc.title !== title);
-                return [...filtered, {
-                title: 'front',
-                fileName: data.fileName,
-                filePath: data.fileUrl,
-                fileType: data.fileType,
-                }];
-            });
-
-            if (title === 'front') setFrontFileName(data.fileName);
-            else if (title === 'back') setBackFileName(data.fileName);
-            else if (title === 'passport') setPassportFileName(data.fileName);
-      
-        } catch (err) {
-          console.error(err);
-          messageApi.error('Failed to upload front file');
-        }finally {
-            setLoading(false); // Stop loading
-        }
-    };
-
-    const district = [
-    {
-        id: 1,
-        name: t('Riyadh'),
-        value: 'riyadh'
-    },
-    {
-        id: 2,
-        name: t('Jeddah'),
-        value: 'jeddah'
-    },
-    {
-        id: 3,
-        name: t('Dammam'),
-        value: 'dammam'
-    },
-    {
-        id: 4,
-        name: t('Khobar'),
-        value: 'khobar'
-    },
-    {
-        id: 5,
-        name: t('Makkah'),
-        value: 'makkah'
-    },
-    {
-        id: 6,
-        name: t('Medina'),
-        value: 'medina'
-    },
-    {
-        id: 7,
-        name: t('Taif'),
-        value: 'taif'
-    },
-    {
-        id: 8,
-        name: t('Tabuk'),
-        value: 'tabuk'
-    },
-    {
-        id: 9,
-        name: t('Hail'),
-        value: 'hail'
-    },
-    {
-        id: 10,
-        name: t('Najran'),
-        value: 'najran'
+  // Reset form and state when modal opens/closes
+  useEffect(() => {
+    if (visible && edititem) {
+      // Edit mode - populate form with existing data
+      form.setFieldsValue({
+        id: edititem.key,
+        fullName: edititem?.fullname,
+        email: edititem?.email,
+        district: edititem?.district,
+        city: edititem?.city,
+        phoneNo: edititem?.mobileno,
+      });
+    } else if (visible && !edititem) {
+      // Add mode - reset everything
+      form.resetFields();
+      setSelectedDistrict(null);
+      setIdType("national_id");
+      setFrontFileName("");
+      setBackFileName("");
+      setPassportFileName("");
+      setDocuments([]);
+    } else if (!visible) {
+      // Modal closed - reset everything
+      form.resetFields();
+      setSelectedDistrict(null);
+      setIdType("national_id");
+      setFrontFileName("");
+      setBackFileName("");
+      setPassportFileName("");
+      setDocuments([]);
     }
-    ]
-    
-    return (
-        <>
-        {contextHolder}
-        <Modal
-            title={null}
-            open={visible}
-            onCancel={onClose}
-            closeIcon={false}
-            centered
-            footer={
-                <Flex justify='end' gap={5}>
-                    <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btncancel text-black border-gray'>
-                        {t("Cancel")}
-                    </Button>
-                    <Button aria-labelledby='submit button' className={`btnsave border0 text-white brand-bg`} onClick={()=>form.submit()} loading={userLoading || updating}>
-                        {edititem? t('Update'):t('Save')}
-                    </Button>
-                </Flex>
-            }
-            width={600}
-        > 
+  }, [visible, edititem, form]);
 
-            <div>
-                <Flex justify='space-between' className='mb-3' gap={6}>
-                    <Title level={5} className='m-0'>
-                        {
-                            edititem ? t('Update user') : t('Add new user')
-                        }
-                    </Title>
-                    <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
-                        <CloseOutlined className='fs-18' />
-                    </Button>
-                </Flex> 
-                <Form
-                    layout='vertical'
-                    form={form}
-                    requiredMark={false}
-                    onFinish={onFinish}
-                >
-                    <Row>
-                        <Col span={24}>
-                            <MyInput
-                                label={t('Full Name')}
-                                name='fullName'
-                                required
-                                message={t('Please enter your full name')}
-                                placeholder={t('Enter full name')}
-                            />
-                        </Col>
-                        <Col span={24}>
-                            <MyInput
-                                label={t('Email Address')}
-                                name='email'
-                                required
-                                message={t('Please enter your email address')}
-                                placeholder={t('Enter email address')}
-                            />
-                        </Col>
-                        <Col span={24}>
-                            <MySelect
-                                label={t("District")}
-                                name="district"
-                                required
-                                message={t("Please select district")}
-                                placeholder={t("Select district")}
-                                options={district}
-                                onChange={(val) => setSelectedDistrict(val)}
-                            />
-                        </Col>
-                        <Col span={24}>
-                            <MySelect
-                                label={t("City")}
-                                name="city"
-                                required
-                                message={t("Please select city")}
-                                options={selectedDistrict ? cities[selectedDistrict.toLowerCase()] || [] : []}
-                                placeholder={t("Select city")}
-                            />
-                        </Col>
-                        <Col span={24}>
-                            <MyInput
-                                name="phoneNo"
-                                label={t("Mobile Number")}
-                                required
-                                message={t("Please enter a valid phone number")}
-                                addonBefore={
-                                    <Select
-                                        defaultValue={t("SA")}
-                                        className='w-80'
-                                        onChange={(value) => form.setFieldsValue({ countryCode: value })}
-                                    >
-                                        <Select.Option value="sa">{t("SA")}</Select.Option>
-                                        <Select.Option value="ae">{t("AE")}</Select.Option>
-                                    </Select>
+  const onFinish = async () => {
+    try {
+      const formData = form.getFieldsValue(true);
+
+      // Validate document uploads
+      if (!edititem) {
+        // Add mode - documents are required
+        if (documents.length === 0) {
+          // Set validation errors
+          if (idType === "national_id") {
+            setUploadErrors({
+              front: t("Front side is required"),
+              back: t("Back side is required"),
+              passport: "",
+            });
+          } else {
+            setUploadErrors({
+              front: "",
+              back: "",
+              passport: t("Passport is required"),
+            });
+          }
+          messageApi.error(
+            t("Please upload required documents (National ID or Passport)")
+          );
+          return;
+        }
+
+        // Check if proper documents are uploaded based on ID type
+        if (idType === "national_id") {
+          const hasFront = documents.some((doc) => doc.title === "front");
+          const hasBack = documents.some((doc) => doc.title === "back");
+
+          const errors = {
+            front: hasFront ? "" : t("Front side is required"),
+            back: hasBack ? "" : t("Back side is required"),
+            passport: "",
+          };
+          setUploadErrors(errors);
+
+          if (!hasFront || !hasBack) {
+            messageApi.error(
+              t("Please upload both front and back side of National ID")
+            );
+            return;
+          }
+        } else if (idType === "passport") {
+          const hasPassport = documents.some((doc) => doc.title === "passport");
+
+          const errors = {
+            front: "",
+            back: "",
+            passport: hasPassport ? "" : t("Passport is required"),
+          };
+          setUploadErrors(errors);
+
+          if (!hasPassport) {
+            messageApi.error(t("Please upload passport document"));
+            return;
+          }
+        }
+      }
+
+      // Clear upload errors if validation passed
+      setUploadErrors({ front: "", back: "", passport: "" });
+
+      const basePayload = {
+        name: formData.fullName,
+        email: formData.email.toLowerCase(),
+        district: formData.district,
+        city: formData.city,
+        phone: formData.phoneNo,
+        password:
+          formData.password && String(formData.password).trim().length > 0
+            ? formData.password
+            : undefined,
+        documents: documents.length > 0 ? documents : undefined,
+      };
+
+      if (edititem) {
+        // Update existing user
+        const input = { id: edititem.key, ...basePayload };
+        await updateUser({ variables: { input } });
+        messageApi.success(t("User account updated successfully!"));
+      } else {
+        // Create new user
+        await createUser({ variables: { input: basePayload } });
+        messageApi.success(t("User account created successfully!"));
+      }
+
+      // Reset form and close modal on success
+      resetFormData();
+      onClose();
+    } catch (error) {
+      messageApi.error(
+        error?.message || t("Failed to save user. Please try again.")
+      );
+    }
+  };
+
+  const handleUpload = async ({ file, title }) => {
+    try {
+      setLoading(true);
+
+      // Validate file type
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "application/pdf",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        messageApi.error(
+          t("Invalid file type. Please upload JPG, PNG, or PDF only.")
+        );
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+      if (file.size > maxSize) {
+        messageApi.error(t("File size too large. Maximum size is 5MB."));
+        return;
+      }
+
+      let compressedFile = file;
+      if (file.type.startsWith("image/")) {
+        compressedFile = await imageCompression(file, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1024,
+          useWebWorker: true,
+        });
+      }
+      const formData = new FormData();
+      formData.append("file", compressedFile);
+
+      // Call your upload API
+      const res = await fetch("https://verify.jusoor-sa.co/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+
+      // Update documents state
+      setDocuments((prevDocs) => {
+        // Remove existing doc with same title if any
+        const filtered = prevDocs.filter((doc) => doc.title !== title);
+        return [
+          ...filtered,
+          {
+            title: title,
+            fileName: data.fileName,
+            filePath: data.fileUrl,
+            fileType: data.fileType,
+          },
+        ];
+      });
+
+      if (title === "front") setFrontFileName(data.fileName);
+      else if (title === "back") setBackFileName(data.fileName);
+      else if (title === "passport") setPassportFileName(data.fileName);
+
+      // Clear error for this field
+      setUploadErrors((prev) => ({ ...prev, [title]: "" }));
+
+      messageApi.success(t("File uploaded successfully"));
+    } catch (err) {
+      console.error(err);
+      messageApi.error(t("Failed to upload file. Please try again."));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const district = [
+    {
+      id: 1,
+      name: t("Riyadh"),
+      value: "riyadh",
+    },
+    {
+      id: 2,
+      name: t("Jeddah"),
+      value: "jeddah",
+    },
+    {
+      id: 3,
+      name: t("Dammam"),
+      value: "dammam",
+    },
+    {
+      id: 4,
+      name: t("Khobar"),
+      value: "khobar",
+    },
+    {
+      id: 5,
+      name: t("Makkah"),
+      value: "makkah",
+    },
+    {
+      id: 6,
+      name: t("Medina"),
+      value: "medina",
+    },
+    {
+      id: 7,
+      name: t("Taif"),
+      value: "taif",
+    },
+    {
+      id: 8,
+      name: t("Tabuk"),
+      value: "tabuk",
+    },
+    {
+      id: 9,
+      name: t("Hail"),
+      value: "hail",
+    },
+    {
+      id: 10,
+      name: t("Najran"),
+      value: "najran",
+    },
+  ];
+
+  return (
+    <>
+      {contextHolder}
+      <Modal
+        title={null}
+        open={visible}
+        onCancel={handleClose}
+        closeIcon={false}
+        centered
+        footer={
+          <Flex justify="end" gap={5}>
+            <Button
+              aria-labelledby="Cancel"
+              type="button"
+              onClick={handleClose}
+              className="btncancel text-black border-gray"
+            >
+              {t("Cancel")}
+            </Button>
+            <Button
+              aria-labelledby="submit button"
+              className={`btnsave border0 text-white brand-bg`}
+              onClick={() => form.submit()}
+              loading={userLoading || updating}
+            >
+              {edititem ? t("Update") : t("Save")}
+            </Button>
+          </Flex>
+        }
+        width={600}
+      >
+        <div>
+          <Flex justify="space-between" className="mb-3" gap={6}>
+            <Title level={5} className="m-0">
+              {edititem ? t("Update user") : t("Add new user")}
+            </Title>
+            <Button
+              aria-labelledby="Close"
+              type="button"
+              onClick={handleClose}
+              className="p-0 border-0 bg-transparent"
+            >
+              <CloseOutlined className="fs-18" />
+            </Button>
+          </Flex>
+          <Form
+            layout="vertical"
+            form={form}
+            requiredMark={false}
+            onFinish={onFinish}
+          >
+            <Row>
+              <Col span={24}>
+                <MyInput
+                  label={t("Full Name")}
+                  name="fullName"
+                  required
+                  message={t("Please enter your full name")}
+                  placeholder={t("Enter full name")}
+                />
+              </Col>
+              <Col span={24}>
+                <MyInput
+                  label={t("Email Address")}
+                  name="email"
+                  required
+                  message={t("Please enter your email address")}
+                  placeholder={t("Enter email address")}
+                />
+              </Col>
+              <Col span={24}>
+                <MySelect
+                  label={t("Region")}
+                  name="district"
+                  required
+                  message={t("Please select region")}
+                  placeholder={t("Select region")}
+                  options={district}
+                  onChange={(val) => setSelectedDistrict(val)}
+                />
+              </Col>
+              <Col span={24}>
+                <MySelect
+                  label={t("City")}
+                  name="city"
+                  required
+                  message={t("Please select city")}
+                  options={
+                    selectedDistrict
+                      ? cities[selectedDistrict.toLowerCase()] || []
+                      : []
+                  }
+                  placeholder={t("Select city")}
+                />
+              </Col>
+              <Col span={24}>
+                <MyInput
+                  name="phoneNo"
+                  label={t("Mobile Number")}
+                  required
+                  message={t("Please enter a valid phone number")}
+                  addonBefore={
+                    <Select
+                      defaultValue={t("SA")}
+                      className="w-80"
+                      onChange={(value) =>
+                        form.setFieldsValue({ countryCode: value })
+                      }
+                    >
+                      <Select.Option value="sa">{t("SA")}</Select.Option>
+                      <Select.Option value="ae">{t("AE")}</Select.Option>
+                    </Select>
+                  }
+                  placeholder="3445592382"
+                  value={form.getFieldValue("phoneNo") || ""}
+                  className="w-100"
+                  validator={{
+                    pattern: /^[0-9\u0660-\u0669]{8,15}$/,
+                    message: t(
+                      "Please enter a valid phone number (8–15 digits, Arabic or English)"
+                    ),
+                  }}
+                />
+              </Col>
+              <Col span={24}>
+                <Row gutter={8}>
+                  <Col span={24}>
+                    <Form.Item
+                      label={t("Upload National ID or Passport")}
+                      className="m-0"
+                      required
+                    >
+                      <Radio.Group
+                        value={idType}
+                        onChange={(e) => {
+                          setIdType(e.target.value);
+                          // Clear file names and documents when switching ID type
+                          setFrontFileName("");
+                          setBackFileName("");
+                          setPassportFileName("");
+                          setDocuments([]);
+                          setUploadErrors({
+                            front: "",
+                            back: "",
+                            passport: "",
+                          });
+                        }}
+                      >
+                        <Space>
+                          <Radio value="national_id">{t("National ID")}</Radio>
+                          <Radio value="passport">{t("Passport")}</Radio>
+                        </Space>
+                      </Radio.Group>
+                    </Form.Item>
+                  </Col>
+
+                  {idType === "national_id" ? (
+                    <>
+                      <Col span={24}>
+                        <Form.Item
+                          validateStatus={uploadErrors.front ? "error" : ""}
+                          help={uploadErrors.front}
+                          className="m-0"
+                        >
+                          <Row gutter={8}>
+                            <Col flex="auto">
+                              <MyInput
+                                withoutForm
+                                size={"large"}
+                                className="m-0"
+                                placeholder={t("Upload Front Side")}
+                                readOnly
+                                value={frontFileName}
+                              />
+                            </Col>
+                            <Col>
+                              <Upload
+                                beforeUpload={() => false}
+                                showUploadList={false}
+                                maxCount={1}
+                                onChange={(info) =>
+                                  handleUpload({
+                                    file: info.file,
+                                    title: "front",
+                                  })
                                 }
-                                placeholder="3445592382"
-                                value={form.getFieldValue("phoneNo") || ""}
-                                className='w-100'
-                            />
-                        </Col>
-                        <Col span={24}>
-                            <Row gutter={8}>
-                                <Col span={24}>
-                                    <Form.Item label={t("Upload National ID or Passport")}className='m-0' required>
-                                        <Radio.Group 
-                                            value={idType} 
-                                            onChange={(e) => {
-                                                setIdType(e.target.value);
-                                                setFrontFileName("");
-                                                setBackFileName("");
-                                                setPassportFileName("");
-                                            }}
-                                        >
-                                            <Space>
-                                                <Radio value="national_id">{t("National ID")}</Radio>
-                                                <Radio value="passport">{t("Passport")}</Radio>
-                                            </Space>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-
-                                {idType === "national_id" ? (
-                                    <>
-                                        <Col span={24}>
-                                            <Row gutter={8}>
-                                                <Col flex="auto">
-                                                    <MyInput 
-                                                        withoutForm 
-                                                        size={'large'} 
-                                                        className='m-0' 
-                                                        placeholder={t("Upload Front Side" )}
-                                                        readOnly 
-                                                        value={frontFileName} 
-                                                    />
-                                                </Col>
-                                                <Col>
-                                                    <Upload 
-                                                        beforeUpload={() => false} 
-                                                        showUploadList={false} 
-                                                        maxCount={1} 
-                                                        onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
-                                                    >
-                                                        <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>{t("Upload")}</Button>
-                                                    </Upload>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                        <Col span={24}>
-                                            <Row gutter={8}>
-                                                <Col flex="auto">
-                                                    <MyInput 
-                                                        withoutForm 
-                                                        size={'large'} 
-                                                        className='m-0' 
-                                                        placeholder={t("Upload Back Side" )}
-                                                        readOnly 
-                                                        value={backFileName} 
-                                                    />
-                                                </Col>
-                                                <Col>
-                                                    <Upload 
-                                                        beforeUpload={() => false} 
-                                                        showUploadList={false} 
-                                                        maxCount={1} 
-                                                        onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
-                                                    >
-                                                        <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>{t("Upload")}</Button>
-                                                    </Upload>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    </>
-                                ) : (
-                                    <Col span={24}>
-                                        <Row gutter={8}>
-                                            <Col flex="auto">
-                                                <MyInput 
-                                                    withoutForm 
-                                                    size={'large'} 
-                                                    className='m-0' 
-                                                    placeholder={t("Upload Passport")} 
-                                                    readOnly 
-                                                    value={passportFileName} 
-                                                />
-                                            </Col>
-                                            <Col>
-                                                <Upload 
-                                                    beforeUpload={() => false} 
-                                                    showUploadList={false} 
-                                                    maxCount={1} 
-                                                    onChange={(info) => handleUpload({ file: info.file, title: 'passport' })}
-                                                >
-                                                    <Button aria-labelledby='Upload' className='btncancel pad-x bg-gray-2 text-black border-gray'>{t("Upload")}</Button>
-                                                </Upload>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                )}
-                            </Row>
-                        </Col>
-                        <Col span={24}>
+                              >
+                                <Button
+                                  aria-labelledby="Upload"
+                                  className="btncancel pad-x bg-gray-2 text-black border-gray"
+                                >
+                                  {t("Upload")}
+                                </Button>
+                              </Upload>
+                            </Col>
+                          </Row>
+                        </Form.Item>
+                      </Col>
+                      <Col span={24}>
+                        <Form.Item
+                          validateStatus={uploadErrors.back ? "error" : ""}
+                          help={uploadErrors.back}
+                          className="m-0"
+                        >
+                          <Row gutter={8}>
+                            <Col flex="auto">
+                              <MyInput
+                                withoutForm
+                                size={"large"}
+                                className="m-0"
+                                placeholder={t("Upload Back Side")}
+                                readOnly
+                                value={backFileName}
+                              />
+                            </Col>
+                            <Col>
+                              <Upload
+                                beforeUpload={() => false}
+                                showUploadList={false}
+                                maxCount={1}
+                                onChange={(info) =>
+                                  handleUpload({
+                                    file: info.file,
+                                    title: "back",
+                                  })
+                                }
+                              >
+                                <Button
+                                  aria-labelledby="Upload"
+                                  className="btncancel pad-x bg-gray-2 text-black border-gray"
+                                >
+                                  {t("Upload")}
+                                </Button>
+                              </Upload>
+                            </Col>
+                          </Row>
+                        </Form.Item>
+                      </Col>
+                    </>
+                  ) : (
+                    <Col span={24}>
+                      <Form.Item
+                        validateStatus={uploadErrors.passport ? "error" : ""}
+                        help={uploadErrors.passport}
+                        className="m-0"
+                      >
+                        <Row gutter={8}>
+                          <Col flex="auto">
                             <MyInput
-                                label={t("New Password")}
-                                type="password"
-                                name="password"
-                                size='large'
-                                placeholder={t('Enter password')}
-                                required={!edititem}
-                                message={t('Please enter password')}
-                                validator={() => ({
-                                    validator: (_, value) => {
-                                        // Optional in edit mode; only validate complexity when provided
-                                        if (!value) return Promise.resolve();
-                                        const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
-                                        return reg.test(value)
-                                            ? Promise.resolve()
-                                            : Promise.reject(new Error(t('Password should contain at least 8 characters, one uppercase letter, one number, one special character')));
-                                    }
-                                })}
+                              withoutForm
+                              size={"large"}
+                              className="m-0"
+                              placeholder={t("Upload Passport")}
+                              readOnly
+                              value={passportFileName}
                             />
-                        </Col>
-                        <Col span={24}>
-                            <MyInput
-                                label={t("Re-Type Password")}
-                                type="password"
-                                name="confirmationPassword"
-                                size='large'
-                                dependencies={['password']}
-                                placeholder={t('Enter confirm password')}
-                                required={!edititem}
-                                message={t('Please confirm your password')}
-                                rules={[
-                                    ({ getFieldValue }) => ({
-                                        validator(_, value) {
-                                            // Optional in edit mode unless provided; if provided, must match
-                                            if (!value) return Promise.resolve();
-                                            return getFieldValue('password') === value
-                                                ? Promise.resolve()
-                                                : Promise.reject(new Error(t('The password that you entered do not match!')));
-                                        },
-                                    }),
-                                ]}
-                            />
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
-            <Divider className='my-2 bg-light-brand' />
-        </Modal>
-        </>
-    )
-}
+                          </Col>
+                          <Col>
+                            <Upload
+                              beforeUpload={() => false}
+                              showUploadList={false}
+                              maxCount={1}
+                              onChange={(info) =>
+                                handleUpload({
+                                  file: info.file,
+                                  title: "passport",
+                                })
+                              }
+                            >
+                              <Button
+                                aria-labelledby="Upload"
+                                className="btncancel pad-x bg-gray-2 text-black border-gray"
+                              >
+                                {t("Upload")}
+                              </Button>
+                            </Upload>
+                          </Col>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                  )}
+                </Row>
+              </Col>
+              <Col span={24}>
+                <MyInput
+                  label={t("Password")}
+                  type="password"
+                  name="password"
+                  size="large"
+                  placeholder={t("Enter password")}
+                  required={!edititem}
+                  validator={() => ({
+                    validator: (_, value) => {
+                      if (!value || value.trim() === "") {
+                        return edititem
+                          ? Promise.resolve()
+                          : Promise.reject(
+                              new Error(t("Please enter password"))
+                            );
+                      }
 
-export {AddUser}
+                      const hasUpperCase = /[A-Z]/.test(value);
+                      const hasLowerCase = /[a-z]/.test(value);
+                      const hasNumber = /\d/.test(value);
+                      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(
+                        value
+                      );
+                      const hasMinLength = value.length >= 8;
+
+                      if (!hasMinLength) {
+                        return Promise.reject(
+                          new Error(
+                            t("Password must be at least 8 characters long")
+                          )
+                        );
+                      }
+                      if (!hasUpperCase) {
+                        return Promise.reject(
+                          new Error(
+                            t(
+                              "Password must contain at least one uppercase letter"
+                            )
+                          )
+                        );
+                      }
+                      if (!hasLowerCase) {
+                        return Promise.reject(
+                          new Error(
+                            t(
+                              "Password must contain at least one lowercase letter"
+                            )
+                          )
+                        );
+                      }
+                      if (!hasNumber) {
+                        return Promise.reject(
+                          new Error(
+                            t("Password must contain at least one number")
+                          )
+                        );
+                      }
+                      if (!hasSpecialChar) {
+                        return Promise.reject(
+                          new Error(
+                            t(
+                              "Password must contain at least one special character"
+                            )
+                          )
+                        );
+                      }
+
+                      return Promise.resolve();
+                    },
+                  })}
+                />
+              </Col>
+              <Col span={24}>
+                <MyInput
+                  label={t("Re-Type Password")}
+                  type="password"
+                  name="confirmationPassword"
+                  size="large"
+                  dependencies={["password"]}
+                  placeholder={t("Enter confirm password")}
+                  required={!edititem}
+                  validator={({ getFieldValue }) => ({
+                    validator(_, value) {
+                      const password = getFieldValue("password");
+
+                      // In edit mode, if no password is entered, confirmation is optional
+                      if (edititem && (!password || password.trim() === "")) {
+                        return Promise.resolve();
+                      }
+
+                      // If password is provided, confirmation is required
+                      if (password && password.trim() !== "") {
+                        if (!value || value.trim() === "") {
+                          return Promise.reject(
+                            new Error(t("Please confirm your password"))
+                          );
+                        }
+
+                        if (password !== value) {
+                          return Promise.reject(
+                            new Error(t("The passwords do not match!"))
+                          );
+                        }
+                      }
+
+                      return Promise.resolve();
+                    },
+                  })}
+                />
+              </Col>
+            </Row>
+          </Form>
+        </div>
+        <Divider className="my-2 bg-light-brand" />
+      </Modal>
+    </>
+  );
+};
+
+export { AddUser };

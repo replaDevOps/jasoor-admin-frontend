@@ -8,21 +8,19 @@ import {
   Card,
   Row,
   Col,
-  Input,
   Table,
 } from "antd";
 import { CustomPagination } from "../../Ui";
-import { DownOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DELETE_CATEGORY, UPDATE_CATEGORY } from "../../../graphql/mutation";
 import { GET_CATEGORIES } from "../../../graphql/query/business";
-import { useQuery, useMutation } from "@apollo/client";
-import { message, Spin } from "antd";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { message } from "antd";
 import { NavLink } from "react-router-dom";
 import { DeleteModal } from "../../../components/Ui";
 import { useTranslation } from "react-i18next";
-import { MySelect } from "../../Forms";
+import { MySelect, SearchInput } from "../../Forms";
 
 const { Text } = Typography;
 
@@ -105,48 +103,51 @@ const CategoryTable = () => {
           },
         ];
 
-        if (row.state !== "UNDER_REVIEW") {
-          items.push({
-            label: (
-              <NavLink
-                onClick={() => {
-                  // send status ACTIVE
-                  updateCategory({
-                    variables: {
-                      input: {
-                        id: row.key,
-                        status: "ACTIVE",
+        if (row.status !== "UNDER_REVIEW") {
+          if (row.status === "INACTIVE") {
+            items.push({
+              label: (
+                <NavLink
+                  onClick={() => {
+                    updateCategory({
+                      variables: {
+                        input: {
+                          id: row.key,
+                          status: "ACTIVE",
+                        },
                       },
-                    },
-                  });
-                }}
-              >
-                {t("Active")}
-              </NavLink>
-            ),
-            key: "3",
-          });
-        } else {
-          items.push({
-            label: (
-              <NavLink
-                onClick={() => {
-                  // send status INACTIVE
-                  updateCategory({
-                    variables: {
-                      input: {
-                        id: row.key,
-                        status: "INACTIVE",
+                    });
+                  }}
+                >
+                  {t("Active")}
+                </NavLink>
+              ),
+              key: "3",
+            });
+          }
+
+          // Show "Inactive" option if current status is ACTIVE
+          if (row.status === "ACTIVE") {
+            items.push({
+              label: (
+                <NavLink
+                  onClick={() => {
+                    updateCategory({
+                      variables: {
+                        input: {
+                          id: row.key,
+                          status: "INACTIVE",
+                        },
                       },
-                    },
-                  });
-                }}
-              >
-                {t("InActive")}
-              </NavLink>
-            ),
-            key: "4",
-          });
+                    });
+                  }}
+                >
+                  {t("InActive")}
+                </NavLink>
+              ),
+              key: "4",
+            });
+          }
         }
 
         return (
@@ -181,69 +182,73 @@ const CategoryTable = () => {
   const [deleteItem, setDeleteItem] = useState(false);
 
   const statusItems = [
-    { key: "ACTIVE", label: t("Active") },
-    { key: "UNDER_REVIEW", label: t("Pending") },
-    { key: "INACTIVE", label: t("Inactive") },
+    { id: "ACTIVE", name: t("Active") },
+    { id: "UNDER_REVIEW", name: t("Pending") },
+    { id: "INACTIVE", name: t("Inactive") },
   ];
 
   const typeItems = [
-    { key: false, label: t("Physical Business") },
-    { key: true, label: t("Online Business") },
+    { id: false, name: t("Physical Business") },
+    { id: true, name: t("Online Business") },
   ];
 
-  // Apollo query with variables
-  const {
-    data,
-    loading: isLoading,
-    refetch,
-  } = useQuery(GET_CATEGORIES, {
-    variables: {
-      limit: pageSize,
-      offSet: (current - 1) * pageSize,
-      filter: {
-        isDigital: selectedCategory,
-        name: searchName,
-        status: selectedStatus,
+  // Apollo lazy query
+  const [loadCategories, { data, loading: isLoading }] = useLazyQuery(
+    GET_CATEGORIES,
+    {
+      fetchPolicy: "network-only",
+      onCompleted: (response) => {
+        if (response?.getAllCategories?.categories) {
+          const mappedCategories = response.getAllCategories.categories.map(
+            (item) => ({
+              key: item.id,
+              categoryicon: item.icon,
+              categoryname: item.name,
+              arabicName: item.arabicName,
+              businesstype: item.isDigital
+                ? t("Digital Business")
+                : t("Physical Business"),
+              status: item.status,
+            })
+          );
+          setCategories(mappedCategories);
+        } else {
+          setCategories([]);
+        }
       },
-    },
-    fetchPolicy: "network-only",
-  });
-  // Map API response to table data
-  useEffect(() => {
-    if (data?.getAllCategories?.categories) {
-      const mappedCategories = data.getAllCategories?.categories.map(
-        (item) => ({
-          key: item.id,
-          categoryicon: item.icon,
-          categoryname: item.name,
-          arabicName: item.arabicName,
-          businesstype: item.isDigital
-            ? t("Online Business")
-            : t("Physical Business"),
-          status: item.status,
-        })
-      );
-      setCategories(mappedCategories);
-    } else {
-      setCategories([]);
+      onError: (error) => {
+        console.error("Error loading categories:", error);
+        messageApi.error(t("Failed to load categories"));
+        setCategories([]);
+      },
     }
-  }, [data]);
+  );
 
+  // Initial load and filter changes with debounce
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      refetch({
-        limit: pageSize,
-        offSet: (current - 1) * pageSize,
-        filter: {
-          isDigital: selectedCategory,
-          name: searchName,
-          status: selectedStatus,
+      loadCategories({
+        variables: {
+          limit: pageSize,
+          offSet: (current - 1) * pageSize,
+          filter: {
+            isDigital: selectedCategory,
+            name: searchName,
+            status: selectedStatus,
+          },
         },
       });
-    }, 500); // wait 0.5s after typing stops
+    }, 400);
 
     return () => clearTimeout(delayDebounce);
-  }, [searchName, selectedCategory, selectedStatus, pageSize, current]);
+  }, [
+    searchName,
+    selectedCategory,
+    selectedStatus,
+    pageSize,
+    current,
+    loadCategories,
+  ]);
 
   // Pagination change
   const handlePageChange = (page, size) => {
@@ -251,68 +256,69 @@ const CategoryTable = () => {
     setPageSize(size);
   };
 
-  // Dropdown selections
-  const handleStatusClick = ({ key }) => {
-    setSelectedStatus(key === "null" ? null : key);
-    refetch({
-      limit: pageSize,
-      offSet: (current - 1) * pageSize,
-      filter: {
-        isDigital: selectedCategory,
-        name: searchName,
-        status: key === "null" ? null : key,
-      },
-    });
+  // Dropdown selections - remove manual refetch, let useEffect handle it
+  const handleStatusClick = ({ id }) => {
+    setCurrent(1); // Reset to page 1 when filter changes
+    setSelectedStatus(id === "null" ? null : id);
   };
 
-  const handleCategoryClick = ({ key }) => {
-    const isDigitalValue = key === "null" ? null : key === "true";
-    setSelectedCategory(isDigitalValue);
-    refetch({
-      limit: pageSize,
-      offSet: (current - 1) * pageSize,
-      filter: {
-        isDigital: isDigitalValue,
-        name: searchName,
-        status: selectedStatus,
-      },
-    });
+  const handleCategoryClick = ({ id }) => {
+    setCurrent(1); // Reset to page 1 when filter changes
+    // Handle both null/undefined and string values
+    if (
+      id === "null" ||
+      id === "undefined" ||
+      id === null ||
+      id === undefined
+    ) {
+      setSelectedCategory(null);
+    } else {
+      const isDigitalValue = id === "true" || id === true;
+      setSelectedCategory(isDigitalValue);
+    }
   };
 
   const handleSearch = (value) => {
+    setCurrent(1); // Reset to page 1 when searching
     setSearchName(value || null);
   };
 
-  useEffect(() => {
-    refetch({
-      limit: pageSize,
-      offSet: (current - 1) * pageSize,
-      filter: {
-        isDigital: selectedCategory,
-        name: searchName,
-        status: selectedStatus,
-      },
-    });
-  }, [searchName, selectedCategory, selectedStatus, pageSize, current]);
-
   const [deleteBusiness, { loading: deleting }] = useMutation(DELETE_CATEGORY, {
-    refetchQueries: [{ query: GET_CATEGORIES }],
-    awaitRefetchQueries: true,
     onCompleted: () => {
       messageApi.success(t("Category deleted successfully"));
       setDeleteItem(false);
+      // Reload categories after delete
+      loadCategories({
+        variables: {
+          limit: pageSize,
+          offSet: (current - 1) * pageSize,
+          filter: {
+            isDigital: selectedCategory,
+            name: searchName,
+            status: selectedStatus,
+          },
+        },
+      });
     },
     onError: (err) => {
-      messageApi.error(err || t("Something went wrong"));
+      messageApi.error(err.message || t("Something went wrong"));
     },
   });
 
   const [updateCategory, { loading: updating }] = useMutation(UPDATE_CATEGORY, {
-    refetchQueries: [{ query: GET_CATEGORIES }],
-    awaitRefetchQueries: true,
     onCompleted: () => {
-      messageApi.success(t("Category deleted successfully"));
-      setDeleteItem(false);
+      messageApi.success(t("Category status changed successfully"));
+      loadCategories({
+        variables: {
+          limit: pageSize,
+          offSet: (current - 1) * pageSize,
+          filter: {
+            isDigital: selectedCategory,
+            name: searchName,
+            status: selectedStatus,
+          },
+        },
+      });
     },
     onError: (err) => {
       messageApi.error(err.message || t("Something went wrong"));
@@ -328,25 +334,23 @@ const CategoryTable = () => {
             <Row gutter={[16, 16]} justify="left" align="middle">
               <Col lg={12} md={16} sm={24} xs={24}>
                 <Row gutter={[16, 16]}>
-                  {/* Search Input - double width */}
-                  <Col span={12}>
-                    <Input
-                      name="name"
-                      placeholder={t("Search")}
-                      prefix={
-                        <img
-                          src="/assets/icons/search.png"
-                          alt="search icon"
-                          width={14}
-                          fetchPriority="high"
-                        />
-                      }
-                      allowClear
-                      className="border-light-gray pad-x ps-0 radius-8 fs-13"
-                      value={searchName || ""}
-                      onChange={(e) => handleSearch(e.target.value.trim())}
-                    />
-                  </Col>
+                  <SearchInput
+                    withoutForm
+                    name="name"
+                    placeholder={t("Search")}
+                    prefix={
+                      <img
+                        src="/assets/icons/search.png"
+                        alt="search icon"
+                        width={14}
+                        fetchPriority="high"
+                      />
+                    }
+                    allowClear
+                    className="border-light-gray pad-x ps-0 radius-8 fs-13"
+                    value={searchName || ""}
+                    onChange={(e) => handleSearch(e.target.value.trim())}
+                  />
 
                   {/* Category Filter */}
                   <Col span={6}>
@@ -354,12 +358,17 @@ const CategoryTable = () => {
                       <MySelect
                         withoutForm
                         name="category"
-                        placeholder={t("Category")}
+                        placeholder={t("Business Type")}
                         options={typeItems}
                         value={selectedCategory}
-                        onChange={(value) =>
-                          handleCategoryClick({ key: String(value) })
-                        }
+                        onChange={(value) => {
+                          if (value === undefined || value === null) {
+                            setSelectedCategory(null);
+                            setCurrent(1);
+                          } else {
+                            handleCategoryClick({ id: String(value) });
+                          }
+                        }}
                         allowClear
                       />
                       <MySelect
@@ -368,9 +377,15 @@ const CategoryTable = () => {
                         placeholder={t("Status")}
                         options={statusItems}
                         value={selectedStatus}
-                        onChange={(value) =>
-                          handleStatusClick({ key: String(value) })
-                        }
+                        onChange={(value) => {
+                          console.log("Selected status value:", value);
+                          if (value === undefined || value === null) {
+                            setSelectedStatus(null);
+                            setCurrent(1);
+                          } else {
+                            handleStatusClick({ id: String(value) });
+                          }
+                        }}
                         allowClear
                       />
                     </Flex>
@@ -388,7 +403,7 @@ const CategoryTable = () => {
             scroll={{ x: 1000 }}
             rowHoverable={false}
             pagination={false}
-            loading={isLoading || deleting || updating} // ✅ loader only on table
+            loading={isLoading || deleting || updating}
           />
           <CustomPagination
             total={data?.getAllCategories?.totalcount}

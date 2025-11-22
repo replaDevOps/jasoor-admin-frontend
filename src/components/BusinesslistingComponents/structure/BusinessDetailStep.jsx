@@ -1,14 +1,26 @@
-import { useState,useEffect } from 'react'
-import { Card, Col, Flex, Form, Image, Radio, Row, Tooltip, Typography } from 'antd'
-import { MyDatepicker, MyInput, MySelect } from '../../Forms'
-import { teamsizeOp,district, cities  } from '../../../data'
-import { ModuleTopHeading } from '../../PageComponents'
-import { GET_CATEGORIES,CUSTOMER } from "../../../graphql/query";
-import { useQuery } from '@apollo/client';
-import { t } from 'i18next'
+import { useState, useEffect } from "react";
+import {
+  Card,
+  Col,
+  Flex,
+  Form,
+  Image,
+  Radio,
+  Row,
+  Tooltip,
+  Typography,
+} from "antd";
+import { MyDatepicker, MyInput, MySelect } from "../../Forms";
+import { teamsizeOp, cities } from "../../../data";
+import { ModuleTopHeading } from "../../PageComponents";
+import { GET_CATEGORIES, CUSTOMER } from "../../../graphql/query";
+import { useQuery } from "@apollo/client";
+import { t } from "i18next";
+import { useDistrictItem } from "../../../shared";
 
-const {Text } = Typography
+const { Text } = Typography;
 const BusinessDetailStep = ({ data, setData }) => {
+  const districtselectItem = useDistrictItem();
   const { data: categoryData } = useQuery(GET_CATEGORIES);
   const { data: customer } = useQuery(CUSTOMER);
   const [form] = Form.useForm();
@@ -16,37 +28,36 @@ const BusinessDetailStep = ({ data, setData }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
 
-  const categories = categoryData?.getAllCategories?.categories?.map(cat => ({
-    id: cat.id,
-    name: t(cat.name),
-    isDigital: cat.isDigital,
-  })) || [];
+  const categories =
+    categoryData?.getAllCategories?.categories?.map((cat) => ({
+      id: cat.id,
+      name: t(cat.name),
+      isDigital: cat.isDigital,
+    })) || [];
 
   const handleRadioChange = (e) => {
     setIsAccess(e.target.value === 2);
   };
 
-
   const handleFormChange = (_, allValues) => {
     setSelectedDistrict(allValues.district?.toLowerCase() || null);
-      const selected = categories.find(c => c.name === allValues.category);
-      const id = selected?.id;
+    const selected = categories.find((c) => c.name === allValues.category);
+    const id = selected?.id;
 
-    
     setSelectedCategory(allValues.category);
-    setData(prev => ({
+    setData((prev) => ({
       ...prev,
       isByTakbeer: isAccess,
       businessTitle: allValues.title,
-      categoryName:allValues.category,
-      categoryId:id,
+      categoryName: allValues.category,
+      categoryId: id,
       district: allValues.district,
       city: allValues.city,
       foundedDate: allValues.dob,
       numberOfEmployees: allValues.teamSize,
       description: allValues.description,
       url: allValues.url,
-      createdBy:allValues.username
+      createdBy: allValues.username,
     }));
   };
 
@@ -63,7 +74,7 @@ const BusinessDetailStep = ({ data, setData }) => {
     });
 
     if (data.categoryId) {
-      const cat = categories.find(cat => cat.id === data.categoryId);
+      const cat = categories.find((cat) => cat.id === data.categoryId);
       setSelectedCategory(cat);
     }
     if (data.district) {
@@ -73,19 +84,44 @@ const BusinessDetailStep = ({ data, setData }) => {
 
   return (
     <>
-      <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
-        <Flex vertical gap={1} >
-            <ModuleTopHeading level={4} name={t('Tell us about your business')} onClick={()=>{}} />
-            <Text className='text-gray'>{t("Let’s start with the basic business information")}</Text>
+      <Flex
+        justify="space-between"
+        className="mb-3"
+        gap={10}
+        wrap
+        align="flex-start"
+      >
+        <Flex vertical gap={1}>
+          <ModuleTopHeading
+            level={4}
+            name={t("Tell us about your business")}
+            onClick={() => {}}
+          />
+          <Text className="text-gray">
+            {t("Let’s start with the basic business information")}
+          </Text>
         </Flex>
-        <Flex className='pill-round' gap={8} align='center'>
-            <Image src="/assets/icons/info-b.png" fetchPriority="high"  preview={false} width={16} alt="info-icon" />
-            <Text className='fs-12 text-sky'>{t("For any query, contact us on +966 543 543 654")}</Text>
+        <Flex className="pill-round" gap={8} align="center">
+          <Image
+            src="/assets/icons/info-b.png"
+            fetchPriority="high"
+            preview={false}
+            width={16}
+            alt="info-icon"
+          />
+          <Text className="fs-12 text-sky">
+            {t("For any query, contact us on +966 543 543 654")}
+          </Text>
         </Flex>
       </Flex>
 
       <Card className="radius-12 border-gray">
-        <Form layout="vertical" form={form} onValuesChange={handleFormChange} requiredMark={false} >
+        <Form
+          layout="vertical"
+          form={form}
+          onValuesChange={handleFormChange}
+          requiredMark={false}
+        >
           <Row gutter={24}>
             <Col span={24}>
               <Flex>
@@ -97,16 +133,26 @@ const BusinessDetailStep = ({ data, setData }) => {
                   <Radio value={1} className="fs-14">
                     <Flex gap={3} align="center">
                       {t("Sell business by Acquiring")}
-                      <Tooltip title='Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities'>
-                        <img src="/assets/icons/info.png" width={20} alt="info icon" fetchPriority="high" />
+                      <Tooltip title="Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities">
+                        <img
+                          src="/assets/icons/info.png"
+                          width={20}
+                          alt="info icon"
+                          fetchPriority="high"
+                        />
                       </Tooltip>
                     </Flex>
                   </Radio>
                   <Radio value={2} className="fs-14">
                     <Flex gap={3} align="center">
                       {t("Sell business by Takbeel")}
-                      <Tooltip title='Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.'>
-                        <img src="/assets/icons/info.png" width={20} alt="info icon" fetchPriority="high" />
+                      <Tooltip title="Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.">
+                        <img
+                          src="/assets/icons/info.png"
+                          width={20}
+                          alt="info icon"
+                          fetchPriority="high"
+                        />
                       </Tooltip>
                     </Flex>
                   </Radio>
@@ -150,7 +196,6 @@ const BusinessDetailStep = ({ data, setData }) => {
                 options={categories}
                 placeholder={t("Choose business category")}
               />
-              
             </Col>
 
             <Col xs={24} sm={24} md={12}>
@@ -160,7 +205,7 @@ const BusinessDetailStep = ({ data, setData }) => {
                 required
                 message={t("Choose region")}
                 placeholder={t("Choose region")}
-                options={district}
+                options={districtselectItem}
                 onChange={(val) => setSelectedDistrict(val)}
               />
             </Col>
@@ -171,7 +216,11 @@ const BusinessDetailStep = ({ data, setData }) => {
                 name="city"
                 required
                 message={t("Choose city")}
-                options={selectedDistrict ? cities[selectedDistrict.toLowerCase()] || [] : []}
+                options={
+                  selectedDistrict
+                    ? cities[selectedDistrict.toLowerCase()] || []
+                    : []
+                }
                 placeholder={t("Choose city")}
               />
             </Col>
@@ -195,7 +244,7 @@ const BusinessDetailStep = ({ data, setData }) => {
                 required
                 message={t("Choose team size")}
                 options={teamsizeOp}
-                placeholder={t("Enter team size")}     
+                placeholder={t("Enter team size")}
               />
             </Col>
 
@@ -223,6 +272,5 @@ const BusinessDetailStep = ({ data, setData }) => {
     </>
   );
 };
-  
 
-export {BusinessDetailStep}
+export { BusinessDetailStep };

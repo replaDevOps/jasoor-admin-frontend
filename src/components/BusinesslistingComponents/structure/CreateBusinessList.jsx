@@ -23,7 +23,7 @@ import dayjs from "dayjs";
 const { Text } = Typography;
 const LOCAL_STORAGE_KEY = "sellBusinessDraft";
 
-const CreateBusinessList = ({ addstep }) => {
+const CreateBusinessList = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [current, setCurrent] = useState(0);
   const [iscancel, setIsCancel] = useState(false);

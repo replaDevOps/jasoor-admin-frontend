@@ -101,7 +101,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
       dataIndex: "fullname",
     },
     {
-      title: t("Email"),
+      title: t("Email Address"),
       dataIndex: "email",
     },
     {
@@ -357,9 +357,8 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
                     withoutForm
                     options={districtItems}
                     onChange={handleDistrictClick}
-                    placeholder={t("District")}
+                    placeholder={t("Region")}
                     allowClear
-                    style={{ minWidth: 150 }}
                   />
                   <MySelect
                     withoutForm

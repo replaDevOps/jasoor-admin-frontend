@@ -10,84 +10,91 @@ import {
 import { NavLink } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
 import { priorityItems } from "../shared";
-import { t } from "i18next";
-
+import { useTranslation } from "react-i18next";
 const { Text } = Typography;
+import { t } from "i18next";
+import { PercentageOutlined } from "@ant-design/icons";
 
-const postsaleColumn = [
-  {
-    title: t("Support Period"),
-    dataIndex: "supportperiod",
-  },
-  {
-    title: t("Number of Session"),
-    dataIndex: "nosession",
-  },
-];
+const usePostSaleColumn = () => {
+  const { t } = useTranslation();
+  return [
+    {
+      title: t("Support Period"),
+      dataIndex: "supportperiod",
+    },
+    {
+      title: t("Number of Session"),
+      dataIndex: "nosession",
+    },
+  ];
+};
 
-const offertableColumn = [
-  {
-    title: "Buyer Name",
-    dataIndex: "buyername",
-    render: (buyername) => {
-      return (
-        <Text>
-          {buyername.substring(0, 5)}
-          {"*".repeat(buyername.length - 5)}
-        </Text>
-      );
+const useOfferTableColumn = () => {
+  const { t } = useTranslation();
+  return [
+    {
+      title: t("Buyer Name"),
+      dataIndex: "buyername",
+      render: (buyername) => {
+        return (
+          <Text>
+            {buyername.substring(0, 5)}
+            {"*".repeat(buyername.length - 5)}
+          </Text>
+        );
+      },
     },
-  },
-  {
-    title: "Business Price",
-    dataIndex: "businessprice",
-  },
-  {
-    title: "Offer Price",
-    dataIndex: "offerprice",
-    render: (_, row) => {
-      return (
-        <>
-          <Flex gap={10} align="center">
-            {row?.offerprice}
-            {row?.priceType === 1 ? (
-              <Tooltip title="CO - Counteroffer">
-                <Text className="brand-bg radius-4 p-1 fs-11 text-white">
-                  CO
-                </Text>
-              </Tooltip>
-            ) : (
-              <Tooltip title="PP - Proceed to Purchase">
-                <Text className="bg-orange bg radius-4 p-1 fs-11 text-white">
-                  PP
-                </Text>
-              </Tooltip>
-            )}
-          </Flex>
-        </>
-      );
+    {
+      title: t("Business Price"),
+      dataIndex: "businessprice",
     },
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    render: (status) => {
-      return status === 0 ? (
-        <Space align="center">
-          <Text className="btnpill fs-12 pending">Send</Text>
-        </Space>
-      ) : status === 1 ? (
-        <Text className="btnpill fs-12 inactive">Reject</Text>
-      ) : status === 2 ? (
-        <Text className="btnpill fs-12 success">Received</Text>
-      ) : null;
+    {
+      title: t("Offer Price"),
+      dataIndex: "offerprice",
+      render: (_, row) => {
+        return (
+          <>
+            <Flex gap={10} align="center">
+              {row?.offerprice}
+              {row?.priceType === 1 ? (
+                <Tooltip title="CO - Counteroffer">
+                  <Text className="brand-bg radius-4 p-1 fs-11 text-white">
+                    CO
+                  </Text>
+                </Tooltip>
+              ) : (
+                <Tooltip title="PP - Proceed to Purchase">
+                  <Text className="bg-orange bg radius-4 p-1 fs-11 text-white">
+                    PP
+                  </Text>
+                </Tooltip>
+              )}
+            </Flex>
+          </>
+        );
+      },
     },
-  },
-  {
-    title: "Offer Date",
-    dataIndex: "offerdate",
-  },
-];
+    {
+      title: t("Status"),
+      dataIndex: "status",
+      render: (status) => {
+        return status === 0 ? (
+          <Space align="center">
+            <Text className="btnpill fs-12 pending">Send</Text>
+          </Space>
+        ) : status === 1 ? (
+          <Text className="btnpill fs-12 inactive">Reject</Text>
+        ) : status === 2 ? (
+          <Text className="btnpill fs-12 success">Received</Text>
+        ) : null;
+      },
+    },
+    {
+      title: t("Offer Date"),
+      dataIndex: "offerdate",
+    },
+  ];
+};
 
 const categoryStatsProfColumn = (handleInputChange) => [
   {
@@ -189,14 +196,7 @@ const categoryStatsProfColumn = (handleInputChange) => [
         onChange={(e) =>
           handleInputChange(e.target.value, index, "localbusinessgrowth")
         }
-        addonBefore={
-          <img
-            src="/assets/icons/reyal-g.png"
-            alt="currency symbol"
-            width={14}
-            fetchPriority="high"
-          />
-        }
+        addonBefore={<PercentageOutlined style={{ fontSize: "14px" }} />}
         className="w-100"
       />
     ),
@@ -417,8 +417,8 @@ const pushnotifyColumn = ({
 ];
 
 export {
-  postsaleColumn,
-  offertableColumn,
+  usePostSaleColumn,
+  useOfferTableColumn,
   categoryStatsProfColumn,
   completedealColumn,
   pushnotifyColumn,

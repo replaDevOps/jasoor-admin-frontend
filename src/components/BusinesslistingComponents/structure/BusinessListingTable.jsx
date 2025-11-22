@@ -1,4 +1,14 @@
-import { Card, Col, Flex, Form, Row, Table, Space, Typography } from "antd";
+import {
+  Card,
+  Col,
+  Flex,
+  Form,
+  Row,
+  Table,
+  Space,
+  Typography,
+  Image,
+} from "antd";
 import { MyDatepicker, MySelect, SearchInput } from "../../Forms";
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -69,6 +79,19 @@ const BusinessListingTable = ({
     {
       title: t("Business Price"),
       dataIndex: "price",
+      render: (value) => {
+        return (
+          <Flex gap={5} align="center">
+            <Image
+              src="/assets/icons/reyal.webp"
+              alt={t("currency-symbol")}
+              preview={false}
+              width={18}
+            />
+            <Text>{value?.toLocaleString()}</Text>
+          </Flex>
+        );
+      },
     },
     {
       title: t("Status"),
