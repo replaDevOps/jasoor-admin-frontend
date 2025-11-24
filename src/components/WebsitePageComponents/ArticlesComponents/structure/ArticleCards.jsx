@@ -1,6 +1,6 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Typography,Spin,message } from 'antd';
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Typography,Spin } from 'antd';
 import { SearchInput } from '../../../Forms';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CustomPagination } from '../../../Ui';
 import { NavLink } from 'react-router-dom';
 import {GETARTICLES} from '../../../../graphql/query/queries'
@@ -13,28 +13,39 @@ const ArticleCards = ({setDeleteItem}) => {
     const lang = localStorage.getItem("lang") || i18n.language || "en";
     const isArabic = lang.toLowerCase() === "ar";
     const [form] = Form.useForm();
-    const [messageApi, contextHolder] = message.useMessage();
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchValue, setSearchValue] = useState("");
+
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
     };
-    const  {data, loading , error,refetch} = useQuery(GETARTICLES,{
-        variables: { search: "" },
+
+    const  {data, loading } = useQuery(GETARTICLES,{
+        variables: { search: searchValue || null },
     });
+
+    // Debounce search term
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            setSearchValue(searchTerm.trim());
+            setCurrent(1);
+        }, 400);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchTerm]);
+
+    const handleSearch = (value) => {
+        setSearchTerm(value);
+    };
 
     const total = data?.getArticles?.totalCount || 0;
     const articleData = (isArabic
         ? data?.getArticles?.articles?.filter(article => article.isArabic)
         : data?.getArticles?.articles?.filter(article => !article.isArabic)
       ) || [];
-
-    const handleSearchChange = (e) => {
-        const value = e.target.value;
-        refetch({ search: value });
-        setCurrent(1); // reset pagination
-    };
 
     if (loading) {
         return (
@@ -46,7 +57,6 @@ const ArticleCards = ({setDeleteItem}) => {
 
     return (
         <>
-        {contextHolder}
             <Card className='radius-12 border-gray'>
                 <Flex vertical gap={20}>
                     <Form form={form} layout="vertical">
@@ -58,8 +68,8 @@ const ArticleCards = ({setDeleteItem}) => {
                                         placeholder={t('Search')}
                                         prefix={<img src='/assets/icons/search.png' alt='search icon' fetchPriority='high' width={14} />}
                                         className='border-light-gray pad-x ps-0 radius-8 fs-13'
-                                        onChange={handleSearchChange}
-                                        debounceMs={400}
+                                        value={searchTerm}
+                                        onChange={(e) => handleSearch(e.target.value)}
                                     />
                                 </Flex>
                             </Col>

@@ -1,6 +1,6 @@
 import { Button, Card, Dropdown, Flex, Form, Table,message,Spin } from 'antd';
 import { SearchInput } from '../../../Forms';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CustomPagination, DeleteModal } from '../../../Ui';
 import {GETFAQ} from '../../../../graphql/query/queries'
 import {DELETE_FAQ} from '../../../../graphql/mutation/mutations'
@@ -17,15 +17,32 @@ const FaqsTable = ({setVisible,setEditItem}) => {
     const [deleteItem, setDeleteItem] = useState(null);
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchValue, setSearchValue] = useState("");
 
     const  {data, loading , refetch:refetchFaqs} = useQuery(GETFAQ,{
-        variables: { search: "" },
+        variables: { search: searchValue || null },
     });
+
     const [deleteFAQ, { loading: deleting }] = useMutation(DELETE_FAQ,{
         variables:{
             deleteFaqId: deleteItem?.id
         }
     });
+
+    // Debounce search term
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            setSearchValue(searchTerm.trim());
+            setCurrent(1);
+        }, 400);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchTerm]);
+
+    const handleSearch = (value) => {
+        setSearchTerm(value);
+    };
     const faqsData = (isArabic
         ? data?.getFAQs?.faqs?.filter(faqs => faqs.isArabic)
         : data?.getFAQs?.faqs?.filter(faqs => !faqs.isArabic)
@@ -72,7 +89,7 @@ const FaqsTable = ({setVisible,setEditItem}) => {
           });
           messageApi.success('FAQ deleted successfully');
           setDeleteItem(null);
-          refetchFaqs({ search: "" });
+          refetchFaqs({ search: searchValue || null });
         } catch (err) {
           console.error(err);
           messageApi.error('Failed to delete FAQ');
@@ -82,11 +99,6 @@ const FaqsTable = ({setVisible,setEditItem}) => {
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
-    };
-    const handleSearchChange = (e) => {
-        const value = e.target.value;
-        refetchFaqs({ search: value });
-        setCurrent(1); // reset pagination
     };
     if (loading || deleting) {
         return (
@@ -108,8 +120,8 @@ const FaqsTable = ({setVisible,setEditItem}) => {
                                 placeholder={t('Search')}
                                 prefix={<img src='/assets/icons/search.png' alt='search icon' fetchPriority='high' width={14} />}
                                 className='border-light-gray pad-x ps-0 radius-8 fs-13'
-                                onChange={handleSearchChange}
-                                debounceMs={400}
+                                value={searchTerm}
+                                onChange={(e) => handleSearch(e.target.value)}
                             />
                         </Flex>
                     </Form>

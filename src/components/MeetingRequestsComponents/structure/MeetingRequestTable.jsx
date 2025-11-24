@@ -27,11 +27,12 @@ const MeetingRequestTable = () => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedMeetingId, setSelectedMeetingId] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState("Status");
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const [visible, setVisible] = useState(false);
   const [deleteItem, setDeleteItem] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchValue, setSearchValue] = useState("");
 
   const [fetchPendingMeetings, { data, loading }] = useLazyQuery(
@@ -42,7 +43,6 @@ const MeetingRequestTable = () => {
   const computeStatusVar = () => {
     if (selectedStatus === "Pending") return "REQUESTED";
     if (selectedStatus === "Cancel Meeting") return "REJECTED";
-    if (selectedStatus === "All" || selectedStatus === "Status") return null;
     return null;
   };
 
@@ -51,7 +51,7 @@ const MeetingRequestTable = () => {
       variables: {
         limit: pageSize,
         offset: (current - 1) * pageSize,
-        search: searchValue,
+        search: searchValue || null,
         status: computeStatusVar(),
       },
     });
@@ -119,7 +119,22 @@ const MeetingRequestTable = () => {
   };
 
   const handleSearch = (value) => {
-    setSearchValue(value);
+    setSearchTerm(value);
+  };
+
+  // Debounce search term
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setSearchValue(searchTerm.trim());
+      setCurrent(1);
+    }, 400);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
+  const handleStatusChange = (value) => {
+    setSelectedStatus(value);
+    setCurrent(1); // Reset to first page on filter change
   };
 
   const [updateMeeting, { loading: updating }] = useMutation(
@@ -131,7 +146,7 @@ const MeetingRequestTable = () => {
           variables: {
             limit: pageSize,
             offset: (current - 1) * pageSize,
-            search: searchValue,
+            search: searchValue || null,
             status: computeStatusVar(),
           },
         },
@@ -271,6 +286,7 @@ const MeetingRequestTable = () => {
                     />
                   }
                   className="border-light-gray pad-x ps-0 radius-8 fs-13"
+                  value={searchTerm}
                   onChange={(e) => handleSearch(e.target.value)}
                   allowClear
                 />
@@ -280,7 +296,7 @@ const MeetingRequestTable = () => {
                   placeholder={t("Status")}
                   options={meetingItems}
                   value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e)}
+                  onChange={handleStatusChange}
                   allowClear
                 />
               </Flex>

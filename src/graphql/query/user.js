@@ -28,6 +28,16 @@ const ME = gql`
     }
   }
 `;
+
+const GETCUSTOMERROLE = gql`
+  query GetCustomerRole {
+    getCustomerRole {
+      id
+      name
+    }
+  }
+`;
+
 const USERS = gql`
   query GetUsers($limit: Int, $offset: Int, $filter: UserFilterInput) {
     getUsers(limit: $limit, offset: $offset, filter: $filter) {
@@ -416,8 +426,8 @@ const GET_NOTIFICATIONS = gql`
 `;
 const GET_NOTIFICATION_COUNT = gql`
   query Query {
-  getNotificationCount
-}
+    getNotificationCount
+  }
 `;
 const GET_ALERTS = gql`
   query Notifications($userId: ID, $offset: Int, $limit: Int) {
@@ -463,6 +473,7 @@ const GETUSERACTIVEBANK = gql`
 
 export {
   ME,
+  GETCUSTOMERROLE,
   NOTIFICATION,
   PROFESSIONALSTATISTICS,
   GETBUYERSTATISTICS,

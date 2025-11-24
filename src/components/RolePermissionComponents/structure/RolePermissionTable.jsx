@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { MySelect, SearchInput } from "../../Forms";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { CustomPagination, DeleteModal } from "../../Ui";
 import { GETROLES } from "../../../graphql/query/user";
 import { UPDATE_ROLE, DELETE_ROLE } from "../../../graphql/mutation";
@@ -24,11 +24,12 @@ const { Text } = Typography;
 const RolePermissionTable = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-  const [selectedStatus, setSelectedStatus] = useState("Status");
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const navigate = useNavigate();
   const [deleteItem, setDeleteItem] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchText, setSearchText] = useState("");
   const [selectedRoleId, setRoleId] = useState(null);
 
@@ -42,35 +43,28 @@ const RolePermissionTable = () => {
         limit: pageSize,
         offset: (current - 1) * pageSize,
         search: searchText || null,
+        isActive: selectedStatus,
       },
     });
-  }, [pageSize, current, fetchRoles]);
+  }, [pageSize, current, searchText, selectedStatus, fetchRoles]);
 
-  const debounce = (func, delay) => {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  const debouncedSearch = useCallback(
-    debounce((value) => {
-      fetchRoles({
-        variables: {
-          limit: pageSize,
-          offset: 0,
-          search: value || null,
-        },
-      });
+  // Debounce search term
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setSearchText(searchTerm.trim());
       setCurrent(1);
-    }, 400),
-    [pageSize, fetchRoles]
-  );
+    }, 400);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   const handleSearch = (value) => {
-    setSearchText(value);
-    debouncedSearch(value);
+    setSearchTerm(value);
+  };
+
+  const handleStatusChange = (value) => {
+    setSelectedStatus(value);
+    setCurrent(1);
   };
 
   const rolepermissionColumn = (setDeleteItem, navigate) => [
@@ -168,43 +162,15 @@ const RolePermissionTable = () => {
   ];
 
   const statusItems = [
-    { id: "2", name: t("Active") },
-    { id: "3", name: t("Inactive") },
+    { id: true, name: t("Active") },
+    { id: false, name: t("Inactive") },
   ];
-
-  const handleStatusClick = ({ key }) => {
-    const selectedItem = statusItems.find((item) => item.key === key);
-    if (selectedItem) {
-      setSelectedStatus(selectedItem.label);
-      fetchRoles({
-        variables: {
-          limit: pageSize,
-          offset: 0,
-          search: searchText || null,
-          isActive:
-            selectedItem.key === "2"
-              ? true
-              : selectedItem.key === "3"
-              ? false
-              : null,
-        },
-      });
-      setCurrent(1);
-    }
-  };
 
   const total = data?.getRoles?.totalCount || 0;
 
   const handlePageChange = (page, size) => {
     setCurrent(page);
     setPageSize(size);
-    fetchRoles({
-      variables: {
-        limit: size,
-        offset: (page - 1) * size,
-        search: searchText || null,
-      },
-    });
   };
 
   const [deleteRole, { loading: onDeleteing }] = useMutation(DELETE_ROLE, {
@@ -249,8 +215,8 @@ const RolePermissionTable = () => {
                       />
                     }
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
-                    onChange={(e) => handleSearch(e.target)}
-                    debounceMs={400}
+                    value={searchTerm}
+                    onChange={(e) => handleSearch(e.target.value)}
                     allowClear
                   />
                   <MySelect
@@ -258,9 +224,8 @@ const RolePermissionTable = () => {
                     name="status"
                     placeholder={t("Status")}
                     options={statusItems}
-                    onChange={(value) => {
-                      setSelectedStatus(value);
-                    }}
+                    value={selectedStatus}
+                    onChange={handleStatusChange}
                     allowClear
                   />
                 </Flex>

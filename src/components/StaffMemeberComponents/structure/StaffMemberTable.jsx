@@ -26,11 +26,12 @@ const { Text } = Typography;
 const StaffMemberTable = ({ setVisible, setEditItem }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [selectedStatus, setSelectedStatus] = useState(t("Status"));
-  const [selectedRole, setSelectedRole] = useState(t("Role"));
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedRole, setSelectedRole] = useState(null);
   const [deleteitem, setDeleteItem] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchText, setSearchText] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
 
@@ -49,18 +50,8 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
         limit: pageSize,
         offset: (current - 1) * pageSize,
         search: searchText || null,
-        status:
-          selectedStatus === "Active"
-            ? "verified"
-            : selectedStatus === "Inactive"
-            ? "inactive"
-            : selectedStatus === "Pending"
-            ? "pending"
-            : null,
-        roleId:
-          selectedRole === "All" || selectedRole === "Role"
-            ? null
-            : roles.find((r) => r.name === selectedRole)?.id || null,
+        status: selectedStatus,
+        roleId: selectedRole,
       },
     });
   }, [
@@ -71,6 +62,16 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
     selectedRole,
     getStaffMembers,
   ]);
+
+  // Debounce search term
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setSearchText(searchTerm.trim());
+      setCurrent(1);
+    }, 400);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   const roles =
     rolesData?.getRoles?.roles?.filter((role) => role.name !== "Customer") ||
@@ -88,25 +89,18 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
     setPageSize(size);
   };
 
-  const handleStatusClick = ({ key }) => {
-    const selectedItem = statusItems.find((item) => item.key === key);
-    if (selectedItem) {
-      setSelectedStatus(selectedItem.label);
-      setCurrent(1); // reset to first page
-    }
-  };
-
   const handleSearch = (value) => {
-    setSearchText(value);
-    setCurrent(1); // reset to first page
+    setSearchTerm(value);
   };
 
-  const handleCategoryClick = ({ key }) => {
-    const selected = roles.find((r) => r.id === key);
-    if (selected) {
-      setSelectedRole(selected.name);
-      setCurrent(1); // reset to first page
-    }
+  const handleStatusChange = (value) => {
+    setSelectedStatus(value);
+    setCurrent(1);
+  };
+
+  const handleRoleChange = (value) => {
+    setSelectedRole(value);
+    setCurrent(1);
   };
 
   const [updateUser] = useMutation(UPDATE_USER, {
@@ -257,8 +251,9 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
   ];
 
   const statusItems = [
-    { id: "2", name: t("Active") },
-    { id: "3", name: t("Inactive") },
+    { id: "verified", name: t("Active") },
+    { id: "inactive", name: t("Inactive") },
+    { id: "pending", name: t("Pending") },
   ];
 
   const roleItems =
@@ -290,21 +285,16 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                       />
                     }
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
-                    onChange={(e) => handleSearch(e.target.value.trim())}
-                    debounceMs={400}
+                    value={searchTerm}
+                    onChange={(e) => handleSearch(e.target.value)}
                   />
                   <MySelect
                     withoutForm
                     name="role"
                     placeholder={t("Role")}
                     options={roleItems}
-                    onChange={(value) => {
-                      const selected = roles.find((r) => r.id === value);
-                      if (selected) {
-                        setSelectedRole(selected.name);
-                        setCurrent(1);
-                      }
-                    }}
+                    value={selectedRole}
+                    onChange={handleRoleChange}
                     allowClear
                   />
                   <MySelect
@@ -312,15 +302,8 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                     name="status"
                     placeholder={t("Status")}
                     options={statusItems}
-                    onChange={(value) => {
-                      const selectedItem = statusItems.find(
-                        (item) => item.id === value
-                      );
-                      if (selectedItem) {
-                        setSelectedStatus(selectedItem.name);
-                        setCurrent(1); // reset to first page
-                      }
-                    }}
+                    value={selectedStatus}
+                    onChange={handleStatusChange}
                     allowClear
                   />
                 </Flex>

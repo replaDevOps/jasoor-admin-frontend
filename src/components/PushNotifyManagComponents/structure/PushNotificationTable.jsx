@@ -23,6 +23,7 @@ const PushNotificationTable = ({
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchValue, setSearchValue] = useState("");
 
   const [fetchCampaigns, { data, loading }] = useLazyQuery(GET_CAMPAIGNS, {
@@ -30,22 +31,18 @@ const PushNotificationTable = ({
   });
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      fetchCampaigns({
-        variables: {
-          filter: {
-            search: searchValue || null,
-            district: selectedDistrict || null,
-            group: selectedCategory?.toUpperCase() || null,
-            status: selectedStatus,
-            limit: pageSize,
-            offset: (current - 1) * pageSize,
-          },
+    fetchCampaigns({
+      variables: {
+        filter: {
+          search: searchValue || null,
+          district: selectedDistrict || null,
+          group: selectedCategory?.toUpperCase() || null,
+          status: selectedStatus,
+          limit: pageSize,
+          offset: (current - 1) * pageSize,
         },
-      });
-    }, 400);
-
-    return () => clearTimeout(handler);
+      },
+    });
   }, [
     searchValue,
     selectedDistrict,
@@ -55,6 +52,35 @@ const PushNotificationTable = ({
     current,
     fetchCampaigns,
   ]);
+
+  // Debounce search term
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setSearchValue(searchTerm.trim());
+      setCurrent(1);
+    }, 400);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+  };
+
+  const handleStatusChange = (value) => {
+    setSelectedStatus(value);
+    setCurrent(1);
+  };
+
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+    setCurrent(1);
+  };
+
+  const handleDistrictChange = (value) => {
+    setSelectedDistrict(value);
+    setCurrent(1);
+  };
 
   const pushnotifyData =
     data?.getCampaigns?.campaigns?.map((campaign, index) => ({
@@ -107,15 +133,16 @@ const PushNotificationTable = ({
                     />
                   }
                   className="border-light-gray pad-x ps-0 radius-8 fs-13"
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  debounceMs={400}
+                  value={searchTerm}
+                  onChange={(e) => handleSearch(e.target.value)}
                 />
                 <MySelect
                   withoutForm
                   name="category"
                   placeholder={t("Group")}
                   options={groupselectItem}
-                  onChange={(value) => setSelectedCategory(value)}
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
                   allowClear
                 />
                 <MySelect
@@ -123,7 +150,8 @@ const PushNotificationTable = ({
                   name="district"
                   placeholder={t("District")}
                   options={districtselectItem}
-                  onChange={(value) => setSelectedDistrict(value)}
+                  value={selectedDistrict}
+                  onChange={handleDistrictChange}
                   allowClear
                 />
                 <MySelect
@@ -131,7 +159,8 @@ const PushNotificationTable = ({
                   name="status"
                   placeholder={t("Status")}
                   options={pushstatusItem}
-                  onChange={(value) => setSelectedStatus(value)}
+                  value={selectedStatus}
+                  onChange={handleStatusChange}
                   allowClear
                 />
               </Flex>

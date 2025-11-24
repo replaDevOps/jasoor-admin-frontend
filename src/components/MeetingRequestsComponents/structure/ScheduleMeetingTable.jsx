@@ -12,8 +12,7 @@ import {
 } from "antd";
 import { NavLink } from "react-router-dom";
 import { MySelect, SearchInput } from "../../Forms";
-import { useState, useEffect } from "react";
-import { DownOutlined } from "@ant-design/icons";
+import { useState, useEffect, useMemo } from "react";
 import { meetingItems } from "../../../shared";
 import { CustomPagination } from "../../Ui";
 import {
@@ -59,10 +58,11 @@ function calculateCommission(price) {
 
 const ScheduleMeetingTable = () => {
   const [form] = Form.useForm();
-  const [selectedStatus, setSelectedStatus] = useState("Status");
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const [visible, setVisible] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [selectedOffer, setSelectedOffer] = useState(null);
 
@@ -121,13 +121,16 @@ const ScheduleMeetingTable = () => {
       title: t("Status"),
       dataIndex: "status",
       render: (status) => {
-        return status === "APPROVED" ? (
-          <Text className="btnpill fs-12 pending">Approved</Text>
-        ) : status === "HELD" ? (
-          <Text className="btnpill fs-12 inactive">Held</Text>
-        ) : (
-          <Text className="btnpill fs-12 cancelled">Cancelled</Text>
-        );
+        if (status === "APPROVED") {
+          return <Text className="btnpill fs-12 pending">{t("Pending")}</Text>;
+        } else if (status === "HELD") {
+          return <Text className="btnpill fs-12 success">{t("Held")}</Text>;
+        } else if (status === "CANCELED") {
+          return (
+            <Text className="btnpill fs-12 inactive">{t("Cancelled")}</Text>
+          );
+        }
+        return <Text className="btnpill fs-12 inactive">{status || "-"}</Text>;
       },
     },
     {
@@ -178,8 +181,7 @@ const ScheduleMeetingTable = () => {
                           variables: {
                             limit: pageSize,
                             offset: (current - 1) * pageSize,
-                            search: searchValue,
-                            status: computeStatusVar(),
+                            ...filter,
                           },
                         });
                       } catch (err) {
@@ -220,23 +222,29 @@ const ScheduleMeetingTable = () => {
   );
 
   // map UI-selected status to API variable
-  const computeStatusVar = () => {
-    if (selectedStatus === "Pending") return "APPROVED";
-    if (selectedStatus === "Cancel Meeting") return "CANCELED";
-    if (selectedStatus === "All" || selectedStatus === "Status") return null;
-    return null;
-  };
+  const filter = useMemo(() => {
+    let statusValue = null;
+    if (selectedStatus === "Pending") {
+      statusValue = "APPROVED";
+    } else if (selectedStatus === "Cancel Meeting") {
+      statusValue = "CANCELED";
+    }
+
+    return {
+      search: searchValue || null,
+      status: statusValue,
+    };
+  }, [selectedStatus, searchValue]);
+
   useEffect(() => {
     fetchScheduledMeetings({
       variables: {
         limit: pageSize,
         offset: (current - 1) * pageSize,
-        search: searchValue,
-        status: computeStatusVar(),
+        ...filter,
       },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageSize, current, searchValue, selectedStatus]);
+  }, [pageSize, current, filter, fetchScheduledMeetings]);
   const schedulemeetingData = (
     data?.getAdminScheduledMeetings?.items || []
   ).map((item) => {
@@ -277,17 +285,24 @@ const ScheduleMeetingTable = () => {
     setPageSize(size);
   };
 
-  const handleStatusClick = ({ key }) => {
-    const selectedItem = meetingItems.find((item) => item.key === key);
-    if (selectedItem) {
-      setSelectedStatus(selectedItem.label);
-    }
+  const handleSearch = (value) => {
+    setSearchTerm(value);
   };
 
-  const handleSearch = (value) => {
-    setSearchValue(value);
+  // Debounce search term
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setSearchValue(searchTerm.trim());
+      setCurrent(1);
+    }, 400);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
+  const handleStatusChange = (value) => {
+    setSelectedStatus(value);
+    setCurrent(1); // Reset to first page on filter change
   };
-  console.log("Selected Offer:", selectedOffer);
 
   const handleDealSubmit = async () => {
     try {
@@ -342,8 +357,7 @@ const ScheduleMeetingTable = () => {
         variables: {
           limit: pageSize,
           offset: (current - 1) * pageSize,
-          search: searchValue,
-          status: computeStatusVar(),
+          ...filter,
         },
       });
     } catch (err) {
@@ -395,6 +409,7 @@ const ScheduleMeetingTable = () => {
                   }
                   allowClear
                   className="border-light-gray pad-x ps-0 radius-8 fs-13"
+                  value={searchTerm}
                   onChange={(e) => handleSearch(e.target.value)}
                 />
                 <MySelect
@@ -403,7 +418,7 @@ const ScheduleMeetingTable = () => {
                   value={selectedStatus}
                   placeholder={t("Status")}
                   options={meetingItems}
-                  onChange={(e) => setSelectedStatus(e)}
+                  onChange={handleStatusChange}
                   allowClear
                 />
               </Flex>

@@ -23,7 +23,8 @@ const { Text } = Typography;
 const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
   const [form] = Form.useForm();
 
-  const [selectedStatus, setSelectedStatus] = useState("Status");
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
@@ -37,36 +38,30 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
       variables: {
         limit: pageSize,
         offset: (current - 1) * pageSize,
-        search: searchValue,
-        status:
-          selectedStatus === "Send"
-            ? true
-            : selectedStatus === "Pending"
-            ? false
-            : null,
+        search: searchValue || null,
+        status: selectedStatus,
       },
     });
-  }, [pageSize, current, selectedStatus]);
+  }, [pageSize, current, selectedStatus, searchValue, fetchContacts]);
 
+  // Debounce search term
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      fetchContacts({
-        variables: {
-          limit: pageSize,
-          offset: (current - 1) * pageSize,
-          search: searchValue,
-          status:
-            selectedStatus === "Send"
-              ? true
-              : selectedStatus === "Pending"
-              ? false
-              : null,
-        },
-      });
+    const delayDebounceFn = setTimeout(() => {
+      setSearchValue(searchTerm.trim());
+      setCurrent(1);
     }, 400);
 
-    return () => clearTimeout(delayDebounce);
-  }, [searchValue]);
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+  };
+
+  const handleStatusChange = (value) => {
+    setSelectedStatus(value);
+    setCurrent(1);
+  };
 
   const total = data?.getAllContactUs?.totalCount || 0;
   const contactreqData = (data?.getAllContactUs?.contactUs || []).map(
@@ -87,8 +82,8 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
   };
 
   const statusItems = [
-    { id: "2", name: t("Send") },
-    { id: "3", name: t("Pending") },
+    { id: true, name: t("Send") },
+    { id: false, name: t("Pending") },
   ];
 
   return (
@@ -112,8 +107,8 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
                       />
                     }
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    debounceMs={400}
+                    value={searchTerm}
+                    onChange={(e) => handleSearch(e.target.value)}
                     allowClear
                   />
                   <MySelect
@@ -122,7 +117,7 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
                     value={selectedStatus}
                     placeholder={t("Status")}
                     options={statusItems}
-                    onChange={(e) => setSelectedStatus(e)}
+                    onChange={handleStatusChange}
                     allowClear
                   />
                 </Flex>

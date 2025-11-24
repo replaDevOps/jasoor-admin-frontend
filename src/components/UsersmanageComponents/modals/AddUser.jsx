@@ -16,18 +16,20 @@ import {
 import { MyInput, MySelect } from "../../Forms";
 import { CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { cities } from "../../../data";
-import { useMutation } from "@apollo/client";
-import { CREATE_USER } from "../../../graphql/mutation/login";
+import { useMutation, useLazyQuery } from "@apollo/client";
+import { CREATE_STAFF_MEMBER } from "../../../graphql/mutation/login";
 import { UPDATE_USER } from "../../../graphql/mutation";
 import imageCompression from "browser-image-compression";
 import { t } from "i18next";
-import { USERS } from "../../../graphql/query";
+import { USERS, GETCUSTOMERROLE } from "../../../graphql/query";
+import { useDistricts, useCities } from "../../../shared";
 
 const { Title } = Typography;
 const AddUser = ({ visible, onClose, edititem }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+  const districts = useDistricts();
+  const cities = useCities();
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [idType, setIdType] = useState("national_id");
   const [frontFileName, setFrontFileName] = useState("");
@@ -40,11 +42,30 @@ const AddUser = ({ visible, onClose, edititem }) => {
     back: "",
     passport: "",
   });
-  const [createUser, { loading: userLoading }] = useMutation(CREATE_USER);
-  const [updateUser, { loading: updating }] = useMutation(UPDATE_USER, {
-    refetchQueries: [{ query: USERS }],
+
+  // Fetch customer roles
+  const [getRoles, { data: rolesData }] = useLazyQuery(GETCUSTOMERROLE, {
+    fetchPolicy: "cache-first",
   });
 
+  const [createStaff, { loading: userLoading }] = useMutation(
+    CREATE_STAFF_MEMBER,
+    {
+      refetchQueries: [USERS],
+    }
+  );
+  const [updateUser, { loading: updating }] = useMutation(UPDATE_USER, {
+    refetchQueries: [USERS],
+  });
+
+  // Fetch roles when modal opens
+  useEffect(() => {
+    if (visible) {
+      getRoles();
+    }
+  }, [visible, getRoles]);
+
+  console.log("selectedDistrict", selectedDistrict);
   // Helper function to reset all form data
   const resetFormData = () => {
     form.resetFields();
@@ -75,6 +96,44 @@ const AddUser = ({ visible, onClose, edititem }) => {
         city: edititem?.city,
         phoneNo: edititem?.mobileno,
       });
+      // Set selectedDistrict to enable city dropdown in edit mode
+      setSelectedDistrict(edititem?.district);
+
+      // Populate document states if documents exist
+      if (edititem?.documents && edititem.documents.length > 0) {
+        setDocuments(edititem.documents);
+
+        // Check if documents contain National ID or Passport
+        const hasFront = edititem.documents.some(
+          (doc) => doc.title === "front"
+        );
+        const hasBack = edititem.documents.some((doc) => doc.title === "back");
+        const hasPassport = edititem.documents.some(
+          (doc) => doc.title === "passport"
+        );
+
+        if (hasPassport) {
+          setIdType("passport");
+          const passportDoc = edititem.documents.find(
+            (doc) => doc.title === "passport"
+          );
+          setPassportFileName(passportDoc?.fileName || t("Passport uploaded"));
+        } else if (hasFront || hasBack) {
+          setIdType("national_id");
+          if (hasFront) {
+            const frontDoc = edititem.documents.find(
+              (doc) => doc.title === "front"
+            );
+            setFrontFileName(frontDoc?.fileName || t("Front side uploaded"));
+          }
+          if (hasBack) {
+            const backDoc = edititem.documents.find(
+              (doc) => doc.title === "back"
+            );
+            setBackFileName(backDoc?.fileName || t("Back side uploaded"));
+          }
+        }
+      }
     } else if (visible && !edititem) {
       // Add mode - reset everything
       form.resetFields();
@@ -168,6 +227,7 @@ const AddUser = ({ visible, onClose, edititem }) => {
         district: formData.district,
         city: formData.city,
         phone: formData.phoneNo,
+        roleId: rolesData?.getCustomerRole?.id,
         password:
           formData.password && String(formData.password).trim().length > 0
             ? formData.password
@@ -181,8 +241,8 @@ const AddUser = ({ visible, onClose, edititem }) => {
         await updateUser({ variables: { input } });
         messageApi.success(t("User account updated successfully!"));
       } else {
-        // Create new user
-        await createUser({ variables: { input: basePayload } });
+        // Create new staff member
+        await createStaff({ variables: { input: basePayload } });
         messageApi.success(t("User account created successfully!"));
       }
 
@@ -272,59 +332,6 @@ const AddUser = ({ visible, onClose, edititem }) => {
     }
   };
 
-  const district = [
-    {
-      id: 1,
-      name: t("Riyadh"),
-      value: "riyadh",
-    },
-    {
-      id: 2,
-      name: t("Jeddah"),
-      value: "jeddah",
-    },
-    {
-      id: 3,
-      name: t("Dammam"),
-      value: "dammam",
-    },
-    {
-      id: 4,
-      name: t("Khobar"),
-      value: "khobar",
-    },
-    {
-      id: 5,
-      name: t("Makkah"),
-      value: "makkah",
-    },
-    {
-      id: 6,
-      name: t("Medina"),
-      value: "medina",
-    },
-    {
-      id: 7,
-      name: t("Taif"),
-      value: "taif",
-    },
-    {
-      id: 8,
-      name: t("Tabuk"),
-      value: "tabuk",
-    },
-    {
-      id: 9,
-      name: t("Hail"),
-      value: "hail",
-    },
-    {
-      id: 10,
-      name: t("Najran"),
-      value: "najran",
-    },
-  ];
-
   return (
     <>
       {contextHolder}
@@ -402,8 +409,11 @@ const AddUser = ({ visible, onClose, edititem }) => {
                   required
                   message={t("Please select region")}
                   placeholder={t("Select region")}
-                  options={district}
-                  onChange={(val) => setSelectedDistrict(val)}
+                  options={districts}
+                  onChange={(val) => {
+                    setSelectedDistrict(val);
+                    form.setFieldsValue({ city: undefined });
+                  }}
                 />
               </Col>
               <Col span={24}>
@@ -418,6 +428,7 @@ const AddUser = ({ visible, onClose, edititem }) => {
                       : []
                   }
                   placeholder={t("Select city")}
+                  disabled={!selectedDistrict}
                 />
               </Col>
               <Col span={24}>

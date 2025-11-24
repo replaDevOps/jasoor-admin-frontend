@@ -19,11 +19,14 @@ import { UPDATE_USER, DELETE_USER } from "../../../graphql/mutation";
 import { USERS } from "../../../graphql/query/user";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
+import { useDistricts, useCities } from "../../../shared";
 
 const { Text } = Typography;
 const UserManagementTable = ({ setVisible, setEditItem }) => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
+  const districts = useDistricts();
+  const cities = useCities();
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
@@ -170,6 +173,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
                   label: (
                     <NavLink
                       onClick={(e) => {
+                        console.log(row);
                         e.preventDefault();
                         setVisible(true);
                         setEditItem(row);
@@ -265,24 +269,25 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
     setPageSize(size);
   };
 
-  const handleDistrictClick = (key) => {
-    const selectedItem = districtItems.find(
-      (item) => String(item.id) === String(key)
-    );
-    if (selectedItem) setSelectedDistrict(selectedItem.name);
+  const handleDistrictClick = (districtId) => {
+    setSelectedDistrict(districtId);
+    setSelectedCity(null); // Reset city when district changes
   };
 
-  const handleCityClick = (key) => {
-    const selectedItem = districtItems.find(
-      (item) => String(item.id) === String(key)
-    );
-    if (selectedItem) setSelectedCity(selectedItem.name);
+  const handleCityClick = (cityId) => {
+    setSelectedCity(cityId);
   };
 
   const handleSearch = (value) => {
     setSearchText(value);
     setCurrent(1);
   };
+
+  // Get available cities for selected district
+  const availableCities = useMemo(() => {
+    if (!selectedDistrict) return [];
+    return cities[selectedDistrict] || [];
+  }, [selectedDistrict, cities]);
 
   // ----------------- Data Mapping -----------------
   const usermanageData =
@@ -299,22 +304,6 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
     })) || [];
 
   const total = data?.getUsers?.totalCount;
-
-  const districtItems = [
-    { id: "1", name: t("Makkah") },
-    { id: "2", name: t("Eastern") },
-    { id: "3", name: t("Al-Madinah") },
-    { id: "4", name: t("Asir") },
-    { id: "5", name: t("Tabuk") },
-    { id: "6", name: t("Najran") },
-    { id: "7", name: t("Al-Qassim") },
-    { id: "8", name: t("Hail") },
-    { id: "9", name: t("Al-Jouf") },
-    { id: "10", name: t("Al-Bahah") },
-    { id: "11", name: t("Riyadh") },
-    { id: "12", name: t("Northern Borders") },
-    { id: "13", name: t("Jazan") },
-  ];
 
   const typeItems = [
     { id: "new", name: t("New") },
@@ -355,17 +344,20 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
                   />
                   <MySelect
                     withoutForm
-                    options={districtItems}
+                    options={districts}
+                    value={selectedDistrict}
                     onChange={handleDistrictClick}
                     placeholder={t("Region")}
                     allowClear
                   />
                   <MySelect
                     withoutForm
-                    options={districtItems}
+                    options={availableCities}
+                    value={selectedCity}
                     onChange={handleCityClick}
                     placeholder={t("City")}
                     allowClear
+                    disabled={!selectedDistrict}
                   />
                   <MySelect
                     withoutForm

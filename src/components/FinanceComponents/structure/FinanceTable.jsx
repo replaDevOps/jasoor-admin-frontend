@@ -13,6 +13,7 @@ const FinanceTable = () => {
   const [dateRange, setDateRange] = useState();
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchText, setSearchText] = useState("");
   const { data, refetch } = useQuery(GET_COMPLETED_DEALS, {
     variables: {
@@ -21,7 +22,7 @@ const FinanceTable = () => {
       filter: {
         startDate: dateRange ? dayjs(dateRange[0]).format("YYYY-MM-DD") : null,
         endDate: dateRange ? dayjs(dateRange[1]).format("YYYY-MM-DD") : null,
-        search: form.getFieldValue("name") || null,
+        search: searchText || null,
       },
     },
     fetchPolicy: "cache-and-network",
@@ -64,6 +65,20 @@ const FinanceTable = () => {
     });
   }, [dateRange, searchText, pageSize, current, refetch]);
 
+  // Debounce search term
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setSearchText(searchTerm.trim());
+      setCurrent(1);
+    }, 400);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+  };
+
   const total = data?.getCompletedDeals?.totalCount;
   const financeData =
     data?.getCompletedDeals?.deals.map((deal) => ({
@@ -103,12 +118,9 @@ const FinanceTable = () => {
                       />
                     }
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
-                    onChange={(e) => {
-                      setSearchText(e.target.value.trim());
-                      setCurrent(1); // reset to first page
-                    }}
+                    value={searchTerm}
+                    onChange={(e) => handleSearch(e.target.value)}
                     allowClear
-                    debounceMs={400}
                   />
                   <Flex>
                     <MyDatepicker

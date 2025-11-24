@@ -1,5 +1,5 @@
 import { Button, Card, Col, Flex, Form, Row, Typography } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import { Breadcrumb } from "antd";
 import { MyInput, MySelect, SingleFileUpload } from "../../Forms";
@@ -48,13 +48,9 @@ const AddNewCategory = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [form] = Form.useForm();
-  const {
-    loading,
-    error,
-    data: category,
-  } = useQuery(GET_CATEGORIES_BY_ID, {
+  const { loading, data: category } = useQuery(GET_CATEGORIES_BY_ID, {
     variables: { getCategoryByIdId: id },
-    skip: !id, // skip if no id
+    skip: !id,
   });
   const editdata = category?.getCategoryById;
   const [categoryProfData, setCategoryProfData] = useState([]);
@@ -83,24 +79,28 @@ const AddNewCategory = () => {
       setCategoryProfData(categorystatsProfData);
     }
   }, [id, editdata]);
-  const [documents, setDocuments] = useState({
-    title: "Category Icon",
-    fileName: "",
-    fileType: "",
-    filePath: "",
-  });
-  const [createCategory, { loading: createLoading }] = useMutation(
-    CREATE_CATEGORY,
-    {
-      onCompleted: (data) => {
-        message.success("Category created successfully");
-        navigate("/categorymanagement");
-      },
-      onError: (error) => {
-        message.error(`Error creating category: ${error.message}`);
-      },
+
+  const [categoryIcon, setCategoryIcon] = useState("");
+  const [uploadLoading, setUploadLoading] = useState(false);
+
+  // Set category icon when editing
+  useEffect(() => {
+    if (id && editdata?.icon) {
+      setCategoryIcon(editdata.icon);
     }
-  );
+  }, [id, editdata]);
+
+  const [createCategory, { loading: creating }] = useMutation(CREATE_CATEGORY, {
+    onCompleted: () => {
+      messageApi.success(t("Category created successfully"));
+      setTimeout(() => {
+        navigate("/categorymanagement");
+      }, 700);
+    },
+    onError: (error) => {
+      messageApi.error(t(`Error creating category: ${error.message}`));
+    },
+  });
 
   const transformGrowthRecords = (data) => {
     return data.map((row) => ({
@@ -126,7 +126,7 @@ const AddNewCategory = () => {
     } else {
       form.resetFields();
     }
-  }, [id, editdata]);
+  }, [id, editdata, form]);
 
   const handleInputChange = (value, index, key) => {
     const updated = [...categoryProfData];
@@ -143,10 +143,13 @@ const AddNewCategory = () => {
     ],
     awaitRefetchQueries: true,
     onCompleted: () => {
-      messageApi.success("Stats changed successfully!");
+      messageApi.success(t("Category updated successfully"));
+      setTimeout(() => {
+        navigate("/categorymanagement");
+      }, 700);
     },
     onError: (err) => {
-      messageApi.error(err.message || "Something went wrong!");
+      messageApi.error(err.message || t("Something went wrong!"));
     },
   });
 
@@ -155,7 +158,7 @@ const AddNewCategory = () => {
       ...(id && { id }),
       name: values.title,
       arabicName: values.arabicTitle,
-      icon: documents.filePath || null, // from uploaded file
+      icon: categoryIcon || null, // Use categoryIcon state
       isDigital: values.category === "Digital Business" ? true : false, // adjust based on your dropdown
       growthRecords: transformGrowthRecords(categoryProfData),
     };
@@ -167,6 +170,7 @@ const AddNewCategory = () => {
   };
   const handleSingleFileUpload = async (file) => {
     try {
+      setUploadLoading(true);
       let processedFile = file;
 
       // Prepare FormData
@@ -184,22 +188,22 @@ const AddNewCategory = () => {
       }
 
       const result = await response.json();
-      // set it to documents state
-      setDocuments({
-        title: "Category Icon",
-        fileName: processedFile.name,
-        fileType: processedFile.type,
-        filePath: result.fileUrl || result.url, // Assuming your API returns the file URL
-      });
+      const uploadedUrl = result.fileUrl || result.url;
 
-      // Return file URL or whatever your API returns
-      return result.fileUrl || result.url;
+      // Set category icon state
+      setCategoryIcon(uploadedUrl);
+
+      messageApi.success(t("Image uploaded successfully"));
+      return uploadedUrl;
     } catch (error) {
       console.error("Error uploading file:", error);
+      messageApi.error(t("Failed to upload image"));
       return null;
+    } finally {
+      setUploadLoading(false);
     }
   };
-  if (loading || updating) {
+  if (loading) {
     return (
       <Flex justify="center" align="center" className="h-200">
         <Spin size="large" />
@@ -257,6 +261,8 @@ const AddNewCategory = () => {
               aria-labelledby="submit button"
               className="btnsave brand-bg border0 text-white"
               onClick={() => form.submit()}
+              loading={creating || updating}
+              disabled={creating || updating}
             >
               {id ? t("Update") : t("Save")}
             </Button>
@@ -305,7 +311,7 @@ const AddNewCategory = () => {
               </Col>
 
               <Col span={24}>
-                {!editdata?.icon ? (
+                {!categoryIcon ? (
                   <SingleFileUpload
                     label={
                       <Flex vertical>
@@ -328,14 +334,54 @@ const AddNewCategory = () => {
                       }
                     }}
                     multiple={false}
+                    loading={uploadLoading}
                   />
                 ) : (
-                  <img
-                    src={editdata?.icon}
-                    alt="Category Icon"
-                    className="w-80 h-80 object-cover radius-8"
-                    fetchPriority="high"
-                  />
+                  <Flex vertical gap={8}>
+                    <Flex vertical>
+                      <Title level={5} className="m-0 fw-500">
+                        {t("Category Icon")}
+                      </Title>
+                      <Text className="text-gray">
+                        {t("Accepted formats")}: JPEG, JPG & PNG, Max size: 5MB
+                        per file. Aspect Ratio: 1:1.
+                      </Text>
+                    </Flex>
+                    <div
+                      style={{ position: "relative", display: "inline-block" }}
+                      className="w-80 h-80"
+                    >
+                      <img
+                        src={categoryIcon}
+                        alt="Category Icon"
+                        className="w-80 h-80 object-cover radius-8"
+                        fetchPriority="high"
+                      />
+                      <Button
+                        type="text"
+                        danger
+                        icon={<DeleteOutlined />}
+                        onClick={() => {
+                          setCategoryIcon("");
+                          form.setFieldsValue({ uploadcr: "" });
+                        }}
+                        style={{
+                          position: "absolute",
+                          top: -8,
+                          right: -8,
+                          borderRadius: "50%",
+                          width: 24,
+                          height: 24,
+                          padding: 0,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "#fff",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                        }}
+                      />
+                    </div>
+                  </Flex>
                 )}
               </Col>
             </Row>
