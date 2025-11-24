@@ -102,6 +102,7 @@ const PushNotificationTable = ({
         minute: "2-digit",
         hour12: true,
       }),
+      schedule: campaign.schedule, // Keep original schedule for editing
       status: campaign.status ? 1 : 0,
     })) || [];
 

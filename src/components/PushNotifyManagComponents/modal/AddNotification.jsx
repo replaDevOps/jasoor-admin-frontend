@@ -3,7 +3,6 @@ import { MyDatepicker, MyInput, MySelect } from "../../Forms";
 import { CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDistrictItem, useGroupItem } from "../../../shared";
-import moment from "moment";
 import { CREATE_CAMPAIGN } from "../../../graphql/mutation";
 import { useMutation } from "@apollo/client";
 import { message } from "antd";
@@ -28,15 +27,15 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
   useEffect(() => {
     if (visible && (edititem || viewnotify)) {
       const source = edititem || viewnotify;
-      const rawDate = source?.date;
-      const parsedDate = moment(rawDate);
+      const rawDate = source?.schedule;
+      const parsedDate = rawDate ? dayjs(rawDate) : null;
       form.setFieldsValue({
         title: source?.title || "",
         group: source?.group?.toUpperCase() || "",
         district: Array.isArray(source?.district)
           ? source.district.map((d) => d?.item)
           : [],
-        dateTime: parsedDate.isValid() ? parsedDate : null,
+        dateTime: parsedDate && parsedDate.isValid() ? parsedDate : null,
         description: source?.description || "",
       });
     } else {
@@ -210,6 +209,7 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
                   placeholder={t("Choose regions")}
                   options={districtselectItems}
                   disabled={viewnotify}
+                  showSearch={false}
                 />
               </Col>
               <Col span={24}>

@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { NavLink } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
-import { CustomPagination, DeleteModal } from "../../Ui";
+import { CustomPagination, DeleteModal, TableLoader } from "../../Ui";
 import { MySelect, SearchInput } from "../../Forms";
 import { ViewIdentity } from "../modals";
 import { UPDATE_USER, DELETE_USER } from "../../../graphql/mutation";
@@ -386,7 +386,10 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
             scroll={{ x: 1000 }}
             rowHoverable={false}
             pagination={false}
-            loading={loading || updating}
+            loading={{
+              ...TableLoader,
+              spinning: loading || updating,
+            }}
           />
           <CustomPagination
             total={total}

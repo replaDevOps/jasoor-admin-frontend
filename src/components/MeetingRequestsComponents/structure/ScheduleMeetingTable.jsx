@@ -14,7 +14,7 @@ import { NavLink } from "react-router-dom";
 import { MySelect, SearchInput } from "../../Forms";
 import { useState, useEffect, useMemo } from "react";
 import { meetingItems } from "../../../shared";
-import { CustomPagination } from "../../Ui";
+import { CustomPagination, TableLoader } from "../../Ui";
 import {
   UPDATE_BUSINESS_MEETING,
   UPDATE_OFFER,
@@ -224,9 +224,11 @@ const ScheduleMeetingTable = () => {
   // map UI-selected status to API variable
   const filter = useMemo(() => {
     let statusValue = null;
-    if (selectedStatus === "Pending") {
+    if (selectedStatus === "2") {
+      // "2" is the ID for "Pending"
       statusValue = "APPROVED";
-    } else if (selectedStatus === "Cancel Meeting") {
+    } else if (selectedStatus === "3") {
+      // "3" is the ID for "Cancel Meeting"
       statusValue = "CANCELED";
     }
 
@@ -244,7 +246,8 @@ const ScheduleMeetingTable = () => {
         ...filter,
       },
     });
-  }, [pageSize, current, filter, fetchScheduledMeetings]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageSize, current, filter]);
   const schedulemeetingData = (
     data?.getAdminScheduledMeetings?.items || []
   ).map((item) => {
@@ -434,7 +437,10 @@ const ScheduleMeetingTable = () => {
           scroll={{ x: 2300 }}
           rowHoverable={false}
           pagination={false}
-          loading={loading || updating || onUpdating}
+          loading={{
+            ...TableLoader,
+            spinning: loading || updating || onUpdating,
+          }}
         />
         <CustomPagination
           total={total}

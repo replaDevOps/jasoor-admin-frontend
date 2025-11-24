@@ -10,7 +10,7 @@ import {
   Col,
   Table,
 } from "antd";
-import { CustomPagination } from "../../Ui";
+import { CustomPagination, TableLoader } from "../../Ui";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DELETE_CATEGORY, UPDATE_CATEGORY } from "../../../graphql/mutation";
@@ -403,7 +403,10 @@ const CategoryTable = () => {
             scroll={{ x: 1000 }}
             rowHoverable={false}
             pagination={false}
-            loading={isLoading || deleting || updating}
+            loading={{
+              ...TableLoader,
+              spinning: isLoading || deleting || updating,
+            }}
           />
           <CustomPagination
             total={data?.getAllCategories?.totalcount}

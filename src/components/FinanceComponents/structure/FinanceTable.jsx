@@ -1,7 +1,7 @@
 import { Card, Col, Flex, Form, Row, Table } from "antd";
 import { MyDatepicker, SearchInput } from "../../Forms";
 import { useState, useEffect } from "react";
-import { CustomPagination } from "../../Ui";
+import { CustomPagination, TableLoader } from "../../Ui";
 import moment from "moment";
 import dayjs from "dayjs";
 import { GET_COMPLETED_DEALS } from "../../../graphql/query/business";
@@ -15,7 +15,7 @@ const FinanceTable = () => {
   const [current, setCurrent] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchText, setSearchText] = useState("");
-  const { data, refetch } = useQuery(GET_COMPLETED_DEALS, {
+  const { data, refetch, loading } = useQuery(GET_COMPLETED_DEALS, {
     variables: {
       limit: pageSize,
       offset: (current - 1) * pageSize,
@@ -147,12 +147,10 @@ const FinanceTable = () => {
             scroll={{ x: 1000 }}
             rowHoverable={false}
             pagination={false}
-            // loading={
-            //     {
-            //         ...TableLoader,
-            //         spinning: loading
-            //     }
-            // }
+            loading={{
+              ...TableLoader,
+              spinning: loading,
+            }}
           />
           <CustomPagination
             total={total}

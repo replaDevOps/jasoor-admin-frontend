@@ -92,11 +92,7 @@ const BusinessDetailStep = ({ data, setData }) => {
         align="flex-start"
       >
         <Flex vertical gap={1}>
-          <ModuleTopHeading
-            level={4}
-            name={t("Tell us about your business")}
-            onClick={() => {}}
-          />
+          <ModuleTopHeading level={4} name={t("Tell us about your business")} />
           <Text className="text-gray">
             {t("Let’s start with the basic business information")}
           </Text>

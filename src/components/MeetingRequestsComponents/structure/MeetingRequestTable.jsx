@@ -13,7 +13,7 @@ import { NavLink } from "react-router-dom";
 import { MySelect, SearchInput } from "../../Forms";
 import { useEffect, useState } from "react";
 import { meetingItems } from "../../../shared";
-import { CustomPagination, DeleteModal } from "../../Ui";
+import { CustomPagination, DeleteModal, TableLoader } from "../../Ui";
 import { ScheduleMeeting } from "../modal";
 import { UPDATE_BUSINESS_MEETING } from "../../../graphql/mutation";
 import { GETADMINPENDINGMEETINGS } from "../../../graphql/query/meeting";
@@ -41,8 +41,8 @@ const MeetingRequestTable = () => {
   );
 
   const computeStatusVar = () => {
-    if (selectedStatus === "Pending") return "REQUESTED";
-    if (selectedStatus === "Cancel Meeting") return "REJECTED";
+    if (selectedStatus === "2") return "ACCEPTED"; // "2" is the ID for "Pending"
+    if (selectedStatus === "3") return "CANCELED"; // "3" is the ID for "Cancel Meeting"
     return null;
   };
 
@@ -313,7 +313,10 @@ const MeetingRequestTable = () => {
           scroll={{ x: 3100 }}
           rowHoverable={false}
           pagination={false}
-          loading={loading}
+          loading={{
+            ...TableLoader,
+            spinning: loading,
+          }}
         />
 
         <CustomPagination

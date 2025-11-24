@@ -64,33 +64,41 @@ const getStatusFromBooleans = (deal) => {
 
 const InprogressDealTable = () => {
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const [form] = Form.useForm();
-    const [selectedStatus, setSelectedStatus] = useState(t("Status"));
+    const [selectedStatus, setSelectedStatus] = useState(null);
     const navigate = useNavigate()
     const [pageSize, setPageSize] = useState(10);
     const [current, setCurrent] = useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
     const [searchValue, setSearchValue] = useState('');
 
     const [getDeals, { data, loading }] = useLazyQuery(GETDEALS, {
         fetchPolicy: 'network-only'
     });
 
+    // Debounce search term
     useEffect(() => {
-        setSelectedStatus(t("Status"));
-    }, [i18n.language, t]);
+        const delayDebounceFn = setTimeout(() => {
+            setSearchValue(searchTerm.trim());
+            setCurrent(1);
+        }, 400);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchTerm]);
     
     useEffect(() => {
         getDeals({
             variables: {
                 limit: pageSize,
                 offset: (current - 1) * pageSize,
-                search: searchValue,
-                status: selectedStatus !== 'Status' ? selectedStatus.toUpperCase() : null,
+                search: searchValue || null,
+                status: selectedStatus ? selectedStatus.toUpperCase() : null,
                 isCompleted: false
             }
         });
-    }, [searchValue, selectedStatus, current, pageSize, getDeals]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchValue, selectedStatus, current, pageSize]);
 
     const inprogressdealData = (data?.getDeals?.deals || []).map((item) => ({
         key:item?.id,
@@ -113,11 +121,12 @@ const InprogressDealTable = () => {
         const selectedItem = businessdealItems.find(item => item.key === key);
         if (selectedItem) {
             setSelectedStatus(selectedItem.label);
+            setCurrent(1); // Reset to first page on filter change
         }
     };
 
     const handleSearch = (value) => {
-        setSearchValue(value);
+        setSearchTerm(value);
     };
     const inprogressdealColumn = [
         {
@@ -176,8 +185,8 @@ const InprogressDealTable = () => {
                                     placeholder={t('Search')}
                                     prefix={<img src='/assets/icons/search.png' width={14} alt='search icon' fetchPriority="high" />}
                                     className='border-light-gray pad-x ps-0 radius-8 fs-13'
+                                    value={searchTerm}
                                     onChange={(e) => handleSearch(e.target.value)}
-                                    debounceMs={400}
                                 />
                                 <Dropdown 
                                     menu={{ 
@@ -188,7 +197,7 @@ const InprogressDealTable = () => {
                                 >
                                     <Button className="btncancel px-3 filter-bg fs-13 text-black" aria-labelledby='filter status'>
                                         <Flex justify='space-between' align='center' gap={30}>
-                                            {selectedStatus}
+                                            {selectedStatus || t('Status')}
                                             <DownOutlined />
                                         </Flex>
                                     </Button>
