@@ -10,14 +10,14 @@ import {
   Col,
   Select,
   Space,
+  Image,
 } from "antd";
 import { OFFERBYBUSINESSID } from "../../../graphql/query";
 import { useQuery } from "@apollo/client";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const { Text } = Typography;
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const OfferTable = (businessId) => {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,8 +39,8 @@ const OfferTable = (businessId) => {
     data?.getOfferByBusinessId?.offers?.map((offer, index) => ({
       key: index,
       buyername: offer?.buyer?.name,
-      businessprice: `SAR ${offer?.business?.price}`,
-      offerprice: `SAR ${offer?.price}`,
+      businessprice: `${offer?.business?.price}`,
+      offerprice: `${offer?.price}`,
       priceType: offer?.status === "COUNTEROFFER" ? 1 : 2, // example mapping
       status: offer?.status === "SEND" ? 0 : offer?.status === "REJECT" ? 1 : 2,
       offerdate: new Date(offer?.createdAt).toLocaleDateString(),
@@ -65,6 +65,19 @@ const OfferTable = (businessId) => {
     {
       title: t("Business Price"),
       dataIndex: "businessprice",
+      render: (_, row) => {
+        return (
+          <Flex gap={5} align="center">
+            <Image
+              src="/assets/icons/reyal.webp"
+              alt="currency-symbol"
+              preview={false}
+              width={18}
+            />
+            <Text>{row.businessprice}</Text>
+          </Flex>
+        );
+      },
     },
     {
       title: t("Offer Price"),
@@ -72,6 +85,12 @@ const OfferTable = (businessId) => {
       render: (_, row) => {
         return (
           <Flex gap={10} align="center">
+            <Image
+              src="/assets/icons/reyal.webp"
+              alt="currency-symbol"
+              preview={false}
+              width={18}
+            />
             {row?.offerprice}
             {row?.priceType === 1 ? (
               <Tooltip title="CO - Counteroffer">
@@ -135,44 +154,47 @@ const OfferTable = (businessId) => {
           pagination={false}
         />
       </Flex>
-      <Col span={24} className="mt-3">
-        <Row justify="space-between" align="middle">
-          <Col span={6}>
-            <Flex gap={5} align="center">
-              <Text>{t("Rows Per Page")}:</Text>
-              <Select
-                className="select-filter"
-                value={pageSize}
-                onChange={(value) => {
-                  setPageSize(value);
-                  setCurrentPage(1);
-                }}
-                options={[
-                  { value: 5, label: 5 },
-                  { value: 10, label: 10 },
-                  { value: 20, label: 20 },
-                  { value: 50, label: 50 },
-                ]}
+      {/* --- LOGIC ADDED HERE: Only show if total items exceed page size --- */}
+      {total > pageSize && (
+        <Col span={24} className="mt-3">
+          <Row justify="space-between" align="middle">
+            <Col span={6}>
+              <Flex gap={5} align="center">
+                <Text>{t("Rows Per Page")}:</Text>
+                <Select
+                  className="select-filter"
+                  value={pageSize}
+                  onChange={(value) => {
+                    setPageSize(value);
+                    setCurrentPage(1);
+                  }}
+                  options={[
+                    { value: 5, label: 5 },
+                    { value: 10, label: 10 },
+                    { value: 20, label: 20 },
+                    { value: 50, label: 50 },
+                  ]}
+                />
+              </Flex>
+            </Col>
+            <Col
+              lg={{ span: 12 }}
+              md={{ span: 12 }}
+              sm={{ span: 24 }}
+              xs={{ span: 24 }}
+            >
+              <Pagination
+                className="pagination"
+                align="end"
+                current={currentPage}
+                pageSize={pageSize}
+                total={total || 0}
+                onChange={(page) => setCurrentPage(page)}
               />
-            </Flex>
-          </Col>
-          <Col
-            lg={{ span: 12 }}
-            md={{ span: 12 }}
-            sm={{ span: 24 }}
-            xs={{ span: 24 }}
-          >
-            <Pagination
-              className="pagination"
-              align="end"
-              current={currentPage}
-              pageSize={pageSize}
-              total={total || 0}
-              onChange={(page) => setCurrentPage(page)}
-            />
-          </Col>
-        </Row>
-      </Col>
+            </Col>
+          </Row>
+        </Col>
+      )}
     </Card>
   );
 };

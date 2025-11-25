@@ -18,7 +18,7 @@ export const MySelect = ({
   return withoutForm ? (
     <Select
       maxTagCount="responsive"
-      className="select min-w-180"
+      className="select min-w-140"
       value={value || undefined}
       mode={mode || ""}
       disabled={disabled || false}

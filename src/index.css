@@ -1249,6 +1249,10 @@ body.ltr {
   min-width: 180px !important;
 }
 
+.min-w-140 {
+  min-width: 140px !important;
+}
+
 .h-80 {
   height: 80px !important;
 }
