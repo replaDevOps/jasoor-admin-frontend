@@ -42,8 +42,8 @@ const MeetingRequestTable = () => {
   );
 
   const computeStatusVar = () => {
-    if (selectedStatus === "2") return "ACCEPTED"; // "2" is the ID for "Pending"
-    if (selectedStatus === "3") return "CANCELED"; // "3" is the ID for "Cancel Meeting"
+    if (selectedStatus === "2") return "ACCEPTED";
+    if (selectedStatus === "3") return "CANCELED";
     return null;
   };
 
@@ -199,16 +199,20 @@ const MeetingRequestTable = () => {
       title: t("Business Price"),
       dataIndex: "businessPrice",
       render: (_, row) => {
-        return (
+        const price = row?.businessPrice;
+
+        return price != null && price !== "" ? (
           <Flex gap={5} align="center">
-            <Image
+            <img
               src="/assets/icons/reyal.webp"
-              alt="currency-symbol"
-              preview={false}
-              width={18}
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
             />
-            <Text>{row.finalizedOffer}</Text>
+            <Text>{price}</Text>
           </Flex>
+        ) : (
+          <Text>-</Text>
         );
       },
     },
@@ -216,16 +220,20 @@ const MeetingRequestTable = () => {
       title: t("Offer Price"),
       dataIndex: "offerPrice",
       render: (_, row) => {
-        return (
+        const price = row?.offerPrice;
+
+        return price != null && price !== "" ? (
           <Flex gap={5} align="center">
-            <Image
+            <img
               src="/assets/icons/reyal.webp"
-              alt="currency-symbol"
-              preview={false}
-              width={18}
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
             />
-            <Text>{row.offerPrice}</Text>
+            <Text>{price}</Text>
           </Flex>
+        ) : (
+          <Text>-</Text>
         );
       },
     },

@@ -67,16 +67,20 @@ const OfferTable = (businessId) => {
       title: t("Business Price"),
       dataIndex: "businessprice",
       render: (_, row) => {
-        return (
+        const price = row?.businessprice;
+
+        return price != null && price !== "" ? (
           <Flex gap={5} align="center">
-            <Image
+            <img
               src="/assets/icons/reyal.webp"
-              alt="currency-symbol"
-              preview={false}
-              width={18}
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
             />
-            <Text>{row.businessprice}</Text>
+            <Text>{price}</Text>
           </Flex>
+        ) : (
+          <Text>-</Text>
         );
       },
     },

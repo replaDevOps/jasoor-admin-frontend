@@ -19,12 +19,18 @@ const usePostSaleColumn = () => {
   const { t } = useTranslation();
   return [
     {
-      title: t("Support Period"),
+      title: t("Support Periods"),
       dataIndex: "supportperiod",
+      render: (supportperiod) => {
+        return <Text>{supportperiod} months</Text>;
+      },
     },
     {
       title: t("Number of Session"),
       dataIndex: "nosession",
+      render: (nosession) => {
+        return <Text>{nosession} sessions</Text>;
+      },
     },
   ];
 };

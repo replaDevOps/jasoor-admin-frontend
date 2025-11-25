@@ -194,16 +194,20 @@ const InprogressDealTable = () => {
       title: t("Finalized Offer"),
       dataIndex: "finalizedOffer",
       render: (_, row) => {
-        return (
+        const price = row?.finalizedOffer;
+
+        return price != null && price !== "" ? (
           <Flex gap={5} align="center">
-            <Image
+            <img
               src="/assets/icons/reyal.webp"
-              alt="currency-symbol"
-              preview={false}
-              width={18}
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
             />
-            <Text>{row.finalizedOffer}</Text>
+            <Text>{price}</Text>
           </Flex>
+        ) : (
+          <Text>-</Text>
         );
       },
     },

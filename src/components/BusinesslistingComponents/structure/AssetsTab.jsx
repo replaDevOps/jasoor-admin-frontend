@@ -31,16 +31,20 @@ const AssetsTab = ({ businessId }) => {
       title: t("Price"),
       dataIndex: "price",
       render: (_, row) => {
-        return (
+        const price = row?.price;
+
+        return price != null && price !== "" ? (
           <Flex gap={5} align="center">
-            <Image
+            <img
               src="/assets/icons/reyal.webp"
-              alt="currency-symbol"
-              preview={false}
-              width={18}
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
             />
-            <Text>{row.price}</Text>
+            <Text>{price}</Text>
           </Flex>
+        ) : (
+          <Text>-</Text>
         );
       },
     },
@@ -85,16 +89,20 @@ const AssetsTab = ({ businessId }) => {
       title: t("Price"),
       dataIndex: "price",
       render: (_, row) => {
-        return (
+        const price = row?.price;
+
+        return price != null && price !== "" ? (
           <Flex gap={5} align="center">
-            <Image
+            <img
               src="/assets/icons/reyal.webp"
-              alt="currency-symbol"
-              preview={false}
-              width={18}
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
             />
-            <Text>{row.price}</Text>
+            <Text>{price}</Text>
           </Flex>
+        ) : (
+          <Text>-</Text>
         );
       },
     },
@@ -139,16 +147,20 @@ const AssetsTab = ({ businessId }) => {
       title: t("Price"),
       dataIndex: "price",
       render: (_, row) => {
-        return (
+        const price = row?.price;
+
+        return price != null && price !== "" ? (
           <Flex gap={5} align="center">
-            <Image
+            <img
               src="/assets/icons/reyal.webp"
-              alt="currency-symbol"
-              preview={false}
-              width={18}
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
             />
-            <Text>{row.price}</Text>
+            <Text>{price}</Text>
           </Flex>
+        ) : (
+          <Text>-</Text>
         );
       },
     },

@@ -79,17 +79,21 @@ const BusinessListingTable = ({
     {
       title: t("Business Price"),
       dataIndex: "price",
-      render: (value) => {
-        return (
+      render: (_, row) => {
+        const price = row?.price;
+
+        return price != null && price !== "" ? (
           <Flex gap={5} align="center">
-            <Image
+            <img
               src="/assets/icons/reyal.webp"
+              width={16}
               alt={t("currency-symbol")}
-              preview={false}
-              width={18}
+              fetchPriority="high"
             />
-            <Text>{value?.toLocaleString()}</Text>
+            <Text>{price}</Text>
           </Flex>
+        ) : (
+          <Text>-</Text>
         );
       },
     },
