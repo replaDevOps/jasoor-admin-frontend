@@ -8,10 +8,8 @@ import { useQuery, useMutation } from "@apollo/client";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const FaqsTable = ({ setVisible, setEditItem }) => {
+const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
   const { t, i18n } = useTranslation();
-  const lang = localStorage.getItem("lang") || i18n.language || "en";
-  const isArabic = lang.toLowerCase() === "ar";
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [deleteItem, setDeleteItem] = useState(null);
@@ -27,6 +25,13 @@ const FaqsTable = ({ setVisible, setEditItem }) => {
   } = useQuery(GETFAQ, {
     variables: { search: searchValue || null },
   });
+
+  // Pass refetch to parent on mount and updates
+  useEffect(() => {
+    if (onRefetch && refetchFaqs) {
+      onRefetch(refetchFaqs);
+    }
+  }, [onRefetch, refetchFaqs]);
 
   const [deleteFAQ, { loading: deleting }] = useMutation(DELETE_FAQ, {
     variables: {
@@ -47,6 +52,11 @@ const FaqsTable = ({ setVisible, setEditItem }) => {
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
+
+  // Get current language dynamically for each render
+  const lang = localStorage.getItem("lang") || i18n.language || "en";
+  const isArabic = lang.toLowerCase() === "ar";
+
   const faqsData =
     (isArabic
       ? data?.getFAQs?.faqs?.filter((faqs) => faqs.isArabic)
@@ -113,7 +123,9 @@ const FaqsTable = ({ setVisible, setEditItem }) => {
       ),
     },
   ];
-  const total = data?.getFAQs?.totalCount;
+
+  // Total should be based on filtered data, not API totalCount
+  const total = faqsData.length;
 
   const handleDelete = async () => {
     if (!deleteItem) return;
@@ -135,7 +147,7 @@ const FaqsTable = ({ setVisible, setEditItem }) => {
     setCurrent(page);
     setPageSize(size);
   };
-  if (loading || deleting) {
+  if (loading) {
     return (
       <Flex justify="center" align="center" className="h-200">
         <Spin size="large" />

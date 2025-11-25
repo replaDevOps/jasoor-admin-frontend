@@ -294,7 +294,7 @@ const CreateBusinessList = () => {
               current={current}
               onChange={onChange}
               items={items}
-              progressDot={(dot, { status, index }) => (
+              progressDot={(dot, { index }) => (
                 <span
                   className={`custom-dot ${
                     current > index ? "completed" : ""
