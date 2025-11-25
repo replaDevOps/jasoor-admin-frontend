@@ -1,7 +1,7 @@
 import { Button, Card, Dropdown, Flex, Form, Table, message, Spin } from "antd";
 import { SearchInput } from "../../../Forms";
 import { useState, useEffect } from "react";
-import { CustomPagination, DeleteModal } from "../../../Ui";
+import { CustomPagination, DeleteModal, TableLoader } from "../../../Ui";
 import { GETFAQ } from "../../../../graphql/query/queries";
 import { DELETE_FAQ } from "../../../../graphql/mutation/mutations";
 import { useQuery, useMutation } from "@apollo/client";
@@ -147,13 +147,6 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
     setCurrent(page);
     setPageSize(size);
   };
-  if (loading) {
-    return (
-      <Flex justify="center" align="center" className="h-200">
-        <Spin size="large" />
-      </Flex>
-    );
-  }
 
   return (
     <>
@@ -191,12 +184,10 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
             scroll={{ x: 1000 }}
             rowHoverable={false}
             pagination={false}
-            // loading={
-            //     {
-            //         ...TableLoader,
-            //         spinning: loading
-            //     }
-            // }
+            loading={{
+              ...TableLoader,
+              spinning: loading,
+            }}
           />
           <CustomPagination
             total={total}

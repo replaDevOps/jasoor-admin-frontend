@@ -87,6 +87,7 @@ const OFFERBYBUSINESSID = gql`
         }
         price
         status
+        isProceedToPay
         createdAt
       }
     }

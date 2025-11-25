@@ -1,4 +1,4 @@
-import { Flex, Form, Table } from "antd";
+import { Flex, Form, Image, Table, Typography } from "antd";
 import { SearchInput } from "../../Forms";
 import { CustomPagination, TableLoader } from "../../Ui";
 import { useState, useEffect } from "react";
@@ -7,6 +7,7 @@ import { useLazyQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { t } from "i18next";
 
+const { Text } = Typography;
 const CompleteDealsTable = ({ setCompleteDeal }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -83,6 +84,19 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
     {
       title: t("Finalized Offer"),
       dataIndex: "finalizedOffer",
+      render: (_, row) => {
+        return (
+          <Flex gap={5} align="center">
+            <Image
+              src="/assets/icons/reyal.webp"
+              alt="currency-symbol"
+              preview={false}
+              width={18}
+            />
+            <Text>{row.finalizedOffer}</Text>
+          </Flex>
+        );
+      },
     },
     {
       title: t("Date"),

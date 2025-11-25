@@ -9,6 +9,7 @@ import {
   Typography,
   Modal,
   Input,
+  Image,
 } from "antd";
 import { NavLink } from "react-router-dom";
 import { MySelect, SearchInput } from "../../Forms";
@@ -107,10 +108,44 @@ const ScheduleMeetingTable = () => {
     {
       title: t("Business Price"),
       dataIndex: "businessPrice",
+      render: (_, row) => {
+        const price = row?.businessPrice;
+
+        return price != null && price !== "" ? (
+          <Flex gap={5} align="center">
+            <img
+              src="/assets/icons/reyal.webp"
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
+            />
+            <Text>{price}</Text>
+          </Flex>
+        ) : (
+          <Text>-</Text>
+        );
+      },
     },
     {
       title: t("Offer Price"),
       dataIndex: "offerPrice",
+      render: (_, row) => {
+        const price = row?.offerPrice;
+
+        return price != null && price !== "" ? (
+          <Flex gap={5} align="center">
+            <img
+              src="/assets/icons/reyal.webp"
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
+            />
+            <Text>{price}</Text>
+          </Flex>
+        ) : (
+          <Text>-</Text>
+        );
+      },
     },
     {
       title: t("Meet Link"),

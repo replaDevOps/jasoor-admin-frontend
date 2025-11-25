@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 import { CustomPagination } from "../../../Ui";
 import { NavLink } from "react-router-dom";
 import { GETARTICLES } from "../../../../graphql/query/queries";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 
@@ -32,13 +32,16 @@ const ArticleCards = ({ setDeleteItem, onRefetch }) => {
     setPageSize(size);
   };
 
-  const {
-    data,
-    loading,
-    refetch: refetchArticles,
-  } = useQuery(GETARTICLES, {
-    variables: { search: searchValue || null },
-  });
+  const [getArticles, { data, loading, refetch: refetchArticles }] =
+    useLazyQuery(GETARTICLES, {
+      fetchPolicy: "network-only",
+    });
+
+  useEffect(() => {
+    getArticles({
+      variables: { search: searchValue || null },
+    });
+  }, [searchValue, getArticles]);
 
   // Pass refetch to parent on mount and updates
   useEffect(() => {
@@ -89,6 +92,7 @@ const ArticleCards = ({ setDeleteItem, onRefetch }) => {
               <Col span={24}>
                 <Flex gap={5} wrap>
                   <SearchInput
+                    withoutForm
                     name="name"
                     placeholder={t("Search")}
                     prefix={
@@ -102,6 +106,7 @@ const ArticleCards = ({ setDeleteItem, onRefetch }) => {
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
+                    allowClear
                   />
                 </Flex>
               </Col>

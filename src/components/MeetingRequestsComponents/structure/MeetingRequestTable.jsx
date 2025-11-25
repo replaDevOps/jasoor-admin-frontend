@@ -4,6 +4,7 @@ import {
   Dropdown,
   Flex,
   Form,
+  Image,
   Row,
   Table,
   Typography,
@@ -101,10 +102,10 @@ const MeetingRequestTable = () => {
           ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
           : "-",
         businessPrice: item.business?.price
-          ? `SAR ${item.business.price.toLocaleString()}`
+          ? `${item.business.price.toLocaleString()}`
           : "-",
         offerPrice: item.offer?.price
-          ? `SAR ${item.offer.price.toLocaleString()}`
+          ? `${item.offer.price.toLocaleString()}`
           : "-",
         meetLink: item.meetingLink || "",
         status: item.status || "-",
@@ -197,10 +198,36 @@ const MeetingRequestTable = () => {
     {
       title: t("Business Price"),
       dataIndex: "businessPrice",
+      render: (_, row) => {
+        return (
+          <Flex gap={5} align="center">
+            <Image
+              src="/assets/icons/reyal.webp"
+              alt="currency-symbol"
+              preview={false}
+              width={18}
+            />
+            <Text>{row.finalizedOffer}</Text>
+          </Flex>
+        );
+      },
     },
     {
       title: t("Offer Price"),
       dataIndex: "offerPrice",
+      render: (_, row) => {
+        return (
+          <Flex gap={5} align="center">
+            <Image
+              src="/assets/icons/reyal.webp"
+              alt="currency-symbol"
+              preview={false}
+              width={18}
+            />
+            <Text>{row.offerPrice}</Text>
+          </Flex>
+        );
+      },
     },
     {
       title: t("Status"),

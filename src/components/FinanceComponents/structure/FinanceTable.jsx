@@ -1,4 +1,4 @@
-import { Card, Col, Flex, Form, Row, Table } from "antd";
+import { Card, Col, Flex, Form, Row, Table, Typography } from "antd";
 import { MyDatepicker, SearchInput } from "../../Forms";
 import { useState, useEffect } from "react";
 import { CustomPagination, TableLoader } from "../../Ui";
@@ -8,6 +8,7 @@ import { GET_COMPLETED_DEALS } from "../../../graphql/query/business";
 import { useQuery } from "@apollo/client";
 import { t } from "i18next";
 
+const { Text } = Typography;
 const FinanceTable = () => {
   const [form] = Form.useForm();
   const [dateRange, setDateRange] = useState();
@@ -43,10 +44,44 @@ const FinanceTable = () => {
     {
       title: t("Deal Amount"),
       dataIndex: "dealAmount",
+      render: (_, row) => {
+        const price = row?.dealAmount;
+
+        return price != null && price !== "" ? (
+          <Flex gap={5} align="center">
+            <img
+              src="/assets/icons/reyal.webp"
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
+            />
+            <Text>{price}</Text>
+          </Flex>
+        ) : (
+          <Text>-</Text>
+        );
+      },
     },
     {
       title: t("Commission Earned"),
       dataIndex: "commissionEarn",
+      render: (_, row) => {
+        const commission = row?.commissionEarn;
+
+        return commission != null && commission !== "" ? (
+          <Flex gap={5} align="center">
+            <img
+              src="/assets/icons/reyal.webp"
+              width={16}
+              alt={t("currency-symbol")}
+              fetchPriority="high"
+            />
+            <Text>{commission}</Text>
+          </Flex>
+        ) : (
+          <Text>-</Text>
+        );
+      },
     },
     {
       title: t("Date & Time"),
@@ -86,8 +121,8 @@ const FinanceTable = () => {
       businessTitle: deal.business?.businessTitle || "N/A",
       sellerName: deal.business?.seller?.name || "N/A",
       buyerName: deal.buyer?.name || "N/A",
-      dealAmount: `SAR ${deal.price ? Number(deal.price).toFixed(2) : "0.00"}`,
-      commissionEarn: `SAR ${
+      dealAmount: `${deal.price ? Number(deal.price).toFixed(2) : "0.00"}`,
+      commissionEarn: `${
         deal.commission ? Number(deal.commission).toFixed(2) : "0.00"
       }`,
       dateTime: moment(deal.createdAt).format("DD/MM/YYYY hh:mm A"),

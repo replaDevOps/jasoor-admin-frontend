@@ -41,7 +41,7 @@ const OfferTable = (businessId) => {
       buyername: offer?.buyer?.name,
       businessprice: `${offer?.business?.price}`,
       offerprice: `${offer?.price}`,
-      priceType: offer?.status === "COUNTEROFFER" ? 1 : 2, // example mapping
+      isProceedToPay: offer?.isProceedToPay,
       status: offer?.status === "SEND" ? 0 : offer?.status === "REJECT" ? 1 : 2,
       offerdate: new Date(offer?.createdAt).toLocaleDateString(),
     })) || [];
@@ -92,16 +92,16 @@ const OfferTable = (businessId) => {
               width={18}
             />
             {row?.offerprice}
-            {row?.priceType === 1 ? (
-              <Tooltip title="CO - Counteroffer">
-                <Text className="brand-bg radius-4 p-1 fs-11 text-white">
-                  CO
-                </Text>
-              </Tooltip>
-            ) : (
+            {row?.isProceedToPay ? (
               <Tooltip title="PP - Proceed to Purchase">
                 <Text className="bg-orange radius-4 p-1 fs-11 text-white">
                   PP
+                </Text>
+              </Tooltip>
+            ) : (
+              <Tooltip title="CO - Counter Offer">
+                <Text className="brand-bg radius-4 p-1 fs-11 text-white">
+                  CO
                 </Text>
               </Tooltip>
             )}

@@ -4,6 +4,7 @@ import {
   Dropdown,
   Flex,
   Form,
+  Image,
   Row,
   Table,
   Typography,
@@ -150,7 +151,7 @@ const InprogressDealTable = () => {
     buyerName: item?.buyer?.name || "-",
     sellerName: item?.business?.seller?.name || "-",
     finalizedOffer: item?.offer?.price
-      ? `SAR ${item?.offer?.price?.toLocaleString()}`
+      ? `${item?.offer?.price?.toLocaleString()}`
       : "-",
     statusInfo: getStatusFromBooleans(item), // Use boolean-based status
     date: item?.createdAt
@@ -192,6 +193,19 @@ const InprogressDealTable = () => {
     {
       title: t("Finalized Offer"),
       dataIndex: "finalizedOffer",
+      render: (_, row) => {
+        return (
+          <Flex gap={5} align="center">
+            <Image
+              src="/assets/icons/reyal.webp"
+              alt="currency-symbol"
+              preview={false}
+              width={18}
+            />
+            <Text>{row.finalizedOffer}</Text>
+          </Flex>
+        );
+      },
     },
     {
       title: t("Status"),
