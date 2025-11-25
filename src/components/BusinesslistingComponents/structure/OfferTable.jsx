@@ -27,7 +27,7 @@ const OfferTable = (businessId) => {
     variables: {
       getOfferByBusinessIdId: businessId?.businessId,
       limit: pageSize,
-      offSet: (currentPage - 1) * pageSize,
+      offSet: currentPage - 1,
       search: "",
     },
     fetchPolicy: "cache-and-network",
