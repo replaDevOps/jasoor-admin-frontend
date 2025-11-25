@@ -16,6 +16,7 @@ import { OFFERBYBUSINESSID } from "../../../graphql/query";
 import { useQuery } from "@apollo/client";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { TableLoader } from "../../Ui";
 
 const { Title, Text } = Typography;
 const OfferTable = (businessId) => {
@@ -42,7 +43,7 @@ const OfferTable = (businessId) => {
       businessprice: `${offer?.business?.price}`,
       offerprice: `${offer?.price}`,
       isProceedToPay: offer?.isProceedToPay,
-      status: offer?.status === "SEND" ? 0 : offer?.status === "REJECT" ? 1 : 2,
+      status: offer?.status,
       offerdate: new Date(offer?.createdAt).toLocaleDateString(),
     })) || [];
 
@@ -113,13 +114,16 @@ const OfferTable = (businessId) => {
       title: t("Status"),
       dataIndex: "status",
       render: (status) => {
-        return status === 0 ? (
+        console.log("status", status);
+        return status === "ACCEPTED" ? (
           <Space align="center">
-            <Text className="btnpill fs-12 pending">Send</Text>
+            <Text className="btnpill fs-12 pending">Accepted</Text>
           </Space>
-        ) : status === 1 ? (
+        ) : status === "REJECTED" ? (
           <Text className="btnpill fs-12 inactive">Reject</Text>
-        ) : status === 2 ? (
+        ) : status === "PENDING" ? (
+          <Text className="btnpill fs-12 inactive">Pending</Text>
+        ) : status ? (
           <Text className="btnpill fs-12 success">Received</Text>
         ) : null;
       },
@@ -130,13 +134,6 @@ const OfferTable = (businessId) => {
     },
   ];
 
-  if (loading) {
-    return (
-      <Flex justify="center" align="center" className="h-200">
-        <Spin size="large" />
-      </Flex>
-    );
-  }
   return (
     <Card className="radius-12 border-gray">
       <Flex vertical gap={10}>
@@ -152,6 +149,10 @@ const OfferTable = (businessId) => {
           scroll={{ x: 500 }}
           rowHoverable={false}
           pagination={false}
+          loading={{
+            ...TableLoader,
+            spinning: loading,
+          }}
         />
       </Flex>
       {/* --- LOGIC ADDED HERE: Only show if total items exceed page size --- */}
