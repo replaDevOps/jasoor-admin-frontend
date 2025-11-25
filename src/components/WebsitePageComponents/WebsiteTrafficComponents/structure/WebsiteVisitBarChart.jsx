@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Flex, Typography,DatePicker } from "antd";
+import { Card, Flex, Typography, DatePicker } from "antd";
 import ReactApexChart from "react-apexcharts";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -9,52 +9,51 @@ const { Title } = Typography;
 const { RangePicker } = DatePicker;
 
 const WebsiteVisitBarChart = () => {
-    const [dateRange, setDateRange] = useState([
-        dayjs().subtract(7, "day"),
-        dayjs(),
-    ]);
-    const [labels, setLabels] = useState([]);
-    const [series, setSeries] = useState([]);
-    const [totalVisitors, setTotalVisitors] = useState(0);
+  const [dateRange, setDateRange] = useState([
+    dayjs().subtract(7, "day"),
+    dayjs(),
+  ]);
+  const [labels, setLabels] = useState([]);
+  const [series, setSeries] = useState([]);
+  const [totalVisitors, setTotalVisitors] = useState(0);
 
-    const fetchData = async (startDate, endDate) => {
-        try {
-          const { data } = await axios.get(
-            `https://verify.jusoor-sa.co/api/analytics?start=${startDate}&end=${endDate}`
-          );
-          if (data.success) {
-            const apiLabels = data.data.labels || [];
-            const apiSeries = data.data.series || [];
-          
-            // Convert API into a map { "DD/MM/YYYY": value }
-            const seriesMap = apiLabels.reduce((acc, label, i) => {
-              acc[label] = apiSeries[i];
-              return acc;
-            }, {} );
-          
-            // Generate full date range
-            const start = dayjs(startDate);
-            const end = dayjs(endDate);
-            const allLabels = [];
-            const allSeries = [];
-          
-            let current = start.clone();
-            while (current.isBefore(end) || current.isSame(end)) {
-              const formatted = current.format("DD/MM/YYYY");
-              allLabels.push(formatted);
-              allSeries.push(seriesMap[formatted] || 0); // ✅ fill 0 if missing
-              current = current.add(1, "day");
-            }
-          
-            setLabels(allLabels);
-            setSeries(allSeries);
-            setTotalVisitors(allSeries.reduce((a, b) => a + b, 0));
-          }
-          
-        } catch (err) {
-          console.error("Failed to load analytics:", err);
+  const fetchData = async (startDate, endDate) => {
+    try {
+      const { data } = await axios.get(
+        `https://verify.jusoor-sa.co/api/analytics?start=${startDate}&end=${endDate}`
+      );
+      if (data.success) {
+        const apiLabels = data.data.labels || [];
+        const apiSeries = data.data.series || [];
+
+        // Convert API into a map { "DD/MM/YYYY": value }
+        const seriesMap = apiLabels.reduce((acc, label, i) => {
+          acc[label] = apiSeries[i];
+          return acc;
+        }, {});
+
+        // Generate full date range
+        const start = dayjs(startDate);
+        const end = dayjs(endDate);
+        const allLabels = [];
+        const allSeries = [];
+
+        let current = start.clone();
+        while (current.isBefore(end) || current.isSame(end)) {
+          const formatted = current.format("DD/MM/YYYY");
+          allLabels.push(formatted);
+          allSeries.push(seriesMap[formatted] || 0); // ✅ fill 0 if missing
+          current = current.add(1, "day");
         }
-      };
+
+        setLabels(allLabels);
+        setSeries(allSeries);
+        setTotalVisitors(allSeries.reduce((a, b) => a + b, 0));
+      }
+    } catch (err) {
+      console.error("Failed to load analytics:", err);
+    }
+  };
 
   // ✅ Load initial data with default date range
   useEffect(() => {
@@ -62,7 +61,6 @@ const WebsiteVisitBarChart = () => {
     const end = dateRange[1].format("YYYY-MM-DD");
     fetchData(start, end);
   }, []);
-
 
   // ✅ Handle date change
   const onChange = (dates) => {
@@ -112,7 +110,15 @@ const WebsiteVisitBarChart = () => {
       colors: ["#3B82F6"],
       legend: {
         show: true,
+        fontSize: "16px",
+        color: "#777E90",
         showForSingleSeries: true,
+        onItemClick: {
+          toggleDataSeries: false,
+        },
+        onItemHover: {
+          highlightDataSeries: true,
+        },
       },
     },
   };
@@ -129,7 +135,7 @@ const WebsiteVisitBarChart = () => {
           </Title>
         </Flex>
         <Flex justify="end" gap={10}>
-           <RangePicker
+          <RangePicker
             className="datepicker-cs"
             value={dateRange}
             onChange={onChange}

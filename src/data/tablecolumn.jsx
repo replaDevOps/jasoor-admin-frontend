@@ -388,7 +388,7 @@ const pushnotifyColumn = ({
                 <NavLink
                   onClick={(e) => {
                     e.preventDefault();
-                    setDeleteItem(true);
+                    setDeleteItem(row.id);
                   }}
                 >
                   {t("Delete")}

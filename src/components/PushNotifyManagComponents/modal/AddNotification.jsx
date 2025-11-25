@@ -61,7 +61,7 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
     ],
     awaitRefetchQueries: true,
     onCompleted: () => {
-      messageApi.success(t("campaign created successfully!"));
+      messageApi.success(t("The Notification scheduled successfully!"));
       onClose();
     },
     onError: (err) => {
@@ -145,6 +145,7 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
                 aria-labelledby="submit button"
                 className={`btnsave border0 text-white brand-bg`}
                 onClick={() => form.submit()}
+                loading={loading}
               >
                 {edititem ? t("Update") : t("Confirm")}
               </Button>

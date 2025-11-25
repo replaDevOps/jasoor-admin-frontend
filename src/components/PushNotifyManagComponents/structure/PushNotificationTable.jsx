@@ -84,6 +84,7 @@ const PushNotificationTable = ({
 
   const pushnotifyData =
     data?.getCampaigns?.campaigns?.map((campaign, index) => ({
+      id: campaign.id,
       key: index + 1,
       title: campaign.title,
       description: campaign.description,
@@ -112,7 +113,6 @@ const PushNotificationTable = ({
     setCurrent(page);
     setPageSize(size);
   };
-  console.log("category", selectedCategory, selectedDistrict, selectedStatus);
 
   return (
     <Card className="radius-12 border-gray">

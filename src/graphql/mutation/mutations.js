@@ -2,234 +2,257 @@ import { gql } from "@apollo/client";
 
 const UPDATE_USER = gql`
   mutation UpdateUser($input: UpdateUserInput!) {
-  updateUser(input: $input) {
-    id
+    updateUser(input: $input) {
+      id
+    }
   }
-}
-`
+`;
 const CREATE_OFFER = gql`
   mutation CreateOffer($input: CreateOfferInput!) {
-  createOffer(input: $input) {
-    id
+    createOffer(input: $input) {
+      id
+    }
   }
-}
-`
-const UPDATE_OFFER = gql `
-mutation UpdateOfferStatus($input: UpdateOfferStatusInput!) {
-  updateOfferStatus(input: $input) {
-    id
+`;
+const UPDATE_OFFER = gql`
+  mutation UpdateOfferStatus($input: UpdateOfferStatusInput!) {
+    updateOfferStatus(input: $input) {
+      id
+    }
   }
-}
-`
-const CREATE_BUSINESS = gql `
+`;
+const CREATE_BUSINESS = gql`
   mutation CreateBusiness($input: CreateBusinessInput!) {
     createBusiness(input: $input) {
       id
     }
-  } 
-`
-const UPDATE_BUSINESS = gql `
-mutation UpdateBusiness($input: UpdateBusinessInput!) {
-  updateBusiness(input: $input) {
-    id
   }
-}
-`
-const DELETE_CATEGORY = gql `
-mutation DeleteCategory($deleteCategoryId: ID!) {
-  deleteCategory(id: $deleteCategoryId)
-}
-`
-const UPDATE_ASSET = gql `
-mutation UpdateAsset($input: UpdateInput!) {
-  updateAsset(input: $input) {
-    id
+`;
+const UPDATE_BUSINESS = gql`
+  mutation UpdateBusiness($input: UpdateBusinessInput!) {
+    updateBusiness(input: $input) {
+      id
+    }
   }
-}
-`
-const UPDATE_INVENTORY = gql `
-mutation UpdateInventory($input: UpdateInput!) {
-  updateInventory(input: $input) {
-    id
+`;
+const DELETE_CATEGORY = gql`
+  mutation DeleteCategory($deleteCategoryId: ID!) {
+    deleteCategory(id: $deleteCategoryId)
   }
-}
-`
-const UPDATE_LIABILITY = gql `
-mutation UpdateLiability($input: UpdateInput!) {
-  updateLiability(input: $input) {
-    id
+`;
+const UPDATE_ASSET = gql`
+  mutation UpdateAsset($input: UpdateInput!) {
+    updateAsset(input: $input) {
+      id
+    }
   }
-}
-`
-const CREATE_SAVE_BUSINESS = gql `
+`;
+const UPDATE_INVENTORY = gql`
+  mutation UpdateInventory($input: UpdateInput!) {
+    updateInventory(input: $input) {
+      id
+    }
+  }
+`;
+const UPDATE_LIABILITY = gql`
+  mutation UpdateLiability($input: UpdateInput!) {
+    updateLiability(input: $input) {
+      id
+    }
+  }
+`;
+const CREATE_SAVE_BUSINESS = gql`
   mutation SaveBusiness($saveBusinessId: ID!) {
     saveBusiness(id: $saveBusinessId)
   }
-`
-const CREATE_VIEW_BUSINESS = gql `
+`;
+const CREATE_VIEW_BUSINESS = gql`
   mutation ViewBusiness($viewBusinessId: ID!) {
     viewBusiness(id: $viewBusinessId)
   }
-`
-const ACCEPT_ENDA = gql `
+`;
+const ACCEPT_ENDA = gql`
   mutation AcceptEnda($input: AcceptEndaInput!) {
-  acceptEnda(input: $input) {
-    id
+    acceptEnda(input: $input) {
+      id
+    }
   }
-}
-`
-const BUSINESS_MEETING = gql `
+`;
+const BUSINESS_MEETING = gql`
   mutation RequestMeeting($input: CreateMeetingInput!) {
-  requestMeeting(input: $input) {
-    id
+    requestMeeting(input: $input) {
+      id
+    }
   }
-}
-`
-const UPDATE_BUSINESS_MEETING = gql `
+`;
+const UPDATE_BUSINESS_MEETING = gql`
   mutation UpdateMeeting($input: UpdateMeetingInput!) {
-  updateMeeting(input: $input) {
-    id
+    updateMeeting(input: $input) {
+      id
+    }
   }
-}
-`
-const UPDATE_MEETING = gql `
-mutation UpdateMeeting($input: UpdateMeetingInput!) {
-  updateMeeting(input: $input) {
-    id
+`;
+const UPDATE_MEETING = gql`
+  mutation UpdateMeeting($input: UpdateMeetingInput!) {
+    updateMeeting(input: $input) {
+      id
+    }
   }
-}
-`
-const APPROVE_MEETING = gql `
-mutation ApproveMeeting($meetingId: ID!, $offerId: ID) {
-  approveMeeting(meetingId: $meetingId, offerId: $offerId)
-}
-`
-const UPLOAD_DOC = gql `
-mutation CreateDocument($input: CreateDocumentInput!) {
-  createDocument(input: $input) {
-    id
+`;
+const APPROVE_MEETING = gql`
+  mutation ApproveMeeting($meetingId: ID!, $offerId: ID) {
+    approveMeeting(meetingId: $meetingId, offerId: $offerId)
   }
-}
-`
-const FINALIZE_DEAL = gql `
-mutation UpdateDeal($input: UpdateDealInput!) {
-  updateDeal(input: $input) {
-    id
+`;
+const UPLOAD_DOC = gql`
+  mutation CreateDocument($input: CreateDocumentInput!) {
+    createDocument(input: $input) {
+      id
+    }
   }
-}
-`
+`;
+const FINALIZE_DEAL = gql`
+  mutation UpdateDeal($input: UpdateDealInput!) {
+    updateDeal(input: $input) {
+      id
+    }
+  }
+`;
 const CREATE_CATEGORY = gql`
-mutation CreateCategory($input: CreateCategoryInput!) {
-  createCategory(input: $input) {
-    id
+  mutation CreateCategory($input: CreateCategoryInput!) {
+    createCategory(input: $input) {
+      id
+    }
   }
-}
-`
-const UPDATE_CATEGORY =gql`
-mutation UpdateCategory($input: UpdateCategoryInput!) {
-  updateCategory(input: $input) {
-    id
+`;
+const UPDATE_CATEGORY = gql`
+  mutation UpdateCategory($input: UpdateCategoryInput!) {
+    updateCategory(input: $input) {
+      id
+    }
   }
-}
-`
+`;
 const CREATE_CAMPAIGN = gql`
-mutation CreateCampaign($title: String!, $group: CampaignGroup!, $schedule: DateTime!, $description: String, $district: [String]!) {
-  createCampaign(title: $title, group: $group, schedule: $schedule, description: $description, district: $district) {
-    id
+  mutation CreateCampaign(
+    $title: String!
+    $group: CampaignGroup!
+    $schedule: DateTime!
+    $description: String
+    $district: [String]!
+  ) {
+    createCampaign(
+      title: $title
+      group: $group
+      schedule: $schedule
+      description: $description
+      district: $district
+    ) {
+      id
+    }
   }
-}
-`
+`;
 const UPDATE_CONTACT_US = gql`
-mutation UpdateContactUs($updateContactUsId: ID!, $status: Boolean, $answer: String) {
-  updateContactUs(id: $updateContactUsId, status: $status, answer: $answer) {
-    id
+  mutation UpdateContactUs(
+    $updateContactUsId: ID!
+    $status: Boolean
+    $answer: String
+  ) {
+    updateContactUs(id: $updateContactUsId, status: $status, answer: $answer) {
+      id
+    }
   }
-}
-`
+`;
 const UPDATE_DEAL = gql`
-mutation UpdateDeal($input: UpdateDealInput!) {
-  updateDeal(input: $input) {
-    id
-    status
+  mutation UpdateDeal($input: UpdateDealInput!) {
+    updateDeal(input: $input) {
+      id
+      status
+    }
   }
-}
-`
+`;
 const UPLOAD_DOCUMENT = gql`
-mutation UploadDocument($input: UpdateDocumentInput!) {
-  uploadDocument(input: $input) {
-    id
+  mutation UploadDocument($input: UpdateDocumentInput!) {
+    uploadDocument(input: $input) {
+      id
+    }
   }
-}
-`
+`;
 const SEND_BANK = gql`
-mutation SendBankToBuyer($sendBankToBuyerId: ID) {
-  sendBankToBuyer(id: $sendBankToBuyerId) {
-    iban
+  mutation SendBankToBuyer($sendBankToBuyerId: ID) {
+    sendBankToBuyer(id: $sendBankToBuyerId) {
+      iban
+    }
   }
-}
-`
+`;
 const CREATE_ARTICLE = gql`
-mutation CreateArticle($input: CreateArticle) {
-  createArticle(input: $input) {
-    id
+  mutation CreateArticle($input: CreateArticle) {
+    createArticle(input: $input) {
+      id
+    }
   }
-}
-`
+`;
 const UPDATE_ARTICLE = gql`
-mutation UpdateArticle($updateArticleId: ID!, $input: CreateArticle) {
-  updateArticle(id: $updateArticleId, input: $input) {
-    id
+  mutation UpdateArticle($updateArticleId: ID!, $input: CreateArticle) {
+    updateArticle(id: $updateArticleId, input: $input) {
+      id
+    }
   }
-}
-`
+`;
 const DELETE_ARTICLE = gql`
-mutation DeleteArticle($deleteArticleId: ID!) {
-  deleteArticle(id: $deleteArticleId)
-}
-`
+  mutation DeleteArticle($deleteArticleId: ID!) {
+    deleteArticle(id: $deleteArticleId)
+  }
+`;
 const CREATE_FAQ = gql`
-mutation CreateFAQ($input: CreateFAQ) {
-  createFAQ(input: $input) {
-    id
+  mutation CreateFAQ($input: CreateFAQ) {
+    createFAQ(input: $input) {
+      id
+    }
   }
-}
-`
+`;
 const UPDATE_FAQ = gql`
-mutation UpdateFAQ($updateFaqId: ID!, $input: CreateFAQ) {
-  updateFAQ(id: $updateFaqId, input: $input) {
-    id
+  mutation UpdateFAQ($updateFaqId: ID!, $input: CreateFAQ) {
+    updateFAQ(id: $updateFaqId, input: $input) {
+      id
+    }
   }
-}
-`
+`;
 const DELETE_FAQ = gql`
-mutation DeleteFAQ($deleteFaqId: ID!) {
-  deleteFAQ(id: $deleteFaqId)
-}
-`
+  mutation DeleteFAQ($deleteFaqId: ID!) {
+    deleteFAQ(id: $deleteFaqId)
+  }
+`;
 const CREATE_TERMS = gql`
   mutation CreateTerms($input: TermsInput) {
     createTerms(input: $input) {
       id
     }
   }
-`
+`;
 const UPDATE_TERMS = gql`
-mutation UpdateTerms($updateTermsId: ID!, $input: TermsInput) {
-  updateTerms(id: $updateTermsId, input: $input) {
-    id
+  mutation UpdateTerms($updateTermsId: ID!, $input: TermsInput) {
+    updateTerms(id: $updateTermsId, input: $input) {
+      id
+    }
   }
-}
-`
+`;
 const DELETE_TERMS = gql`
-mutation DeleteTerms($deleteTermsId: ID!) {
-  deleteTerms(id: $deleteTermsId)
-}
-`
+  mutation DeleteTerms($deleteTermsId: ID!) {
+    deleteTerms(id: $deleteTermsId)
+  }
+`;
 const DELETE_USER = gql`
-mutation DeleteUser($deleteUserId: ID) {
-  deleteUser(id: $deleteUserId)
-}
-`
+  mutation DeleteUser($deleteUserId: ID) {
+    deleteUser(id: $deleteUserId)
+  }
+`;
+
+const DELETE_CAMPAIGN = gql`
+  mutation DeleteCampaign($deleteCampaignId: ID!) {
+    deleteCampaign(id: $deleteCampaignId)
+  }
+`;
+
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -266,4 +289,5 @@ export {
   DELETE_FAQ,
   DELETE_TERMS,
   DELETE_USER,
-}
+  DELETE_CAMPAIGN,
+};
