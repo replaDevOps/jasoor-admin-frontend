@@ -149,7 +149,7 @@ const PushNotificationTable = ({
                 <MySelect
                   withoutForm
                   name="district"
-                  placeholder={t("District")}
+                  placeholder={t("Region")}
                   options={districtselectItem}
                   value={selectedDistrict}
                   onChange={handleDistrictChange}

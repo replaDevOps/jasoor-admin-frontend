@@ -17,6 +17,7 @@ import { GET_ALL_CONTACT_US } from "../../../graphql/query/user";
 import { useLazyQuery } from "@apollo/client";
 import { TableLoader } from "../../Ui/TableLoader";
 import { t } from "i18next";
+import { NavLink } from "react-router-dom";
 
 const { Text } = Typography;
 
@@ -171,23 +172,40 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
                 key: "action",
                 fixed: "right",
                 width: 100,
-                render: (_, row) =>
-                  row.status !== 1 ? (
-                    <Button
-                      type="primary"
-                      size="small"
-                      onClick={() => {
-                        setVisible(true);
-                        setSendView(true);
-                        setViewItem(row);
-                      }}
-                      aria-labelledby="Response"
-                    >
-                      Response
-                    </Button>
-                  ) : (
-                    <img src="/assets/icons/rejected.png" width={20} />
-                  ),
+                render: (_, row) => {
+                  const items = [
+                    {
+                      label: (
+                        <NavLink
+                          onClick={() => {
+                            setVisible(true);
+                            setSendView(row.status !== 1);
+                            setViewItem(row);
+                          }}
+                        >
+                          {t("View")}
+                        </NavLink>
+                      ),
+                      key: "1",
+                    },
+                  ];
+
+                  return (
+                    <Dropdown menu={{ items }} trigger={["click"]}>
+                      <Button
+                        aria-labelledby="action dropdown"
+                        className="bg-transparent border0 p-0"
+                      >
+                        <img
+                          src="/assets/icons/dots.png"
+                          alt="dots icon"
+                          width={16}
+                          fetchPriority="high"
+                        />
+                      </Button>
+                    </Dropdown>
+                  );
+                },
               },
             ]}
             dataSource={contactreqData}
