@@ -223,7 +223,6 @@ const AddUser = ({ visible, onClose, edititem }) => {
 
       const basePayload = {
         name: formData.fullName,
-        email: formData.email.toLowerCase(),
         district: formData.district,
         city: formData.city,
         phone: formData.phoneNo,
@@ -241,8 +240,12 @@ const AddUser = ({ visible, onClose, edititem }) => {
         await updateUser({ variables: { input } });
         messageApi.success(t("User account updated successfully!"));
       } else {
-        // Create new staff member
-        await createStaff({ variables: { input: basePayload } });
+        // Create new staff member - include email
+        const input = {
+          ...basePayload,
+          email: formData.email.toLowerCase(),
+        };
+        await createStaff({ variables: { input } });
         messageApi.success(t("User account created successfully!"));
       }
 
@@ -400,6 +403,7 @@ const AddUser = ({ visible, onClose, edititem }) => {
                   required
                   message={t("Please enter your email address")}
                   placeholder={t("Enter email address")}
+                  disabled={!!edititem}
                 />
               </Col>
               <Col span={24}>
@@ -625,71 +629,61 @@ const AddUser = ({ visible, onClose, edititem }) => {
                   type="password"
                   name="password"
                   size="large"
+                  className="fs-14"
                   placeholder={t("Enter password")}
-                  required={!edititem}
-                  validator={() => ({
-                    validator: (_, value) => {
-                      if (!value || value.trim() === "") {
-                        return edititem
-                          ? Promise.resolve()
-                          : Promise.reject(
-                              new Error(t("Please enter password"))
-                            );
-                      }
+                  rules={
+                    edititem
+                      ? [
+                          {
+                            validator: (_, value) => {
+                              if (!value || value.trim() === "") {
+                                return Promise.resolve();
+                              }
 
-                      const hasUpperCase = /[A-Z]/.test(value);
-                      const hasLowerCase = /[a-z]/.test(value);
-                      const hasNumber = /\d/.test(value);
-                      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(
-                        value
-                      );
-                      const hasMinLength = value.length >= 8;
+                              if (value.length < 8) {
+                                return Promise.reject(
+                                  new Error(
+                                    t("Password must be at least 8 characters")
+                                  )
+                                );
+                              }
 
-                      if (!hasMinLength) {
-                        return Promise.reject(
-                          new Error(
-                            t("Password must be at least 8 characters long")
-                          )
-                        );
-                      }
-                      if (!hasUpperCase) {
-                        return Promise.reject(
-                          new Error(
-                            t(
-                              "Password must contain at least one uppercase letter"
-                            )
-                          )
-                        );
-                      }
-                      if (!hasLowerCase) {
-                        return Promise.reject(
-                          new Error(
-                            t(
-                              "Password must contain at least one lowercase letter"
-                            )
-                          )
-                        );
-                      }
-                      if (!hasNumber) {
-                        return Promise.reject(
-                          new Error(
-                            t("Password must contain at least one number")
-                          )
-                        );
-                      }
-                      if (!hasSpecialChar) {
-                        return Promise.reject(
-                          new Error(
-                            t(
-                              "Password must contain at least one special character"
-                            )
-                          )
-                        );
-                      }
+                              const pattern =
+                                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]/;
+                              if (!pattern.test(value)) {
+                                return Promise.reject(
+                                  new Error(
+                                    t(
+                                      "Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character"
+                                    )
+                                  )
+                                );
+                              }
 
-                      return Promise.resolve();
-                    },
-                  })}
+                              return Promise.resolve();
+                            },
+                          },
+                        ]
+                      : [
+                          {
+                            required: true,
+                            message: t("Please enter password"),
+                          },
+                          {
+                            min: 8,
+                            message: t(
+                              "Password must be at least 8 characters"
+                            ),
+                          },
+                          {
+                            pattern:
+                              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]/,
+                            message: t(
+                              "Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character"
+                            ),
+                          },
+                        ]
+                  }
                 />
               </Col>
               <Col span={24}>
@@ -699,35 +693,47 @@ const AddUser = ({ visible, onClose, edititem }) => {
                   name="confirmationPassword"
                   size="large"
                   dependencies={["password"]}
+                  className="fs-14"
                   placeholder={t("Enter confirm password")}
-                  required={!edititem}
-                  validator={({ getFieldValue }) => ({
-                    validator(_, value) {
-                      const password = getFieldValue("password");
+                  rules={[
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        const password = getFieldValue("password");
 
-                      // In edit mode, if no password is entered, confirmation is optional
-                      if (edititem && (!password || password.trim() === "")) {
-                        return Promise.resolve();
-                      }
+                        // In edit mode, if no password is entered, confirmation is optional
+                        if (edititem && (!password || password.trim() === "")) {
+                          return Promise.resolve();
+                        }
 
-                      // If password is provided, confirmation is required
-                      if (password && password.trim() !== "") {
-                        if (!value || value.trim() === "") {
+                        // If password is provided in any mode
+                        if (password && password.trim() !== "") {
+                          if (!value || value.trim() === "") {
+                            return Promise.reject(
+                              new Error(t("Please confirm your password"))
+                            );
+                          }
+
+                          if (password !== value) {
+                            return Promise.reject(
+                              new Error(t("The two passwords do not match!"))
+                            );
+                          }
+                        }
+
+                        // In add mode, password is required
+                        if (
+                          !edititem &&
+                          (!password || password.trim() === "")
+                        ) {
                           return Promise.reject(
                             new Error(t("Please confirm your password"))
                           );
                         }
 
-                        if (password !== value) {
-                          return Promise.reject(
-                            new Error(t("The passwords do not match!"))
-                          );
-                        }
-                      }
-
-                      return Promise.resolve();
-                    },
-                  })}
+                        return Promise.resolve();
+                      },
+                    }),
+                  ]}
                 />
               </Col>
             </Row>
