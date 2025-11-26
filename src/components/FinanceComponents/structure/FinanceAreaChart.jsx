@@ -12,12 +12,12 @@ const { Title } = Typography;
 
 const FinanceAreaChart = () => {
   const [selectedStatus, setSelectedStatus] = useState("2025");
-  const { data: count, loading: isLoading } = useQuery(GET_FINANCE_COUNT, {
+  const { data: count } = useQuery(GET_FINANCE_COUNT, {
     fetchPolicy: "cache-and-network",
   });
   const total = count?.getFinanceCount?.totalPrice;
 
-  const { data, loading, error } = useQuery(GET_FINANCE_GRAPH, {
+  const { data } = useQuery(GET_FINANCE_GRAPH, {
     variables: { year: Number(selectedStatus) },
     fetchPolicy: "cache-and-network",
   });
@@ -82,7 +82,7 @@ const FinanceAreaChart = () => {
         strokeColors: "#fff",
         hover: { size: 6 },
       },
-      tooltip: { y: { formatter: (val) => `SAR ${val}` } },
+      tooltip: { y: { formatter: (val) => `${val}` } },
       grid: { borderColor: "#eee", strokeDashArray: 4 },
       colors: ["#2563EB"],
       legend: { show: false },

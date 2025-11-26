@@ -35,7 +35,7 @@ const AddRolePermission = () => {
     skip: !id,
   });
   const detail = data?.getRole;
-  const [createRole] = useMutation(CREATE_ROLE);
+
   const backendToFrontendMap = {
     viewDashboard: ["Dashboard", "View Dashboard"],
     viewListings: ["Business Listing", "View Listings"],
@@ -65,7 +65,7 @@ const AddRolePermission = () => {
     manageRoles: ["Admin Setting", "Add/Edit/Delete Roles"],
   };
 
-  const buildPermissionsFromBackend = (detail) => {
+  const buildPermissionsFromBackend = () => {
     const permissions = {};
     Object.keys(backendToFrontendMap).forEach((backendKey) => {
       const [category, option] = backendToFrontendMap[backendKey];
@@ -90,6 +90,7 @@ const AddRolePermission = () => {
       form.resetFields();
       setSelectedPermissions({});
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, detail]);
 
   const handleCategoryChange = (category, checked) => {
@@ -124,10 +125,26 @@ const AddRolePermission = () => {
     return options.every((opt) => selectedPermissions[category]?.[opt]);
   };
 
-  const [updateRole] = useMutation(UPDATE_ROLE, {
+  const [updateRole, { loading: updating }] = useMutation(UPDATE_ROLE, {
     refetchQueries: ["GetRoles"],
     onCompleted: () => {
-      messageApi.success(t("Stats changed successfully!"));
+      messageApi.success(t("Role updated successfully!"));
+      setTimeout(() => {
+        navigate("/rolepermission");
+      }, 1000);
+    },
+    onError: (err) => {
+      messageApi.error(err.message || t("Something went wrong!"));
+    },
+  });
+
+  const [createRole, { loading: creating }] = useMutation(CREATE_ROLE, {
+    refetchQueries: ["GetRoles"],
+    onCompleted: () => {
+      messageApi.success(t("Role created successfully!"));
+      setTimeout(() => {
+        navigate("/rolepermission");
+      }, 1000);
     },
     onError: (err) => {
       messageApi.error(err.message || t("Something went wrong!"));
@@ -138,7 +155,7 @@ const AddRolePermission = () => {
     const input = {
       ...(id && { id }),
       name: values.name,
-      ...buildPermissionsFromBackend(selectedPermissions),
+      ...buildPermissionsFromBackend(),
     };
     if (id) {
       updateRole({
@@ -146,10 +163,8 @@ const AddRolePermission = () => {
           input,
         },
       });
-      navigate("/rolepermission");
     } else {
       createRole({ variables: { input } });
-      navigate("/rolepermission");
     }
   };
 
@@ -209,6 +224,7 @@ const AddRolePermission = () => {
             <Button
               className="btnsave brand-bg border0 text-white"
               onClick={() => form.submit()}
+              loading={creating || updating}
               aria-labelledby="submit button"
             >
               {id ? t("Update") : t("Save")}
@@ -257,7 +273,7 @@ const AddRolePermission = () => {
                           {t(permission.category)}
                         </Checkbox>
                         <Space direction="vertical" className="px-3">
-                          {permission.options.map((option, _) => (
+                          {permission.options.map((option) => (
                             <Checkbox
                               key={option}
                               checked={

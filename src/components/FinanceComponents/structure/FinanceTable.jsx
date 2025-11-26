@@ -30,6 +30,10 @@ const FinanceTable = () => {
   });
   const financeColumn = [
     {
+      title: t("Reference No"),
+      dataIndex: "reference",
+    },
+    {
       title: t("Business Title"),
       dataIndex: "businessTitle",
     },
@@ -118,6 +122,7 @@ const FinanceTable = () => {
   const financeData =
     data?.getCompletedDeals?.deals.map((deal) => ({
       key: deal.id,
+      reference: deal.business?.reference || "N/A",
       businessTitle: deal.business?.businessTitle || "N/A",
       sellerName: deal.business?.seller?.name || "N/A",
       buyerName: deal.buyer?.name || "N/A",

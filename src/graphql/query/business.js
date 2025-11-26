@@ -250,6 +250,7 @@ const GET_COMPLETED_DEALS = gql`
         id
         business {
           businessTitle
+          reference
           seller {
             name
           }
