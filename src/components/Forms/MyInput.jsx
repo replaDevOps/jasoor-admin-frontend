@@ -15,6 +15,8 @@ export const MyInput = ({
   textArea,
   oTp,
   validator,
+  rules,
+  dependencies,
   ...props
 }) => {
   return (
@@ -55,8 +57,11 @@ export const MyInput = ({
           }
           tooltip={tooltip || null}
           className="custom-input fs-14 otp-cs"
+          dependencies={dependencies}
           rules={
-            validator
+            rules
+              ? rules
+              : validator
               ? [
                   {
                     required: required,
