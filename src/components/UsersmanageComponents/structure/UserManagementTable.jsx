@@ -33,7 +33,8 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
   const [selectedCity, setSelectedCity] = useState(null);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
-  const [searchText, setSearchText] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [viewmodal, setViewModal] = useState(false);
   const [viewstate, SetViewState] = useState(null);
   const [deleteVisible, setDeleteVisible] = useState(false);
@@ -49,7 +50,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
       city: selectedCity || null,
       district: selectedDistrict || null,
       status: selectedStatus || null,
-      name: searchText || null,
+      name: searchValue || null,
       createdType: selectedCategory || null,
     };
   }, [
@@ -57,7 +58,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
     selectedDistrict,
     selectedStatus,
     selectedCategory,
-    searchText,
+    searchValue,
   ]);
 
   useEffect(() => {
@@ -279,9 +280,18 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
   };
 
   const handleSearch = (value) => {
-    setSearchText(value);
-    setCurrent(1);
+    setSearchTerm(value);
   };
+
+  // Debounce search term
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setSearchValue(searchTerm.trim());
+      setCurrent(1);
+    }, 400);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   // Get available cities for selected district
   const availableCities = useMemo(() => {
@@ -339,8 +349,8 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
                     }
                     allowClear
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
-                    onChange={(e) => handleSearch(e.target.value.trim())}
-                    debounceMs={400}
+                    value={searchTerm}
+                    onChange={(e) => handleSearch(e.target.value)}
                   />
                   <MySelect
                     withoutForm
