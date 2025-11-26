@@ -349,7 +349,7 @@ const CategoryTable = () => {
                     allowClear
                     className="border-light-gray pad-x ps-0 radius-8 fs-13"
                     value={searchName || ""}
-                    onChange={(e) => handleSearch(e.target.value.trim())}
+                    onChange={(e) => handleSearch(e.target.value)}
                   />
 
                   {/* Category Filter */}
