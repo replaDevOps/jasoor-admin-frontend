@@ -193,6 +193,10 @@ const AddNewCategory = () => {
       // Set category icon state
       setCategoryIcon(uploadedUrl);
 
+      // Set form field value to trigger validation
+      form.setFieldsValue({ uploadcr: uploadedUrl });
+      form.validateFields(["uploadcr"]);
+
       messageApi.success(t("Image uploaded successfully"));
       return uploadedUrl;
     } catch (error) {
@@ -311,33 +315,8 @@ const AddNewCategory = () => {
               </Col>
 
               <Col span={24}>
-                {!categoryIcon ? (
-                  <SingleFileUpload
-                    label={
-                      <Flex vertical>
-                        <Title level={5} className="m-0 fw-500">
-                          {t("Category Icon")}
-                        </Title>
-                        <Text className="text-gray">
-                          {t("Accepted formats")}: JPEG, JPG & PNG, Max size:
-                          5MB per file. Aspect Ratio: 1:1.
-                        </Text>
-                      </Flex>
-                    }
-                    form={form}
-                    name={"uploadcr"}
-                    title={t("Upload")}
-                    onUpload={async (file) => {
-                      const fileUrl = await handleSingleFileUpload(file);
-                      if (fileUrl) {
-                        form.setFieldsValue({ uploadcr: fileUrl });
-                      }
-                    }}
-                    multiple={false}
-                    loading={uploadLoading}
-                  />
-                ) : (
-                  <Flex vertical gap={8}>
+                <Form.Item
+                  label={
                     <Flex vertical>
                       <Title level={5} className="m-0 fw-500">
                         {t("Category Icon")}
@@ -347,6 +326,34 @@ const AddNewCategory = () => {
                         per file. Aspect Ratio: 1:1.
                       </Text>
                     </Flex>
+                  }
+                  name="uploadcr"
+                  rules={[
+                    {
+                      validator: async (_, value) => {
+                        if (!value || value === "") {
+                          return Promise.reject(
+                            new Error(t("Please upload category icon"))
+                          );
+                        }
+                        return Promise.resolve();
+                      },
+                    },
+                  ]}
+                  validateTrigger={["onChange", "onBlur"]}
+                >
+                  {!categoryIcon ? (
+                    <SingleFileUpload
+                      form={form}
+                      name={"uploadcr"}
+                      title={t("Upload")}
+                      onUpload={async (file) => {
+                        await handleSingleFileUpload(file);
+                      }}
+                      multiple={false}
+                      loading={uploadLoading}
+                    />
+                  ) : (
                     <div
                       style={{ position: "relative", display: "inline-block" }}
                       className="w-80 h-80"
@@ -363,7 +370,8 @@ const AddNewCategory = () => {
                         icon={<DeleteOutlined />}
                         onClick={() => {
                           setCategoryIcon("");
-                          form.setFieldsValue({ uploadcr: "" });
+                          form.setFieldsValue({ uploadcr: undefined });
+                          form.validateFields(["uploadcr"]);
                         }}
                         style={{
                           position: "absolute",
@@ -381,8 +389,8 @@ const AddNewCategory = () => {
                         }}
                       />
                     </div>
-                  </Flex>
-                )}
+                  )}
+                </Form.Item>
               </Col>
             </Row>
           </Form>

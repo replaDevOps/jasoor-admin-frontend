@@ -18,6 +18,7 @@ import { UPDATE_BUSINESS } from "../../../graphql/mutation";
 import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 
 const { Text, Title } = Typography;
 
@@ -183,15 +184,9 @@ const SingleviewBusinesslist = () => {
                       {data?.category.name}
                     </Text>
                     <Text className="fs-12 text-gray border-gray p-2 radius-8">
+                      Founded on{" "}
                       {data?.foundedDate
-                        ? new Date(data.foundedDate).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            }
-                          )
+                        ? dayjs(data.foundedDate).format("MM/YYYY")
                         : "-"}
                     </Text>
                   </Flex>

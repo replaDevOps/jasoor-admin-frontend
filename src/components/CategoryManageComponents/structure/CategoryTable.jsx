@@ -189,7 +189,7 @@ const CategoryTable = () => {
 
   const typeItems = [
     { id: false, name: t("Physical Business") },
-    { id: true, name: t("Online Business") },
+    { id: true, name: t("Digital Business") },
   ];
 
   // Apollo lazy query
