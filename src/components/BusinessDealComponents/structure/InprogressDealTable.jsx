@@ -1,17 +1,6 @@
-import {
-  Button,
-  Col,
-  Dropdown,
-  Flex,
-  Form,
-  Image,
-  Row,
-  Table,
-  Typography,
-} from "antd";
-import { SearchInput } from "../../Forms";
+import { Button, Col, Flex, Form, Row, Table, Typography } from "antd";
+import { MySelect, SearchInput } from "../../Forms";
 import { useState, useEffect } from "react";
-import { DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { CustomPagination } from "../../Ui";
 import { GETDEALS } from "../../../graphql/query/meeting";
@@ -166,14 +155,6 @@ const InprogressDealTable = () => {
     setPageSize(size);
   };
 
-  const handleStatusClick = ({ key }) => {
-    const selectedItem = businessdealItems.find((item) => item.key === key);
-    if (selectedItem) {
-      setSelectedStatus(selectedItem.label);
-      setCurrent(1); // Reset to first page on filter change
-    }
-  };
-
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
@@ -229,7 +210,6 @@ const InprogressDealTable = () => {
   ];
 
   const businessdealItems = [
-    { key: "1", label: t("All") },
     { key: "2", label: t("Commission Verification") },
     { key: "3", label: t("DSA From Seller") },
     { key: "4", label: t("DSA From Buyer") },
@@ -247,6 +227,7 @@ const InprogressDealTable = () => {
             <Col lg={24} md={24} sm={24} xs={24}>
               <Flex gap={5} wrap>
                 <SearchInput
+                  withoutForm
                   name="name"
                   placeholder={t("Search")}
                   prefix={
@@ -260,24 +241,16 @@ const InprogressDealTable = () => {
                   className="border-light-gray pad-x ps-0 radius-8 fs-13"
                   value={searchTerm}
                   onChange={(e) => handleSearch(e.target.value)}
+                  allowClear
                 />
-                <Dropdown
-                  menu={{
-                    items: businessdealItems,
-                    onClick: handleStatusClick,
-                  }}
-                  trigger={["click"]}
-                >
-                  <Button
-                    className="btncancel px-3 filter-bg fs-13 text-black"
-                    aria-labelledby="filter status"
-                  >
-                    <Flex justify="space-between" align="center" gap={30}>
-                      {selectedStatus || t("Status")}
-                      <DownOutlined />
-                    </Flex>
-                  </Button>
-                </Dropdown>
+                <MySelect
+                  withoutForm
+                  name="businessdealstatus"
+                  placeholder={t("Business Deal Status")}
+                  options={businessdealItems}
+                  onChange={(value) => setSelectedStatus(value)}
+                  allowClear
+                />
               </Flex>
             </Col>
           </Row>

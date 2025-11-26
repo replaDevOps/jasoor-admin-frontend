@@ -114,6 +114,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
         <Form form={form} layout="vertical">
           <Flex gap={5}>
             <SearchInput
+              withoutForm
               name="name"
               placeholder={t("Search")}
               prefix={
@@ -127,6 +128,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
               className="border-light-gray pad-x ps-0 radius-8 fs-13"
               value={searchTerm}
               onChange={(e) => handleSearch(e.target.value)}
+              allowClear
             />
           </Flex>
         </Form>
