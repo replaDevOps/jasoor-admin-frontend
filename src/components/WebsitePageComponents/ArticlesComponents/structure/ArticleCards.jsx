@@ -22,7 +22,7 @@ const { Paragraph, Text } = Typography;
 const ArticleCards = ({ setDeleteItem, onRefetch }) => {
   const { t, i18n } = useTranslation();
   const [form] = Form.useForm();
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(12);
   const [current, setCurrent] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchValue, setSearchValue] = useState("");
@@ -37,11 +37,20 @@ const ArticleCards = ({ setDeleteItem, onRefetch }) => {
       fetchPolicy: "network-only",
     });
 
+  // Get current language dynamically for each render
+  const lang = localStorage.getItem("lang") || i18n.language || "en";
+  const isArabic = lang.toLowerCase() === "ar";
+
   useEffect(() => {
     getArticles({
-      variables: { search: searchValue || null },
+      variables: {
+        search: searchValue || null,
+        isArabic: isArabic,
+        limit: pageSize,
+        offset: (current - 1) * pageSize,
+      },
     });
-  }, [searchValue, getArticles]);
+  }, [searchValue, isArabic, pageSize, current, getArticles]);
 
   // Pass refetch to parent on mount and updates
   useEffect(() => {
@@ -55,7 +64,7 @@ const ArticleCards = ({ setDeleteItem, onRefetch }) => {
     const delayDebounceFn = setTimeout(() => {
       setSearchValue(searchTerm.trim());
       setCurrent(1);
-    }, 400);
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
@@ -64,24 +73,8 @@ const ArticleCards = ({ setDeleteItem, onRefetch }) => {
     setSearchTerm(value);
   };
 
-  // Get current language dynamically for each render
-  const lang = localStorage.getItem("lang") || i18n.language || "en";
-  const isArabic = lang.toLowerCase() === "ar";
-
   const total = data?.getArticles?.totalCount || 0;
-  const articleData =
-    (isArabic
-      ? data?.getArticles?.articles?.filter((article) => article.isArabic)
-      : data?.getArticles?.articles?.filter((article) => !article.isArabic)) ||
-    [];
-
-  if (loading) {
-    return (
-      <Flex justify="center" align="center" className="h-200">
-        <Spin size="large" />
-      </Flex>
-    );
-  }
+  const articleData = data?.getArticles?.articles || [];
 
   return (
     <>
@@ -112,7 +105,11 @@ const ArticleCards = ({ setDeleteItem, onRefetch }) => {
               </Col>
             </Row>
           </Form>
-          {articleData?.length === 0 ? (
+          {loading ? (
+            <Flex justify="center" align="center" className="h-200">
+              <Spin size="large" />
+            </Flex>
+          ) : articleData?.length === 0 ? (
             <Flex justify="center" align="center" className="h-200">
               <Text className="fs-16 text-gray">{t("No articles found")}</Text>
             </Flex>
@@ -241,6 +238,7 @@ const ArticleCards = ({ setDeleteItem, onRefetch }) => {
             current={current}
             pageSize={pageSize}
             onPageChange={handlePageChange}
+            pageSizeOptions={[12, 24, 36, 48]}
           />
         </Flex>
       </Card>

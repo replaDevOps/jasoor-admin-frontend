@@ -1,8 +1,18 @@
 import { gql } from "@apollo/client";
 
 const GETARTICLES = gql`
-  query GetArticles($search: String) {
-    getArticles(search: $search) {
+  query GetArticles(
+    $search: String
+    $isArabic: Boolean
+    $limit: Int
+    $offset: Int
+  ) {
+    getArticles(
+      search: $search
+      isArabic: $isArabic
+      limit: $limit
+      offset: $offset
+    ) {
       totalCount
       articles {
         id
