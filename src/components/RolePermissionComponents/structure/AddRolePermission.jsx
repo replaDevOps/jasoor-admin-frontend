@@ -246,7 +246,7 @@ const AddRolePermission = () => {
                   label={t("Role Name")}
                   size="large"
                   name="name"
-                  className="w-100"
+                  className="w-100 fs-14"
                   placeholder={t("Enter Role Name")}
                   rules={[
                     { required: true, message: t("Please enter role name") },
