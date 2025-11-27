@@ -25,7 +25,7 @@ export const MySelect = ({
       {...props}
     >
       {options?.map((opt) => (
-        <Select.Option value={opt?.id} key={opt?.id}>
+        <Select.Option value={showKey ? opt?.id : opt?.name} key={opt?.id}>
           {opt?.name}
         </Select.Option>
       ))}
