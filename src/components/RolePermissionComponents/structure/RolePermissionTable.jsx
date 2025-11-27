@@ -135,7 +135,7 @@ const RolePermissionTable = () => {
                         });
                       }}
                     >
-                      {row.isActive ? t("InActive") : t("Activate")}
+                      {row.isActive ? t("Inactive") : t("Activate")}
                     </NavLink>
                   ),
                   key: "3",

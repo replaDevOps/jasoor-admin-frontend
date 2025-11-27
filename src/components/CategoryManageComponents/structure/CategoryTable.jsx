@@ -103,51 +103,48 @@ const CategoryTable = () => {
           },
         ];
 
-        if (row.status !== "UNDER_REVIEW") {
-          if (row.status === "INACTIVE") {
-            items.push({
-              label: (
-                <NavLink
-                  onClick={() => {
-                    updateCategory({
-                      variables: {
-                        input: {
-                          id: row.key,
-                          status: "ACTIVE",
-                        },
+        if (row.status === "INACTIVE") {
+          items.push({
+            label: (
+              <NavLink
+                onClick={() => {
+                  updateCategory({
+                    variables: {
+                      input: {
+                        id: row.key,
+                        status: "ACTIVE",
                       },
-                    });
-                  }}
-                >
-                  {t("Active")}
-                </NavLink>
-              ),
-              key: "3",
-            });
-          }
+                    },
+                  });
+                }}
+              >
+                {t("Active")}
+              </NavLink>
+            ),
+            key: "3",
+          });
+        }
 
-          // Show "Inactive" option if current status is ACTIVE
-          if (row.status === "ACTIVE") {
-            items.push({
-              label: (
-                <NavLink
-                  onClick={() => {
-                    updateCategory({
-                      variables: {
-                        input: {
-                          id: row.key,
-                          status: "INACTIVE",
-                        },
+        if (row.status === "ACTIVE") {
+          items.push({
+            label: (
+              <NavLink
+                onClick={() => {
+                  updateCategory({
+                    variables: {
+                      input: {
+                        id: row.key,
+                        status: "INACTIVE",
                       },
-                    });
-                  }}
-                >
-                  {t("InActive")}
-                </NavLink>
-              ),
-              key: "4",
-            });
-          }
+                    },
+                  });
+                }}
+              >
+                {t("Inactive")}
+              </NavLink>
+            ),
+            key: "4",
+          });
         }
 
         return (

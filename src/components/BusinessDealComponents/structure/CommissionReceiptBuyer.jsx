@@ -101,7 +101,7 @@ const CommissionReceiptBuyer = ({ details }) => {
         <Col span={24}>
           <Flex vertical gap={6}>
             <Text className="fw-600 text-medium-gray fs-13">
-              {t("Jasoor’s Commission bank statement or screenshot")}
+              {t("Jusoor's Commission bank statement or screenshot")}
             </Text>
             {jasoorDoc &&
               renderUploadedDoc({

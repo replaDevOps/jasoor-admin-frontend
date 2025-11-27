@@ -159,11 +159,8 @@ const AddUser = ({ visible, onClose, edititem }) => {
     try {
       const formData = form.getFieldsValue(true);
 
-      // Validate document uploads
       if (!edititem) {
-        // Add mode - documents are required
         if (documents.length === 0) {
-          // Set validation errors
           if (idType === "national_id") {
             setUploadErrors({
               front: t("Front side is required"),
@@ -221,6 +218,12 @@ const AddUser = ({ visible, onClose, edititem }) => {
       // Clear upload errors if validation passed
       setUploadErrors({ front: "", back: "", passport: "" });
 
+      // Clean documents array - remove __typename from GraphQL
+      const cleanDocuments =
+        documents.length > 0
+          ? documents.map(({ __typename, ...doc }) => doc) // eslint-disable-line no-unused-vars
+          : undefined;
+
       const basePayload = {
         name: formData.fullName,
         district: formData.district,
@@ -231,7 +234,7 @@ const AddUser = ({ visible, onClose, edititem }) => {
           formData.password && String(formData.password).trim().length > 0
             ? formData.password
             : undefined,
-        documents: documents.length > 0 ? documents : undefined,
+        documents: cleanDocuments,
       };
 
       if (edititem) {
@@ -306,11 +309,14 @@ const AddUser = ({ visible, onClose, edititem }) => {
 
       // Update documents state
       setDocuments((prevDocs) => {
-        // Remove existing doc with same title if any
         const filtered = prevDocs.filter((doc) => doc.title !== title);
+
+        const existingDoc = prevDocs.find((doc) => doc.title === title);
+
         return [
           ...filtered,
           {
+            ...(existingDoc?.id && { id: existingDoc.id }),
             title: title,
             fileName: data.fileName,
             filePath: data.fileUrl,

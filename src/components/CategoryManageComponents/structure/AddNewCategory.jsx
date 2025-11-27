@@ -165,7 +165,7 @@ const AddNewCategory = () => {
     if (id) {
       updateCategory({ variables: { input } });
     } else {
-      createCategory({ variables: { input } });
+      createCategory({ variables: { input: { ...input, status: "ACTIVE" } } });
     }
   };
   const handleSingleFileUpload = async (file) => {
