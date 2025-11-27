@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Row, Col, Card, Typography, Spin,Flex } from "antd";
+import { Row, Col, Card, Typography, Spin, Flex } from "antd";
 import { ModuleTopHeading } from "../../components";
 import { GET_ALERTS } from "../../graphql/query";
 import { MARK_AS_READ } from "../../graphql/mutation";
@@ -136,14 +136,6 @@ const Alerts = () => {
                     <Text className="text-justify text-gray">
                       {t(notif.message)}
                     </Text>
-                    {/* optional action to mark as read */}
-                    {!notif.isRead && (
-                      <div>
-                        <a onClick={() => handleMarkAsRead(notif.id)}>
-                          {t("Mark as read")}
-                        </a>
-                      </div>
-                    )}
                   </Flex>
                 ))}
               </Flex>
