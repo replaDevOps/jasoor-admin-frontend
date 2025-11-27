@@ -272,36 +272,37 @@ const AddRolePermission = () => {
                   <Flex vertical gap={20}>
                     {permissionsData.map((permission, index) => (
                       <Flex vertical gap={10} key={index}>
-                        <Checkbox
-                          checked={isCategoryChecked(permission.category)}
-                          onChange={(e) =>
-                            handleCategoryChange(
-                              permission.category,
-                              e.target.checked
-                            )
-                          }
-                        >
-                          {t(permission.category)}
-                        </Checkbox>
+                        <Flex align="center" gap={8}>
+                          <Checkbox
+                            checked={isCategoryChecked(permission.category)}
+                            onChange={(e) =>
+                              handleCategoryChange(
+                                permission.category,
+                                e.target.checked
+                              )
+                            }
+                          />
+                          <Text>{t(permission.category)}</Text>
+                        </Flex>
                         <Space direction="vertical" className="px-3">
                           {permission.options.map((option) => (
-                            <Checkbox
-                              key={option}
-                              checked={
-                                !!selectedPermissions[permission.category]?.[
-                                  option
-                                ]
-                              }
-                              onChange={(e) =>
-                                handleOptionChange(
-                                  permission.category,
-                                  option,
-                                  e.target.checked
-                                )
-                              }
-                            >
-                              {t(option)}
-                            </Checkbox>
+                            <Flex align="center" gap={8} key={option}>
+                              <Checkbox
+                                checked={
+                                  !!selectedPermissions[permission.category]?.[
+                                    option
+                                  ]
+                                }
+                                onChange={(e) =>
+                                  handleOptionChange(
+                                    permission.category,
+                                    option,
+                                    e.target.checked
+                                  )
+                                }
+                              />
+                              <Text>{t(option)}</Text>
+                            </Flex>
                           ))}
                         </Space>
                       </Flex>
