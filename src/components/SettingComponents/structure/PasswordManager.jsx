@@ -79,15 +79,28 @@ const PasswordManager = () => {
                 rules={[
                   { required: true, message: t("Please enter new password") },
                   {
-                    min: 8,
-                    message: t("Password must be at least 8 characters"),
-                  },
-                  {
-                    pattern:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]/,
-                    message: t(
-                      "Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character"
-                    ),
+                    validator: (_, value) => {
+                      if (!value) {
+                        return Promise.resolve();
+                      }
+                      if (value.length < 8) {
+                        return Promise.reject(
+                          new Error(t("Password must be at least 8 characters"))
+                        );
+                      }
+                      const pattern =
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]/;
+                      if (!pattern.test(value)) {
+                        return Promise.reject(
+                          new Error(
+                            t(
+                              "Password must contain at least one uppercase, lowercase, number and a special character"
+                            )
+                          )
+                        );
+                      }
+                      return Promise.resolve();
+                    },
                   },
                 ]}
               />
