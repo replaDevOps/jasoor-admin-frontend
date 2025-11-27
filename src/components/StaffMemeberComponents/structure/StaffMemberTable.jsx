@@ -107,11 +107,12 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
     refetchQueries: [{ query: GETSTAFFMEMBERS }],
     awaitRefetchQueries: true,
   });
-  const [deleteUser] = useMutation(DELETE_USER, {
+  const [deleteUser, { loading: onDeleting }] = useMutation(DELETE_USER, {
     refetchQueries: [GETSTAFFMEMBERS],
     awaitRefetchQueries: true,
     onCompleted: () => {
       messageApi.success(t("Staff member deleted successfully!"));
+      setDeleteItem(false);
     },
   });
 
@@ -340,13 +341,13 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
           "This action cannot be undone. Are you sure you want to delete this staff member?"
         )}
         type="danger"
+        loading={onDeleting}
         onConfirm={() => {
           if (selectedUserId) {
             deleteUser({
               variables: { deleteUserId: selectedUserId },
             });
           }
-          setDeleteItem(false);
         }}
       />
     </>

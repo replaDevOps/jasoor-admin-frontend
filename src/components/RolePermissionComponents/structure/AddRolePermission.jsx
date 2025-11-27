@@ -152,10 +152,21 @@ const AddRolePermission = () => {
   });
 
   const onFinish = (values) => {
+    // Validate at least one permission is selected
+    const permissions = buildPermissionsFromBackend();
+    const hasAtLeastOnePermission = Object.values(permissions).some(
+      (value) => value === true
+    );
+
+    if (!hasAtLeastOnePermission) {
+      messageApi.error(t("Please select at least one permission"));
+      return;
+    }
+
     const input = {
       ...(id && { id }),
       name: values.name,
-      ...buildPermissionsFromBackend(),
+      ...permissions,
     };
     if (id) {
       updateRole({

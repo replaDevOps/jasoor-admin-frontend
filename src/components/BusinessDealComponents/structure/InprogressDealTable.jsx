@@ -210,13 +210,13 @@ const InprogressDealTable = () => {
   ];
 
   const businessdealItems = [
-    { key: "2", label: t("Commission Verification") },
-    { key: "3", label: t("DSA From Seller") },
-    { key: "4", label: t("DSA From Buyer") },
-    { key: "5", label: t("Buyer Payment") },
-    { key: "6", label: t("Payment Approval") },
-    { key: "7", label: t("Document Confirmation") },
-    { key: "8", label: t("Deal To Fainal Pending") },
+    { id: "2", name: t("Commission Verification") },
+    { id: "3", name: t("DSA From Seller") },
+    { id: "4", name: t("DSA From Buyer") },
+    { id: "5", name: t("Buyer Payment") },
+    { id: "6", name: t("Payment Approval") },
+    { id: "7", name: t("Document Confirmation") },
+    { id: "8", name: t("Deal To Fainal Pending") },
   ];
 
   return (
