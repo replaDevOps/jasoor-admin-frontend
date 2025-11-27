@@ -34,7 +34,11 @@ const BusinessListingTable = ({
   setStatus,
 }) => {
   const { t } = useTranslation();
-  const { data } = useQuery(GET_CATEGORIES);
+  const { data } = useQuery(GET_CATEGORIES, {
+    variables: {
+      isAdminCategory: true,
+    },
+  });
   const [form] = Form.useForm();
   const [dateRange, setDateRange] = useState(null);
   const navigate = useNavigate();

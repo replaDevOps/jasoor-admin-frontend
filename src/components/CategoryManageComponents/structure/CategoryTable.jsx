@@ -180,7 +180,6 @@ const CategoryTable = () => {
 
   const statusItems = [
     { id: "ACTIVE", name: t("Active") },
-    { id: "UNDER_REVIEW", name: t("Pending") },
     { id: "INACTIVE", name: t("Inactive") },
   ];
 
@@ -221,13 +220,13 @@ const CategoryTable = () => {
     }
   );
 
-  // Initial load and filter changes with debounce
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       loadCategories({
         variables: {
           limit: pageSize,
           offSet: (current - 1) * pageSize,
+          isAdminCategory: true,
           filter: {
             isDigital: selectedCategory,
             name: searchName,
@@ -289,6 +288,7 @@ const CategoryTable = () => {
         variables: {
           limit: pageSize,
           offSet: (current - 1) * pageSize,
+          isAdminCategory: true,
           filter: {
             isDigital: selectedCategory,
             name: searchName,
@@ -309,6 +309,7 @@ const CategoryTable = () => {
         variables: {
           limit: pageSize,
           offSet: (current - 1) * pageSize,
+          isAdminCategory: true,
           filter: {
             isDigital: selectedCategory,
             name: searchName,
@@ -349,7 +350,6 @@ const CategoryTable = () => {
                     onChange={(e) => handleSearch(e.target.value)}
                   />
 
-                  {/* Category Filter */}
                   <Col span={6}>
                     <Flex gap={5}>
                       <MySelect
@@ -366,6 +366,7 @@ const CategoryTable = () => {
                             handleCategoryClick({ id: String(value) });
                           }
                         }}
+                        showKey
                         allowClear
                       />
                       <MySelect
@@ -383,6 +384,7 @@ const CategoryTable = () => {
                             handleStatusClick({ id: String(value) });
                           }
                         }}
+                        showKey
                         allowClear
                       />
                     </Flex>

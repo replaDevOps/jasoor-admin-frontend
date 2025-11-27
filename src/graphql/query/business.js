@@ -187,8 +187,18 @@ const GET_BUSINESSES_DOCUMENT_ID = gql`
   }
 `;
 const GET_CATEGORIES = gql`
-  query GetAllCategories($limit: Int, $offSet: Int, $filter: CategoryFilter) {
-    getAllCategories(limit: $limit, offSet: $offSet, filter: $filter) {
+  query GetAllCategories(
+    $limit: Int
+    $offSet: Int
+    $filter: CategoryFilter
+    $isAdminCategory: Boolean
+  ) {
+    getAllCategories(
+      limit: $limit
+      offSet: $offSet
+      filter: $filter
+      isAdminCategory: $isAdminCategory
+    ) {
       totalcount
       categories {
         id

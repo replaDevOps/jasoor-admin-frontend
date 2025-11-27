@@ -21,7 +21,11 @@ import { useDistrictItem } from "../../../shared";
 const { Text } = Typography;
 const BusinessDetailStep = ({ data, setData }) => {
   const districtselectItem = useDistrictItem();
-  const { data: categoryData } = useQuery(GET_CATEGORIES);
+  const { data: categoryData } = useQuery(GET_CATEGORIES, {
+    variables: {
+      isAdminCategory: true,
+    },
+  });
   const { data: customer } = useQuery(CUSTOMER);
   const [form] = Form.useForm();
   const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
