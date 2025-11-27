@@ -3,7 +3,7 @@ import { MyDatepicker, MyInput, MySelect } from "../../Forms";
 import { CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDistrictItem, useGroupItem } from "../../../shared";
-import { CREATE_CAMPAIGN } from "../../../graphql/mutation";
+import { CREATE_CAMPAIGN, UPDATE_CAMPAIGN } from "../../../graphql/mutation";
 import { useMutation } from "@apollo/client";
 import { message } from "antd";
 import { GET_CAMPAIGNS } from "../../../graphql/query";
@@ -75,6 +75,32 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
     },
   });
 
+  const [updateCampaign, { loading: updating }] = useMutation(UPDATE_CAMPAIGN, {
+    refetchQueries: [
+      {
+        query: GET_CAMPAIGNS,
+        variables: {
+          filter: {
+            search: searchValue || null,
+            district: selectedDistrict || null,
+            group: selectedCategory || null,
+            status: selectedStatus !== null ? selectedStatus : null,
+            limit: pageSize,
+            offset: (current - 1) * pageSize,
+          },
+        },
+      },
+    ],
+    awaitRefetchQueries: true,
+    onCompleted: () => {
+      messageApi.success(t("Notification updated successfully!"));
+      onClose();
+    },
+    onError: (err) => {
+      messageApi.error(err.message || t("Failed to update campaign."));
+    },
+  });
+
   const onFinish = (values) => {
     const districts = Array.isArray(values.district)
       ? values.district.map((d) => (d.value ? d.value : d)) // handle MySelect returning objects or strings
@@ -88,15 +114,30 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
 
     setSendNow(isSendNow);
 
-    campaign({
-      variables: {
-        title: values.title,
-        group: values?.group,
-        district: districts,
-        schedule: isSendNow ? now.toISOString() : values.dateTime,
-        description: values.description,
-      },
-    });
+    if (edititem) {
+      // Update existing campaign
+      updateCampaign({
+        variables: {
+          updateCampaignId: edititem.id,
+          title: values.title,
+          group: values?.group,
+          district: districts,
+          schedule: isSendNow ? now.toISOString() : values.dateTime,
+          description: values.description,
+        },
+      });
+    } else {
+      // Create new campaign
+      campaign({
+        variables: {
+          title: values.title,
+          group: values?.group,
+          district: districts,
+          schedule: isSendNow ? now.toISOString() : values.dateTime,
+          description: values.description,
+        },
+      });
+    }
   };
 
   const range = (start, end) => {
@@ -159,7 +200,7 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
                 aria-labelledby="submit button"
                 className={`btnsave border0 text-white brand-bg`}
                 onClick={() => form.submit()}
-                loading={loading}
+                loading={loading || updating}
               >
                 {edititem ? t("Update") : t("Confirm")}
               </Button>

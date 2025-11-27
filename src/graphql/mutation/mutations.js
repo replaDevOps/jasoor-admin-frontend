@@ -151,6 +151,31 @@ const CREATE_CAMPAIGN = gql`
     }
   }
 `;
+
+const UPDATE_CAMPAIGN = gql`
+  mutation UpdateCampaign(
+    $updateCampaignId: ID!
+    $district: [String]!
+    $title: String
+    $group: CampaignGroup
+    $schedule: DateTime
+    $description: String
+    $status: Boolean
+  ) {
+    updateCampaign(
+      id: $updateCampaignId
+      district: $district
+      title: $title
+      group: $group
+      schedule: $schedule
+      description: $description
+      status: $status
+    ) {
+      id
+    }
+  }
+`;
+
 const UPDATE_CONTACT_US = gql`
   mutation UpdateContactUs(
     $updateContactUsId: ID!
@@ -267,6 +292,7 @@ export {
   FINALIZE_DEAL,
   CREATE_CATEGORY,
   CREATE_CAMPAIGN,
+  UPDATE_CAMPAIGN,
   UPDATE_BUSINESS,
   UPDATE_ASSET,
   UPDATE_INVENTORY,

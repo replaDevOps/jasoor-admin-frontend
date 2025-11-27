@@ -135,6 +135,7 @@ const PushNotificationTable = ({
                   }
                   className="border-light-gray pad-x ps-0 radius-8 fs-13"
                   value={searchTerm}
+                  allowClear
                   onChange={(e) => handleSearch(e.target.value)}
                 />
                 <MySelect
