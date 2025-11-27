@@ -42,8 +42,18 @@ const GETARTICLE = gql`
   }
 `;
 const GETFAQ = gql`
-  query GetFAQs($search: String) {
-    getFAQs(search: $search) {
+  query GetFAQs(
+    $search: String
+    $isArabic: Boolean
+    $limit: Int
+    $offset: Int
+  ) {
+    getFAQs(
+      search: $search
+      isArabic: $isArabic
+      limit: $limit
+      offset: $offset
+    ) {
       totalCount
       faqs {
         id

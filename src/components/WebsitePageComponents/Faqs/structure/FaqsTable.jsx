@@ -1,10 +1,10 @@
-import { Button, Card, Dropdown, Flex, Form, Table, message, Spin } from "antd";
+import { Button, Card, Dropdown, Flex, Form, Table, message } from "antd";
 import { SearchInput } from "../../../Forms";
 import { useState, useEffect } from "react";
 import { CustomPagination, DeleteModal, TableLoader } from "../../../Ui";
 import { GETFAQ } from "../../../../graphql/query/queries";
 import { DELETE_FAQ } from "../../../../graphql/mutation/mutations";
-import { useQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -18,20 +18,45 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchValue, setSearchValue] = useState("");
 
-  const {
-    data,
-    loading,
-    refetch: refetchFaqs,
-  } = useQuery(GETFAQ, {
-    variables: { search: searchValue || null },
+  // Get current language
+  const lang = localStorage.getItem("lang") || i18n.language || "en";
+  const isArabic = lang.toLowerCase() === "ar";
+  console.log("Current Language:", lang, isArabic);
+  const [loadFaqs, { data, loading }] = useLazyQuery(GETFAQ, {
+    fetchPolicy: "network-only",
   });
 
-  // Pass refetch to parent on mount and updates
+  // Load FAQs when dependencies change
   useEffect(() => {
-    if (onRefetch && refetchFaqs) {
-      onRefetch(refetchFaqs);
+    const delayDebounceFn = setTimeout(() => {
+      loadFaqs({
+        variables: {
+          search: searchValue || null,
+          isArabic: isArabic,
+          limit: pageSize,
+          offset: (current - 1) * pageSize,
+        },
+      });
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchValue, isArabic, pageSize, current, loadFaqs]);
+
+  // Pass refetch to parent
+  useEffect(() => {
+    if (onRefetch && loadFaqs) {
+      onRefetch(() =>
+        loadFaqs({
+          variables: {
+            search: searchValue || null,
+            isArabic: isArabic,
+            limit: pageSize,
+            offset: (current - 1) * pageSize,
+          },
+        })
+      );
     }
-  }, [onRefetch, refetchFaqs]);
+  }, [onRefetch, loadFaqs, searchValue, isArabic, pageSize, current]);
 
   const [deleteFAQ, { loading: deleting }] = useMutation(DELETE_FAQ, {
     variables: {
@@ -53,14 +78,8 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
     setSearchTerm(value);
   };
 
-  // Get current language dynamically for each render
-  const lang = localStorage.getItem("lang") || i18n.language || "en";
-  const isArabic = lang.toLowerCase() === "ar";
-
-  const faqsData =
-    (isArabic
-      ? data?.getFAQs?.faqs?.filter((faqs) => faqs.isArabic)
-      : data?.getFAQs?.faqs?.filter((faqs) => !faqs.isArabic)) || [];
+  const faqsData = data?.getFAQs?.faqs || [];
+  const total = data?.getFAQs?.totalCount || 0;
 
   const faqsColumn = (setVisible, setEditItem, setDeleteItem) => [
     {
@@ -124,9 +143,6 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
     },
   ];
 
-  // Total should be based on filtered data, not API totalCount
-  const total = faqsData.length;
-
   const handleDelete = async () => {
     if (!deleteItem) return;
 
@@ -136,7 +152,15 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
       });
       messageApi.success("FAQ deleted successfully");
       setDeleteItem(null);
-      refetchFaqs({ search: searchValue || null });
+      // Reload FAQs after deletion
+      loadFaqs({
+        variables: {
+          search: searchValue || null,
+          isArabic: isArabic,
+          limit: pageSize,
+          offset: (current - 1) * pageSize,
+        },
+      });
     } catch (err) {
       console.error(err);
       messageApi.error("Failed to delete FAQ");
@@ -176,10 +200,7 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
           <Table
             size="large"
             columns={faqsColumn(setVisible, setEditItem, setDeleteItem)}
-            dataSource={faqsData.slice(
-              (current - 1) * pageSize,
-              current * pageSize
-            )}
+            dataSource={faqsData}
             className="pagination table-cs table"
             showSorterTooltip={false}
             scroll={{ x: 1000 }}
