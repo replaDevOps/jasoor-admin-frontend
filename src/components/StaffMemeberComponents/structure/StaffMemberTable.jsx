@@ -43,7 +43,6 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
     fetchPolicy: "network-only",
   });
 
-  // ✅ Fetch staff members when filters, pagination, or searchText changes
   useEffect(() => {
     getStaffMembers({
       variables: {

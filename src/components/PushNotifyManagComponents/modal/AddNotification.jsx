@@ -15,14 +15,15 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
   const groupselectItem = useGroupItem();
   const districtselectItems = useDistrictItem();
   const [messageApi, contextHolder] = message.useMessage();
-  const [searchValue, setSearchValue] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedDistrict, setSelectedDistrict] = useState(null);
-  const [pageSize, setPageSize] = useState(10);
-  const [current, setCurrent] = useState(1);
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [searchValue] = useState("");
+  const [selectedCategory] = useState(null);
+  const [selectedDistrict] = useState(null);
+  const [pageSize] = useState(10);
+  const [current] = useState(1);
+  const [selectedStatus] = useState(null);
 
   const [form] = Form.useForm();
+  const [sendNow, setSendNow] = useState(false);
 
   useEffect(() => {
     if (visible && (edititem || viewnotify)) {
@@ -38,10 +39,12 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
         dateTime: parsedDate && parsedDate.isValid() ? parsedDate : null,
         description: source?.description || "",
       });
+      setSendNow(false);
     } else {
       form.resetFields();
+      setSendNow(false);
     }
-  }, [visible, edititem, viewnotify]);
+  }, [visible, edititem, viewnotify, form]);
 
   const [campaign, { loading }] = useMutation(CREATE_CAMPAIGN, {
     refetchQueries: [
@@ -61,7 +64,10 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
     ],
     awaitRefetchQueries: true,
     onCompleted: () => {
-      messageApi.success(t("The Notification scheduled successfully!"));
+      const message = sendNow
+        ? t("Notification sent successfully!")
+        : t("Notification scheduled successfully!");
+      messageApi.success(message);
       onClose();
     },
     onError: (err) => {
@@ -74,12 +80,20 @@ const AddNotification = ({ visible, onClose, edititem, viewnotify }) => {
       ? values.district.map((d) => (d.value ? d.value : d)) // handle MySelect returning objects or strings
       : [];
 
+    // Check if selected time is within the next 10 minutes (current time)
+    const selectedTime = dayjs(values.dateTime);
+    const now = dayjs();
+    const timeDifference = selectedTime.diff(now, "minute");
+    const isSendNow = timeDifference <= 10;
+
+    setSendNow(isSendNow);
+
     campaign({
       variables: {
         title: values.title,
         group: values?.group,
         district: districts,
-        schedule: values.dateTime,
+        schedule: isSendNow ? now.toISOString() : values.dateTime,
         description: values.description,
       },
     });

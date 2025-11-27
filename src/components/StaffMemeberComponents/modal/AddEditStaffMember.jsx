@@ -87,28 +87,31 @@ const AddEditStaffMember = ({ visible, onClose, edititem }) => {
 
   const handleFinish = (values) => {
     const roleId = values.assignRole;
+
+    const basePayload = {
+      name: values.fullName,
+      phone: values.phoneNo || null,
+      roleId,
+      ...(values.password ? { password: values.password } : {}),
+    };
+
     if (edititem) {
+      // Update user - exclude email
       updateUser({
         variables: {
           input: {
             id: edititem.key,
-            name: values.fullName,
-            email: values.email,
-            phone: values.phoneNo || null,
-            roleId,
-            ...(values.password ? { password: values.password } : {}),
+            ...basePayload,
           },
         },
       });
     } else {
+      // Create user - include email
       createUser({
         variables: {
           input: {
-            name: values.fullName,
+            ...basePayload,
             email: values.email,
-            phone: values.phoneNo || null,
-            password: values.password,
-            roleId,
           },
         },
       });
@@ -181,6 +184,7 @@ const AddEditStaffMember = ({ visible, onClose, edititem }) => {
                   required
                   message={t("Please enter your email address")}
                   placeholder={t("Enter email address")}
+                  disabled={!!edititem}
                 />
               </Col>
               <Col span={24}>
