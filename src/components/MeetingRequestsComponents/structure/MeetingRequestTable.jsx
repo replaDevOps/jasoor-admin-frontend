@@ -330,9 +330,9 @@ const MeetingRequestTable = () => {
                   name="status"
                   placeholder={t("Status")}
                   options={meetingItems}
-                  value={selectedStatus}
                   onChange={handleStatusChange}
                   allowClear
+                  showKey
                 />
               </Flex>
             </Col>
