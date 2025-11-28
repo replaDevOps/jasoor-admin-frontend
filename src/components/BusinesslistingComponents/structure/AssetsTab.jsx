@@ -188,11 +188,7 @@ const AssetsTab = ({ businessId }) => {
     },
   ];
   const [messageApi, contextHolder] = message.useMessage();
-  const {
-    loading,
-    error,
-    data: business,
-  } = useQuery(GET_BUSINESSES_ASSETS_BY_ID, {
+  const { data: business } = useQuery(GET_BUSINESSES_ASSETS_BY_ID, {
     variables: { getBusinessByIdId: businessId },
   });
 

@@ -161,9 +161,9 @@ const BusinessListingTable = ({
                   name="category"
                   placeholder={t("Category")}
                   options={categoryItems}
-                  value={category}
                   onChange={(value) => setCategory(value)}
                   allowClear
+                  showKey
                 />
                 <MySelect
                   withoutForm
@@ -172,6 +172,7 @@ const BusinessListingTable = ({
                   options={statusItems}
                   onChange={(value) => setStatus(value)}
                   allowClear
+                  showKey
                 />
               </Flex>
             </Col>
@@ -204,7 +205,7 @@ const BusinessListingTable = ({
           dataSource={businesses}
           className="pagination table-cs table"
           showSorterTooltip={false}
-          scroll={{ x: 1000 }}
+          scroll={{ x: 1400 }}
           rowHoverable={false}
           onRow={(record) => ({
             onClick: () => navigate("/businesslisting/details/" + record?.id),

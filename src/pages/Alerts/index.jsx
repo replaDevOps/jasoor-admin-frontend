@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Row, Col, Card, Typography, Spin, Flex } from "antd";
 import { ModuleTopHeading } from "../../components";
 import { GET_ALERTS } from "../../graphql/query";
-import { MARK_AS_READ } from "../../graphql/mutation";
-import { useMutation, useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { t } from "i18next";
 import Cookies from "js-cookie";
 
@@ -12,14 +11,14 @@ const Alerts = () => {
   const userId = Cookies.get("userId");
   const LIMIT = 10;
 
-  const [groups, setGroups] = useState([]); // aggregated groups from paginated API
+  const [groups, setGroups] = useState([]);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
   const loaderRef = useRef(null);
 
-  const [loadAlerts, { called, loading, fetchMore, refetch }] = useLazyQuery(
+  const [loadAlerts, { called, loading, fetchMore }] = useLazyQuery(
     GET_ALERTS,
     {
       fetchPolicy: "network-only",
@@ -41,23 +40,6 @@ const Alerts = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
-
-  const [markAsRead] = useMutation(MARK_AS_READ);
-
-  const handleMarkAsRead = async (id) => {
-    try {
-      await markAsRead({ variables: { markNotificationAsReadId: id } });
-      // simplest: refetch full list after marking read to keep grouping consistent
-      if (typeof refetch === "function") {
-        const res = await refetch({ userId, offset: 0, limit: offset });
-        const fetchedGroups = res?.data?.getAlerts?.groups || [];
-        setGroups(fetchedGroups);
-        setOffset(fetchedGroups.length);
-      }
-    } catch (err) {
-      console.error("markAsRead failed", err);
-    }
-  };
 
   const loadMore = async () => {
     if (!hasMore || loadingMore) return;
