@@ -97,17 +97,24 @@ import { MyInput, MySelect } from "../../Forms";
 import { MinusCircleFilled } from "@ant-design/icons";
 import { ModuleTopHeading } from "../../PageComponents";
 
-const FormReplicate = ({ dayKey, title, form, fieldsConfig = [] }) => {
+const FormReplicate = ({
+  dayKey,
+  title,
+  form,
+  fieldsConfig = [],
+  allowEmpty = false,
+}) => {
   useEffect(() => {
     const fields = form.getFieldValue(dayKey) || [];
-    if (fields.length === 0) {
+    // Only auto-insert a default row when empty if allowEmpty is false
+    if (!allowEmpty && fields.length === 0) {
       const defaultItem = {};
       fieldsConfig.forEach((f) => {
         defaultItem[f.name] = null;
       });
       form.setFieldsValue({ [dayKey]: [defaultItem] });
     }
-  }, [dayKey, form, fieldsConfig]);
+  }, [dayKey, form, fieldsConfig, allowEmpty]);
 
   return (
     <Form.List name={dayKey}>
@@ -115,7 +122,7 @@ const FormReplicate = ({ dayKey, title, form, fieldsConfig = [] }) => {
         <Space direction="vertical" className="w-100">
           <Row gutter={[16, 16]} align="middle">
             <Col span={24}>
-              <ModuleTopHeading level={5} name={title} onClick={() => add()} shape="round" />
+              <ModuleTopHeading level={5} name={title} onClick={() => add()} />
             </Col>
             <Col span={24}>
               {fields.map(({ key, name }) => (
@@ -127,34 +134,57 @@ const FormReplicate = ({ dayKey, title, form, fieldsConfig = [] }) => {
                 >
                   <Col span={24}>
                     <Flex justify="end">
-                      <MinusCircleFilled className="text-red" onClick={() => remove(name)} />
+                      <MinusCircleFilled
+                        className="text-red"
+                        onClick={() => remove(name)}
+                      />
                     </Flex>
                   </Col>
 
-                  {fieldsConfig.map((field, index) => (
-                    <Col key={index} xs={24} sm={24} md={24} lg={field.col || 6}>
-                      {field.type === "input" ? (
-                        <MyInput
-                          label={field.label}
-                          name={[name, field.name]}
-                          placeholder={field.placeholder}
-                          required={field.required}
-                          message={field.message}
-                          addonBefore={field.addonBefore}
-                          className={field.className || ""}
-                        />
-                      ) : field.type === "select" ? (
-                        <MySelect
-                          label={field.label}
-                          name={[name, field.name]}
-                          placeholder={field.placeholder}
-                          required={field.required}
-                          message={field.message}
-                          options={field.options || []}
-                        />
-                      ) : null}
-                    </Col>
-                  ))}
+                  {fieldsConfig.map((field, index) => {
+                    const evaluatedValidator =
+                      typeof field.validator === "function"
+                        ? field.validator({
+                            getFieldValue: form.getFieldValue,
+                            index: name,
+                            dayKey,
+                            form,
+                          })
+                        : field.validator;
+
+                    return (
+                      <Col
+                        key={index}
+                        xs={24}
+                        sm={24}
+                        md={24}
+                        lg={field.col || 6}
+                      >
+                        {field.type === "input" ? (
+                          <MyInput
+                            label={field.label}
+                            name={[name, field.name]}
+                            placeholder={field.placeholder}
+                            required={field.required}
+                            message={field.message}
+                            addonBefore={field.addonBefore}
+                            className={field.className || ""}
+                            validator={evaluatedValidator}
+                          />
+                        ) : field.type === "select" ? (
+                          <MySelect
+                            label={field.label}
+                            name={[name, field.name]}
+                            placeholder={field.placeholder}
+                            required={field.required}
+                            message={field.message}
+                            options={field.options || []}
+                            validator={evaluatedValidator}
+                          />
+                        ) : null}
+                      </Col>
+                    );
+                  })}
                 </Row>
               ))}
             </Col>

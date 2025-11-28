@@ -286,8 +286,90 @@ const SIMILER_BUSINESS_CATEGORY_GRAPH = gql`
     }
   }
 `;
+
+const GET_BUSINESS = gql`
+  query GetBusinessById($getBusinessByIdId: ID!) {
+    getBusinessById(id: $getBusinessByIdId) {
+      numberOfFavorites
+      numberOfOffers
+      totalViews
+      business {
+        id
+        businessTitle
+        isSupportVerified
+        reference
+        district
+        city
+        description
+        foundedDate
+        growthOpportunities
+        isByTakbeer
+        isAbleInActive
+        multiple
+        numberOfEmployees
+        price
+        profit
+        profitMargen
+        profittime
+        reason
+        capitalRecovery
+        revenue
+        revenueTime
+        supportSession
+        supportDuration
+        businessStatus
+        url
+        isStatsVerified
+        category {
+          id
+          name
+          arabicName
+        }
+        savedBy {
+          id
+        }
+        seller {
+          id
+        }
+        assets {
+          id
+          isActive
+          name
+          price
+          purchaseYear
+          quantity
+        }
+        liabilities {
+          id
+          isActive
+          name
+          price
+          purchaseYear
+          quantity
+        }
+        inventoryItems {
+          id
+          isActive
+          name
+          price
+          purchaseYear
+          quantity
+        }
+        documents {
+          id
+          title
+          fileName
+          fileType
+          filePath
+          description
+        }
+      }
+    }
+  }
+`;
 export {
   GET_BUSINESS_STATS,
+  GET_BUSINESS,
   GET_BUSINESS_STATS_GRAPH,
   GET_BUSINESS_PRICE_TIER,
   GET_BUSINESS_REVENUE_TIER,
