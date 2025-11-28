@@ -227,6 +227,7 @@ const RolePermissionTable = () => {
                     value={selectedStatus}
                     onChange={handleStatusChange}
                     allowClear
+                    showKey
                   />
                 </Flex>
               </Col>
