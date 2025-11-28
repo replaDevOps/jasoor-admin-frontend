@@ -355,18 +355,18 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
                   <MySelect
                     withoutForm
                     options={districts}
-                    value={selectedDistrict}
                     onChange={handleDistrictClick}
                     placeholder={t("Region")}
                     allowClear
+                    showKey
                   />
                   <MySelect
                     withoutForm
                     options={availableCities}
-                    value={selectedCity}
                     onChange={handleCityClick}
                     placeholder={t("City")}
                     allowClear
+                    showKey
                     disabled={!selectedDistrict}
                   />
                   <MySelect
@@ -375,6 +375,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
                     onChange={(e) => setSelectedCategory(e)}
                     placeholder={t("Type")}
                     allowClear
+                    showKey
                   />
                   <MySelect
                     withoutForm
@@ -382,6 +383,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
                     onChange={(e) => setSelectedStatus(e)}
                     placeholder={t("Status")}
                     allowClear
+                    showKey
                   />
                 </Flex>
               </Col>
