@@ -161,9 +161,9 @@ const PushNotificationTable = ({
                   name="status"
                   placeholder={t("Status")}
                   options={pushstatusItem}
-                  value={selectedStatus}
                   onChange={handleStatusChange}
                   allowClear
+                  showKey
                 />
               </Flex>
             </Col>
