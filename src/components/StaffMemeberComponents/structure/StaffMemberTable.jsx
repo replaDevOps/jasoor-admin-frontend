@@ -296,6 +296,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                     value={selectedRole}
                     onChange={handleRoleChange}
                     allowClear
+                    showKey
                   />
                   <MySelect
                     withoutForm
@@ -305,6 +306,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
                     value={selectedStatus}
                     onChange={handleStatusChange}
                     allowClear
+                    showKey
                   />
                 </Flex>
               </Col>

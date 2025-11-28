@@ -115,11 +115,11 @@ const ContactRequestTable = ({ setVisible, setSendView, setViewItem }) => {
                   <MySelect
                     withoutForm
                     name="status"
-                    value={selectedStatus}
                     placeholder={t("Status")}
                     options={statusItems}
                     onChange={handleStatusChange}
                     allowClear
+                    showKey
                   />
                 </Flex>
               </Col>
