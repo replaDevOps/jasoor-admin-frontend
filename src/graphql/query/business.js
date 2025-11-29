@@ -247,8 +247,11 @@ const GET_FINANCE_COUNT = gql`
 const GET_FINANCE_GRAPH = gql`
   query GetRenenueGraph($year: Int) {
     getRenenueGraph(year: $year) {
-      month
-      revenue
+      graphData {
+        month
+        revenue
+      }
+      totalRevenue
     }
   }
 `;

@@ -3,7 +3,7 @@ import { Card, Flex, Typography, Dropdown, Button, Image } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import ReactApexChart from "react-apexcharts";
 import { yearOp } from "../../../shared";
-import { GET_FINANCE_GRAPH, GET_FINANCE_COUNT } from "../../../graphql/query";
+import { GET_FINANCE_GRAPH } from "../../../graphql/query";
 import { useQuery } from "@apollo/client";
 import { ModuleTopHeading } from "../../PageComponents";
 import { t } from "i18next";
@@ -12,16 +12,12 @@ const { Title } = Typography;
 
 const FinanceAreaChart = () => {
   const [selectedStatus, setSelectedStatus] = useState("2025");
-  const { data: count } = useQuery(GET_FINANCE_COUNT, {
-    fetchPolicy: "cache-and-network",
-  });
-  const total = count?.getFinanceCount?.totalPrice;
 
   const { data } = useQuery(GET_FINANCE_GRAPH, {
     variables: { year: Number(selectedStatus) },
     fetchPolicy: "cache-and-network",
   });
-
+  console.log("Finance graph data:", data);
   const handleStatusClick = ({ key }) => {
     const selectedItem = yearOp.find((item) => item.key === key);
     if (selectedItem) {
@@ -34,7 +30,7 @@ const FinanceAreaChart = () => {
       {
         name: "Revenue",
         data:
-          data?.getRenenueGraph?.map((item) =>
+          data?.getRenenueGraph?.graphData?.map((item) =>
             Number(item.revenue.toFixed(2))
           ) || Array(12).fill(0),
       },
@@ -103,7 +99,7 @@ const FinanceAreaChart = () => {
               preview={false}
             />
             <Title level={4} className="fw-600 text-black m-0">
-              {total}
+              {data?.getRenenueGraph?.totalRevenue}
             </Title>
           </Flex>
         </Flex>
