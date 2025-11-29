@@ -11,14 +11,11 @@ const ListingRevenueBar = () => {
 
   // Prepare chart series and categories dynamically
   const counts = data?.getBusinessByRevenueTier.map((item) => item.count) || [];
-  const categories =
-    data?.getBusinessByRevenueTier.map((item) => item.priceTier) || [];
-  // Optionally calculate dynamic Y-axis max
-  const maxCount = Math.max(...counts, 10); // fallback to 10 if all zero
-  const yAxisMax = Math.ceil(maxCount / 10) * 10; // round up to nearest 10 for nice scale
 
+  const maxCount = Math.max(...counts, 10);
+  const yAxisMax = Math.ceil(maxCount / 10) * 10;
   const chartData = {
-    series: [{ name: t("Business Revenue"), data: counts }],
+    series: [{ name: t("Listings"), data: counts }],
     options: {
       chart: { type: "bar", toolbar: { show: false } },
       plotOptions: {
@@ -28,7 +25,7 @@ const ListingRevenueBar = () => {
       stroke: { curve: "smooth", width: 2 },
       xaxis: {
         categories: [
-          " (0-50k)",
+          "(0-50k)",
           "SAR (50k-100k)",
           "SAR (100k-250k)",
           "SAR (250k-500k)",

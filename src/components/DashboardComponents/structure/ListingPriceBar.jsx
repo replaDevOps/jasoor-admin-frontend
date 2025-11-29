@@ -17,7 +17,7 @@ const ListingPriceBar = () => {
   const yAxisMax = Math.ceil(maxCount / 10) * 10; // round up to nearest 10 for nice scale
 
   const chartData = {
-    series: [{ name: t("Business Price"), data: counts }],
+    series: [{ name: t("Listings"), data: counts }],
     options: {
       plotOptions: {
         bar: { columnWidth: "60%", dataLabels: { position: "top" } },
@@ -27,11 +27,11 @@ const ListingPriceBar = () => {
       stroke: { curve: "smooth", width: 2 },
       xaxis: {
         categories: [
-          "SAR (0-50k)",
-          "SAR (50k-100k)",
-          "SAR (100k-250k)",
-          "SAR (250k-500k)",
-          "SAR (500k+)",
+          "(0-50k)",
+          "(50k-100k)",
+          "(100k-250k)",
+          "(250k-500k)",
+          "(500k+)",
         ],
         labels: {
           style: { colors: "#000", fontSize: "11px" },
