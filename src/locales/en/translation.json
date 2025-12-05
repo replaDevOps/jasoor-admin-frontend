@@ -709,5 +709,20 @@
   "Accept": "Accept",
   "Add a New Article": "Add a New Article",
   "This action cannot be undone. Are you sure you want to delete this article?": "This action cannot be undone. Are you sure you want to delete this article?",
-  "Select Date & Time": "Select Date & Time"
+  "Select Date & Time": "Select Date & Time",
+  "OTP has been sent to your email address.": "OTP has been sent to your email address.",
+  "Failed to send OTP. Please try again.": "Failed to send OTP. Please try again.",
+  "OTP verified successfully. You may now reset your password.": "OTP verified successfully. You may now reset your password.",
+  "Invalid or expired OTP. Please try again.": "Invalid or expired OTP. Please try again.",
+  "Password has been reset successfully.": "Password has been reset successfully.",
+  "Reset token has expired. Please start over.": "Reset token has expired. Please start over.",
+  "Failed to reset password. Please try again.": "Failed to reset password. Please try again.",
+  "Network error. Please check your connection.": "Network error. Please check your connection.",
+  "An error occurred. Please try again.": "An error occurred. Please try again.",
+  "A new OTP has been sent to your email.": "A new OTP has been sent to your email.",
+  "Failed to resend OTP. Please try again.": "Failed to resend OTP. Please try again.",
+  "Send OTP": "Send OTP",
+  "Verify OTP": "Verify OTP",
+  "Reset Password": "Reset Password",
+  "Enter the 6 digit OTP code sent to": "Enter the 6 digit OTP code sent to"
 }

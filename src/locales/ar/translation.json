@@ -709,5 +709,20 @@
   "Accept": "يقبل",
   "Add a New Article": "أضف مقالة جديدة",
   "This action cannot be undone. Are you sure you want to delete this article?": "لا يمكن عكس هذا الإجراء. هل أنت متأكد من رغبتك في حذف هذه المقالة؟",
-  "Select Date & Time": "حدد التاريخ والوقت"
+  "Select Date & Time": "حدد التاريخ والوقت",
+  "OTP has been sent to your email address.": "تم إرسال رمز OTP إلى عنوان بريدك الإلكتروني.",
+  "Failed to send OTP. Please try again.": "فشل إرسال رمز OTP. يرجى المحاولة مرة أخرى.",
+  "OTP verified successfully. You may now reset your password.": "تم التحقق من رمز OTP بنجاح. يمكنك الآن إعادة تعيين كلمة المرور.",
+  "Invalid or expired OTP. Please try again.": "رمز OTP غير صالح أو منتهي الصلاحية. يرجى المحاولة مرة أخرى.",
+  "Password has been reset successfully.": "تم إعادة تعيين كلمة المرور بنجاح.",
+  "Reset token has expired. Please start over.": "انتهت صلاحية رمز إعادة التعيين. يرجى البدء من جديد.",
+  "Failed to reset password. Please try again.": "فشل إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى.",
+  "Network error. Please check your connection.": "خطأ في الشبكة. يرجى التحقق من اتصالك.",
+  "An error occurred. Please try again.": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+  "A new OTP has been sent to your email.": "تم إرسال رمز OTP جديد إلى بريدك الإلكتروني.",
+  "Failed to resend OTP. Please try again.": "فشل إعادة إرسال رمز OTP. يرجى المحاولة مرة أخرى.",
+  "Send OTP": "إرسال OTP",
+  "Verify OTP": "التحقق من OTP",
+  "Reset Password": "إعادة تعيين كلمة المرور",
+  "Enter the 6 digit OTP code sent to": "أدخل رمز OTP المكون من 6 أرقام المرسل إلى"
 }

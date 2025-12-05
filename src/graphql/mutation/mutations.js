@@ -278,6 +278,34 @@ const DELETE_CAMPAIGN = gql`
   }
 `;
 
+const REQUEST_PASSWORD_RESET = gql`
+  mutation RequestPasswordReset($email: String!) {
+    requestPasswordReset(email: $email) {
+      success
+      message
+    }
+  }
+`;
+
+const VERIFY_PASSWORD_RESET_OTP = gql`
+  mutation VerifyPasswordResetOTP($email: String!, $otp: String!) {
+    verifyPasswordResetOTP(email: $email, otp: $otp) {
+      success
+      message
+      resetToken
+    }
+  }
+`;
+
+const RESET_PASSWORD_WITH_TOKEN = gql`
+  mutation ResetPasswordWithToken($resetToken: String!, $newPassword: String!) {
+    resetPasswordWithToken(resetToken: $resetToken, newPassword: $newPassword) {
+      success
+      message
+    }
+  }
+`;
+
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -316,4 +344,7 @@ export {
   DELETE_TERMS,
   DELETE_USER,
   DELETE_CAMPAIGN,
+  REQUEST_PASSWORD_RESET,
+  VERIFY_PASSWORD_RESET_OTP,
+  RESET_PASSWORD_WITH_TOKEN,
 };
