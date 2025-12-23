@@ -10,6 +10,7 @@ import {
   Modal,
   Input,
   Image,
+  message,
 } from "antd";
 import { NavLink } from "react-router-dom";
 import { MySelect, SearchInput } from "../../Forms";
@@ -22,6 +23,7 @@ import {
   CREATE_OFFER,
 } from "../../../graphql/mutation";
 import { GETADMINSCHEDULEMEETINGS } from "../../../graphql/query/meeting";
+import { IS_BUSINESS_IN_DEAL_PROCESS } from "../../../graphql/query/business";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { t } from "i18next";
 
@@ -58,6 +60,7 @@ function calculateCommission(price) {
 }
 
 const ScheduleMeetingTable = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -72,6 +75,11 @@ const ScheduleMeetingTable = () => {
   );
   const [updateOffer, { loading: onUpdating }] = useMutation(UPDATE_OFFER);
   const [createOffer] = useMutation(CREATE_OFFER);
+  const [openDropdownRowId, setOpenDropdownRowId] = useState(null);
+  const [disabledActionBusinessIds, setDisabledActionBusinessIds] = useState(
+    new Set()
+  );
+
   const schedulemeetingColumn = (setVisible) => [
     {
       title: t("Business Title"),
@@ -178,64 +186,103 @@ const ScheduleMeetingTable = () => {
           menu={{
             items: [
               {
-                label: (
-                  <NavLink
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setVisible(true);
-                      setSelectedOffer({
-                        id: row.offerId,
-                        price: row.offerPrice,
-                        commission: row.offerCommission,
-                        meetingId: row.key,
-                        businessId: row.businessId,
-                      });
-                    }}
-                  >
-                    {t("Open Deal")}
-                  </NavLink>
-                ),
+                label: t("Open Deal"),
                 key: "1",
+                disabled: disabledActionBusinessIds.has(row.businessId),
+                onClick: () => {
+                  if (disabledActionBusinessIds.has(row.businessId)) {
+                    messageApi.warning(
+                      t("Deal already opened for this business.")
+                    );
+                    return;
+                  }
+                  setVisible(true);
+                  setSelectedOffer({
+                    id: row.offerId,
+                    price: row.offerPrice,
+                    commission: row.offerCommission,
+                    meetingId: row.key,
+                    businessId: row.businessId,
+                  });
+                },
               },
               {
-                label: (
-                  <NavLink
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      // No-op: previously used a local delete state which is now removed
-                      try {
-                        await updateMeeting({
-                          variables: {
-                            input: {
-                              id: row.key,
-                              status: "HELD",
-                            },
-                          },
-                        });
-                        await fetchScheduledMeetings({
-                          variables: {
-                            limit: pageSize,
-                            offset: (current - 1) * pageSize,
-                            ...filter,
-                          },
-                        });
-                      } catch (err) {
-                        console.error(err);
-                      }
-                    }}
-                  >
-                    {t("Schedule New Meeting")}
-                  </NavLink>
-                ),
+                label: t("Schedule New Meeting"),
                 key: "2",
+                disabled: disabledActionBusinessIds.has(row.businessId),
+                onClick: async () => {
+                  if (disabledActionBusinessIds.has(row.businessId)) {
+                    messageApi.warning(
+                      t("Deal already opened for this business.")
+                    );
+                    return;
+                  }
+                  try {
+                    await updateMeeting({
+                      variables: {
+                        input: {
+                          id: row.key,
+                          status: "HELD",
+                        },
+                      },
+                    });
+                    await fetchScheduledMeetings({
+                      variables: {
+                        limit: pageSize,
+                        offset: (current - 1) * pageSize,
+                        ...filter,
+                      },
+                    });
+                  } catch (err) {
+                    console.error(err);
+                  }
+                },
               },
             ],
           }}
           trigger={["click"]}
+          open={openDropdownRowId === row.key}
+          onOpenChange={async (nextOpen) => {
+            if (!nextOpen) {
+              setOpenDropdownRowId(null);
+              return;
+            }
+            if (disabledActionBusinessIds.has(row.businessId)) {
+              messageApi.warning(t("Deal already opened for this business."));
+              setOpenDropdownRowId(row.key);
+              return;
+            }
+            try {
+              const { data: dealData } = await checkBusinessInDealProcess({
+                variables: { isBusinessInDealProcessId: row.businessId },
+              });
+              const isInDeal = !!dealData?.isBusinessInDealProcess;
+              if (isInDeal) {
+                setDisabledActionBusinessIds((prev) => {
+                  const next = new Set(prev);
+                  next.add(row.businessId);
+                  return next;
+                });
+                messageApi.warning(t("Deal already opened for this business."));
+                setOpenDropdownRowId(row.key);
+              } else {
+                setOpenDropdownRowId(row.key);
+              }
+            } catch (err) {
+              console.error(err);
+              messageApi.error(t("Unable to check deal status."));
+              setOpenDropdownRowId(null);
+            }
+          }}
         >
           <Button
             aria-labelledby="action button"
             className="bg-transparent border0 p-0"
+            style={
+              disabledActionBusinessIds.has(row.businessId)
+                ? { opacity: 0.5, cursor: "not-allowed" }
+                : {}
+            }
           >
             <img
               src="/assets/icons/dots.png"
@@ -251,6 +298,12 @@ const ScheduleMeetingTable = () => {
   // Apollo lazy query
   const [fetchScheduledMeetings, { data, loading }] = useLazyQuery(
     GETADMINSCHEDULEMEETINGS,
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+  const [checkBusinessInDealProcess] = useLazyQuery(
+    IS_BUSINESS_IN_DEAL_PROCESS,
     {
       fetchPolicy: "network-only",
     }
@@ -428,6 +481,7 @@ const ScheduleMeetingTable = () => {
 
   return (
     <>
+      {contextHolder}
       <Flex vertical gap={20}>
         <Form form={form} layout="vertical">
           <Row gutter={[16, 16]} align={"middle"} justify={"space-between"}>

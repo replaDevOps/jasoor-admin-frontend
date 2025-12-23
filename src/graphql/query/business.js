@@ -11,6 +11,11 @@ const GET_BUSINESS_STATS = gql`
     }
   }
 `;
+const IS_BUSINESS_IN_DEAL_PROCESS = gql`
+  query IsBusinessInDealProcess($isBusinessInDealProcessId: ID!) {
+    isBusinessInDealProcess(id: $isBusinessInDealProcessId)
+  }
+`;
 const GET_BUSINESS_STATS_GRAPH = gql`
   query GetBusinessStatsGraph($year: Int) {
     getBusinessStatsGraph(year: $year) {
@@ -372,6 +377,7 @@ const GET_BUSINESS = gql`
 `;
 export {
   GET_BUSINESS_STATS,
+  IS_BUSINESS_IN_DEAL_PROCESS,
   GET_BUSINESS,
   GET_BUSINESS_STATS_GRAPH,
   GET_BUSINESS_PRICE_TIER,
