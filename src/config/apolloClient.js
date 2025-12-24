@@ -3,13 +3,10 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
-import { getAccessToken, clearAuthTokens } from "../shared/tokenManager";
+import { getAccessToken, clearAuthTokens, shouldRefreshToken, isAuthenticated } from "../shared/tokenManager";
 import { refreshAccessToken } from "../shared/tokenRefreshService";
 
 const API_URL = "https://verify.jusoor-sa.co/graphql";
-
-let isRefreshing = false;
-let pendingRequests = [];
 
 // HTTP Link
 const httpLink = createHttpLink({
@@ -17,8 +14,14 @@ const httpLink = createHttpLink({
   credentials: "include",
 });
 
-// Auth Link (Attaches token)
-const authLink = setContext((_, { headers }) => {
+// Auth Link (Attaches token and proactively refreshes if needed)
+const authLink = setContext(async (_, { headers }) => {
+  // Check if token needs refresh BEFORE making the request
+  if (isAuthenticated() && shouldRefreshToken()) {
+    console.log("⚠️ Token is about to expire, refreshing proactively...");
+    await refreshAccessToken();
+  }
+  
   const token = getAccessToken();
   return {
     headers: {
@@ -67,56 +70,32 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
         err.message?.includes("Invalid token or authentication failed") ||
         err.message?.includes("Unauthorized") ||
         err.message?.includes("jwt expired") ||
+        err.message?.includes("Authentication required") ||
         err.extensions?.code === "UNAUTHENTICATED"
       ) {
         console.warn("⚠️ Authentication error detected - attempting token refresh...");
         
-        // Try to refresh the token
-        if (!isRefreshing) {
-          isRefreshing = true;
-          
-          return new Promise((resolve) => {
-            refreshAccessToken()
-              .then((newToken) => {
-                isRefreshing = false;
+        // Try to refresh the token and retry the request
+        return new Promise((resolve) => {
+          refreshAccessToken()
+            .then((newToken) => {
+              if (newToken) {
+                console.log("✅ Token refreshed, retrying request...");
                 
-                if (newToken) {
-                  console.log("✅ Token refreshed, retrying request...");
-                  
-                  // Update the operation context with new token
-                  const oldHeaders = operation.getContext().headers;
-                  operation.setContext({
-                    headers: {
-                      ...oldHeaders,
-                      authorization: `Bearer ${newToken}`,
-                    },
-                  });
-                  
-                  // Retry all pending requests
-                  pendingRequests.forEach(callback => callback());
-                  pendingRequests = [];
-                  
-                  // Retry the failed operation
-                  resolve(forward(operation));
-                } else {
-                  console.error("❌ Token refresh failed - logging out");
-                  // Clear tokens and redirect to login
-                  clearAuthTokens();
-                  pendingRequests = [];
-                  
-                  // Trigger logout event
-                  window.dispatchEvent(new CustomEvent('forceLogout'));
-                  
-                  if (window.location.pathname !== "/login" && window.location.pathname !== "/") {
-                    window.location.href = "/";
-                  }
-                  resolve(forward(operation));
-                }
-              })
-              .catch((error) => {
-                console.error("❌ Token refresh error:", error);
-                isRefreshing = false;
-                pendingRequests = [];
+                // Update the operation context with new token
+                const oldHeaders = operation.getContext().headers;
+                operation.setContext({
+                  headers: {
+                    ...oldHeaders,
+                    authorization: `Bearer ${newToken}`,
+                  },
+                });
+                
+                // Retry the failed operation
+                resolve(forward(operation));
+              } else {
+                console.error("❌ Token refresh failed - logging out");
+                // Clear tokens and redirect to login
                 clearAuthTokens();
                 
                 // Trigger logout event
@@ -126,16 +105,21 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
                   window.location.href = "/";
                 }
                 resolve(forward(operation));
-              });
-          });
-        } else {
-          // If already refreshing, queue this request
-          return new Promise((resolve) => {
-            pendingRequests.push(() => {
+              }
+            })
+            .catch((error) => {
+              console.error("❌ Token refresh error:", error);
+              clearAuthTokens();
+              
+              // Trigger logout event
+              window.dispatchEvent(new CustomEvent('forceLogout'));
+              
+              if (window.location.pathname !== "/login" && window.location.pathname !== "/") {
+                window.location.href = "/";
+              }
               resolve(forward(operation));
             });
-          });
-        }
+        });
       }
     }
   }

@@ -4,7 +4,6 @@ import {
   Dropdown,
   Flex,
   Form,
-  Image,
   Row,
   Table,
   Typography,

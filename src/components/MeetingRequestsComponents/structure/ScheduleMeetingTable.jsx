@@ -9,7 +9,6 @@ import {
   Typography,
   Modal,
   Input,
-  Image,
   message,
 } from "antd";
 import { NavLink } from "react-router-dom";
