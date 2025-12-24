@@ -1,4 +1,3 @@
-import { REFRESH_TOKEN } from "../graphql/mutation/login";
 import {
   getRefreshToken,
   setAuthTokens,
@@ -7,17 +6,28 @@ import {
   isAuthenticated,
   isRefreshTokenExpired,
 } from "./tokenManager";
+import { REFRESH_TOKEN } from "../graphql/mutation/login";
 
 /**
  * Token Refresh Service
  * Handles automatic token refresh with retry logic and error handling
- * Uses fetch API to avoid circular dependency with Apollo Client
+ * Uses dynamic import of Apollo Client to avoid circular dependency
  */
-
-const API_URL = "https://verify.jusoor-sa.co/graphql";
 
 let isRefreshing = false;
 let refreshSubscribers = [];
+let cachedClient = null;
+
+/**
+ * Get Apollo Client lazily to avoid circular dependency
+ */
+const getClient = async () => {
+  if (!cachedClient) {
+    const { client } = await import("../config/apolloClient");
+    cachedClient = client;
+  }
+  return cachedClient;
+};
 
 /**
  * Add callback to be executed after token refresh
@@ -38,7 +48,7 @@ const onTokenRefreshed = (token) => {
 
 /**
  * Refresh the access token using the refresh token
- * Uses fetch API instead of Apollo Client to avoid circular dependency
+ * Uses dynamic import of Apollo Client to avoid circular dependency
  * @returns {Promise<string|null>} New access token or null on failure
  */
 export const refreshAccessToken = async () => {
@@ -65,42 +75,25 @@ export const refreshAccessToken = async () => {
   console.log("🔄 Attempting to refresh access token...");
 
   try {
-    // Use fetch API instead of Apollo Client to avoid circular dependency
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    // Get Apollo Client lazily to avoid circular dependency
+    const client = await getClient();
+    
+    const { data } = await client.mutate({
+      mutation: REFRESH_TOKEN,
+      variables: { token: refreshToken },
+      fetchPolicy: "no-cache",
+      context: {
+        // Skip the authLink for this request to avoid infinite loop
+        skipAuth: true,
       },
-      credentials: "include",
-      body: JSON.stringify({
-        query: `
-          mutation RefreshToken($token: String!) {
-            refreshToken(token: $token) {
-              token
-              refreshToken
-              user {
-                id
-                status
-              }
-            }
-          }
-        `,
-        variables: { token: refreshToken },
-      }),
     });
 
-    const result = await response.json();
-
-    if (result.errors) {
-      throw new Error(result.errors[0]?.message || "Token refresh failed");
-    }
-
-    if (result.data?.refreshToken?.token) {
+    if (data?.refreshToken?.token) {
       const {
         token: newAccessToken,
         refreshToken: newRefreshToken,
         user,
-      } = result.data.refreshToken;
+      } = data.refreshToken;
 
       // Store new tokens
       setAuthTokens(newAccessToken, newRefreshToken, user);
@@ -122,7 +115,8 @@ export const refreshAccessToken = async () => {
       error.message?.includes("Token is invalid or expired") ||
       error.message?.includes("jwt expired") ||
       error.message?.includes("refresh token") ||
-      error.message?.includes("expired");
+      error.message?.includes("expired") ||
+      error.graphQLErrors?.[0]?.message?.includes("expired");
 
     if (isTokenExpired) {
       console.error("🚨 Refresh token has expired - user must login again");

@@ -15,7 +15,6 @@ import {
   shouldRefreshToken,
   isAuthenticated,
 } from "../shared/tokenManager";
-import { refreshAccessToken } from "../shared/tokenRefreshService";
 
 const API_URL = "https://verify.jusoor-sa.co/graphql";
 
@@ -26,10 +25,16 @@ const httpLink = createHttpLink({
 });
 
 // Auth Link (Attaches token and proactively refreshes if needed)
-const authLink = setContext(async (_, { headers }) => {
+const authLink = setContext(async (operation, { headers, skipAuth }) => {
+  // Skip auth for refresh token mutation to avoid infinite loop
+  if (skipAuth) {
+    return { headers };
+  }
+  
   // Check if token needs refresh BEFORE making the request
   if (isAuthenticated() && shouldRefreshToken()) {
     console.log("⚠️ Token is about to expire, refreshing proactively...");
+    const { refreshAccessToken } = await import("../shared/tokenRefreshService");
     await refreshAccessToken();
   }
 
@@ -89,9 +94,10 @@ const errorLink = onError(
             "⚠️ Authentication error detected - attempting token refresh..."
           );
 
-          // Try to refresh the token and retry the request
+          // Try to refresh the token and retry the request using dynamic import
           return new Promise((resolve) => {
-            refreshAccessToken()
+            import("../shared/tokenRefreshService")
+              .then(({ refreshAccessToken }) => refreshAccessToken())
               .then((newToken) => {
                 if (newToken) {
                   console.log("✅ Token refreshed, retrying request...");
