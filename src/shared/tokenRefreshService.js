@@ -77,7 +77,7 @@ export const refreshAccessToken = async () => {
   try {
     // Get Apollo Client lazily to avoid circular dependency
     const client = await getClient();
-    
+
     const { data } = await client.mutate({
       mutation: REFRESH_TOKEN,
       variables: { token: refreshToken },

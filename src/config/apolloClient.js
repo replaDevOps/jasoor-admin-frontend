@@ -30,11 +30,13 @@ const authLink = setContext(async (operation, { headers, skipAuth }) => {
   if (skipAuth) {
     return { headers };
   }
-  
+
   // Check if token needs refresh BEFORE making the request
   if (isAuthenticated() && shouldRefreshToken()) {
     console.log("⚠️ Token is about to expire, refreshing proactively...");
-    const { refreshAccessToken } = await import("../shared/tokenRefreshService");
+    const { refreshAccessToken } = await import(
+      "../shared/tokenRefreshService"
+    );
     await refreshAccessToken();
   }
 
