@@ -1,44 +1,59 @@
-import { useState, useEffect, useRef } from 'react';
-import { Flex, Typography } from 'antd';
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+import { useState, useEffect, useRef } from "react";
+import { Flex, Typography } from "antd";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 // import DOMPurify from 'dompurify'; // optional: enable if you need sanitization
 
 const { Title } = Typography;
 
 const toolbarOptions = [
-  ['bold', 'italic', 'underline', 'strike'],
-  ['blockquote'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  [{ script: 'sub' }, { script: 'super' }],
-  [{ indent: '-1' }, { indent: '+1' }],
-  [{ direction: 'rtl' }],
+  ["bold", "italic", "underline", "strike"],
+  ["blockquote"],
+  [{ list: "ordered" }, { list: "bullet" }],
+  [{ script: "sub" }, { script: "super" }],
+  [{ indent: "-1" }, { indent: "+1" }],
+  [{ direction: "rtl" }],
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
   [{ color: [] }, { background: [] }],
   [{ align: [] }],
-  ['clean']
+  ["clean"],
 ];
 
 const formats = [
-  'header', 'bold', 'italic', 'underline', 'strike', 'blockquote',
-  'list', 'indent', 'script',
-  'direction', 'color', 'background', 'align'
+  "header",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "indent",
+  "script",
+  "direction",
+  "color",
+  "background",
+  "align",
 ];
 
-const EditorDescription = ({ descriptionData, onChange, label, onEditorInit }) => {
-  const lang = localStorage.getItem('lang') || 'en';
-  const isArabic = lang.toLowerCase().startsWith('ar');
+const EditorDescription = ({
+  descriptionData,
+  onChange,
+  label,
+  onEditorInit,
+}) => {
+  const lang = localStorage.getItem("lang") || "en";
+  const isArabic = lang.toLowerCase().startsWith("ar");
 
   // value holds the HTML we pass to ReactQuill as controlled value
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const quillRef = useRef(null);
   const isInitializedRef = useRef(false);
-  const lastDescriptionDataRef = useRef('');
+  const lastDescriptionDataRef = useRef("");
 
   // Keep editor instance available and call onEditorInit
   useEffect(() => {
     const editor = quillRef.current?.getEditor?.();
-    if (editor && typeof onEditorInit === 'function') {
+    if (editor && typeof onEditorInit === "function") {
       onEditorInit(editor);
     }
   }, [onEditorInit]);
@@ -46,13 +61,13 @@ const EditorDescription = ({ descriptionData, onChange, label, onEditorInit }) =
   // Insert backend/html data into editor ONLY when descriptionData changes from external source
   // (not from user typing). This prevents infinite loops.
   useEffect(() => {
-    const html = descriptionData ?? '';
-    
+    const html = descriptionData ?? "";
+
     // Skip if this is the same data we already processed or if it came from user input
     if (isInitializedRef.current && lastDescriptionDataRef.current === html) {
       return;
     }
-    
+
     lastDescriptionDataRef.current = html;
     const editor = quillRef.current?.getEditor?.();
 
@@ -61,7 +76,7 @@ const EditorDescription = ({ descriptionData, onChange, label, onEditorInit }) =
       if (editor && isInitializedRef.current) {
         editor.setContents([]);
       }
-      setValue('');
+      setValue("");
       isInitializedRef.current = true;
       return;
     }
@@ -100,8 +115,8 @@ const EditorDescription = ({ descriptionData, onChange, label, onEditorInit }) =
         modules={{ toolbar: toolbarOptions }}
         formats={formats}
         style={{
-          direction: isArabic ? 'rtl' : 'ltr',
-          textAlign: isArabic ? 'right' : 'left'
+          direction: isArabic ? "rtl" : "ltr",
+          textAlign: isArabic ? "right" : "left",
         }}
       />
     </Flex>
