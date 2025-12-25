@@ -19,22 +19,6 @@ const toolbarOptions = [
   ["clean"],
 ];
 
-const formats = [
-  "header",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "blockquote",
-  "list",
-  "indent",
-  "script",
-  "direction",
-  "color",
-  "background",
-  "align",
-];
-
 const EditorDescription = ({
   descriptionData,
   onChange,
@@ -113,7 +97,6 @@ const EditorDescription = ({
         value={value}
         onChange={handleChange}
         modules={{ toolbar: toolbarOptions }}
-        formats={formats}
         style={{
           direction: isArabic ? "rtl" : "ltr",
           textAlign: isArabic ? "right" : "left",
