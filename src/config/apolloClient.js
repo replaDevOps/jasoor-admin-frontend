@@ -41,7 +41,6 @@ const authLink = setContext(async (operation, { headers, skipAuth }) => {
   }
 
   const token = getAccessToken();
-  console.log("🔑 Attaching access token to request", token);
   return {
     headers: {
       ...headers,
