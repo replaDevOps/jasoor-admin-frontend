@@ -4,7 +4,6 @@ import { EditorDescription, ModuleTopHeading } from '../../components';
 import { useMutation,useQuery } from "@apollo/client";
 import { CREATE_TERMS,UPDATE_TERMS } from '../../graphql/mutation/mutations';
 import { GETDSATERMS } from '../../graphql/query/queries';
-import 'react-quill/dist/quill.snow.css';
 import { useTranslation } from "react-i18next";
 import { TAGS } from "../../data/tags";
 

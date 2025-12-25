@@ -21,7 +21,7 @@ const toolbarOptions = [
 
 const formats = [
   'header', 'bold', 'italic', 'underline', 'strike', 'blockquote',
-  'list', 'bullet', 'indent', 'script',
+  'list', 'indent', 'script',
   'direction', 'color', 'background', 'align'
 ];
 
@@ -32,6 +32,8 @@ const EditorDescription = ({ descriptionData, onChange, label, onEditorInit }) =
   // value holds the HTML we pass to ReactQuill as controlled value
   const [value, setValue] = useState('');
   const quillRef = useRef(null);
+  const isInitializedRef = useRef(false);
+  const lastDescriptionDataRef = useRef('');
 
   // Keep editor instance available and call onEditorInit
   useEffect(() => {
@@ -41,42 +43,45 @@ const EditorDescription = ({ descriptionData, onChange, label, onEditorInit }) =
     }
   }, [onEditorInit]);
 
-  // Insert backend/html data into editor when descriptionData arrives or changes.
-  // Use dangerouslyPasteHTML if editor exists (prevents Quill's default empty doc from winning).
+  // Insert backend/html data into editor ONLY when descriptionData changes from external source
+  // (not from user typing). This prevents infinite loops.
   useEffect(() => {
     const html = descriptionData ?? '';
+    
+    // Skip if this is the same data we already processed or if it came from user input
+    if (isInitializedRef.current && lastDescriptionDataRef.current === html) {
+      return;
+    }
+    
+    lastDescriptionDataRef.current = html;
     const editor = quillRef.current?.getEditor?.();
 
     if (!html) {
       // clear editor
-      if (editor) {
-        editor.setContents([]);            // clears content
-        setValue('');
-      } else {
-        setValue('');
+      if (editor && isInitializedRef.current) {
+        editor.setContents([]);
       }
+      setValue('');
+      isInitializedRef.current = true;
       return;
     }
 
     if (editor) {
       try {
-        // optional sanitization:
-        // const safeHtml = DOMPurify.sanitize(html);
-        // editor.clipboard.dangerouslyPasteHTML(safeHtml);
         editor.clipboard.dangerouslyPasteHTML(html);
         setValue(html);
       } catch (err) {
-        // fallback: set controlled value if paste fails
         setValue(html);
       }
     } else {
-      // editor not ready yet — set value so when it mounts it uses this HTML
       setValue(html);
     }
+    isInitializedRef.current = true;
   }, [descriptionData]);
 
   const handleChange = (html) => {
     setValue(html);
+    lastDescriptionDataRef.current = html; // Track that this change came from user
     if (onChange) onChange(html);
   };
 

@@ -21,7 +21,6 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
   // Get current language
   const lang = localStorage.getItem("lang") || i18n.language || "en";
   const isArabic = lang.toLowerCase() === "ar";
-  console.log("Current Language:", lang, isArabic);
   const [loadFaqs, { data, loading }] = useLazyQuery(GETFAQ, {
     fetchPolicy: "network-only",
   });
