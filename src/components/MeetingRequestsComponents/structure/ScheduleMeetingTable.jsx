@@ -580,7 +580,7 @@ const ScheduleMeetingTable = () => {
           </Form>
         )}
       </Modal>
-      
+
       <DeleteModal
         visible={deleteItem}
         onClose={() => setDeleteItem(false)}
