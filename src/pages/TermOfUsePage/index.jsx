@@ -20,15 +20,15 @@ const TermOfUsePage = () => {
 
   useEffect(() => {
     if (!data?.getTerms || data.getTerms.length === 0) return;
-    
+
     // First, try to find a term matching the current language
     let termToUse = data.getTerms.find((t) => t.isArabic === isArabic);
-    
+
     // If not found, check if there's a single term with both languages
     if (!termToUse && data.getTerms.length > 0) {
       termToUse = data.getTerms[0];
     }
-    
+
     if (termToUse) {
       if (isArabic && termToUse.arabicTerm) {
         setDescriptionData(termToUse.arabicTerm);
@@ -53,10 +53,10 @@ const TermOfUsePage = () => {
 
       // Check if we have any existing terms
       const allTerms = data?.getTerms || [];
-      
+
       // Find the term record - could be language-specific or shared
       let existingTerm = allTerms.find((t) => t.isArabic === isArabic);
-      
+
       // If not found by exact language match, check if there's a single shared term
       if (!existingTerm && allTerms.length === 1) {
         existingTerm = allTerms[0];
@@ -69,7 +69,7 @@ const TermOfUsePage = () => {
           ndaTerm: null,
           policy: null,
         };
-        
+
         // Add current language content
         if (isArabic) {
           updateInput.arabicTerm = descriptionData;
@@ -84,7 +84,7 @@ const TermOfUsePage = () => {
             updateInput.arabicTerm = existingTerm.arabicTerm;
           }
         }
-        
+
         await updateTerms({
           variables: {
             updateTermsId: existingTerm.id,
