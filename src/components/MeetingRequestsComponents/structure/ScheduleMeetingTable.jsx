@@ -219,7 +219,9 @@ const ScheduleMeetingTable = () => {
                     return;
                   }
                   if (row.status === "CANCELED") {
-                    messageApi.warning(t("Cannot reschedule a cancelled meeting."));
+                    messageApi.warning(
+                      t("Cannot reschedule a cancelled meeting.")
+                    );
                     return;
                   }
                   setSelectedMeetingId(row.key);
