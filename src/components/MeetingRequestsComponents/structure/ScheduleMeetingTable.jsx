@@ -242,7 +242,16 @@ const ScheduleMeetingTable = () => {
               {
                 label: t("Cancel"),
                 key: "3",
+                disabled: row.status === "HELD" || row.status === "CANCELED",
                 onClick: () => {
+                  if (row.status === "HELD") {
+                    messageApi.warning(t("Cannot cancel a held meeting."));
+                    return;
+                  }
+                  if (row.status === "CANCELED") {
+                    messageApi.warning(t("Meeting is already cancelled."));
+                    return;
+                  }
                   setSelectedMeetingId(row.key);
                   setDeleteItem(true);
                 },
