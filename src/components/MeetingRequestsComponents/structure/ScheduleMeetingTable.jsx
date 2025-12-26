@@ -15,7 +15,7 @@ import { NavLink } from "react-router-dom";
 import { MySelect, SearchInput } from "../../Forms";
 import { useState, useEffect, useMemo } from "react";
 import { meetingItems } from "../../../shared";
-import { CustomPagination, TableLoader } from "../../Ui";
+import { CustomPagination, TableLoader, DeleteModal } from "../../Ui";
 import {
   UPDATE_BUSINESS_MEETING,
   UPDATE_OFFER,
@@ -63,11 +63,13 @@ const ScheduleMeetingTable = () => {
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [visible, setVisible] = useState(false);
+  const [deleteItem, setDeleteItem] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [selectedOffer, setSelectedOffer] = useState(null);
+  const [selectedMeetingId, setSelectedMeetingId] = useState(null);
 
   const [updateMeeting, { loading: updating }] = useMutation(
     UPDATE_BUSINESS_MEETING
@@ -235,6 +237,14 @@ const ScheduleMeetingTable = () => {
                   } catch (err) {
                     console.error(err);
                   }
+                },
+              },
+              {
+                label: t("Cancel"),
+                key: "3",
+                onClick: () => {
+                  setSelectedMeetingId(row.key);
+                  setDeleteItem(true);
                 },
               },
             ],
@@ -570,6 +580,39 @@ const ScheduleMeetingTable = () => {
           </Form>
         )}
       </Modal>
+      
+      <DeleteModal
+        visible={deleteItem}
+        onClose={() => setDeleteItem(false)}
+        title="Are you sure?"
+        subtitle="This action cannot be undone. Are you sure you want to cancel this Meeting?"
+        type="danger"
+        loading={updating}
+        onConfirm={async () => {
+          try {
+            await updateMeeting({
+              variables: {
+                input: {
+                  id: selectedMeetingId,
+                  status: "CANCELED",
+                },
+              },
+            });
+            setDeleteItem(false);
+            await fetchScheduledMeetings({
+              variables: {
+                limit: pageSize,
+                offset: (current - 1) * pageSize,
+                ...filter,
+              },
+            });
+            messageApi.success(t("Meeting cancelled successfully!"));
+          } catch (err) {
+            console.error(err);
+            messageApi.error(t("Failed to cancel meeting"));
+          }
+        }}
+      />
     </>
   );
 };
