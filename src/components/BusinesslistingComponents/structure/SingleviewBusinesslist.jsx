@@ -117,7 +117,7 @@ const SingleviewBusinesslist = () => {
               {data?.businessTitle}
             </Title>
           </Flex>
-          <Button
+          {/* <Button
             aria-labelledby="edit button"
             className="bg-transparent border0 p-0"
           >
@@ -128,7 +128,7 @@ const SingleviewBusinesslist = () => {
               width={24}
               preview={false}
             />
-          </Button>
+          </Button> */}
         </Flex>
         <Flex justify="space-between" align="center" gap={5}>
           <Title level={5} className="m-0">
