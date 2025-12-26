@@ -212,7 +212,7 @@ const ScheduleMeetingTable = () => {
               {
                 label: t("Reschedule Meeting"),
                 key: "4",
-                disabled: row.status === "HELD" || row.status === "CANCELED",
+                disabled: row.status === "HELD" || row.status === "CANCELED" || row.status === "RESCHEDULED",
                 onClick: () => {
                   if (row.status === "HELD") {
                     messageApi.warning(t("Cannot reschedule a held meeting."));
@@ -221,6 +221,12 @@ const ScheduleMeetingTable = () => {
                   if (row.status === "CANCELED") {
                     messageApi.warning(
                       t("Cannot reschedule a cancelled meeting.")
+                    );
+                    return;
+                  }
+                  if (row.status === "RESCHEDULED") {
+                    messageApi.warning(
+                      t("Meeting is already rescheduled.")
                     );
                     return;
                   }
