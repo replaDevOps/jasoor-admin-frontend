@@ -16,6 +16,7 @@ import { MySelect, SearchInput } from "../../Forms";
 import { useState, useEffect, useMemo } from "react";
 import { meetingItems } from "../../../shared";
 import { CustomPagination, TableLoader, DeleteModal } from "../../Ui";
+import { RescheduleMeeting } from "../modal";
 import {
   UPDATE_BUSINESS_MEETING,
   UPDATE_OFFER,
@@ -63,6 +64,7 @@ const ScheduleMeetingTable = () => {
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [visible, setVisible] = useState(false);
+  const [rescheduleVisible, setRescheduleVisible] = useState(false);
   const [deleteItem, setDeleteItem] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
@@ -208,35 +210,20 @@ const ScheduleMeetingTable = () => {
                 },
               },
               {
-                label: t("Schedule New Meeting"),
-                key: "2",
-                disabled: disabledActionBusinessIds.has(row.businessId),
-                onClick: async () => {
-                  if (disabledActionBusinessIds.has(row.businessId)) {
-                    messageApi.warning(
-                      t("Deal already opened for this business.")
-                    );
+                label: t("Reschedule Meeting"),
+                key: "4",
+                disabled: row.status === "HELD" || row.status === "CANCELED",
+                onClick: () => {
+                  if (row.status === "HELD") {
+                    messageApi.warning(t("Cannot reschedule a held meeting."));
                     return;
                   }
-                  try {
-                    await updateMeeting({
-                      variables: {
-                        input: {
-                          id: row.key,
-                          status: "HELD",
-                        },
-                      },
-                    });
-                    await fetchScheduledMeetings({
-                      variables: {
-                        limit: pageSize,
-                        offset: (current - 1) * pageSize,
-                        ...filter,
-                      },
-                    });
-                  } catch (err) {
-                    console.error(err);
+                  if (row.status === "CANCELED") {
+                    messageApi.warning(t("Cannot reschedule a cancelled meeting."));
+                    return;
                   }
+                  setSelectedMeetingId(row.key);
+                  setRescheduleVisible(true);
                 },
               },
               {
@@ -621,6 +608,34 @@ const ScheduleMeetingTable = () => {
             messageApi.error(t("Failed to cancel meeting"));
           }
         }}
+      />
+
+      <RescheduleMeeting
+        visible={rescheduleVisible}
+        onClose={() => {
+          setRescheduleVisible(false);
+          setSelectedMeetingId(null);
+        }}
+        meetingId={selectedMeetingId}
+        updateMeeting={async (options) => {
+          try {
+            await updateMeeting(options);
+            setRescheduleVisible(false);
+            setSelectedMeetingId(null);
+            await fetchScheduledMeetings({
+              variables: {
+                limit: pageSize,
+                offset: (current - 1) * pageSize,
+                ...filter,
+              },
+            });
+            messageApi.success(t("Meeting rescheduled successfully!"));
+          } catch (err) {
+            console.error(err);
+            messageApi.error(t("Failed to reschedule meeting"));
+          }
+        }}
+        loading={updating}
       />
     </>
   );
