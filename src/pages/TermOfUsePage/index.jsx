@@ -19,16 +19,23 @@ const TermOfUsePage = () => {
   const { data } = useQuery(GETTERMSOFUSE);
 
   useEffect(() => {
-    if (!data?.getTerms) return;
-    if (isArabic) {
-      const arabicTerm = data.getTerms.find((t) => t.arabicTerm?.content);
-      if (arabicTerm) {
-        setDescriptionData(arabicTerm.arabicTerm.content);
-      }
-    } else {
-      const englishTerm = data.getTerms.find((t) => t.term?.content);
-      if (englishTerm) {
-        setDescriptionData(englishTerm.term.content);
+    if (!data?.getTerms || data.getTerms.length === 0) return;
+    
+    // First, try to find a term matching the current language
+    let termToUse = data.getTerms.find((t) => t.isArabic === isArabic);
+    
+    // If not found, check if there's a single term with both languages
+    if (!termToUse && data.getTerms.length > 0) {
+      termToUse = data.getTerms[0];
+    }
+    
+    if (termToUse) {
+      if (isArabic && termToUse.arabicTerm) {
+        setDescriptionData(termToUse.arabicTerm);
+      } else if (!isArabic && termToUse.term) {
+        setDescriptionData(termToUse.term);
+      } else {
+        setDescriptionData("");
       }
     }
   }, [data, isArabic]);
@@ -44,24 +51,44 @@ const TermOfUsePage = () => {
         return;
       }
 
-      // Find existing term based on language
-      const existingTerms = data?.getTerms?.find(
-        (t) => t.isArabic === isArabic
-      );
+      // Check if we have any existing terms
+      const allTerms = data?.getTerms || [];
+      
+      // Find the term record - could be language-specific or shared
+      let existingTerm = allTerms.find((t) => t.isArabic === isArabic);
+      
+      // If not found by exact language match, check if there's a single shared term
+      if (!existingTerm && allTerms.length === 1) {
+        existingTerm = allTerms[0];
+      }
 
-      if (existingTerms?.id) {
-        // Update existing terms
+      if (existingTerm?.id) {
+        // Update existing terms - preserve the other language content
+        const updateInput = {
+          isArabic,
+          ndaTerm: null,
+          policy: null,
+        };
+        
+        // Add current language content
+        if (isArabic) {
+          updateInput.arabicTerm = descriptionData;
+          // Preserve English content if it exists
+          if (existingTerm.term) {
+            updateInput.term = existingTerm.term;
+          }
+        } else {
+          updateInput.term = descriptionData;
+          // Preserve Arabic content if it exists
+          if (existingTerm.arabicTerm) {
+            updateInput.arabicTerm = existingTerm.arabicTerm;
+          }
+        }
+        
         await updateTerms({
           variables: {
-            updateTermsId: existingTerms.id,
-            input: {
-              ...(isArabic
-                ? { arabicTerm: { content: descriptionData } }
-                : { term: { content: descriptionData } }),
-              isArabic,
-              ndaTerm: null,
-              policy: null,
-            },
+            updateTermsId: existingTerm.id,
+            input: updateInput,
           },
           refetchQueries: [{ query: GETTERMSOFUSE }],
           awaitRefetchQueries: true,
@@ -73,8 +100,8 @@ const TermOfUsePage = () => {
           variables: {
             input: {
               ...(isArabic
-                ? { arabicTerm: { content: descriptionData } }
-                : { term: { content: descriptionData } }),
+                ? { arabicTerm: descriptionData }
+                : { term: descriptionData }),
               isArabic,
               ndaTerm: null,
               policy: null,
