@@ -75,6 +75,7 @@ const CreateBusinessList = () => {
         multiple: null,
         capitalRecovery: null,
         username: null,
+        userId: null,
         assets: [
           { name: null, price: null, purchaseYear: null, quantity: null },
         ],
@@ -127,6 +128,7 @@ const CreateBusinessList = () => {
       multiple: null,
       capitalRecovery: null,
       username: null,
+      userId: null,
       assets: [{ name: null, price: null, purchaseYear: null, quantity: null }],
       liabilities: [
         { name: null, price: null, purchaseYear: null, quantity: null },
@@ -180,6 +182,7 @@ const CreateBusinessList = () => {
         multiple: business.multiple,
         capitalRecovery: business.capitalRecovery,
         username: business.seller?.name || null,
+        userId: business.seller?.id || null,
         assets:
           business.assets?.length > 0
             ? business.assets
@@ -336,10 +339,12 @@ const CreateBusinessList = () => {
     }
 
     // eslint-disable-next-line no-unused-vars
-    const { categoryName, recoveryTime, ...rest } = businessData;
+    const { categoryName, username, userId, recoveryTime, ...rest } =
+      businessData;
     try {
       const inputData = {
         ...rest,
+        createdBy: businessData.userId,
         revenueTime: businessData.revenueTime === 1 ? "6" : "12",
         profittime: businessData.profittime === 1 ? "6" : "12",
         capitalRecovery: parseFloat(businessData.capitalRecovery),
@@ -435,7 +440,7 @@ const CreateBusinessList = () => {
           messageApi.success(t("Business updated successfully!"));
           // Navigate back to profile after 1 second
           setTimeout(() => {
-            navigate("/profiledashboard");
+            navigate("/businesslist");
           }, 1000);
         } else {
           setReviewModal(true);
@@ -461,6 +466,7 @@ const CreateBusinessList = () => {
           multiple: null,
           capitalRecovery: null,
           username: null,
+          userId: null,
           assets: [
             { name: null, price: null, purchaseYear: null, quantity: null },
           ],

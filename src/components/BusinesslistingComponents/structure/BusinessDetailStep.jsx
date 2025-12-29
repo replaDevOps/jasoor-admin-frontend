@@ -61,7 +61,13 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
 
   const handleFormChange = (_, allValues) => {
     const selected = categories.find((c) => c.name === allValues.category);
-    const id = selected?.id;
+    const categoryId = selected?.id;
+
+    // Find the selected user from customer list
+    const selectedUser = customer?.getCustomers?.find(
+      (u) => u?.id === allValues.username
+    );
+    const userName = selectedUser?.name || null;
 
     setSelectedCategory(allValues.category);
     setData((prev) => ({
@@ -69,14 +75,15 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
       isByTakbeer: isAccess,
       businessTitle: allValues.title,
       categoryName: allValues.category,
-      categoryId: id,
+      categoryId: categoryId,
       district: allValues.district,
       city: allValues.city,
       foundedDate: allValues.dob,
       numberOfEmployees: allValues.teamSize,
       description: allValues.description,
       url: allValues.url,
-      createdBy: allValues.username,
+      username: userName,
+      userId: allValues.username,
     }));
   };
 
@@ -105,7 +112,7 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
         teamSize: initialTeamSize,
         description: data.description,
         url: data.url,
-        username: data.username || null,
+        username: data.userId || null,
       });
 
       setIsInitialized(true);
@@ -168,7 +175,7 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
     if (!current.description && data.description)
       patch.description = data.description;
     if (!current.url && data.url) patch.url = data.url;
-    if (!current.username && data.username) patch.username = data.username;
+    if (!current.username && data.userId) patch.username = data.userId;
 
     if (Object.keys(patch).length > 0) form.setFieldsValue(patch);
   }, [categories.length, district.length, selectedDistrict, data, form]);
