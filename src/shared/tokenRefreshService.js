@@ -246,7 +246,7 @@ export const startAutoRefresh = async () => {
   // Check token every 3 minutes (ensures we catch 8-minute threshold)
   autoRefreshInterval = setInterval(async () => {
     const hasRefresh = !!getRefreshToken();
-    const hasAccess = isAuthenticated();
+    isAuthenticated();
     // If both tokens are missing, stop auto-refresh and logout
     if (!hasRefresh) {
       console.error(
