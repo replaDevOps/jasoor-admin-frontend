@@ -1,9 +1,18 @@
-import { useState } from 'react';
-import { PlusOutlined, MinusCircleFilled } from '@ant-design/icons';
-import { Upload, Form, Typography, Flex } from 'antd';
+import { useState } from "react";
+import { PlusOutlined, MinusCircleFilled } from "@ant-design/icons";
+import { Upload, Form, Typography, Flex } from "antd";
 const { Dragger } = Upload;
 
-const SingleFileUpload = ({ multiple = false, name, required, message, form, label, title,onUpload }) => {
+const SingleFileUpload = ({
+  multiple = false,
+  name,
+  required,
+  message,
+  form,
+  label,
+  title,
+  onUpload,
+}) => {
   const [fileList, setFileList] = useState([]);
 
   const handleChange = async (info) => {
@@ -15,12 +24,14 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, lab
 
     setFileList(newFileList);
 
-    const files = multiple ? newFileList.map(file => file.originFileObj) : newFileList[0]?.originFileObj || null;
+    const files = multiple
+      ? newFileList.map((file) => file.originFileObj)
+      : newFileList[0]?.originFileObj || null;
     form.setFieldsValue({ [name]: files });
     try {
       if (multiple) {
         // upload all files in parallel
-        await Promise.all(files.map(file => onUpload(file)));
+        await Promise.all(files.map((file) => onUpload(file)));
       } else {
         await onUpload(files);
       }
@@ -32,15 +43,15 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, lab
   };
 
   const handleRemove = (file) => {
-    const newFileList = fileList.filter(f => f.uid !== file.uid);
+    const newFileList = fileList.filter((f) => f.uid !== file.uid);
     setFileList(newFileList);
-    
-    const files = multiple ? newFileList.map(f => f.originFileObj) : null;
+
+    const files = multiple ? newFileList.map((f) => f.originFileObj) : null;
     form.setFieldsValue({ [name]: files || null });
   };
 
   return (
-    <div className='w-100'>
+    <div className="w-100">
       <Form.Item
         name={name}
         label={label}
@@ -57,19 +68,23 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, lab
             name="file"
             multiple={multiple}
             showUploadList={false}
-            customRequest={({ file, onSuccess }) => {
+            customRequest={({ onSuccess }) => {
               setTimeout(() => {
                 onSuccess("ok");
               }, 1000);
             }}
             fileList={fileList}
             onChange={handleChange}
-            onDrop={(e) => console.log('Dropped files', e.dataTransfer.files)}
-            className='upload-d'
+            className="upload-d"
           >
             {fileList.length === 0 || multiple ? (
-              <Flex vertical align='center' justify='center' className='upload-flex'>
-                <PlusOutlined className='fs-16' />
+              <Flex
+                vertical
+                align="center"
+                justify="center"
+                className="upload-flex"
+              >
+                <PlusOutlined className="fs-16" />
                 <p className="ant-upload p-0 m-0 text-black">{title}</p>
               </Flex>
             ) : null}
@@ -77,19 +92,33 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, lab
         )}
         {fileList.length > 0 && (
           <div className="w-100">
-            {fileList.map(file => (
-              <Flex key={file.uid} justify='space-between' className="w-100 p-2 mt-2 radius-4 border-light-color" gap={4}>
-                <Flex align='flex-start' gap={10} className='w-100'>
-                  <img src="/assets/icons/file.png" alt="file-icon" width={24} className='pt-1' fetchPriority="high"/>
-                  <Flex vertical align='flex-start'>
-                    <Typography.Text strong className='text-gray'>{file.name.slice(0, 20)}{file.name.length > 20 ? '...' : ''}</Typography.Text>
-                    <Typography.Text className='fs-12'>
+            {fileList.map((file) => (
+              <Flex
+                key={file.uid}
+                justify="space-between"
+                className="w-100 p-2 mt-2 radius-4 border-light-color"
+                gap={4}
+              >
+                <Flex align="flex-start" gap={10} className="w-100">
+                  <img
+                    src="/assets/icons/file.png"
+                    alt="file-icon"
+                    width={24}
+                    className="pt-1"
+                    fetchPriority="high"
+                  />
+                  <Flex vertical align="flex-start">
+                    <Typography.Text strong className="text-gray">
+                      {file.name.slice(0, 20)}
+                      {file.name.length > 20 ? "..." : ""}
+                    </Typography.Text>
+                    <Typography.Text className="fs-12">
                       {(file.size / 1024 / 1024).toFixed(1)} MB
                     </Typography.Text>
                   </Flex>
                 </Flex>
-                <MinusCircleFilled 
-                  className="text-red cursor-pointer" 
+                <MinusCircleFilled
+                  className="text-red cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleRemove(file);

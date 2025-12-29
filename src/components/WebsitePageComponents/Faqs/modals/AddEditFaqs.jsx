@@ -47,7 +47,6 @@ const AddEditFaqs = ({ visible, onClose, edititem, refetchFaqs }) => {
   }, [visible, edititem]);
   const onFinish = async (values) => {
     const { question, answer } = values;
-    console.log({ question, answer });
     if (!question || !answer) {
       messageApi.error(t("Please fill in both question and answer"));
       return;

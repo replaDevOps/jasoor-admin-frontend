@@ -414,8 +414,6 @@ const ScheduleMeetingTable = () => {
       const values = await form.validateFields();
       const offerPrice = parseFloat(values.offerPrice);
 
-      console.log("Selected Offer:", selectedOffer);
-
       // Check if offer exists
       if (selectedOffer.id) {
         // Update existing offer

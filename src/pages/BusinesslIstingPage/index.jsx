@@ -60,6 +60,7 @@ const BusinesslIstingPage = () => {
     setPage(page);
     setPageSize(size);
   };
+
   return (
     <>
       <Row gutter={[24, 24]}>

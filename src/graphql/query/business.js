@@ -338,6 +338,7 @@ const GET_BUSINESS = gql`
         }
         seller {
           id
+          name
         }
         assets {
           id

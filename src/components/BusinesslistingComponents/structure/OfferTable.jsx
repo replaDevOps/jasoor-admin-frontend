@@ -118,7 +118,6 @@ const OfferTable = (businessId) => {
       title: t("Status"),
       dataIndex: "status",
       render: (status) => {
-        console.log("status", status);
         return status === "ACCEPTED" ? (
           <Space align="center">
             <Text className="btnpill fs-12 pending">Accepted</Text>

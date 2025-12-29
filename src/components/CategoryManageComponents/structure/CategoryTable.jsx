@@ -376,7 +376,6 @@ const CategoryTable = () => {
                         options={statusItems}
                         value={selectedStatus}
                         onChange={(value) => {
-                          console.log("Selected status value:", value);
                           if (value === undefined || value === null) {
                             setSelectedStatus(null);
                             setCurrent(1);

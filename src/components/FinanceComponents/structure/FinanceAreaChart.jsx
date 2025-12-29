@@ -17,7 +17,6 @@ const FinanceAreaChart = () => {
     variables: { year: Number(selectedStatus) },
     fetchPolicy: "cache-and-network",
   });
-  console.log("Finance graph data:", data);
   const handleStatusClick = ({ key }) => {
     const selectedItem = yearOp.find((item) => item.key === key);
     if (selectedItem) {

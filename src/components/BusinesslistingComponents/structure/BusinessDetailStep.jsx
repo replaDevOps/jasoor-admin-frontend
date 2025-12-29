@@ -105,6 +105,7 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
         teamSize: initialTeamSize,
         description: data.description,
         url: data.url,
+        username: data.username || null,
       });
 
       setIsInitialized(true);
@@ -139,6 +140,7 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
       "teamSize",
       "description",
       "url",
+      "username",
     ]);
 
     // Normalize team size to the label the Select expects
@@ -166,6 +168,7 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
     if (!current.description && data.description)
       patch.description = data.description;
     if (!current.url && data.url) patch.url = data.url;
+    if (!current.username && data.username) patch.username = data.username;
 
     if (Object.keys(patch).length > 0) form.setFieldsValue(patch);
   }, [categories.length, district.length, selectedDistrict, data, form]);

@@ -1,22 +1,10 @@
-import { useState, useEffect } from "react";
-import {
-  Card,
-  Checkbox,
-  Col,
-  Flex,
-  Image,
-  Row,
-  Typography,
-  message,
-  Spin,
-} from "antd";
+import { Card, Col, Flex, Image, Row, Typography } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
 const DigitalSaleAgreement = ({ details }) => {
-    const {t}= useTranslation()
-  console.log("details in dsa", details?.ndaPdfPath);
+  const { t } = useTranslation();
   return (
     <>
       <Row gutter={[16, 24]}>
@@ -77,14 +65,16 @@ const DigitalSaleAgreement = ({ details }) => {
                   className="badge-cs pending fs-12 fit-content"
                   align="center"
                 >
-                  <CheckCircleOutlined className="fs-14" /> {t("Waiting for seller to sign the sales agreement")}
+                  <CheckCircleOutlined className="fs-14" />{" "}
+                  {t("Waiting for seller to sign the sales agreement")}
                 </Flex>
                 <Flex
                   gap={5}
                   className="badge-cs pending fs-12 fit-content"
                   align="center"
                 >
-                  <CheckCircleOutlined className="fs-14" /> {t("Waiting for buyer to sign the sales agreement")}
+                  <CheckCircleOutlined className="fs-14" />{" "}
+                  {t("Waiting for buyer to sign the sales agreement")}
                 </Flex>
               </>
             )}
@@ -97,14 +87,16 @@ const DigitalSaleAgreement = ({ details }) => {
                   className="badge-cs success fs-12 fit-content"
                   align="center"
                 >
-                  <CheckCircleOutlined className="fs-14" /> {t("Buyer accepted the Sale Agreement")}
+                  <CheckCircleOutlined className="fs-14" />{" "}
+                  {t("Buyer accepted the Sale Agreement")}
                 </Flex>
                 <Flex
                   gap={5}
                   className="badge-cs success fs-12 fit-content"
                   align="center"
                 >
-                  <CheckCircleOutlined className="fs-14" /> {t("Seller accepted the Sale Agreement")}
+                  <CheckCircleOutlined className="fs-14" />{" "}
+                  {t("Seller accepted the Sale Agreement")}
                 </Flex>
               </>
             )}
@@ -117,14 +109,16 @@ const DigitalSaleAgreement = ({ details }) => {
                   className="badge-cs pending fs-12 fit-content"
                   align="center"
                 >
-                  <CheckCircleOutlined className="fs-14" /> {t("Waiting for buyer to sign the sales agreement")}
+                  <CheckCircleOutlined className="fs-14" />{" "}
+                  {t("Waiting for buyer to sign the sales agreement")}
                 </Flex>
                 <Flex
                   gap={5}
                   className="badge-cs success fs-12 fit-content"
                   align="center"
                 >
-                  <CheckCircleOutlined className="fs-14" /> {t("Seller accepted the Sale Agreement")}
+                  <CheckCircleOutlined className="fs-14" />{" "}
+                  {t("Seller accepted the Sale Agreement")}
                 </Flex>
               </>
             )}
@@ -137,14 +131,16 @@ const DigitalSaleAgreement = ({ details }) => {
                   className="badge-cs pending fs-12 fit-content"
                   align="center"
                 >
-                  <CheckCircleOutlined className="fs-14" /> {t("Waiting for seller to sign the sales agreement")}
+                  <CheckCircleOutlined className="fs-14" />{" "}
+                  {t("Waiting for seller to sign the sales agreement")}
                 </Flex>
                 <Flex
                   gap={5}
                   className="badge-cs success fs-12 fit-content"
                   align="center"
                 >
-                  <CheckCircleOutlined className="fs-14" /> {t("Buyer accepted the Sale Agreement")}
+                  <CheckCircleOutlined className="fs-14" />{" "}
+                  {t("Buyer accepted the Sale Agreement")}
                 </Flex>
               </>
             )}

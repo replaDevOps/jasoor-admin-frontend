@@ -74,6 +74,7 @@ const CreateBusinessList = () => {
         profitMargen: null,
         multiple: null,
         capitalRecovery: null,
+        username: null,
         assets: [
           { name: null, price: null, purchaseYear: null, quantity: null },
         ],
@@ -125,6 +126,7 @@ const CreateBusinessList = () => {
       profitMargen: null,
       multiple: null,
       capitalRecovery: null,
+      username: null,
       assets: [{ name: null, price: null, purchaseYear: null, quantity: null }],
       liabilities: [
         { name: null, price: null, purchaseYear: null, quantity: null },
@@ -177,6 +179,7 @@ const CreateBusinessList = () => {
         profitMargen: business.profitMargen,
         multiple: business.multiple,
         capitalRecovery: business.capitalRecovery,
+        username: business.seller?.name || null,
         assets:
           business.assets?.length > 0
             ? business.assets
@@ -456,6 +459,8 @@ const CreateBusinessList = () => {
           price: null,
           profitMargen: null,
           multiple: null,
+          capitalRecovery: null,
+          username: null,
           assets: [
             { name: null, price: null, purchaseYear: null, quantity: null },
           ],
@@ -565,7 +570,7 @@ const CreateBusinessList = () => {
                   title: (
                     <Text
                       className="fs-13 text-gray cursor"
-                      onClick={() => navigate("/")}
+                      onClick={() => navigate("/businesslist")}
                     >
                       {t("Home")}
                     </Text>

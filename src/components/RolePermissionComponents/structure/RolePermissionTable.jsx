@@ -88,7 +88,6 @@ const RolePermissionTable = () => {
       fixed: "right",
       width: 100,
       render: (_, row) => {
-        console.log(row, "rolename");
         if (row.rolename === "Customer") return null;
         return (
           <Dropdown

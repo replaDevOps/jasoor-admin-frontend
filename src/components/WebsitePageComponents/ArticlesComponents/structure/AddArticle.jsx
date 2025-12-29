@@ -224,8 +224,6 @@ const AddArticle = () => {
   const isMutating = creating || updating;
   const saveDisabled = uploading || isMutating;
 
-  console.log("Rendering AddArticle with detail:", descriptionData, detail);
-
   return (
     <>
       {contextHolder}

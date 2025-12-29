@@ -3,19 +3,19 @@ import Cookies from "js-cookie";
 const TOKEN_CONFIG = {
   // Access token expires in 10 minutes (backend: '10m')
   ACCESS_TOKEN_EXPIRY: 10 / (24 * 60), // 10 minutes in days
-  
+
   // Refresh token expires in 234 hours ≈ 9.75 days (backend: '234h')
   REFRESH_TOKEN_EXPIRY: 234 / 24, // 234 hours in days (9.75 days)
-  
+
   // User data expiry (same as refresh token)
   USER_DATA_EXPIRY: 234 / 24, // 234 hours in days (9.75 days)
-  
+
   // Cookie options - more permissive for localhost, secure for production
   SECURE_OPTIONS: {
-    secure: window.location.protocol === 'https:', // Only use secure flag on HTTPS
-    sameSite: window.location.hostname === 'localhost' ? 'lax' : 'strict', // Lax on localhost, strict in production
-    path: '/', // Ensure cookies are available across all paths
-  }
+    secure: window.location.protocol === "https:", // Only use secure flag on HTTPS
+    sameSite: window.location.hostname === "localhost" ? "lax" : "strict", // Lax on localhost, strict in production
+    path: "/", // Ensure cookies are available across all paths
+  },
 };
 
 /**
@@ -24,9 +24,9 @@ const TOKEN_CONFIG = {
  * Better than plaintext, but httpOnly cookies from backend are ideal
  */
 const encryptToken = (token) => {
-  if (!token) return '';
-  const key = 'J@$00r-S3cur3-K3y-2025'; // Should be in env variable
-  let encrypted = '';
+  if (!token) return "";
+  const key = "J@$00r-S3cur3-K3y-2025"; // Should be in env variable
+  let encrypted = "";
   for (let i = 0; i < token.length; i++) {
     encrypted += String.fromCharCode(
       token.charCodeAt(i) ^ key.charCodeAt(i % key.length)
@@ -36,11 +36,11 @@ const encryptToken = (token) => {
 };
 
 const decryptToken = (encrypted) => {
-  if (!encrypted) return '';
+  if (!encrypted) return "";
   try {
-    const key = 'J@$00r-S3cur3-K3y-2025';
+    const key = "J@$00r-S3cur3-K3y-2025";
     const decoded = atob(encrypted);
-    let decrypted = '';
+    let decrypted = "";
     for (let i = 0; i < decoded.length; i++) {
       decrypted += String.fromCharCode(
         decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length)
@@ -48,28 +48,12 @@ const decryptToken = (encrypted) => {
     }
     return decrypted;
   } catch (error) {
-    console.error('Token decryption failed:', error);
-    return '';
+    console.error("Token decryption failed:", error);
+    return "";
   }
 };
-
-/**
- * Store authentication tokens and user data securely
- * IMPORTANT: Tokens are encrypted before storage
- * @param {string} accessToken - JWT access token
- * @param {string} refreshToken - JWT refresh token
- * @param {object} user - User data (id, status, etc.)
- */
 export const setAuthTokens = (accessToken, refreshToken, user) => {
   try {
-    console.log('🔐 Setting auth tokens...', {
-      hasAccessToken: !!accessToken,
-      hasRefreshToken: !!refreshToken,
-      hasUser: !!user,
-      protocol: window.location.protocol,
-      willUseSecure: window.location.protocol === 'https:'
-    });
-
     // Encrypt and store access token (short-lived)
     Cookies.set("_at", encryptToken(accessToken), {
       expires: TOKEN_CONFIG.ACCESS_TOKEN_EXPIRY,
@@ -88,7 +72,7 @@ export const setAuthTokens = (accessToken, refreshToken, user) => {
       Cookies.set("userId", user.id, {
         expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
       });
-      
+
       Cookies.set("userStatus", user.status, {
         expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
       });
@@ -98,21 +82,14 @@ export const setAuthTokens = (accessToken, refreshToken, user) => {
     // This tracks when the REFRESH token was first issued, not when access token was refreshed
     const existingIssuedAt = Cookies.get("tokenIssuedAt");
     if (!existingIssuedAt) {
-      // First time login - set the issue timestamp
       Cookies.set("tokenIssuedAt", new Date().toISOString(), {
         expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
       });
-      console.log('📅 Token issue timestamp set (first login)');
-    } else {
-      console.log('📅 Token issue timestamp preserved (token refresh)');
     }
-
     // Set when the access token was last refreshed (for 8-minute check)
     Cookies.set("tokenRefreshedAt", new Date().toISOString(), {
       expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
     });
-
-    console.log('✅ Auth tokens set successfully');
     return true;
   } catch (error) {
     console.error("❌ Error setting auth tokens:", error);
@@ -120,44 +97,24 @@ export const setAuthTokens = (accessToken, refreshToken, user) => {
   }
 };
 
-/**
- * Get the current access token
- * @returns {string|null} Access token or null if not found
- */
 export const getAccessToken = () => {
   const encrypted = Cookies.get("_at");
   return encrypted ? decryptToken(encrypted) : null;
 };
 
-/**
- * Get the current refresh token
- * @returns {string|null} Refresh token or null if not found
- */
 export const getRefreshToken = () => {
   const encrypted = Cookies.get("_rt");
   return encrypted ? decryptToken(encrypted) : null;
 };
 
-/**
- * Get user ID from cookies
- * @returns {string|null} User ID or null if not found
- */
 export const getUserId = () => {
   return Cookies.get("userId") || null;
 };
 
-/**
- * Get user status from cookies
- * @returns {string|null} User status or null if not found
- */
 export const getUserStatus = () => {
   return Cookies.get("userStatus") || null;
 };
 
-/**
- * Check if user is authenticated
- * @returns {boolean} True if access token exists
- */
 export const isAuthenticated = () => {
   return !!getAccessToken();
 };
@@ -190,12 +147,10 @@ export const clearAuthTokens = () => {
     Cookies.remove("userStatus");
     Cookies.remove("tokenRefreshedAt"); // Last refresh time
     Cookies.remove("tokenIssuedAt"); // Token issue time (IMPORTANT!)
-    
+
     // Clear localStorage as fallback (backward compatibility)
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    
-    console.log('🗑️ All auth tokens and timestamps cleared');
     return true;
   } catch (error) {
     console.error("Error clearing auth tokens:", error);
@@ -209,7 +164,7 @@ export const clearAuthTokens = () => {
  */
 export const isRefreshTokenExpired = () => {
   const tokenIssuedAt = Cookies.get("tokenIssuedAt"); // Use ISSUE time, not refresh time
-  
+
   if (!tokenIssuedAt) {
     console.warn("⚠️ No tokenIssuedAt found - considering token expired");
     return true; // No timestamp means token is expired
@@ -219,32 +174,18 @@ export const isRefreshTokenExpired = () => {
     const issuedTime = new Date(tokenIssuedAt);
     const now = new Date();
     const hoursSinceIssue = (now - issuedTime) / (1000 * 60 * 60);
-
-    console.log('🕐 Refresh token age check:', {
-      issuedAt: issuedTime.toISOString(),
-      hoursSinceIssue: hoursSinceIssue.toFixed(2),
-      maxHours: 233,
-      isExpired: hoursSinceIssue > 233
-    });
-
     // Refresh token expires in 234 hours
     // Consider it expired if more than 233 hours have passed (1 hour buffer)
     return hoursSinceIssue > 233;
   } catch (error) {
     console.error("Error checking refresh token expiry:", error);
-    return true; // On error, consider it expired to be safe
+    return true;
   }
 };
 
-/**
- * Check if access token is about to expire (within 2 minutes)
- * This helps prevent failed requests due to token expiration
- * Backend config: Access token = 10 minutes, triggers refresh at 8 minutes
- * @returns {boolean} True if token should be refreshed
- */
 export const shouldRefreshToken = () => {
   const lastRefresh = Cookies.get("tokenRefreshedAt");
-  
+
   if (!lastRefresh) {
     return true; // No refresh timestamp, should refresh
   }
@@ -308,12 +249,12 @@ export const debugTokenInfo = () => {
   const tokenRefreshedAt = Cookies.get("tokenRefreshedAt");
   const hasAccess = !!getAccessToken();
   const hasRefresh = !!getRefreshToken();
-  
+
   const info = {
     hasAccessToken: hasAccess,
     hasRefreshToken: hasRefresh,
-    tokenIssuedAt: tokenIssuedAt || 'NOT SET',
-    tokenRefreshedAt: tokenRefreshedAt || 'NOT SET',
+    tokenIssuedAt: tokenIssuedAt || "NOT SET",
+    tokenRefreshedAt: tokenRefreshedAt || "NOT SET",
     userId: getUserId(),
     userStatus: getUserStatus(),
   };
@@ -325,7 +266,5 @@ export const debugTokenInfo = () => {
     info.daysUntilExpiry = ((234 - hoursSinceIssue) / 24).toFixed(2);
     info.isExpired = hoursSinceIssue > 233;
   }
-
-  console.log('🔍 Token Debug Info:', info);
   return info;
 };

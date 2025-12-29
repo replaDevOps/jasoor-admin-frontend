@@ -41,7 +41,6 @@ const PrivacyPolicyPage = () => {
     setDescriptionData(value);
   };
 
-  // useEffect(() => { console.log("Updated descriptionData:", descriptionData); }, [descriptionData]);
   const onFinish = async () => {
     try {
       if (!descriptionData || descriptionData.trim().length === 0) {

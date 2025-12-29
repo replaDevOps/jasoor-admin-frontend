@@ -159,7 +159,6 @@ const BusinessDealsDetails = ({ completedeal }) => {
     );
   }
 
-  console.log("details", details);
   return (
     <>
       {contextHolder}

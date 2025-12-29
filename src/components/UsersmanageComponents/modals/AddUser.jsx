@@ -64,8 +64,6 @@ const AddUser = ({ visible, onClose, edititem }) => {
       getRoles();
     }
   }, [visible, getRoles]);
-
-  console.log("selectedDistrict", selectedDistrict);
   // Helper function to reset all form data
   const resetFormData = () => {
     form.resetFields();

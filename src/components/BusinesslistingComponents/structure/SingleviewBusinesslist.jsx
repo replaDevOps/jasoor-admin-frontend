@@ -47,6 +47,14 @@ const SingleviewBusinesslist = () => {
   // Local per-button loading to avoid spinning all actions at once
   const [actionLoading, setActionLoading] = useState(null); // 'reject' | 'accept' | 'inactivate' | 'activate' | null
 
+  const handleEditBusiness = () => {
+    if (data?.businessStatus === "SOLD") {
+      messageApi.error(t("Cannot edit a sold business"));
+      return;
+    }
+    navigate(`/createbusinesslist?edit=${id}`);
+  };
+
   const handleStatusChange = async (nextStatus, actionKey) => {
     setActionLoading(actionKey);
     try {
@@ -117,9 +125,11 @@ const SingleviewBusinesslist = () => {
               {data?.businessTitle}
             </Title>
           </Flex>
-          {/* <Button
+          <Button
             aria-labelledby="edit button"
             className="bg-transparent border0 p-0"
+            onClick={handleEditBusiness}
+            disabled={data?.businessStatus === "SOLD"}
           >
             <Image
               src="/assets/icons/edit.png"
@@ -128,7 +138,7 @@ const SingleviewBusinesslist = () => {
               width={24}
               preview={false}
             />
-          </Button> */}
+          </Button>
         </Flex>
         <Flex justify="space-between" align="center" gap={5}>
           <Title level={5} className="m-0">

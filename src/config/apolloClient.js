@@ -33,7 +33,6 @@ const authLink = setContext(async (operation, { headers, skipAuth }) => {
 
   // Check if token needs refresh BEFORE making the request
   if (isAuthenticated() && shouldRefreshToken()) {
-    console.log("⚠️ Token is about to expire, refreshing proactively...");
     const { refreshAccessToken } = await import(
       "../shared/tokenRefreshService"
     );
@@ -102,8 +101,6 @@ const errorLink = onError(
               .then(({ refreshAccessToken }) => refreshAccessToken())
               .then((newToken) => {
                 if (newToken) {
-                  console.log("✅ Token refreshed, retrying request...");
-
                   // Update the operation context with new token
                   const oldHeaders = operation.getContext().headers;
                   operation.setContext({

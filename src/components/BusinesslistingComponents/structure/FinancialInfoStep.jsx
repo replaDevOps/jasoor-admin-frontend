@@ -88,7 +88,6 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
   for (let y = foundedYear; y <= currentYear; y++) {
     yearOp.push({ id: String(y), name: y });
   }
-  console.log("revenueLookups", data.multiple);
   const handleFormChange = (_, allValues) => {
     setData((prev) => ({
       ...prev,
@@ -179,12 +178,12 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
 
     const multiple =
       price > 0 && avgMonthlyProfit > 0 ? price / avgMonthlyProfit : null;
-    console.log("multiple", multiple);
+
     const scaledMultiple =
       typeof multiple === "number" && Number.isFinite(multiple)
         ? String(Math.floor(Math.abs(multiple)))[0]
         : null;
-    console.log("scaledMultiple", scaledMultiple);
+
     const profitMargin = adjustedRevenue
       ? ((adjustedProfit / adjustedRevenue) * 100).toFixed(2)
       : null;

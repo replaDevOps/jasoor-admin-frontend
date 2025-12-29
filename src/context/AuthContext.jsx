@@ -1,15 +1,15 @@
 // AuthContext.js
-import { createContext, useState, useEffect } from 'react';
-import { 
-  isAuthenticated, 
+import { createContext, useState, useEffect } from "react";
+import {
+  isAuthenticated,
   setAuthTokens,
-  getUserData 
-} from '../shared/tokenManager';
-import { 
-  startAutoRefresh, 
-  stopAutoRefresh, 
-  handleLogout as serviceLogout 
-} from '../shared/tokenRefreshService';
+  getUserData,
+} from "../shared/tokenManager";
+import {
+  startAutoRefresh,
+  stopAutoRefresh,
+  handleLogout as serviceLogout,
+} from "../shared/tokenRefreshService";
 
 export const AuthContext = createContext();
 
@@ -21,21 +21,16 @@ export const AuthProvider = ({ children }) => {
   // Initialize auth and start auto-refresh on app load
   useEffect(() => {
     const initAuth = async () => {
-      console.log('🚀 AuthProvider: Initializing...');
-      
       // Start auto-refresh service (it will handle auth recovery)
       const success = await startAutoRefresh();
-      
       if (success) {
         setIsLoggedIn(true);
         setUserData(getUserData());
-        console.log('✅ AuthProvider: Initialized successfully');
       } else {
         setIsLoggedIn(false);
         setUserData({});
-        console.log('❌ AuthProvider: Not authenticated');
       }
-      
+
       setIsInitializing(false);
     };
 
@@ -43,18 +38,17 @@ export const AuthProvider = ({ children }) => {
 
     // Listen for forced logout events (from Apollo error handler)
     const handleForceLogout = () => {
-      console.log('🚨 Force logout event received');
       setIsLoggedIn(false);
       setUserData({});
       stopAutoRefresh();
     };
 
-    window.addEventListener('forceLogout', handleForceLogout);
+    window.addEventListener("forceLogout", handleForceLogout);
 
     // Cleanup on unmount
     return () => {
       stopAutoRefresh();
-      window.removeEventListener('forceLogout', handleForceLogout);
+      window.removeEventListener("forceLogout", handleForceLogout);
     };
   }, []);
 
@@ -62,7 +56,7 @@ export const AuthProvider = ({ children }) => {
     setAuthTokens(token, refreshToken, user);
     setIsLoggedIn(true);
     setUserData(getUserData());
-    
+
     // Start auto-refresh after login
     startAutoRefresh();
   };
@@ -74,13 +68,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      isLoggedIn, 
-      login, 
-      logout, 
-      userData,
-      isInitializing 
-    }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        login,
+        logout,
+        userData,
+        isInitializing,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

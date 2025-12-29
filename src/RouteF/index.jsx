@@ -66,12 +66,6 @@ const RouteF = () => {
     // Create WebSocket connection
     const socket = new WebSocket(url);
     setWs(socket);
-
-    // Optional: listen to messages
-    socket.onmessage = (event) => {
-      console.log("Message received:", event.data);
-    };
-
     // Clean up on unmount or page unload
     const handleUnload = () => {
       socket.close();

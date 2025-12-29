@@ -72,7 +72,6 @@ export const refreshAccessToken = async () => {
   }
 
   isRefreshing = true;
-  console.log("🔄 Attempting to refresh access token...");
 
   try {
     // Get Apollo Client lazily to avoid circular dependency
@@ -102,7 +101,6 @@ export const refreshAccessToken = async () => {
       onTokenRefreshed(newAccessToken);
 
       isRefreshing = false;
-      console.log("✅ Token refreshed successfully");
       return newAccessToken;
     } else {
       throw new Error("Invalid refresh token response - no token in response");
@@ -137,7 +135,6 @@ export const refreshAccessToken = async () => {
       window.location.pathname !== "/login" &&
       window.location.pathname !== "/"
     ) {
-      console.log("🔄 Redirecting to login page...");
       window.location.href = "/";
     }
 
@@ -171,13 +168,11 @@ export const ensureValidToken = async () => {
 
   if (!isAuthenticated()) {
     // Access token missing but refresh token exists - try to recover
-    console.log("⚠️ Access token missing, attempting recovery...");
     const newToken = await refreshAccessToken();
     return !!newToken;
   }
 
   if (shouldRefreshToken()) {
-    console.log("⏰ Token is old, refreshing...");
     const newToken = await refreshAccessToken();
     return !!newToken;
   }
@@ -195,15 +190,8 @@ export const initializeAuth = async () => {
   const hasRefresh = !!getRefreshToken();
   const refreshExpired = isRefreshTokenExpired();
 
-  console.log("🔐 Initializing auth...", {
-    hasAccess,
-    hasRefresh,
-    refreshExpired,
-  });
-
   // Case 1: No tokens at all - user not logged in
   if (!hasAccess && !hasRefresh) {
-    console.log("❌ No tokens found - user not logged in");
     return false;
   }
 
@@ -217,9 +205,7 @@ export const initializeAuth = async () => {
 
   // Case 3: Has access token - check if needs refresh
   if (hasAccess) {
-    console.log("✅ Access token found");
     if (shouldRefreshToken()) {
-      console.log("⚠️ Token is old, refreshing...");
       const newToken = await refreshAccessToken();
       return !!newToken;
     }
@@ -229,15 +215,10 @@ export const initializeAuth = async () => {
   // Case 4: Access token missing but refresh token exists and is valid
   // This happens when user comes back after access token expired (>10 min)
   if (!hasAccess && hasRefresh && !refreshExpired) {
-    console.log(
-      "⚠️ Access token missing but refresh token exists - attempting recovery..."
-    );
     const newToken = await refreshAccessToken();
     if (newToken) {
-      console.log("✅ Token recovered successfully!");
       return true;
     } else {
-      console.log("❌ Token recovery failed - logging out");
       return false;
     }
   }
@@ -245,12 +226,6 @@ export const initializeAuth = async () => {
   return false;
 };
 
-/**
- * Auto-refresh setup - checks token validity every 3 minutes
- * Call this on app initialization
- * Backend config: Access token = 10min, Refresh token = 234h
- * Auto-refresh triggers at 8 minutes (2 min before expiry)
- */
 let autoRefreshInterval = null;
 
 export const startAutoRefresh = async () => {
@@ -263,21 +238,15 @@ export const startAutoRefresh = async () => {
   const isAuth = await initializeAuth();
 
   if (!isAuth) {
-    console.log("❌ Auth initialization failed - not starting auto-refresh");
     // Trigger logout event
     window.dispatchEvent(new CustomEvent("forceLogout"));
     return false;
   }
 
-  console.log("✅ Starting auto-refresh service...");
-
   // Check token every 3 minutes (ensures we catch 8-minute threshold)
   autoRefreshInterval = setInterval(async () => {
     const hasRefresh = !!getRefreshToken();
     const hasAccess = isAuthenticated();
-
-    console.log("🔄 Auto-refresh check...", { hasAccess, hasRefresh });
-
     // If both tokens are missing, stop auto-refresh and logout
     if (!hasRefresh) {
       console.error(
@@ -313,13 +282,9 @@ export const stopAutoRefresh = () => {
   if (autoRefreshInterval) {
     clearInterval(autoRefreshInterval);
     autoRefreshInterval = null;
-    console.log("⏹️ Auto-refresh stopped");
   }
 };
 
-/**
- * Handle logout - clear tokens and stop auto-refresh
- */
 export const handleLogout = () => {
   stopAutoRefresh();
   clearAuthTokens();

@@ -9,7 +9,6 @@ import { t } from "i18next";
 const { Text } = Typography;
 const BusinessCategoryDonut = () => {
   const { data: categoryData, loading } = useQuery(GET_BUSINESS_CATEGORY_COUNT);
-  console.log("categoryData", categoryData);
   const chartData = {
     series:
       categoryData?.getCountByEachCategory.map((item) => item.count) || [],

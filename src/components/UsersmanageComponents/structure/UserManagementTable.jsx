@@ -174,7 +174,6 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
                   label: (
                     <NavLink
                       onClick={(e) => {
-                        console.log(row);
                         e.preventDefault();
                         setVisible(true);
                         setEditItem(row);
