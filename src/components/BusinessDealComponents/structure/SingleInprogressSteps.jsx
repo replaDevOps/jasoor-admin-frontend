@@ -155,9 +155,11 @@ const SingleInprogressSteps = ({ details }) => {
       emptydesc: t("Waiting for the buyer & seller to finalized the deal."),
     },
   ];
+
   const [openPanels, setOpenPanels] = useState(
     details ? allSteps.slice(0, initialStep + 1).map((step) => step.key) : ["1"]
   );
+
   const getStepItems = (steps) =>
     steps.map((item) => ({
       key: item.key,
