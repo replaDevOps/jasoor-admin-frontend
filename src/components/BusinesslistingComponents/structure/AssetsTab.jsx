@@ -1,4 +1,4 @@
-import { Card, Flex, Typography, Switch, Image } from "antd";
+import { Card, Flex, Typography, Switch } from "antd";
 import { TableContent } from "./TableContent";
 import {
   UPDATE_ASSET,
