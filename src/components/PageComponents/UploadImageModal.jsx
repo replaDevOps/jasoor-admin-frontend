@@ -1,30 +1,26 @@
-import { useState } from 'react'
-import { Modal, Button, Upload, Form, Typography } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
-import { ImagePreviewModal } from './ImagePreviewModal';
-
-
-const { Text } = Typography;
+import { useState } from "react";
+import { Modal, Button, Upload, Form, Typography } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { ImagePreviewModal } from "./ImagePreviewModal";
 
 const UploadImageModal = ({ visible, onClose }) => {
-  const [loading, setLoading] = useState(false)
-  const [fileList, setFileList] = useState([])
-  const [previewVisible, setPreviewVisible] = useState(false)
-  const [previewImage, setPreviewImage] = useState('')
+  const [fileList, setFileList] = useState([]);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
 
   const handleUploadChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList)
-  }
+    setFileList(newFileList);
+  };
 
   const handlePreview = async (file) => {
-    setPreviewImage(file.url || file.thumbUrl)
-    setPreviewVisible(true)
-  }
+    setPreviewImage(file.url || file.thumbUrl);
+    setPreviewVisible(true);
+  };
 
   const closePreview = () => {
-    setPreviewVisible(false)
-    setPreviewImage('')
-  }
+    setPreviewVisible(false);
+    setPreviewImage("");
+  };
 
   return (
     <>
@@ -32,27 +28,32 @@ const UploadImageModal = ({ visible, onClose }) => {
         open={visible}
         width={650}
         centered
-        className='shadow-c'
-        title={<Typography.Text className="ant-modal-title">Add Images</Typography.Text>}
+        className="shadow-c"
+        title={
+          <Typography.Text className="ant-modal-title">
+            Add Images
+          </Typography.Text>
+        }
         onCancel={onClose}
         footer={[
           <Button
             key="submit"
-            className='btnsave'
+            className="btnsave"
             type="primary"
             htmlType="submit"
-            loading={loading}
-            aria-labelledby='Save image'
+            aria-labelledby="Save image"
           >
             Save Images
-          </Button>
+          </Button>,
         ]}
       >
         <div className="modal-border" />
         <Form>
           <Form.Item
             name="upload"
-            rules={[{ required: true, message: 'Please upload at least one image.' }]}
+            rules={[
+              { required: true, message: "Please upload at least one image." },
+            ]}
           >
             <Upload
               name="upload"
@@ -66,7 +67,7 @@ const UploadImageModal = ({ visible, onClose }) => {
               {fileList.length < 5 && (
                 <div>
                   <PlusOutlined />
-                  <div className='margintop-8'>Upload</div>
+                  <div className="margintop-8">Upload</div>
                 </div>
               )}
             </Upload>
@@ -81,7 +82,7 @@ const UploadImageModal = ({ visible, onClose }) => {
         onClose={closePreview}
       />
     </>
-  )
-}
+  );
+};
 
-export { UploadImageModal }
+export { UploadImageModal };
