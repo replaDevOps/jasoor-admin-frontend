@@ -69,7 +69,7 @@ const EditorDescription = ({
       try {
         editor.clipboard.dangerouslyPasteHTML(html);
         setValue(html);
-      } catch (err) {
+      } catch {
         setValue(html);
       }
     } else {

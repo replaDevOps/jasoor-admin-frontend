@@ -9,7 +9,6 @@ import Cookie from "js-cookie";
 const { Title } = Typography;
 const PasswordManager = () => {
   const [messageApi, contextHolder] = message.useMessage();
-  // get userId from localStorage or context
   const userId = Cookie.get("userId");
   const [form] = Form.useForm();
 

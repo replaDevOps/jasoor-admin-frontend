@@ -13,7 +13,6 @@ import {
 import { MySelect, SearchInput } from "../../Forms";
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { DownOutlined } from "@ant-design/icons";
 import { CustomPagination, DeleteModal } from "../../Ui";
 import { UPDATE_USER, DELETE_USER } from "../../../graphql/mutation";
 import { GETSTAFFMEMBERS, GETROLES } from "../../../graphql/query";
