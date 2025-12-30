@@ -1,4 +1,4 @@
-import { Flex, Form, Image, Table, Typography } from "antd";
+import { Flex, Form, Table, Typography } from "antd";
 import { SearchInput } from "../../Forms";
 import { CustomPagination, TableLoader } from "../../Ui";
 import { useState, useEffect } from "react";
