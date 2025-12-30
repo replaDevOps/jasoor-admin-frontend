@@ -7,7 +7,7 @@ import { Spin } from "antd";
 import { t } from "i18next";
 
 const ListingPriceBar = () => {
-  const { data, loading, error } = useQuery(GET_BUSINESS_PRICE_TIER);
+  const { data, loading } = useQuery(GET_BUSINESS_PRICE_TIER);
 
   // Prepare chart series and categories dynamically
   const counts = data?.getBusinessByPriceTier.map((item) => item.count) || [];
