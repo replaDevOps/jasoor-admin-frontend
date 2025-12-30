@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Card, Col, Flex, Form, Image, Row, Typography } from "antd";
 import { MyInput } from "../../Forms";
 import { useTranslation } from "react-i18next";
