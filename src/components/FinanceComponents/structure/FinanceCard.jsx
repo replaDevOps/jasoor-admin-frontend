@@ -5,11 +5,9 @@ import { t } from "i18next";
 
 const { Title, Text } = Typography;
 const FinanceCard = () => {
-  const {
-    data: count,
-    loading,
-    error,
-  } = useQuery(GET_FINANCE_COUNT, { fetchPolicy: "cache-and-network" });
+  const { data: count } = useQuery(GET_FINANCE_COUNT, {
+    fetchPolicy: "cache-and-network",
+  });
 
   const data = [
     {
