@@ -261,7 +261,9 @@ const BankAccountCard = ({ settingId }) => {
           setDeleteBankId(null);
         }}
         title={t("Remove Bank Account?")}
-        subtitle={t("Are you sure you want to delete this bank account? This action cannot be undone, and any active deals won’t be able to send payments to this account.")}
+        subtitle={t(
+          "Are you sure you want to delete this bank account? This action cannot be undone, and any active deals won’t be able to send payments to this account."
+        )}
         type="danger"
         loading={deleteLoading}
         onConfirm={() => {

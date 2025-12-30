@@ -14,14 +14,14 @@ import { MyInput, MySelect } from "../../Forms";
 import { CloseOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
 import { ADD_ADMIN_BANK, UPDATEBANK } from "../../../graphql/mutation";
-import { gql, useMutation } from "@apollo/client";
-import { GET_SETTINGS, GETADMINBANK } from "../../../graphql/query";
+import { useMutation } from "@apollo/client";
+import { GETADMINBANK } from "../../../graphql/query";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 const AddNewBankAccount = ({ visible, onClose, edititem, settingId }) => {
-    const{t}=useTranslation()
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   useEffect(() => {
@@ -141,7 +141,9 @@ const AddNewBankAccount = ({ visible, onClose, edititem, settingId }) => {
             </Flex>
             {!edititem && (
               <Text className="fs-14">
-                {t("Securely link your bank account to receive payments for completed deals. Make sure the IBAN is correct to avoid payout delays.")}
+                {t(
+                  "Securely link your bank account to receive payments for completed deals. Make sure the IBAN is correct to avoid payout delays."
+                )}
               </Text>
             )}
           </Flex>
@@ -202,7 +204,9 @@ const AddNewBankAccount = ({ visible, onClose, edititem, settingId }) => {
                       width={20}
                     />
                     <Text className="text-brand fs-13">
-                     {t("Your banking details are encrypted and used only for secure payouts through Jusoor.")}
+                      {t(
+                        "Your banking details are encrypted and used only for secure payouts through Jusoor."
+                      )}
                     </Text>
                   </Flex>
                 </Card>

@@ -183,7 +183,6 @@ const AddRolePermission = () => {
     <>
       {contextHolder}
       <Flex vertical gap={25}>
-        {/* Breadcrumb + Header */}
         <Breadcrumb
           separator=">"
           items={[
@@ -242,8 +241,6 @@ const AddRolePermission = () => {
             </Button>
           </Flex>
         </Flex>
-
-        {/* Form */}
         <Card>
           <Form layout="vertical" form={form} onFinish={onFinish}>
             <Row gutter={[24, 14]}>
