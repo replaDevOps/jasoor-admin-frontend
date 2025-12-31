@@ -427,21 +427,20 @@ const ScheduleMeetingTable = () => {
           },
         });
       } else {
-        // Create new offer if offerId doesn't exist (only businessId and price)
-        if (!selectedOffer.businessId) {
-          console.error("Business ID is missing!");
-          throw new Error("Business ID is required to create an offer");
-        }
-
-        await createOffer({
-          variables: {
-            input: {
-              businessId: selectedOffer.businessId,
-              price: offerPrice,
-              status: "ACCEPTED",
-            },
-          },
-        });
+        // // Create new offer if offerId doesn't exist (only businessId and price)
+        // if (!selectedOffer.businessId) {
+        //   console.error("Business ID is missing!");
+        //   throw new Error("Business ID is required to create an offer");
+        // }
+        // await createOffer({
+        //   variables: {
+        //     input: {
+        //       businessId: selectedOffer.businessId,
+        //       price: offerPrice,
+        //       status: "ACCEPTED",
+        //     },
+        //   },
+        // });
       }
 
       // update meeting status to HELD
