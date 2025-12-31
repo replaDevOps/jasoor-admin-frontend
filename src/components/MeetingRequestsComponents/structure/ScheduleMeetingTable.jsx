@@ -414,34 +414,34 @@ const ScheduleMeetingTable = () => {
       const values = await form.validateFields();
       const offerPrice = parseFloat(values.offerPrice);
 
-      // Check if offer exists
-      if (selectedOffer.id) {
-        // Update existing offer
-        await updateOffer({
-          variables: {
-            input: {
-              id: selectedOffer.id,
-              price: offerPrice,
-              status: "ACCEPTED",
-            },
-          },
-        });
-      } else {
-        // // Create new offer if offerId doesn't exist (only businessId and price)
-        // if (!selectedOffer.businessId) {
-        //   console.error("Business ID is missing!");
-        //   throw new Error("Business ID is required to create an offer");
-        // }
-        // await createOffer({
-        //   variables: {
-        //     input: {
-        //       businessId: selectedOffer.businessId,
-        //       price: offerPrice,
-        //       status: "ACCEPTED",
-        //     },
-        //   },
-        // });
-      }
+      // // Check if offer exists
+      // if (selectedOffer.id) {
+      //   // Update existing offer
+      //   await updateOffer({
+      //     variables: {
+      //       input: {
+      //         id: selectedOffer.id,
+      //         price: offerPrice,
+      //         status: "ACCEPTED",
+      //       },
+      //     },
+      //   });
+      // } else {
+      //   // // Create new offer if offerId doesn't exist (only businessId and price)
+      //   // if (!selectedOffer.businessId) {
+      //   //   console.error("Business ID is missing!");
+      //   //   throw new Error("Business ID is required to create an offer");
+      //   // }
+      //   // await createOffer({
+      //   //   variables: {
+      //   //     input: {
+      //   //       businessId: selectedOffer.businessId,
+      //   //       price: offerPrice,
+      //   //       status: "ACCEPTED",
+      //   //     },
+      //   //   },
+      //   // });
+      // }
 
       // update meeting status to HELD
       await updateMeeting({
@@ -449,6 +449,7 @@ const ScheduleMeetingTable = () => {
           input: {
             id: selectedOffer.meetingId,
             status: "HELD",
+            offerPrice: offerPrice,
           },
         },
       });
