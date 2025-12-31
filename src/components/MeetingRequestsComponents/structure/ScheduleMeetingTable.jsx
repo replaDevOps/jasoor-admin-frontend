@@ -449,6 +449,7 @@ const ScheduleMeetingTable = () => {
           input: {
             id: selectedOffer.meetingId,
             status: "HELD",
+            offerPrice: offerPrice,
           },
         },
       });
