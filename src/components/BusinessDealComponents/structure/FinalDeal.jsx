@@ -53,10 +53,7 @@ const FinalDeal = ({ details }) => {
   };
   console.log("details", details);
 
-  const isCompleted =
-    details?.isSellerCompleted &&
-    details?.isBuyerCompleted &&
-    details?.status === "COMPLETED";
+  const isCompleted = details?.isSellerCompleted && details?.isBuyerCompleted;
   return (
     <>
       {contextHolder}
