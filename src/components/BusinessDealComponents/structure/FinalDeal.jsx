@@ -51,12 +51,12 @@ const FinalDeal = ({ details }) => {
       },
     });
   };
+  console.log("details", details);
 
   const isCompleted =
     details?.isSellerCompleted &&
     details?.isBuyerCompleted &&
     details?.status === "COMPLETED";
-
   return (
     <>
       {contextHolder}
@@ -147,7 +147,9 @@ const FinalDeal = ({ details }) => {
                 loading={loading}
                 type="primary"
                 className="btnsave bg-brand"
-                disabled={isCompleted || loading}
+                disabled={
+                  !isCompleted || loading || details?.status === "COMPLETED"
+                }
                 onClick={handleMarkVerified}
                 aria-labelledby="Mark Deal as Completed"
               >
