@@ -243,14 +243,15 @@ const InprogressDealTable = () => {
                   onChange={(e) => handleSearch(e.target.value)}
                   allowClear
                 />
-                <MySelect
+                // later we fixed this
+                {/* <MySelect
                   withoutForm
                   name="businessdealstatus"
                   placeholder={t("Business Deal Status")}
                   options={businessdealItems}
                   onChange={(value) => setSelectedStatus(value)}
                   allowClear
-                />
+                /> */}
               </Flex>
             </Col>
           </Row>
