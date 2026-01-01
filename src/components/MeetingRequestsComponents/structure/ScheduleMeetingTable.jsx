@@ -168,11 +168,15 @@ const ScheduleMeetingTable = () => {
       dataIndex: "status",
       render: (status) => {
         if (status === "APPROVED") {
-          return <Text className="btnpill fs-12 pending">{t("Scheduled")}</Text>;
+          return (
+            <Text className="btnpill fs-12 pending">{t("Scheduled")}</Text>
+          );
         } else if (status === "HELD") {
           return <Text className="btnpill fs-12 success">{t("Held")}</Text>;
         } else if (status === "RESCHEDULED") {
-          return <Text className="btnpill fs-12 pending">{t("Rescheduled")}</Text>;
+          return (
+            <Text className="btnpill fs-12 pending">{t("Rescheduled")}</Text>
+          );
         } else if (status === "CANCELED") {
           return (
             <Text className="btnpill fs-12 inactive">{t("Cancelled")}</Text>
