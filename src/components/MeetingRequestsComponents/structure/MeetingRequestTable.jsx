@@ -12,7 +12,6 @@ import {
 import { NavLink } from "react-router-dom";
 import { MySelect, SearchInput } from "../../Forms";
 import { useEffect, useState } from "react";
-import { meetingItems } from "../../../shared";
 import { CustomPagination, DeleteModal, TableLoader } from "../../Ui";
 import { ScheduleMeeting } from "../modal";
 import { UPDATE_BUSINESS_MEETING } from "../../../graphql/mutation";
@@ -22,7 +21,10 @@ import { t } from "i18next";
 import dayjs from "dayjs";
 
 const { Text } = Typography;
-
+const meetingItems = [
+  { id: "2", name: "Pending" },
+  { id: "3", name: "Cancel Meeting" },
+];
 const MeetingRequestTable = () => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
