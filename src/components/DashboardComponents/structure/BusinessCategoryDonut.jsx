@@ -49,49 +49,6 @@ const BusinessCategoryDonut = () => {
     },
   };
 
-  const data = [
-    {
-      id: 1,
-      icon: "db.png",
-    },
-    {
-      id: 2,
-      icon: "rc.png",
-    },
-    {
-      id: 3,
-      icon: "rs.png",
-    },
-    {
-      id: 4,
-      icon: "ts.png",
-    },
-    {
-      id: 5,
-      icon: "cps.png",
-    },
-    {
-      id: 6,
-      icon: "rec.png",
-    },
-    {
-      id: 7,
-      icon: "hbf.png",
-    },
-    {
-      id: 8,
-      icon: "al.png",
-    },
-    {
-      id: 9,
-      icon: "ib.png",
-    },
-    {
-      id: 10,
-      icon: "es.png",
-    },
-  ];
-
   if (loading) {
     return (
       <Flex justify="center" align="center" className="h-200">
@@ -134,19 +91,21 @@ const BusinessCategoryDonut = () => {
                 xs={{ span: 24 }}
                 sm={{ span: 24 }}
               >
-                {data.slice(0, 5).map((item, index) => (
-                  <Flex gap={5} align="center" className="mb-3" key={index}>
-                    <img
-                      src={"/assets/icons/categoryicons/" + item.icon}
-                      width={24}
-                      alt="category icon"
-                      fetchPriority="high"
-                    />
-                    <Text className="fs-16 fw-500">
-                      {categoryData?.getCountByEachCategory[index]?.category}
-                    </Text>
-                  </Flex>
-                ))}
+                {categoryData?.getCountByEachCategory
+                  .slice(0, 5)
+                  .map((item, index) => (
+                    <Flex gap={5} align="center" className="mb-3" key={index}>
+                      <img
+                        src={item.icon}
+                        width={24}
+                        alt="category icon"
+                        fetchPriority="high"
+                      />
+                      <Text className="fs-16 fw-500">
+                        {categoryData?.getCountByEachCategory[index]?.category}
+                      </Text>
+                    </Flex>
+                  ))}
               </Col>
               <Col
                 lg={{ span: 12 }}
@@ -154,22 +113,24 @@ const BusinessCategoryDonut = () => {
                 xs={{ span: 24 }}
                 sm={{ span: 24 }}
               >
-                {data.slice(5).map((item, index) => (
-                  <Flex gap={5} align="center" className="mb-3" key={index}>
-                    <img
-                      src={"/assets/icons/categoryicons/" + item.icon}
-                      width={24}
-                      alt="category icon"
-                      fetchPriority="high"
-                    />
-                    <Text className="fs-16 fw-500">
-                      {
-                        categoryData?.getCountByEachCategory[index + 5]
-                          ?.category
-                      }
-                    </Text>
-                  </Flex>
-                ))}
+                {categoryData?.getCountByEachCategory
+                  .slice(5)
+                  .map((item, index) => (
+                    <Flex gap={5} align="center" className="mb-3" key={index}>
+                      <img
+                        src={item.icon}
+                        width={24}
+                        alt="category icon"
+                        fetchPriority="high"
+                      />
+                      <Text className="fs-16 fw-500">
+                        {
+                          categoryData?.getCountByEachCategory[index + 5]
+                            ?.category
+                        }
+                      </Text>
+                    </Flex>
+                  ))}
               </Col>
             </Row>
           </Col>
