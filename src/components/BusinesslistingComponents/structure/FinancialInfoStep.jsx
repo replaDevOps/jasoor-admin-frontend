@@ -212,7 +212,6 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
     form.getFieldValue("profittime"),
     form.getFieldValue("revenueTime"),
   ]);
-
   return (
     <>
       <Flex
