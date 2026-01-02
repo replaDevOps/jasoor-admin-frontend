@@ -4,6 +4,7 @@ import {
   MeetingRequestTable,
   ModuleTopHeading,
   ScheduleMeetingTable,
+  CancelledMeetingsTable,
 } from "../../components";
 import { t } from "i18next";
 
@@ -18,6 +19,11 @@ const MeetingRequestPage = () => {
       key: "2",
       label: t("Schedule Meetings"),
       children: <ScheduleMeetingTable />,
+    },
+    {
+      key: "3",
+      label: t("Cancelled Meetings"),
+      children: <CancelledMeetingsTable />,
     },
   ];
   return (

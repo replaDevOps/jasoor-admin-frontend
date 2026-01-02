@@ -395,7 +395,7 @@ const AddNewCategory = () => {
             </Row>
           </Form>
         </Card>
-        <Card className="radius-12 border-gray">
+        {/* <Card className="radius-12 border-gray">
           <Flex vertical gap={10} className="alignStart">
             <Title level={5} className="m-0">
               {t("Category Stats & Profitability")}
@@ -406,7 +406,7 @@ const AddNewCategory = () => {
               columns={categoryStatsProfColumn(handleInputChange)}
             />
           </Flex>
-        </Card>
+        </Card> */}
       </Flex>
     </>
   );
