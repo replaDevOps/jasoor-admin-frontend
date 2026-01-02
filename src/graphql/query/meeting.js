@@ -113,18 +113,18 @@ const GETADMINSCHEDULEMEETINGS = gql`
 `;
 const GETDEALS = gql`
   query GetDeals(
-    $limit: Int
-    $offset: Int
-    $search: String
+    $dealType: DealType
     $status: String
-    $isCompleted: Boolean
+    $search: String
+    $offset: Int
+    $limit: Int
   ) {
     getDeals(
-      limit: $limit
-      offset: $offset
-      search: $search
+      dealType: $dealType
       status: $status
-      isCompleted: $isCompleted
+      search: $search
+      offset: $offset
+      limit: $limit
     ) {
       totalCount
       deals {

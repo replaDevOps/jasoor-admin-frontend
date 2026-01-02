@@ -1,5 +1,6 @@
 export * from "./InprogressDealTable";
 export * from "./CompleteDealsTable";
+export * from "./DealsTable";
 export * from "./BusinessDealsDetails";
 export * from "./SingleInprogressSteps";
 export * from "./DigitalSaleAgreement";
