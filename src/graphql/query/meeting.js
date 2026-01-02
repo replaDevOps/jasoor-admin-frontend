@@ -156,9 +156,50 @@ const GETDEALS = gql`
   }
 `;
 
+const GETADMINCANCELMEETINGS = gql`
+  query GetAdminCancelMeetings($offset: Int, $limit: Int, $search: String) {
+    getAdminCancelMeetings(offset: $offset, limit: $limit, search: $search) {
+      totalCount
+      items {
+        id
+        business {
+          businessTitle
+          price
+          seller {
+            id
+            name
+            email
+            phone
+          }
+        }
+        requestedTo {
+          name
+          email
+          phone
+          id
+        }
+        requestedBy {
+          name
+          email
+          phone
+          id
+        }
+        requestedDate
+        requestedEndDate
+        receiverAvailabilityDate
+        offer {
+          price
+        }
+        status
+      }
+    }
+  }
+`;
+
 export {
   GETMEETINGSCOUNT,
   GETADMINSCHEDULEMEETINGS,
   GETADMINPENDINGMEETINGS,
   GETDEALS,
+  GETADMINCANCELMEETINGS,
 };
