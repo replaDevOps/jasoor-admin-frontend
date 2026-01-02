@@ -94,10 +94,9 @@ const getStatusFromBooleans = (deal) => {
   return { key: "PENDING", label: "Commission Pending", className: "pending" };
 };
 
-const InprogressDealTable = () => {
+const DealsTable = ({ dealType = "INPROGRESS", onRowClick }) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const [selectedStatus, setSelectedStatus] = useState(null);
   const navigate = useNavigate();
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
@@ -119,19 +118,29 @@ const InprogressDealTable = () => {
   }, [searchTerm]);
 
   useEffect(() => {
-    getDeals({
-      variables: {
-        limit: pageSize,
-        offset: (current - 1) * pageSize,
-        search: searchValue || null,
-        status: selectedStatus ? selectedStatus.toUpperCase() : null,
-        isCompleted: false,
-      },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchValue, selectedStatus, current, pageSize]);
+    const variables = {
+      limit: pageSize,
+      offset: (current - 1) * pageSize,
+      search: searchValue || null,
+    };
 
-  const inprogressdealData = (data?.getDeals?.deals || []).map((item) => ({
+    // Set status based on deal type
+    if (dealType === "inprogress") {
+      variables.status = null;
+      variables.dealType = "inprogress";
+    } else if (dealType === "completed") {
+      variables.status = null;
+      variables.dealType = "completed";
+    } else if (dealType === "canceled") {
+      variables.status = null;
+      variables.dealType = "canceled";
+    }
+
+    getDeals({ variables });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue, current, pageSize, dealType]);
+
+  const dealData = (data?.getDeals?.deals || []).map((item) => ({
     key: item?.id,
     businessTitle: item?.business?.businessTitle || "-",
     buyerName: item?.buyer?.name || "-",
@@ -139,7 +148,7 @@ const InprogressDealTable = () => {
     finalizedOffer: item?.offer?.price
       ? `${item?.offer?.price?.toLocaleString()}`
       : "-",
-    statusInfo: getStatusFromBooleans(item), // Use boolean-based status
+    statusInfo: getStatusFromBooleans(item),
     date: item?.createdAt
       ? new Date(item?.createdAt).toLocaleDateString()
       : "-",
@@ -155,7 +164,8 @@ const InprogressDealTable = () => {
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
-  const inprogressdealColumn = [
+
+  const columns = [
     {
       title: t("Business Title"),
       dataIndex: "businessTitle",
@@ -174,7 +184,7 @@ const InprogressDealTable = () => {
       render: (_, row) => {
         const price = row?.finalizedOffer;
 
-        return price != null && price !== "" ? (
+        return price != null && price !== "" && price !== "-" ? (
           <Flex gap={5} align="center">
             <img
               src="/assets/icons/reyal.webp"
@@ -206,16 +216,6 @@ const InprogressDealTable = () => {
     },
   ];
 
-  const businessdealItems = [
-    { id: "2", name: t("Commission Verification") },
-    { id: "3", name: t("DSA From Seller") },
-    { id: "4", name: t("DSA From Buyer") },
-    { id: "5", name: t("Buyer Payment") },
-    { id: "6", name: t("Payment Approval") },
-    { id: "7", name: t("Document Confirmation") },
-    { id: "8", name: t("Deal To Fainal Pending") },
-  ];
-
   return (
     <>
       <Flex vertical gap={20}>
@@ -240,31 +240,25 @@ const InprogressDealTable = () => {
                   onChange={(e) => handleSearch(e.target.value)}
                   allowClear
                 />
-
-                {/*
-                
-                 <MySelect
-                  withoutForm
-                  name="businessdealstatus"
-                  placeholder={t("Business Deal Status")}
-                  options={businessdealItems}
-                  onChange={(value) => setSelectedStatus(value)}
-                  allowClear
-                /> */}
               </Flex>
             </Col>
           </Row>
         </Form>
         <Table
           size="large"
-          columns={inprogressdealColumn}
-          dataSource={inprogressdealData}
+          columns={columns}
+          dataSource={dealData}
           className="pagination table-cs table"
           showSorterTooltip={false}
-          scroll={{ x: 1600 }}
+          scroll={{ x: dealType === "INPROGRESS" ? 1600 : 1200 }}
           rowHoverable={false}
           onRow={(record) => ({
-            onClick: () => navigate("/businessdeal/details/" + record?.key),
+            onClick: () => {
+              navigate("/businessdeal/details/" + record?.key);
+              if (onRowClick) {
+                onRowClick(record);
+              }
+            },
           })}
           pagination={false}
           loading={{
@@ -283,4 +277,4 @@ const InprogressDealTable = () => {
   );
 };
 
-export { InprogressDealTable };
+export { DealsTable };
