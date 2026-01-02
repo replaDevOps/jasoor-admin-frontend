@@ -243,8 +243,10 @@ const InprogressDealTable = () => {
                   onChange={(e) => handleSearch(e.target.value)}
                   allowClear
                 />
-                // later we fixed this
-                {/* <MySelect
+
+                {/*
+                
+                 <MySelect
                   withoutForm
                   name="businessdealstatus"
                   placeholder={t("Business Deal Status")}

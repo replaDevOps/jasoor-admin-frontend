@@ -36,7 +36,6 @@ const BusinessVisionStep = forwardRef(({ data, setData }, ref) => {
       supportDuration: data.supportDuration || undefined,
       noSession: data.supportSession || undefined,
       growthOpportunities: data.growthOpportunities,
-      businessPrice: data.price || undefined,
       reasonSelling: data.reason,
     });
   }, [data, form]);
@@ -91,11 +90,10 @@ const BusinessVisionStep = forwardRef(({ data, setData }, ref) => {
                 className="w-100"
                 validator={{
                   validator: (_, value) => {
-                    if (!value) {
-                      return Promise.reject(
-                        new Error(t("Please enter the support duration"))
-                      );
-                    } else if (Number(value) <= 0) {
+                    if (value === undefined || value === null || value === "") {
+                      return Promise.resolve();
+                    }
+                    if (Number(value) <= 0) {
                       return Promise.reject(
                         new Error(t("Support duration must be greater than 0"))
                       );
@@ -113,13 +111,10 @@ const BusinessVisionStep = forwardRef(({ data, setData }, ref) => {
                 placeholder={t("Enter number of sessions")}
                 validator={{
                   validator: (_, value) => {
-                    if (!value) {
-                      return Promise.reject(
-                        new Error(
-                          t("Please enter the number of support sessions")
-                        )
-                      );
-                    } else if (Number(value) <= 0) {
+                    if (value === undefined || value === null || value === "") {
+                      return Promise.resolve();
+                    }
+                    if (Number(value) <= 0) {
                       return Promise.reject(
                         new Error(
                           t("Number of sessions must be greater than 0")
