@@ -6,7 +6,7 @@ export const CREATE_USER = gql`
       id
     }
   }
-`
+`;
 
 export const CREATE_STAFF_MEMBER = gql`
   mutation CreateStaff($input: UserInput!) {
@@ -16,20 +16,20 @@ export const CREATE_STAFF_MEMBER = gql`
       }
     }
   }
-`
+`;
 
 export const LOGIN = gql`
-    mutation Login($password: String!, $email: String) {
-  login(password: $password, email: $email) {
-    token
-    refreshToken
-    user {
-      id
-      status
+  mutation StaffLogin($password: String!, $email: String) {
+    staffLogin(password: $password, email: $email) {
+      token
+      refreshToken
+      user {
+        id
+        status
+      }
     }
   }
-}
-`
+`;
 
 export const REFRESH_TOKEN = gql`
   mutation RefreshToken($token: String!) {
@@ -42,62 +42,106 @@ export const REFRESH_TOKEN = gql`
       }
     }
   }
-`
+`;
 
 export const LOGOUT = gql`
-    mutation Logout {
-  logout {
-    message
+  mutation Logout {
+    logout {
+      message
+    }
   }
-}
-`
+`;
 
 export const CREATE_ROLE = gql`
-    mutation CreateRole($input: CreateRoleInput!) {
-  createRole(input: $input) {
-    id
+  mutation CreateRole($input: CreateRoleInput!) {
+    createRole(input: $input) {
+      id
+    }
   }
-}
-`
+`;
 export const UPDATE_ROLE = gql`
-mutation UpdateRole($input: UpdateRoleInput!) {
-  updateRole(input: $input) {
-    id
+  mutation UpdateRole($input: UpdateRoleInput!) {
+    updateRole(input: $input) {
+      id
+    }
   }
-}
-`
+`;
 export const DELETE_ROLE = gql`
-mutation DeleteRole($deleteRoleId: ID) {
-  deleteRole(id: $deleteRoleId)
-}
-`
-export const UPDATE_SETTING = gql`
-mutation UpdateSettings($updateSettingsId: ID!, $language: String,$commissionRate: String, $faceBook: String, $instagram: String, $whatsApp: String, $x: String, $email: String) {
-  updateSettings(id: $updateSettingsId, language: $language,commissionRate: $commissionRate, faceBook: $faceBook, instagram: $instagram, whatsApp: $whatsApp, x: $x, email: $email) {
-    id
+  mutation DeleteRole($deleteRoleId: ID) {
+    deleteRole(id: $deleteRoleId)
   }
-}
-`
+`;
+export const UPDATE_SETTING = gql`
+  mutation UpdateSettings(
+    $updateSettingsId: ID!
+    $language: String
+    $commissionRate: String
+    $faceBook: String
+    $instagram: String
+    $whatsApp: String
+    $x: String
+    $email: String
+  ) {
+    updateSettings(
+      id: $updateSettingsId
+      language: $language
+      commissionRate: $commissionRate
+      faceBook: $faceBook
+      instagram: $instagram
+      whatsApp: $whatsApp
+      x: $x
+      email: $email
+    ) {
+      id
+    }
+  }
+`;
 
 export const CREATE_SETTINGS = gql`
-mutation CreateSettings($commissionRate: String!, $language: String, $banks: [BankInput!]!, $email: String, $x: String, $whatsApp: String, $instagram: String, $faceBook: String) {
-  createSettings(commissionRate: $commissionRate, language: $language, banks: $banks, email: $email, x: $x, whatsApp: $whatsApp, instagram: $instagram, faceBook: $faceBook){
-    id
+  mutation CreateSettings(
+    $commissionRate: String!
+    $language: String
+    $banks: [BankInput!]!
+    $email: String
+    $x: String
+    $whatsApp: String
+    $instagram: String
+    $faceBook: String
+  ) {
+    createSettings(
+      commissionRate: $commissionRate
+      language: $language
+      banks: $banks
+      email: $email
+      x: $x
+      whatsApp: $whatsApp
+      instagram: $instagram
+      faceBook: $faceBook
+    ) {
+      id
+    }
   }
-}
-`
+`;
 export const CHANGE_ADMIN_PASSWORD = gql`
-mutation AdminChangePassword($adminChangePasswordId: ID, $oldPassword: String, $newPassword: String) {
-  adminChangePassword(id: $adminChangePasswordId, oldPassword: $oldPassword, newPassword: $newPassword)
-}
-`
-export const ADD_ADMIN_BANK = gql`
-mutation AddAdminBank($input: BankInput!, $addAdminBankId: ID) {
-  addAdminBank(input: $input, id: $addAdminBankId) {
-    id
+  mutation AdminChangePassword(
+    $adminChangePasswordId: ID
+    $oldPassword: String
+    $newPassword: String
+  ) {
+    adminChangePassword(
+      id: $adminChangePasswordId
+      oldPassword: $oldPassword
+      newPassword: $newPassword
+    )
   }
-}
-`
+`;
+export const ADD_ADMIN_BANK = gql`
+  mutation AddAdminBank($input: BankInput!, $addAdminBankId: ID) {
+    addAdminBank(input: $input, id: $addAdminBankId) {
+      id
+    }
+  }
+`;
 
 export const UPDATEBANK = gql`
   mutation UpdateBank($updateBankId: ID!, $input: BankInput!) {
@@ -108,7 +152,7 @@ export const UPDATEBANK = gql`
 `;
 
 export const MARK_AS_READ = gql`
-mutation MarkNotificationAsRead($markNotificationAsReadId: ID!) {
-  markNotificationAsRead(id: $markNotificationAsReadId)
-}
-`
+  mutation MarkNotificationAsRead($markNotificationAsReadId: ID!) {
+    markNotificationAsRead(id: $markNotificationAsReadId)
+  }
+`;
