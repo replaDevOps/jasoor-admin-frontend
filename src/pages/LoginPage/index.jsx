@@ -29,7 +29,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
   const [messageApi, contextHolder] = message.useMessage();
-  const [loginUser, { loading }] = useMutation(LOGIN);
   const [form] = Form.useForm();
   const [selectedLang, setSelectedLang] = useState({
     key: "1",
@@ -37,6 +36,28 @@ const LoginPage = () => {
     icon: "assets/icons/en.png",
   });
   const [getSeetings] = useLazyQuery(GET_SETTINGS);
+
+  const [loginUser, { loading }] = useMutation(LOGIN, {
+    onError: (error) => {
+      let errorMessage = t("Login failed: Something went wrong");
+
+      // Handle different error types
+      if (error?.networkError?.message) {
+        errorMessage = t(
+          "Network error: Please check your internet connection"
+        );
+      } else if (error?.graphQLErrors && error.graphQLErrors.length > 0) {
+        // Get the first GraphQL error message
+        const graphQLError = error.graphQLErrors[0];
+        errorMessage = graphQLError?.message || errorMessage;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+
+      messageApi.error(errorMessage);
+      console.error("Login error:", error);
+    },
+  });
 
   const [language, setLanguage] = useState();
   useEffect(() => {
@@ -59,57 +80,67 @@ const LoginPage = () => {
   }, []);
 
   const handleFinish = async (values) => {
+    const email = values.email.toLowerCase().trim();
+    const password = values.password;
+
+    // Validate inputs
+    if (!email || !password) {
+      messageApi.error(t("Please enter email and password"));
+      return;
+    }
+
     try {
-      const email = values.email.toLowerCase(); // convert to lowercase
-      const password = values.password;
-      const { data, errors } = await loginUser({
+      // Call the login mutation
+      const { data } = await loginUser({
         variables: { email, password },
       });
 
-      if (errors && errors.length > 0) {
-        const errorMessage =
-          errors[0]?.message || "Login failed: Invalid credentials";
-        messageApi.error(errorMessage);
-        return;
-      }
+      // Check if login was successful
+      if (data?.staffLogin?.token && data?.staffLogin?.refreshToken) {
+        const user = data.staffLogin.user;
 
-      if (data?.login?.token && data?.login?.refreshToken) {
-        // Use the new token management system
-        login(data.login.token, data.login.refreshToken, data.login.user);
-
-        const settingsResult = await getSeetings();
-        const backendLang =
-          settingsResult?.data?.getSetting?.language?.toLowerCase();
-
-        if (backendLang) {
-          localStorage.setItem("lang", backendLang);
-          i18n.changeLanguage(backendLang);
-          setLanguage(backendLang);
-          setSelectedLang(
-            backendLang === "ar"
-              ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
-              : { key: "1", label: "EN", icon: "assets/icons/en.png" }
+        // Check if user status is active
+        if (user?.status === "inactive" || user?.status === "INACTIVE") {
+          messageApi.error(
+            t("Your account is inactive. Please contact administrator.")
           );
+          return;
         }
 
-        messageApi.success("Login successful!");
-        navigate("/");
-      } else {
-        messageApi.error("Login failed: Invalid credentials");
+        // Use the new token management system
+        login(data.staffLogin.token, data.staffLogin.refreshToken, user);
+
+        messageApi.success(t("Login successful! Redirecting..."));
+
+        // Fetch settings to get backend language preference
+        try {
+          const settingsResult = await getSeetings();
+          const backendLang =
+            settingsResult?.data?.getSetting?.language?.toLowerCase();
+
+          if (backendLang && backendLang !== language) {
+            localStorage.setItem("lang", backendLang);
+            i18n.changeLanguage(backendLang);
+            setLanguage(backendLang);
+            setSelectedLang(
+              backendLang === "ar"
+                ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
+                : { key: "1", label: "EN", icon: "assets/icons/en.png" }
+            );
+          }
+        } catch (settingsError) {
+          console.warn("Failed to fetch settings:", settingsError);
+          // Continue with navigation even if settings fetch fails
+        }
+
+        // Navigate to dashboard after a short delay to show success message
+        setTimeout(() => {
+          navigate("/");
+        }, 500);
       }
     } catch (error) {
-      let errorMessage = "Login failed: Something went wrong";
-
-      // Handle different error types
-      if (error?.networkError) {
-        errorMessage = "Network error: Please check your internet connection";
-      } else if (error?.graphQLErrors && error.graphQLErrors.length > 0) {
-        errorMessage = error.graphQLErrors[0]?.message || errorMessage;
-      } else if (error?.message) {
-        errorMessage = error.message;
-      }
-
-      messageApi.error(errorMessage);
+      // Error is already handled by onError callback, just log it
+      console.error("Login error:", error);
     }
   };
 
@@ -224,6 +255,7 @@ const LoginPage = () => {
                 className="btnsave bg-dark-blue fs-16"
                 block
                 loading={loading}
+                disabled={loading}
               >
                 {t("Sign In")}
               </Button>
