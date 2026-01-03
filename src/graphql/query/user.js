@@ -380,13 +380,11 @@ const GET_SETTINGS = gql`
   query GetSetting {
     getSetting {
       id
-      language
       commissionRate
       faceBook
       instagram
       whatsApp
       x
-      email
     }
   }
 `;

@@ -17,11 +17,7 @@ import { useState, useEffect, useMemo } from "react";
 import { meetingItems } from "../../../shared";
 import { CustomPagination, TableLoader, DeleteModal } from "../../Ui";
 import { RescheduleMeeting } from "../modal";
-import {
-  UPDATE_BUSINESS_MEETING,
-  UPDATE_OFFER,
-  CREATE_OFFER,
-} from "../../../graphql/mutation";
+import { UPDATE_BUSINESS_MEETING } from "../../../graphql/mutation";
 import { GETADMINSCHEDULEMEETINGS } from "../../../graphql/query/meeting";
 import { IS_BUSINESS_IN_DEAL_PROCESS } from "../../../graphql/query/business";
 import { useLazyQuery, useMutation } from "@apollo/client";
@@ -76,8 +72,6 @@ const ScheduleMeetingTable = () => {
   const [updateMeeting, { loading: updating }] = useMutation(
     UPDATE_BUSINESS_MEETING
   );
-  const [updateOffer, { loading: onUpdating }] = useMutation(UPDATE_OFFER);
-  const [createOffer] = useMutation(CREATE_OFFER);
   const [openDropdownRowId, setOpenDropdownRowId] = useState(null);
   const [disabledActionBusinessIds, setDisabledActionBusinessIds] = useState(
     new Set()
@@ -190,129 +184,136 @@ const ScheduleMeetingTable = () => {
       key: "action",
       fixed: "right",
       width: 100,
-      render: (_, row) => (
-        <Dropdown
-          menu={{
-            items: [
-              {
-                label: t("Open Deal"),
-                key: "1",
-                disabled: disabledActionBusinessIds.has(row.businessId),
-                onClick: () => {
-                  if (disabledActionBusinessIds.has(row.businessId)) {
-                    messageApi.warning(
-                      t("Deal already opened for this business.")
-                    );
-                    return;
-                  }
-                  setVisible(true);
-                  setSelectedOffer({
-                    id: row.offerId,
-                    price: row.offerPrice,
-                    commission: row.offerCommission,
-                    meetingId: row.key,
-                    businessId: row.businessId,
-                  });
+      render: (_, row) => {
+        if (row.status === "HELD") return null;
+        return (
+          <Dropdown
+            menu={{
+              items: [
+                {
+                  label: t("Open Deal"),
+                  key: "1",
+                  disabled: disabledActionBusinessIds.has(row.businessId),
+                  onClick: () => {
+                    if (disabledActionBusinessIds.has(row.businessId)) {
+                      messageApi.warning(
+                        t("Deal already opened for this business.")
+                      );
+                      return;
+                    }
+                    setVisible(true);
+                    setSelectedOffer({
+                      id: row.offerId,
+                      price: row.offerPrice,
+                      commission: row.offerCommission,
+                      meetingId: row.key,
+                      businessId: row.businessId,
+                    });
+                  },
                 },
-              },
-              {
-                label: t("Reschedule Meeting"),
-                key: "4",
-                disabled:
-                  row.status === "HELD" ||
-                  row.status === "CANCELED" ||
-                  row.status === "RESCHEDULED",
-                onClick: () => {
-                  if (row.status === "HELD") {
-                    messageApi.warning(t("Cannot reschedule a held meeting."));
-                    return;
-                  }
-                  if (row.status === "CANCELED") {
-                    messageApi.warning(
-                      t("Cannot reschedule a cancelled meeting.")
-                    );
-                    return;
-                  }
-                  if (row.status === "RESCHEDULED") {
-                    messageApi.warning(t("Meeting is already rescheduled."));
-                    return;
-                  }
-                  setSelectedMeetingId(row.key);
-                  setRescheduleVisible(true);
+                {
+                  label: t("Reschedule Meeting"),
+                  key: "4",
+                  disabled:
+                    row.status === "HELD" ||
+                    row.status === "CANCELED" ||
+                    row.status === "RESCHEDULED",
+                  onClick: () => {
+                    if (row.status === "HELD") {
+                      messageApi.warning(
+                        t("Cannot reschedule a held meeting.")
+                      );
+                      return;
+                    }
+                    if (row.status === "CANCELED") {
+                      messageApi.warning(
+                        t("Cannot reschedule a cancelled meeting.")
+                      );
+                      return;
+                    }
+                    if (row.status === "RESCHEDULED") {
+                      messageApi.warning(t("Meeting is already rescheduled."));
+                      return;
+                    }
+                    setSelectedMeetingId(row.key);
+                    setRescheduleVisible(true);
+                  },
                 },
-              },
-              {
-                label: t("Cancel"),
-                key: "3",
-                disabled: row.status === "HELD" || row.status === "CANCELED",
-                onClick: () => {
-                  if (row.status === "HELD") {
-                    messageApi.warning(t("Cannot cancel a held meeting."));
-                    return;
-                  }
-                  if (row.status === "CANCELED") {
-                    messageApi.warning(t("Meeting is already cancelled."));
-                    return;
-                  }
-                  setSelectedMeetingId(row.key);
-                  setDeleteItem(true);
+                {
+                  label: t("Cancel"),
+                  key: "3",
+                  disabled: row.status === "HELD" || row.status === "CANCELED",
+                  onClick: () => {
+                    if (row.status === "HELD") {
+                      messageApi.warning(t("Cannot cancel a held meeting."));
+                      return;
+                    }
+                    if (row.status === "CANCELED") {
+                      messageApi.warning(t("Meeting is already cancelled."));
+                      return;
+                    }
+                    setSelectedMeetingId(row.key);
+                    setDeleteItem(true);
+                  },
                 },
-              },
-            ],
-          }}
-          trigger={["click"]}
-          open={openDropdownRowId === row.key}
-          onOpenChange={async (nextOpen) => {
-            if (!nextOpen) {
-              setOpenDropdownRowId(null);
-              return;
-            }
-            if (disabledActionBusinessIds.has(row.businessId)) {
-              messageApi.warning(t("Deal already opened for this business."));
-              setOpenDropdownRowId(row.key);
-              return;
-            }
-            try {
-              const { data: dealData } = await checkBusinessInDealProcess({
-                variables: { isBusinessInDealProcessId: row.businessId },
-              });
-              const isInDeal = !!dealData?.isBusinessInDealProcess;
-              if (isInDeal) {
-                setDisabledActionBusinessIds((prev) => {
-                  const next = new Set(prev);
-                  next.add(row.businessId);
-                  return next;
-                });
+              ],
+            }}
+            trigger={["click"]}
+            open={openDropdownRowId === row.key}
+            onOpenChange={async (nextOpen) => {
+              if (!nextOpen) {
+                setOpenDropdownRowId(null);
+                return;
+              }
+              if (disabledActionBusinessIds.has(row.businessId)) {
                 messageApi.warning(t("Deal already opened for this business."));
                 setOpenDropdownRowId(row.key);
-              } else {
-                setOpenDropdownRowId(row.key);
+                return;
               }
-            } catch (err) {
-              console.error(err);
-              messageApi.error(t("Unable to check deal status."));
-              setOpenDropdownRowId(null);
-            }
-          }}
-        >
-          <Button
-            aria-labelledby="action button"
-            className="bg-transparent border0 p-0"
-            style={
-              disabledActionBusinessIds.has(row.businessId)
-                ? { opacity: 0.5, cursor: "not-allowed" }
-                : {}
-            }
+              try {
+                const { data: dealData } = await checkBusinessInDealProcess({
+                  variables: { isBusinessInDealProcessId: row.businessId },
+                });
+                const isInDeal = !!dealData?.isBusinessInDealProcess;
+                if (isInDeal) {
+                  setDisabledActionBusinessIds((prev) => {
+                    const next = new Set(prev);
+                    next.add(row.businessId);
+                    return next;
+                  });
+                  messageApi.warning(
+                    t("Deal already opened for this business.")
+                  );
+                  setOpenDropdownRowId(row.key);
+                } else {
+                  setOpenDropdownRowId(row.key);
+                }
+              } catch (err) {
+                console.error(err);
+                messageApi.error(t("Unable to check deal status."));
+                setOpenDropdownRowId(null);
+              }
+            }}
           >
-            <img
-              src="/assets/icons/dots.png"
-              alt="dot icon"
-              width={16}
-              fetchPriority="high"
-            />
-          </Button>
-        </Dropdown>
-      ),
+            <Button
+              aria-labelledby="action button"
+              className="bg-transparent border0 p-0"
+              style={
+                disabledActionBusinessIds.has(row.businessId)
+                  ? { opacity: 0.5, cursor: "not-allowed" }
+                  : {}
+              }
+            >
+              <img
+                src="/assets/icons/dots.png"
+                alt="dot icon"
+                width={16}
+                fetchPriority="high"
+              />
+            </Button>
+          </Dropdown>
+        );
+      },
     },
   ];
   // Apollo lazy query
@@ -550,7 +551,7 @@ const ScheduleMeetingTable = () => {
           pagination={false}
           loading={{
             ...TableLoader,
-            spinning: loading || updating || onUpdating,
+            spinning: loading || updating,
           }}
         />
         <CustomPagination
