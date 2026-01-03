@@ -2,25 +2,55 @@ import { Button, Card, Col, Flex, Form, Row, Typography } from "antd";
 import { MyInput, MySelect } from "../../Forms";
 import { useEffect } from "react";
 import { UPDATE_SETTING, CREATE_SETTINGS } from "../../../graphql/mutation/";
+import { UPDATE_USER } from "../../../graphql/mutation/mutations";
 import { GET_SETTINGS } from "../../../graphql/query";
-import { useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { message } from "antd";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
+import { getUserId } from "../../../shared/tokenManager";
+import { gql } from "@apollo/client";
+
+const GET_USER = gql`
+  query GetUser($getUserId: ID!) {
+    getUser(id: $getUserId) {
+      id
+      email
+      language
+    }
+  }
+`;
 
 const { Title } = Typography;
 const CommissionSocial = ({ comssionSocial }) => {
+  const { t, i18n } = useTranslation();
   const langItems = [
     {
       id: "EN",
-      name: "English",
+      name: t("English"),
     },
     {
       id: "AR",
-      name: "Arabic",
+      name: t("Arabic"),
     },
   ];
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+  const userId = getUserId();
+
+  // Get user data to fetch email and language
+  const [getUser, { data: userData }] = useLazyQuery(GET_USER, {
+    fetchPolicy: "network-only",
+  });
+
+  useEffect(() => {
+    // Fetch user data when component mounts
+    if (userId) {
+      getUser({
+        variables: { getUserId: userId },
+      });
+    }
+  }, [userId, getUser]);
+
   useEffect(() => {
     if (comssionSocial) {
       form.setFieldsValue({
@@ -29,12 +59,15 @@ const CommissionSocial = ({ comssionSocial }) => {
         instagram: comssionSocial.instagram,
         whatsapp: comssionSocial.whatsapp,
         twitter: comssionSocial.twitter,
-        email: comssionSocial.email,
-        language: comssionSocial.language === "EN" ? "English" : "Arabic",
       });
     }
-  }, [comssionSocial, form]);
-
+    if (userData?.getUser) {
+      form.setFieldsValue({
+        email: userData.getUser.email,
+        language: userData.getUser.language,
+      });
+    }
+  }, [comssionSocial, form, userData]);
   const [changeSetting, { loading: updating }] = useMutation(UPDATE_SETTING, {
     refetchQueries: [{ query: GET_SETTINGS }],
     awaitRefetchQueries: true,
@@ -50,10 +83,23 @@ const CommissionSocial = ({ comssionSocial }) => {
     refetchQueries: [{ query: GET_SETTINGS }],
     awaitRefetchQueries: true,
     onCompleted: () => {
-      messageApi.success("Settings created successfully!");
+      messageApi.success(t("Settings created successfully!"));
     },
     onError: (err) => {
       messageApi.error(err?.message || "Failed to create settings.");
+    },
+  });
+
+  const [updateUser, { loading: updatingUser }] = useMutation(UPDATE_USER, {
+    onCompleted: (data) => {
+      if (data?.updateUser?.language) {
+        const langCode = data.updateUser.language === "AR" ? "ar" : "en";
+        localStorage.setItem("lang", langCode);
+        i18n.changeLanguage(langCode);
+      }
+    },
+    onError: (err) => {
+      messageApi.error(err?.message || t("Failed to update user language."));
     },
   });
 
@@ -63,7 +109,6 @@ const CommissionSocial = ({ comssionSocial }) => {
     const instagram = values.instagram || null;
     const whatsApp = values.whatsapp || null;
     const twitter = values.twitter || null;
-    const email = values.email || null;
     const language = values.language || null;
     if (comssionSocial && comssionSocial?.id) {
       changeSetting({
@@ -74,27 +119,36 @@ const CommissionSocial = ({ comssionSocial }) => {
           instagram,
           whatsApp,
           twitter,
-          email,
-          language: language === "Arabic" ? "AR" : "EN",
         },
       });
     } else {
       createSetting({
         variables: {
           commissionRate: commissionRate || "",
-          banks: [],
-          email,
           x: twitter || null,
           whatsApp,
           instagram,
           faceBook: facebook || null,
-          language,
+        },
+      });
+    }
+    // Update user language if changed
+    if (userId && language) {
+      const selectedLanguage = language;
+
+      // Update backend language
+      updateUser({
+        variables: {
+          input: {
+            id: userId,
+            language: selectedLanguage,
+          },
         },
       });
     }
   };
 
-  const isLoading = updating || creating;
+  const isLoading = updating || creating || updatingUser;
 
   return (
     <>
@@ -130,6 +184,7 @@ const CommissionSocial = ({ comssionSocial }) => {
             required
             message={t("Choose language")}
             options={langItems}
+            showKey={true}
             placeholder={t("Choose language")}
           />
           <Title level={5} className="my-3 fw-600">
@@ -164,12 +219,7 @@ const CommissionSocial = ({ comssionSocial }) => {
               <MyInput label={t("X")} name="twitter" />
             </Col>
             <Col md={{ span: 12 }} span={24}>
-              <MyInput
-                label={t("Email Address")}
-                name="email"
-                required
-                disabled
-              />
+              <MyInput label={t("Email Address")} name="email" disabled />
             </Col>
           </Row>
         </Form>

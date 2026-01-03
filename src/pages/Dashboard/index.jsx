@@ -9,6 +9,7 @@ import {
 import { useQuery } from "@apollo/client";
 import { ME } from "../../graphql/query";
 import { t } from "i18next";
+import { getUserId } from "../../shared/tokenManager";
 
 const { Text, Title } = Typography;
 const Dashboard = () => {
@@ -21,7 +22,7 @@ const Dashboard = () => {
 
   const today = new Date().toLocaleDateString("en-US", options);
 
-  const userId = localStorage.getItem("userId");
+  const userId = getUserId();
   const { data, loading: isLoading } = useQuery(ME, {
     variables: { getUserId: userId },
     skip: !userId,

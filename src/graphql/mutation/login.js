@@ -74,23 +74,19 @@ export const DELETE_ROLE = gql`
 export const UPDATE_SETTING = gql`
   mutation UpdateSettings(
     $updateSettingsId: ID!
-    $language: String
     $commissionRate: String
     $faceBook: String
     $instagram: String
     $whatsApp: String
     $x: String
-    $email: String
   ) {
     updateSettings(
       id: $updateSettingsId
-      language: $language
       commissionRate: $commissionRate
       faceBook: $faceBook
       instagram: $instagram
       whatsApp: $whatsApp
       x: $x
-      email: $email
     ) {
       id
     }
@@ -100,9 +96,6 @@ export const UPDATE_SETTING = gql`
 export const CREATE_SETTINGS = gql`
   mutation CreateSettings(
     $commissionRate: String!
-    $language: String
-    $banks: [BankInput!]!
-    $email: String
     $x: String
     $whatsApp: String
     $instagram: String
@@ -110,9 +103,6 @@ export const CREATE_SETTINGS = gql`
   ) {
     createSettings(
       commissionRate: $commissionRate
-      language: $language
-      banks: $banks
-      email: $email
       x: $x
       whatsApp: $whatsApp
       instagram: $instagram

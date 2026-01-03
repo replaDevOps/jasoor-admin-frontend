@@ -115,9 +115,10 @@ const Alerts = () => {
                         })}
                       </Text>
                     </Flex>
-                    <Text className="text-justify text-gray">
-                      {t(notif.message)}
-                    </Text>
+                    <div
+                      className="text-justify text-gray fs-14"
+                      dangerouslySetInnerHTML={{ __html: notif.message }}
+                    />
                   </Flex>
                 ))}
               </Flex>
