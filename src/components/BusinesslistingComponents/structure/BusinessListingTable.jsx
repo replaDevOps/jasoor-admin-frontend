@@ -29,7 +29,6 @@ const BusinessListingTable = ({
   onFiltersChange,
   search,
   setSearch,
-  category,
   setCategory,
   setStatus,
 }) => {

@@ -326,7 +326,7 @@ const MeetingRequestTable = () => {
                   onChange={(e) => handleSearch(e.target.value)}
                   allowClear
                 />
-                <MySelect
+                {/* <MySelect
                   withoutForm
                   name="status"
                   placeholder={t("Status")}
@@ -334,7 +334,7 @@ const MeetingRequestTable = () => {
                   onChange={handleStatusChange}
                   allowClear
                   showKey
-                />
+                /> */}
               </Flex>
             </Col>
           </Row>
