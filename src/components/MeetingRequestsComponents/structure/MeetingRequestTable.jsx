@@ -375,7 +375,7 @@ const MeetingRequestTable = () => {
               variables: {
                 input: {
                   id: selectedMeetingId,
-                  status: "REJECTED",
+                  status: "CANCELED",
                 },
               },
             });
