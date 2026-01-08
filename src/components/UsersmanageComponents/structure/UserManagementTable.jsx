@@ -272,10 +272,26 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
   const handleDistrictClick = (districtId) => {
     setSelectedDistrict(districtId);
     setSelectedCity(null); // Reset city when district changes
+    setCurrent(1);
+    setPageSize(10);
   };
 
   const handleCityClick = (cityId) => {
     setSelectedCity(cityId);
+    setCurrent(1);
+    setPageSize(10);
+  };
+
+  const handleTypeChange = (value) => {
+    setSelectedCategory(value);
+    setCurrent(1);
+    setPageSize(10);
+  };
+
+  const handleStatusChange = (value) => {
+    setSelectedStatus(value);
+    setCurrent(1);
+    setPageSize(10);
   };
 
   const handleSearch = (value) => {
@@ -287,6 +303,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
     const delayDebounceFn = setTimeout(() => {
       setSearchValue(searchTerm.trim());
       setCurrent(1);
+      setPageSize(10);
     }, 400);
 
     return () => clearTimeout(delayDebounceFn);
@@ -371,7 +388,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
                   <MySelect
                     withoutForm
                     options={typeItems}
-                    onChange={(e) => setSelectedCategory(e)}
+                    onChange={handleTypeChange}
                     placeholder={t("Type")}
                     allowClear
                     showKey
@@ -379,7 +396,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
                   <MySelect
                     withoutForm
                     options={statusItems}
-                    onChange={(e) => setSelectedStatus(e)}
+                    onChange={handleStatusChange}
                     placeholder={t("Status")}
                     allowClear
                     showKey
