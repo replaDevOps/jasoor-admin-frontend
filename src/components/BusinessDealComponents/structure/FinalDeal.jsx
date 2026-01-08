@@ -51,7 +51,6 @@ const FinalDeal = ({ details }) => {
       },
     });
   };
-  console.log("details", details);
 
   const isCompleted = details?.isSellerCompleted && details?.isBuyerCompleted;
   return (

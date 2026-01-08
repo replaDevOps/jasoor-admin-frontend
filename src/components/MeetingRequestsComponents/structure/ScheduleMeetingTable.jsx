@@ -333,15 +333,11 @@ const ScheduleMeetingTable = () => {
   // map UI-selected status to API variable
   const filter = useMemo(() => {
     let statusValue = null;
-    console.log(selectedStatus);
     if (selectedStatus === "Scheduled" || selectedStatus === "2") {
-      // "2" is the ID for "Scheduled" (APPROVED on backend)
       statusValue = "APPROVED";
     } else if (selectedStatus === "Held" || selectedStatus === "3") {
-      // "3" is the ID for "Held"
       statusValue = "HELD";
     } else if (selectedStatus === "Rescheduled" || selectedStatus === "4") {
-      // "4" is the ID for "Rescheduled"
       statusValue = "RESCHEDULED";
     }
 
