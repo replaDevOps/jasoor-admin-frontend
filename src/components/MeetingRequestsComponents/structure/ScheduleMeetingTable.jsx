@@ -20,40 +20,19 @@ import { RescheduleMeeting } from "../modal";
 import { UPDATE_BUSINESS_MEETING } from "../../../graphql/mutation";
 import { GETADMINSCHEDULEMEETINGS } from "../../../graphql/query/meeting";
 import { IS_BUSINESS_IN_DEAL_PROCESS } from "../../../graphql/query/business";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { t } from "i18next";
 
+const GET_SETTING = gql`
+  query GetSetting {
+    getSetting {
+      commissionRate
+    }
+  }
+`;
+
 const { Text } = Typography;
-function calculateCommission(price) {
-  let commission = 0;
-
-  // Bracket 1: 0 - 100K → 4%
-  if (price > 0) {
-    commission += Math.min(price, 100000) * 0.04;
-  }
-
-  // Bracket 2: 100K - 500K → 3%
-  if (price > 100000) {
-    commission += Math.min(price - 100000, 400000) * 0.03;
-  }
-
-  // Bracket 3: 500K - 2M → 2.5%
-  if (price > 500000) {
-    commission += Math.min(price - 500000, 1500000) * 0.025;
-  }
-
-  // Bracket 4: 2M+ → 1.5%
-  if (price > 2000000) {
-    commission += (price - 2000000) * 0.015;
-  }
-
-  // Minimum commission rule
-  if (price < 50000 && commission < 2000) {
-    commission = 2000;
-  }
-
-  return commission;
-}
 
 const ScheduleMeetingTable = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -76,6 +55,13 @@ const ScheduleMeetingTable = () => {
   const [disabledActionBusinessIds, setDisabledActionBusinessIds] = useState(
     new Set()
   );
+
+  const { data: settingData } = useQuery(GET_SETTING, {
+    fetchPolicy: "network-only",
+  });
+  const commissionRate = settingData?.getSetting?.commissionRate || 0;
+
+  console.log("Commission Rate:", commissionRate);
 
   const schedulemeetingColumn = (setVisible) => [
     {
@@ -421,36 +407,6 @@ const ScheduleMeetingTable = () => {
       const values = await form.validateFields();
       const offerPrice = parseFloat(values.offerPrice);
 
-      // // Check if offer exists
-      // if (selectedOffer.id) {
-      //   // Update existing offer
-      //   await updateOffer({
-      //     variables: {
-      //       input: {
-      //         id: selectedOffer.id,
-      //         price: offerPrice,
-      //         status: "ACCEPTED",
-      //       },
-      //     },
-      //   });
-      // } else {
-      //   // // Create new offer if offerId doesn't exist (only businessId and price)
-      //   // if (!selectedOffer.businessId) {
-      //   //   console.error("Business ID is missing!");
-      //   //   throw new Error("Business ID is required to create an offer");
-      //   // }
-      //   // await createOffer({
-      //   //   variables: {
-      //   //     input: {
-      //   //       businessId: selectedOffer.businessId,
-      //   //       price: offerPrice,
-      //   //       status: "ACCEPTED",
-      //   //     },
-      //   //   },
-      //   // });
-      // }
-
-      // update meeting status to HELD
       await updateMeeting({
         variables: {
           input: {
@@ -476,7 +432,7 @@ const ScheduleMeetingTable = () => {
   };
   const handlePriceChange = (e) => {
     const value = parseFloat(e.target.value) || 0;
-    const commission = calculateCommission(value);
+    const commission = value * (commissionRate / 100);
     form.setFieldsValue({
       commission: `SAR ${commission.toLocaleString()}`,
     });
@@ -487,7 +443,7 @@ const ScheduleMeetingTable = () => {
       const priceValue =
         parseFloat(String(selectedOffer.price).replace("SAR", "").trim()) || 0;
 
-      const commission = calculateCommission(priceValue);
+      const commission = priceValue * (commissionRate / 100);
       form.setFieldsValue({
         offerPrice: priceValue,
         commission: `SAR ${commission.toLocaleString()}`,
@@ -496,7 +452,7 @@ const ScheduleMeetingTable = () => {
       // Reset form when modal closes
       form.resetFields();
     }
-  }, [selectedOffer, form]);
+  }, [selectedOffer, form, commissionRate]);
 
   return (
     <>
@@ -547,7 +503,7 @@ const ScheduleMeetingTable = () => {
           pagination={false}
           loading={{
             ...TableLoader,
-            spinning: loading || updating,
+            spinning: loading,
           }}
         />
         <CustomPagination
@@ -565,9 +521,14 @@ const ScheduleMeetingTable = () => {
           setSelectedOffer(null);
           form.resetFields();
         }}
+        centered
         onOk={handleDealSubmit}
         okText="Confirm Deal"
         cancelText="Cancel"
+        okButtonProps={{
+          loading: updating,
+          disabled: updating,
+        }}
       >
         {selectedOffer && (
           <Form form={form} layout="vertical">
