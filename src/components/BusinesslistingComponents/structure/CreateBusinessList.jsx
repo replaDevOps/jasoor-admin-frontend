@@ -677,7 +677,11 @@ const CreateBusinessList = () => {
             </Flex>
           </Flex>
         </div>
-        <CancelModal visible={iscancel} onClose={() => setIsCancel(false)} />
+        <CancelModal
+          visible={iscancel}
+          onClose={() => setIsCancel(false)}
+          onConfirm={() => navigate("/businesslist")}
+        />
         <BusinesslistingReviewModal
           visible={reviewmodal}
           onClose={() => setReviewModal(false)}
