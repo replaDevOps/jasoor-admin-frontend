@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Card, Flex, Typography, Dropdown, Button, Image } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { Card, Flex, Typography, Button, Image, DatePicker } from "antd";
+import dayjs from "dayjs";
 import ReactApexChart from "react-apexcharts";
-import { yearOp } from "../../../shared";
 import { GET_FINANCE_GRAPH } from "../../../graphql/query";
 import { useQuery } from "@apollo/client";
 import { ModuleTopHeading } from "../../PageComponents";
@@ -11,16 +10,18 @@ import { t } from "i18next";
 const { Title } = Typography;
 
 const FinanceAreaChart = () => {
-  const [selectedStatus, setSelectedStatus] = useState("2025");
+  const [selectedStatus, setSelectedStatus] = useState(
+    dayjs().year().toString()
+  );
 
   const { data } = useQuery(GET_FINANCE_GRAPH, {
     variables: { year: Number(selectedStatus) },
     fetchPolicy: "cache-and-network",
   });
-  const handleStatusClick = ({ key }) => {
-    const selectedItem = yearOp.find((item) => item.key === key);
-    if (selectedItem) {
-      setSelectedStatus(selectedItem.label);
+
+  const handleYearChange = (date, dateString) => {
+    if (dateString) {
+      setSelectedStatus(dateString);
     }
   };
 
@@ -102,23 +103,13 @@ const FinanceAreaChart = () => {
             </Title>
           </Flex>
         </Flex>
-        <Dropdown
-          menu={{
-            items: yearOp,
-            onClick: handleStatusClick,
-          }}
-          trigger={["click"]}
-        >
-          <Button
-            aria-labelledby="filter status"
-            className="btncancel px-3 filter-bg fs-13 text-black"
-          >
-            <Flex justify="space-between" align="center" gap={30}>
-              {selectedStatus}
-              <DownOutlined />
-            </Flex>
-          </Button>
-        </Dropdown>
+        <DatePicker
+          picker="year"
+          value={dayjs(selectedStatus, "YYYY")}
+          onChange={handleYearChange}
+          allowClear={false}
+          className="btncancel px-3 filter-bg fs-13 text-black"
+        />
       </Flex>
       <ReactApexChart
         options={chartData.options}
