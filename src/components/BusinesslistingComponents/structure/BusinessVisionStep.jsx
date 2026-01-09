@@ -30,11 +30,13 @@ const BusinessVisionStep = forwardRef(({ data, setData }, ref) => {
       return JSON.stringify(updated) !== JSON.stringify(prev) ? updated : prev;
     });
   };
-
+  console.log("BusinessVisionStep data:", data);
   useEffect(() => {
     form.setFieldsValue({
-      supportDuration: data.supportDuration || undefined,
-      noSession: data.supportSession || undefined,
+      supportDuration: data.supportDuration
+        ? String(data.supportDuration)
+        : undefined,
+      noSession: data.supportSession ? String(data.supportSession) : undefined,
       growthOpportunities: data.growthOpportunities,
       reasonSelling: data.reason,
     });

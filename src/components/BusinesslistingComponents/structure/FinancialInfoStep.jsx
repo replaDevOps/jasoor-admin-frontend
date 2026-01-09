@@ -122,33 +122,34 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
   };
 
   // Sync form with incoming data (edit mode or draft load)
+  console.log("FinancialInfoStep data:", data);
   useEffect(() => {
     form.setFieldsValue({
       revenueTime: normalizeLookupValue(data.revenueTime),
       revenue: data.revenue || undefined,
       profittime: normalizeLookupValue(data.profittime),
       profit: data.profit || undefined,
-      businessPrice: data.price || undefined,
+      businessPrice: data.price ? String(data.price) : undefined,
       profitMargin: data.profitMargen || null,
       multiple: data.multiple || null,
       capitalRecovery: data.capitalRecovery || null,
       keyassets: data.assets?.map((item) => ({
         assetName: item.name,
-        noItems: item.quantity,
+        noItems: item.quantity ? String(item.quantity) : "",
         purchaseYear: item.purchaseYear,
-        price: item.price,
+        price: item.price ? String(item.price) : "",
       })),
       liability: data.liabilities?.map((item) => ({
         liabilityName: item.name,
-        quantity: item.quantity,
+        quantity: item.quantity ? String(item.quantity) : "",
         liabilitypurchaseYear: item.purchaseYear,
-        liabilityPrice: item.price,
+        liabilityPrice: item.price ? String(item.price) : "",
       })),
       inventory: data.inventoryItems?.map((item) => ({
         inventoryName: item.name,
-        inventoryquantity: item.quantity,
+        inventoryquantity: item.quantity ? String(item.quantity) : "",
         inventoryypurchaseYear: item.purchaseYear,
-        inventoryPrice: item.price,
+        inventoryPrice: item.price ? String(item.price) : "",
       })),
     });
   }, [data, form]);
