@@ -2,7 +2,7 @@ import { Button, Divider, Flex, Modal, Typography } from "antd";
 import { t } from "i18next";
 
 const { Title, Text } = Typography;
-const CancelModal = ({ visible, onClose }) => {
+const CancelModal = ({ visible, onClose, onConfirm }) => {
   return (
     <Modal
       title={null}
@@ -24,6 +24,7 @@ const CancelModal = ({ visible, onClose }) => {
             aria-labelledby="Confirm"
             type="primary"
             className="btnsave border0 text-white brand-bg"
+            onClick={onConfirm}
           >
             {t("Confirm")}
           </Button>
