@@ -17,15 +17,13 @@ import { ScheduleMeeting } from "../modal";
 import { UPDATE_BUSINESS_MEETING } from "../../../graphql/mutation";
 import { GETADMINPENDINGMEETINGS } from "../../../graphql/query/meeting";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 
 const { Text } = Typography;
-const meetingItems = [
-  { id: "2", name: "Pending" },
-  { id: "3", name: "Cancel Meeting" },
-];
+
 const MeetingRequestTable = () => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedMeetingId, setSelectedMeetingId] = useState(null);

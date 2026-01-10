@@ -11,22 +11,22 @@ import { useTranslation } from "react-i18next";
 const { Text } = Typography;
 
 // Helper function to determine status display based on boolean flags
-const getStatusFromBooleans = (deal) => {
+const getStatusFromBooleans = (deal, t) => {
   if (deal.status === "CANCEL") {
-    return { key: "CANCEL", label: "Canceled", className: "dealcancelled" };
+    return { key: "CANCEL", label: t("Cancelled"), className: "dealcancelled" };
   }
   if (
     deal.isBuyerCompleted &&
     deal.isSellerCompleted &&
     deal.status === "COMPLETED"
   ) {
-    return { key: "COMPLETED", label: "Completed", className: "success" };
+    return { key: "COMPLETED", label: t("Completed"), className: "success" };
   }
 
   if (deal.isBuyerCompleted && deal.isSellerCompleted) {
     return {
       key: "JUSOOR_VERIFICATION_PENDING",
-      label: "Awaiting Deal Closure",
+      label: t("Awaiting Deal Closure"),
       className: "pending",
     };
   }
@@ -34,7 +34,7 @@ const getStatusFromBooleans = (deal) => {
   if (deal.isBuyerCompleted && deal.isDocVedifiedBuyer) {
     return {
       key: "DOCUMENT_CONFIRMATION",
-      label: "Finalizing Deal",
+      label: t("Finalizing Deal"),
       className: "pending",
     };
   }
@@ -42,7 +42,7 @@ const getStatusFromBooleans = (deal) => {
   if (!deal.isDocVedifiedSeller && deal.isPaymentVedifiedSeller) {
     return {
       key: "DOCUMENT_CONFIRMATION_PENDING",
-      label: "Document Verification Pending",
+      label: t("Document Verification Pending"),
       className: "pending",
     };
   }
@@ -51,7 +51,7 @@ const getStatusFromBooleans = (deal) => {
   if (deal.isDsaSeller && deal.isDsaBuyer && !deal.isPaymentVedifiedSeller) {
     return {
       key: "PAYMENT_PENDING",
-      label: "Payment Verification Pending",
+      label: t("Payment Verification Pending"),
       className: "pending",
     };
   }
@@ -59,17 +59,21 @@ const getStatusFromBooleans = (deal) => {
   // Step 2: Digital Sale Agreement (YELLOW - PENDING)
   if (deal.isCommissionVerified) {
     if (!deal.isDsaSeller && !deal.isDsaBuyer) {
-      return { key: "DSA_PENDING", label: "DSA Pending", className: "pending" };
+      return {
+        key: "DSA_PENDING",
+        label: t("DSA Pending"),
+        className: "pending",
+      };
     } else if (!deal.isDsaSeller) {
       return {
         key: "DSA_SELLER_PENDING",
-        label: "DSA Seller Pending",
+        label: t("DSA Seller Pending"),
         className: "pending",
       };
     } else if (!deal.isDsaBuyer) {
       return {
         key: "DSA_BUYER_PENDING",
-        label: "DSA Buyer Pending",
+        label: t("DSA Buyer Pending"),
         className: "pending",
       };
     }
@@ -77,7 +81,7 @@ const getStatusFromBooleans = (deal) => {
   if (!deal?.isCommissionVerified && deal?.isCommissionUploaded) {
     return {
       key: "COMMISSION_VERIFICATION_PENDING",
-      label: "Commission Verification Pending",
+      label: t("Commission Verification Pending"),
       className: "pending",
     };
   }
@@ -85,13 +89,17 @@ const getStatusFromBooleans = (deal) => {
   if (deal.isCommissionUploaded) {
     return {
       key: "COMMISSION_PENDING",
-      label: "Commission Pending",
+      label: t("Commission Pending"),
       className: "pending",
     };
   }
 
   // Default fallback (YELLOW - PENDING)
-  return { key: "PENDING", label: "Commission Pending", className: "pending" };
+  return {
+    key: "PENDING",
+    label: t("Commission Pending"),
+    className: "pending",
+  };
 };
 
 const InprogressDealTable = () => {
@@ -139,7 +147,7 @@ const InprogressDealTable = () => {
     finalizedOffer: item?.offer?.price
       ? `${item?.offer?.price?.toLocaleString()}`
       : "-",
-    statusInfo: getStatusFromBooleans(item), // Use boolean-based status
+    statusInfo: getStatusFromBooleans(item, t),
     date: item?.createdAt
       ? new Date(item?.createdAt).toLocaleDateString()
       : "-",
@@ -195,7 +203,7 @@ const InprogressDealTable = () => {
       render: (statusInfo) => {
         return (
           <Text className={`btnpill fs-12 ${statusInfo.className}`}>
-            {t(statusInfo.label)}
+            {statusInfo.label}
           </Text>
         );
       },

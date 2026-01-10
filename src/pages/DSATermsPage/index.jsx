@@ -71,7 +71,7 @@ const DSATermsPage = () => {
           refetchQueries: [{ query: GETDSATERMS }],
           awaitRefetchQueries: true,
         });
-        messageApi.success(t("DSA Terms updated successfully!"));
+        messageApi.success(t("DSA term updated successfully"));
       } else {
         await createTerms({
           variables: {
@@ -87,7 +87,7 @@ const DSATermsPage = () => {
           refetchQueries: [{ query: GETDSATERMS }],
           awaitRefetchQueries: true,
         });
-        messageApi.success(t("DSA Terms created successfully!"));
+        messageApi.success(t("DSA term created successfully"));
       }
     } catch (err) {
       console.error(err);

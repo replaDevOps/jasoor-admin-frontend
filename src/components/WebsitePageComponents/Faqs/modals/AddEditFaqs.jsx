@@ -15,7 +15,7 @@ const AddEditFaqs = ({ visible, onClose, edititem, refetchFaqs }) => {
 
   const [createFAQ, { loading: creating }] = useMutation(CREATE_FAQ, {
     onCompleted: () => {
-      messageApi.success(t("FAQ added successfully"));
+      messageApi.success(t("FAQ created successfully"));
     },
     onError: (err) => {
       messageApi.error(err.message || t("Failed to create FAQ"));

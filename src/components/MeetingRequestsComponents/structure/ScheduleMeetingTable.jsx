@@ -22,7 +22,7 @@ import { GETADMINSCHEDULEMEETINGS } from "../../../graphql/query/meeting";
 import { IS_BUSINESS_IN_DEAL_PROCESS } from "../../../graphql/query/business";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const GET_SETTING = gql`
   query GetSetting {
@@ -35,6 +35,7 @@ const GET_SETTING = gql`
 const { Text } = Typography;
 
 const ScheduleMeetingTable = () => {
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState(null);
