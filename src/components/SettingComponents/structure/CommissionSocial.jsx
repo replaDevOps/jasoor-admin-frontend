@@ -86,7 +86,7 @@ const CommissionSocial = ({ comssionSocial }) => {
       messageApi.success(t("Settings created successfully!"));
     },
     onError: (err) => {
-      messageApi.error(err?.message || "Failed to create settings.");
+      messageApi.error(err?.message || t("Failed to create settings."));
     },
   });
 
@@ -105,7 +105,7 @@ const CommissionSocial = ({ comssionSocial }) => {
 
   const onFinish = (values) => {
     const commissionRate = values.rate ? String(values.rate) : null;
-    const facebook = values.facebook || null;
+    const faceBook = values.facebook || null;
     const instagram = values.instagram || null;
     const whatsApp = values.whatsapp || null;
     const twitter = values.twitter || null;
@@ -115,7 +115,7 @@ const CommissionSocial = ({ comssionSocial }) => {
         variables: {
           updateSettingsId: comssionSocial.id,
           commissionRate,
-          facebook,
+          faceBook,
           instagram,
           whatsApp,
           twitter,
@@ -128,20 +128,16 @@ const CommissionSocial = ({ comssionSocial }) => {
           x: twitter || null,
           whatsApp,
           instagram,
-          faceBook: facebook || null,
+          faceBook: faceBook || null,
         },
       });
     }
-    // Update user language if changed
-    if (userId && language) {
-      const selectedLanguage = language;
-
-      // Update backend language
+    if (userData.getUser.language !== language) {
       updateUser({
         variables: {
           input: {
             id: userId,
-            language: selectedLanguage,
+            language,
           },
         },
       });
@@ -207,7 +203,7 @@ const CommissionSocial = ({ comssionSocial }) => {
           </Title>
           <Row gutter={12}>
             <Col lg={{ span: 12 }} md={{ span: 12 }} span={24}>
-              <MyInput label={t("Facebook")} name="facebook" />
+              <MyInput label={t("Telegram")} name="facebook" />
             </Col>
             <Col lg={{ span: 12 }} md={{ span: 12 }} span={24}>
               <MyInput label={t("Instagram")} name="instagram" />
