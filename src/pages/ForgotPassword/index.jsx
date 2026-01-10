@@ -12,7 +12,11 @@ import {
 } from "antd";
 import { MyInput } from "../../components";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ArrowLeftOutlined, ArrowRightOutlined, DownOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation } from "@apollo/client";

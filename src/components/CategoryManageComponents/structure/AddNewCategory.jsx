@@ -1,5 +1,9 @@
 import { Button, Card, Col, Flex, Form, Row, Typography } from "antd";
-import { ArrowLeftOutlined, ArrowRightOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import { Breadcrumb } from "antd";
 import { MyInput, MySelect, SingleFileUpload } from "../../Forms";
