@@ -84,7 +84,9 @@ const RescheduleMeeting = ({
             </Button>
           </Flex>
           <Text className="fs-14">
-            {t("Please select a new date and time for the virtual meeting. An updated invitation will be sent to both parties upon confirmation.")}
+            {t(
+              "Please select a new date and time for the virtual meeting. An updated invitation will be sent to both parties upon confirmation."
+            )}
           </Text>
         </Flex>
         <Form layout="vertical" form={form} requiredMark={false}>
