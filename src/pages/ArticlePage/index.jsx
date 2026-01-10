@@ -31,14 +31,14 @@ const ArticlePage = () => {
     if (!deleteitem) return;
     try {
       await deleteArticle({ variables: { deleteArticleId: deleteitem } });
-      messageApi.success("Article deleted successfully");
+      messageApi.success(t("Article deleted successfully"));
       setDeleteItem(null);
       if (refetchArticlesRef.current) {
         refetchArticlesRef.current();
       }
     } catch (err) {
       console.error(err);
-      messageApi.error("Failed to delete article");
+      messageApi.error(t("Failed to delete article"));
     }
   };
 

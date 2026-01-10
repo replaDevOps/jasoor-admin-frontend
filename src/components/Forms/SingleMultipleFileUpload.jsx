@@ -57,13 +57,16 @@ const SingleMultipleFileUpload = ({
     ];
 
     if (file.size > maxSize) {
-      return { valid: false, message: `File ${file.name} exceeds 10MB limit` };
+      return {
+        valid: false,
+        message: t("File {{name}} exceeds 10MB limit", { name: file.name }),
+      };
     }
 
     if (!allowedTypes.includes(file.type)) {
       return {
         valid: false,
-        message: `File ${file.name} has unsupported format`,
+        message: t("File {{name}} has unsupported format", { name: file.name }),
       };
     }
 
@@ -135,7 +138,9 @@ const SingleMultipleFileUpload = ({
       }
     } catch (error) {
       console.error("Upload failed:", error);
-      setValidationError(error.message || "Upload failed. Please try again.");
+      setValidationError(
+        t(error.message) || t("Upload failed. Please try again.")
+      );
       // Revert the UIDs if upload failed
       setUploadedFileUids(uploadedFileUids);
     } finally {

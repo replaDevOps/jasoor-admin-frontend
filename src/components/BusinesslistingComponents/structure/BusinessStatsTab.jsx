@@ -14,21 +14,21 @@ const BusinessStatsTab = ({ status }) => {
   const { t } = useTranslation();
   const capitalRecoveryText =
     status?.capitalRecovery > 12
-      ? `${Math.floor(status.capitalRecovery / 12)} Year(s)`
-      : `${status?.capitalRecovery} Month(s)`;
+      ? `${Math.floor(status.capitalRecovery / 12)} ${t("Year(s)")}`
+      : `${status?.capitalRecovery} ${t("Month(s)")}`;
 
   const businessstatsData = [
     {
       id: 1,
       icon: "/assets/icons/rev.png",
       title: status?.revenue,
-      subtitle: t(`Revenue ${status?.revenueTime} Months`),
+      subtitle: t("Revenue {{count}} Months", { count: status?.revenueTime }),
     },
     {
       id: 2,
       icon: "/assets/icons/pro.png",
       title: status?.profit,
-      subtitle: t(`Profit ${status?.profittime} Months`),
+      subtitle: t("Profit {{count}} Months", { count: status?.profittime }),
     },
     {
       id: 3,
@@ -120,7 +120,7 @@ const BusinessStatsTab = ({ status }) => {
                       fetchPriority="high"
                       preview={false}
                       width={"100%"}
-                      alt="stats-icon"
+                      alt={t("stats-icon")}
                     />
                   </div>
                   <Flex vertical gap={2}>

@@ -515,7 +515,7 @@ const ScheduleMeetingTable = () => {
       </Flex>
       <Modal
         open={visible}
-        title="Offer Details"
+        title={t("Offer Details")}
         onCancel={() => {
           setVisible(false);
           setSelectedOffer(null);
@@ -523,8 +523,8 @@ const ScheduleMeetingTable = () => {
         }}
         centered
         onOk={handleDealSubmit}
-        okText="Confirm Deal"
-        cancelText="Cancel"
+        okText={t("Confirm Deal")}
+        cancelText={t("Cancel")}
         okButtonProps={{
           loading: updating,
           disabled: updating,
@@ -533,19 +533,19 @@ const ScheduleMeetingTable = () => {
         {selectedOffer && (
           <Form form={form} layout="vertical">
             <Form.Item
-              label="Offer Price"
+              label={t("Offer Price")}
               name="offerPrice"
-              rules={[{ required: true, message: "Enter Offer Price" }]}
+              rules={[{ required: true, message: t("Enter Offer Price") }]}
             >
               <Input
                 type="number"
-                prefix="SAR"
-                placeholder="Enter offer price"
+                prefix={t("SAR")}
+                placeholder={t("Enter offer price")}
                 onChange={handlePriceChange}
               />
             </Form.Item>
 
-            <Form.Item label="Commission" name="commission">
+            <Form.Item label={t("Commission")} name="commission">
               <Input disabled />
             </Form.Item>
           </Form>
@@ -555,8 +555,10 @@ const ScheduleMeetingTable = () => {
       <DeleteModal
         visible={deleteItem}
         onClose={() => setDeleteItem(false)}
-        title="Are you sure?"
-        subtitle="This action cannot be undone. Are you sure you want to cancel this Meeting?"
+        title={t("Are you sure?")}
+        subtitle={t(
+          "This action cannot be undone. Are you sure you want to cancel this Meeting?"
+        )}
         type="danger"
         loading={updating}
         onConfirm={async () => {

@@ -24,7 +24,8 @@ const { Text, Title } = Typography;
 
 const SingleviewBusinesslist = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -134,7 +135,7 @@ const SingleviewBusinesslist = () => {
             <Image
               src="/assets/icons/edit.png"
               fetchPriority="high"
-              alt="edit-icon"
+              alt={t("edit-icon")}
               width={24}
               preview={false}
             />
@@ -151,7 +152,7 @@ const SingleviewBusinesslist = () => {
                 className="btncancel"
                 loading={actionLoading === "reject"}
                 onClick={() => handleStatusChange("REJECT", "reject")}
-                aria-labelledby="Reject"
+                aria-labelledby={t("Reject")}
               >
                 {t("Reject")}
               </Button>
@@ -159,7 +160,7 @@ const SingleviewBusinesslist = () => {
                 className="btnsave border0 bg-green text-white"
                 loading={actionLoading === "accept"}
                 onClick={() => handleStatusChange("ACTIVE", "accept")}
-                aria-labelledby="Accept"
+                aria-labelledby={t("Accept")}
               >
                 {t("Accept")}
               </Button>
@@ -169,7 +170,7 @@ const SingleviewBusinesslist = () => {
               className="btnsave border0 bg-red text-white"
               loading={actionLoading === "inactivate"}
               onClick={() => handleStatusChange("INACTIVE", "inactivate")}
-              aria-labelledby="Inactivate"
+              aria-labelledby={t("Inactivate")}
             >
               {t("Inactivate")}
             </Button>
@@ -178,7 +179,7 @@ const SingleviewBusinesslist = () => {
               className="btnsave border0 bg-green text-white"
               loading={actionLoading === "activate"}
               onClick={() => handleStatusChange("ACTIVE", "activate")}
-              aria-labelledby="Activate"
+              aria-labelledby={t("Activate")}
             >
               {t("Activate")}
             </Button>
@@ -191,10 +192,12 @@ const SingleviewBusinesslist = () => {
                 <Flex vertical gap={10}>
                   <Flex gap={5} align="center">
                     <Text className="fs-12 text-gray border-gray p-2 radius-8">
-                      {data?.category.name}
+                      {isArabic
+                        ? data?.category?.arabicName
+                        : data?.category?.name}
                     </Text>
                     <Text className="fs-12 text-gray border-gray p-2 radius-8">
-                      Founded on{" "}
+                      {t("Founded on")}{" "}
                       {data?.foundedDate
                         ? dayjs(data.foundedDate).format("MM/YYYY")
                         : "-"}
@@ -209,7 +212,7 @@ const SingleviewBusinesslist = () => {
                       <Image
                         src="/assets/icons/reyal-b.png"
                         fetchPriority="high"
-                        alt="currency symbol"
+                        alt={t("currency-symbol")}
                         preview={false}
                         width={20}
                       />
@@ -225,7 +228,7 @@ const SingleviewBusinesslist = () => {
                     src="/assets/icons/loc.svg"
                     fetchPriority="high"
                     width={16}
-                    alt="location-icon"
+                    alt={t("location-icon")}
                   />
                   <Text className="text-gray pt-1x">{data?.district}</Text>
                 </Flex>

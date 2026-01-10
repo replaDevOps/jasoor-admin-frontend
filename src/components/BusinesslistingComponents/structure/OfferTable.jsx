@@ -91,19 +91,19 @@ const OfferTable = (businessId) => {
           <Flex gap={10} align="center">
             <Image
               src="/assets/icons/reyal.webp"
-              alt="currency-symbol"
+              alt={t("currency-symbol")}
               preview={false}
               width={18}
             />
             {row?.offerprice}
             {row?.isProceedToPay ? (
-              <Tooltip title="PP - Proceed to Purchase">
+              <Tooltip title={t("PP - Proceed to Purchase")}>
                 <Text className="bg-orange radius-4 p-1 fs-11 text-white">
                   PP
                 </Text>
               </Tooltip>
             ) : (
-              <Tooltip title="CO - Counter Offer">
+              <Tooltip title={t("CO - Counter Offer")}>
                 <Text className="brand-bg radius-4 p-1 fs-11 text-white">
                   CO
                 </Text>
@@ -119,14 +119,14 @@ const OfferTable = (businessId) => {
       render: (status) => {
         return status === "ACCEPTED" ? (
           <Space align="center">
-            <Text className="btnpill fs-12 pending">Accepted</Text>
+            <Text className="btnpill fs-12 pending">{t("Accepted")}</Text>
           </Space>
         ) : status === "REJECTED" ? (
-          <Text className="btnpill fs-12 inactive">Reject</Text>
+          <Text className="btnpill fs-12 inactive">{t("Reject")}</Text>
         ) : status === "PENDING" ? (
-          <Text className="btnpill fs-12 inactive">Pending</Text>
+          <Text className="btnpill fs-12 inactive">{t("Pending")}</Text>
         ) : status ? (
-          <Text className="btnpill fs-12 success">Received</Text>
+          <Text className="btnpill fs-12 success">{t("Received")}</Text>
         ) : null;
       },
     },
@@ -163,7 +163,7 @@ const OfferTable = (businessId) => {
           <Row justify="space-between" align="middle">
             <Col span={6}>
               <Flex gap={5} align="center">
-                <Text>{t("Rows Per Page")}:</Text>
+                <Text>{t("Rows per page")}:</Text>
                 <Select
                   className="select-filter"
                   value={pageSize}

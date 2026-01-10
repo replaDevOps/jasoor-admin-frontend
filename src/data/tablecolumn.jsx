@@ -22,14 +22,22 @@ const usePostSaleColumn = () => {
       title: t("Support Periods"),
       dataIndex: "supportperiod",
       render: (supportperiod) => {
-        return <Text>{supportperiod} months</Text>;
+        return (
+          <Text>
+            {supportperiod} {t("months")}
+          </Text>
+        );
       },
     },
     {
       title: t("Number of Session"),
       dataIndex: "nosession",
       render: (nosession) => {
-        return <Text>{nosession} sessions</Text>;
+        return (
+          <Text>
+            {nosession} {t("sessions")}
+          </Text>
+        );
       },
     },
   ];

@@ -163,7 +163,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
             });
             messageApi.success(t("User status updated successfully!"));
           } catch (err) {
-            messageApi.error(err.message || "Something went wrong!");
+            messageApi.error(err.message || t("Something went wrong!"));
           }
         };
         return (

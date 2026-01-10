@@ -32,12 +32,14 @@ const BusinessListingTable = ({
   setCategory,
   setStatus,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data } = useQuery(GET_CATEGORIES, {
     variables: {
       isAdminCategory: true,
     },
   });
+
+  const isArabic = i18n.language === "ar";
   const [form] = Form.useForm();
   const [dateRange, setDateRange] = useState(null);
   const navigate = useNavigate();
@@ -46,9 +48,9 @@ const BusinessListingTable = ({
     if (!data?.getAllCategories) return [];
     return data?.getAllCategories?.categories?.map((cat) => ({
       id: cat.id,
-      name: t(cat.name),
+      name: isArabic ? cat.arabicName || cat.name : cat.name,
     }));
-  }, [data, t]);
+  }, [data, t, isArabic]);
 
   const statusItems = useMemo(
     () => [
@@ -77,7 +79,8 @@ const BusinessListingTable = ({
     {
       title: t("Category"),
       dataIndex: "category",
-      render: (_, record) => record?.category?.name,
+      render: (_, record) =>
+        isArabic ? record?.category?.arabicName : record?.category?.name,
     },
     {
       title: t("Business Price"),
@@ -110,22 +113,21 @@ const BusinessListingTable = ({
             <Text className="btnpill fs-12 pending">{t("Under Review")}</Text>
           </Space>
         ) : status === "INACTIVE" ? (
-          <Text className="btnpill fs-12 inactive">Inactive</Text>
+          <Text className="btnpill fs-12 inactive">{t("Inactive")}</Text>
         ) : status === "ACTIVE" ? (
           <Text className="btnpill fs-12 success">{t("Active")}</Text>
         ) : status === "REJECT" ? (
           <Text className="btnpill fs-12 inactive">{t("Rejected")}</Text>
         ) : status === "SOLD" ? (
-          <Text className="btnpill fs-12 sold-status">Sold</Text>
+          <Text className="btnpill fs-12 sold-status">{t("Sold")}</Text>
         ) : null;
       },
     },
     {
       title: t("Date"),
       render: (_, record) => {
-        const date = new Date(record?.createdAt);
-        const options = { year: "numeric", month: "short", day: "numeric" };
-        return date.toLocaleDateString("en-US", options);
+        const date = dayjs(record?.createdAt);
+        return date.format("MMM D, YYYY");
       },
     },
   ];
@@ -179,7 +181,7 @@ const BusinessListingTable = ({
               <Flex justify="end" gap={10}>
                 <MyDatepicker
                   withoutForm
-                  label="Date"
+                  label={t("Date")}
                   rangePicker
                   value={dateRange}
                   onChange={(dates) => {

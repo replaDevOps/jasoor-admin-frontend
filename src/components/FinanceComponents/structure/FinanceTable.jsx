@@ -122,15 +122,15 @@ const FinanceTable = () => {
   const financeData =
     data?.getCompletedDeals?.deals.map((deal) => ({
       key: deal.id,
-      reference: deal.business?.reference || "N/A",
-      businessTitle: deal.business?.businessTitle || "N/A",
-      sellerName: deal.business?.seller?.name || "N/A",
-      buyerName: deal.buyer?.name || "N/A",
+      reference: deal.business?.reference || t("N/A"),
+      businessTitle: deal.business?.businessTitle || t("N/A"),
+      sellerName: deal.business?.seller?.name || t("N/A"),
+      buyerName: deal.buyer?.name || t("N/A"),
       dealAmount: `${deal.price ? Number(deal.price).toFixed(2) : "0.00"}`,
       commissionEarn: `${
         deal.commission ? Number(deal.commission).toFixed(2) : "0.00"
       }`,
-      dateTime: moment(deal.createdAt).format("DD/MM/YYYY hh:mm A"),
+      dateTime: dayjs(deal.createdAt).format("DD/MM/YYYY hh:mm A"),
     })) || [];
 
   const handlePageChange = (page, size) => {

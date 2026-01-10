@@ -271,7 +271,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                     >
                       {revenueLookups?.map((list, index) => (
                         <Select.Option value={list?.id} key={index}>
-                          {list?.name}
+                          {t(list?.name)}
                         </Select.Option>
                       ))}
                     </Select>
@@ -304,7 +304,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                       prefix={
                         <img
                           src="/assets/icons/reyal-g.png"
-                          alt="currency-symbol"
+                          alt={t("currency-symbol")}
                           width={15}
                           fetchPriority="high"
                         />
@@ -333,7 +333,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                     >
                       {revenueLookups?.map((list, index) => (
                         <Select.Option value={list?.id} key={index}>
-                          {list?.name}
+                          {t(list?.name)}
                         </Select.Option>
                       ))}
                     </Select>
@@ -366,7 +366,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                       prefix={
                         <img
                           src="/assets/icons/reyal-g.png"
-                          alt="currency-symbol"
+                          alt={t("currency-symbol")}
                           width={14}
                           fetchPriority="high"
                         />
@@ -415,7 +415,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 addonBefore={
                   <img
                     src="/assets/icons/reyal-g.png"
-                    alt="currency-symbol"
+                    alt={t("currency-symbol")}
                     width={14}
                     fetchPriority="high"
                   />
@@ -432,7 +432,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 addonBefore={
                   <img
                     src="/assets/icons/reyal-g.png"
-                    alt="currency-symbol"
+                    alt={t("currency-symbol")}
                     width={14}
                     fetchPriority="high"
                   />
@@ -530,7 +530,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 addonBefore: (
                   <img
                     src="/assets/icons/reyal-g.png"
-                    alt="currency-symbol"
+                    alt={t("currency-symbol")}
                     width={14}
                     fetchPriority="high"
                   />
@@ -627,7 +627,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 addonBefore: (
                   <img
                     src="/assets/icons/reyal-g.png"
-                    alt="currency-symbol"
+                    alt={t("currency-symbol")}
                     width={14}
                     fetchPriority="high"
                   />
@@ -730,7 +730,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 addonBefore: (
                   <img
                     src="/assets/icons/reyal-g.png"
-                    alt="currency-symbol"
+                    alt={t("currency-symbol")}
                     width={14}
                     fetchPriority="high"
                   />
