@@ -3,11 +3,12 @@ import { MyInput } from "../../Forms";
 import { CHANGE_ADMIN_PASSWORD } from "../../../graphql/mutation";
 import { useMutation } from "@apollo/client";
 import { message } from "antd";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import Cookie from "js-cookie";
 
 const { Title } = Typography;
 const PasswordManager = () => {
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const userId = Cookie.get("userId");
   const [form] = Form.useForm();
@@ -18,7 +19,7 @@ const PasswordManager = () => {
       form.resetFields();
     },
     onError: (err) => {
-      messageApi.error(err.message || t("Failed to change password."));
+      messageApi.error(t(err.message) || t("Failed to change password."));
     },
   });
 

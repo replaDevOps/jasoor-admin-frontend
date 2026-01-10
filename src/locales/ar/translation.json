@@ -952,6 +952,8 @@
   "Article updated successfully": "تم تحديث المقال بنجاح",
   "FAQ created successfully": "تم إنشاء الأسئلة الشائعة بنجاح",
   "FAQ updated successfully": "تم تحديث الأسئلة الشائعة بنجاح",
+  "FAQ deleted successfully": "تم حذف الأسئلة الشائعة بنجاح",
+  "Failed to delete FAQ": "فشل حذف الأسئلة الشائعة",
   "DSA term created successfully": "تم إنشاء شروط DSA بنجاح",
   "DSA term updated successfully": "تم تحديث شروط DSA بنجاح",
   "Role deleted successfully!": "تم حذف الدور بنجاح!",
@@ -970,5 +972,15 @@
   "Phone Number (Optional)": "رقم الهاتف (اختياري)",
   "Assign Role": "تعيين دور",
   "Verify": "التحقق",
-  "Enter phone number": "أدخل رقم الهاتف"
+  "Enter phone number": "أدخل رقم الهاتف",
+  "Password changed successfully!": "تم تغيير كلمة المرور بنجاح!",
+  "Failed to change password.": "فشل تغيير كلمة المرور.",
+  "Old password is incorrect": "كلمة المرور القديمة غير صحيحة",
+  "Password must contain at least one uppercase, lowercase, number and a special character": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل، وحرف صغير واحد، ورقم واحد، ورمز خاص واحد",
+  "Settings created successfully!": "تم إنشاء الإعدادات بنجاح!",
+  "Failed to update user language.": "فشل تحديث لغة المستخدم.",
+  "Enter commission rate": "أدخل معدل العمولة",
+  "Telegram": "تيليجرام",
+  "Loading...": "جاري التحميل...",
+  "Saving...": "جاري الحفظ..."
 }

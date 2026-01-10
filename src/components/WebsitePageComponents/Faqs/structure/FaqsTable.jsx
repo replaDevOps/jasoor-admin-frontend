@@ -149,7 +149,7 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
       await deleteFAQ({
         variables: { deleteFaqId: deleteItem.id },
       });
-      messageApi.success("FAQ deleted successfully");
+      messageApi.success(t("FAQ deleted successfully"));
       setDeleteItem(null);
       // Reload FAQs after deletion
       loadFaqs({
@@ -162,7 +162,7 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
       });
     } catch (err) {
       console.error(err);
-      messageApi.error("Failed to delete FAQ");
+      messageApi.error(t("Failed to delete FAQ"));
     }
   };
 
@@ -202,7 +202,7 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
             dataSource={faqsData}
             className="pagination table-cs table"
             showSorterTooltip={false}
-            scroll={{ x: 1000 }}
+            scroll={{ x: 800 }}
             rowHoverable={false}
             pagination={false}
             loading={{
@@ -221,8 +221,10 @@ const FaqsTable = ({ setVisible, setEditItem, onRefetch }) => {
       <DeleteModal
         visible={deleteItem}
         onClose={() => setDeleteItem(false)}
-        title="Are you sure?"
-        subtitle="This action cannot be undone. Are you sure you want to delete this question?"
+        title={t("Are you sure?")}
+        subtitle={t(
+          "This action cannot be undone. Are you sure you want to delete this question?"
+        )}
         type="danger"
         onConfirm={handleDelete}
         loading={deleting}

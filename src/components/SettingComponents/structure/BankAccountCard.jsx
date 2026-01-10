@@ -18,7 +18,7 @@ import { DeleteModal, MaskedAccount } from "../../Ui";
 import { AddNewBankAccount } from "../modal";
 import { gql, useMutation, useLazyQuery } from "@apollo/client";
 import { GETADMINBANK } from "../../../graphql/query/user";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 const ACTIVEBANK = gql`
@@ -33,6 +33,7 @@ const DELETEBANK = gql`
   }
 `;
 const BankAccountCard = ({ settingId }) => {
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [value, setValue] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -63,7 +64,7 @@ const BankAccountCard = ({ settingId }) => {
         messageApi.success(t("Bank status updated successfully"));
       },
       onError: (err) => {
-        messageApi.error(err.message);
+        messageApi.error(t(err.message));
       },
     }
   );
@@ -77,7 +78,7 @@ const BankAccountCard = ({ settingId }) => {
         messageApi.success(t("Bank deleted successfully"));
       },
       onError: (err) => {
-        messageApi.error(err.message);
+        messageApi.error(t(err.message));
       },
       refetchQueries: [{ query: GETADMINBANK }],
     }
@@ -96,7 +97,7 @@ const BankAccountCard = ({ settingId }) => {
   const data =
     banks?.map((b, index) => ({
       id: b.id,
-      title: b.isActive ? "By Default" : `Account ${index + 1}`,
+      title: b.isActive ? t("By Default") : `${t("Account")} ${index + 1}`,
       accountTitle: b?.accountTitle,
       bankname: b.bankName,
       accountno: b.accountNumber,
@@ -110,9 +111,9 @@ const BankAccountCard = ({ settingId }) => {
         spinning={mutationLoading || banksLoading}
         tip={
           mutationLoading
-            ? "Updating..."
+            ? t("Updating...")
             : banksLoading
-            ? "Loading..."
+            ? t("Loading...")
             : undefined
         }
       >

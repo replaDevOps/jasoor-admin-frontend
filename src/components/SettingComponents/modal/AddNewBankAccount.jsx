@@ -44,7 +44,7 @@ const AddNewBankAccount = ({ visible, onClose, edititem, settingId }) => {
       onClose();
     },
     onError: (err) => {
-      messageApi.error(err.message || t("Failed to add bank account."));
+      messageApi.error(t(err.message) || t("Failed to add bank account."));
     },
   });
 
@@ -56,7 +56,7 @@ const AddNewBankAccount = ({ visible, onClose, edititem, settingId }) => {
       onClose();
     },
     onError: (err) => {
-      messageApi.error(err.message || t("Failed to update bank account."));
+      messageApi.error(t(err.message) || t("Failed to update bank account."));
     },
   });
 
@@ -162,17 +162,17 @@ const AddNewBankAccount = ({ visible, onClose, edititem, settingId }) => {
                   message={t("Please choose bank name")}
                   placeholder={t("Choose")}
                   options={[
-                    { id: 1, name: "Saudi National Bank" },
-                    { id: 2, name: "Saudi Awwal Bank" },
-                    { id: 3, name: "The Saudi Investment Bank" },
-                    { id: 4, name: "Alinma Bank" },
-                    { id: 5, name: "Banque Saudi Fransi" },
-                    { id: 6, name: "Riyad Bank" },
-                    { id: 7, name: "Al Rajhi Bank" },
-                    { id: 8, name: "Arab National Bank" },
-                    { id: 9, name: "Bank Albilad" },
-                    { id: 10, name: "Bank AlJazira" },
-                    { id: 11, name: "Gulf International Bank" },
+                    { id: 1, name: t("Saudi National Bank") },
+                    { id: 2, name: t("Saudi Awwal Bank") },
+                    { id: 3, name: t("The Saudi Investment Bank") },
+                    { id: 4, name: t("Alinma Bank") },
+                    { id: 5, name: t("Banque Saudi Fransi") },
+                    { id: 6, name: t("Riyad Bank") },
+                    { id: 7, name: t("Al Rajhi Bank") },
+                    { id: 8, name: t("Arab National Bank") },
+                    { id: 9, name: t("Bank Albilad") },
+                    { id: 10, name: t("Bank AlJazira") },
+                    { id: 11, name: t("Gulf International Bank") },
                   ]}
                 />
               </Col>

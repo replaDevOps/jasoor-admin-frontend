@@ -190,7 +190,6 @@ const AddEditStaffMember = ({ visible, onClose, edititem }) => {
               </Col>
               <Col span={24}>
                 <MyInput
-                  // type='number'
                   label={t("Phone Number (Optional)")}
                   name="phoneNo"
                   placeholder={t("Enter phone number")}

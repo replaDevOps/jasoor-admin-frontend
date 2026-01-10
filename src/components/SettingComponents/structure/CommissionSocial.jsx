@@ -75,7 +75,7 @@ const CommissionSocial = ({ comssionSocial }) => {
       messageApi.success(t("Settings updated successfully!"));
     },
     onError: (err) => {
-      messageApi.error(err?.message || t("Failed to update settings."));
+      messageApi.error(t(err?.message) || t("Failed to update settings."));
     },
   });
 
@@ -86,7 +86,7 @@ const CommissionSocial = ({ comssionSocial }) => {
       messageApi.success(t("Settings created successfully!"));
     },
     onError: (err) => {
-      messageApi.error(err?.message || t("Failed to create settings."));
+      messageApi.error(t(err?.message) || t("Failed to create settings."));
     },
   });
 
@@ -99,7 +99,7 @@ const CommissionSocial = ({ comssionSocial }) => {
       }
     },
     onError: (err) => {
-      messageApi.error(err?.message || t("Failed to update user language."));
+      messageApi.error(t(err?.message) || t("Failed to update user language."));
     },
   });
 
