@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Breadcrumb } from "antd";
 import { MyInput, MySelect, SingleFileUpload } from "../../Forms";
 import { categoriesItems } from "../../../shared";
-import { categorystatsProfData, categoryStatsProfColumn } from "../../../data";
+import { categorystatsProfData } from "../../../data";
 import { useEffect, useState } from "react";
 import {
   UPDATE_CATEGORY,

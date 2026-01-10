@@ -203,8 +203,8 @@ const CategoryTable = () => {
               categoryname: item.name,
               arabicName: item.arabicName,
               businesstype: item.isDigital
-                ? t("Digital Business")
-                : t("Physical Business"),
+                ? "Digital Business"
+                : "Physical Business",
               status: item.status,
             })
           );

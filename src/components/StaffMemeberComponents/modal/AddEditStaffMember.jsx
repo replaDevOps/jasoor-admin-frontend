@@ -15,10 +15,11 @@ import { useEffect } from "react";
 import { GETROLES, GETSTAFFMEMBERS } from "../../../graphql/query";
 import { CREATE_STAFF_MEMBER, UPDATE_USER } from "../../../graphql/mutation";
 import { useQuery, useMutation } from "@apollo/client";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 const AddEditStaffMember = ({ visible, onClose, edititem }) => {
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const { data } = useQuery(GETROLES, {
     variables: {

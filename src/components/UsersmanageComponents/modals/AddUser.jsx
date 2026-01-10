@@ -20,12 +20,13 @@ import { useMutation, useLazyQuery } from "@apollo/client";
 import { CREATE_STAFF_MEMBER } from "../../../graphql/mutation/login";
 import { UPDATE_USER } from "../../../graphql/mutation";
 import imageCompression from "browser-image-compression";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { USERS, GETCUSTOMERROLE } from "../../../graphql/query";
 import { useDistricts, useCities } from "../../../shared";
 
 const { Title } = Typography;
 const AddUser = ({ visible, onClose, edititem }) => {
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const districts = useDistricts();

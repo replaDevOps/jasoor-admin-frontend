@@ -732,5 +732,7 @@
   "Send OTP": "Send OTP",
   "Verify OTP": "Verify OTP",
   "Reset Password": "Reset Password",
-  "Enter the 6 digit OTP code sent to": "Enter the 6 digit OTP code sent to"
+  "Enter the 6 digit OTP code sent to": "Enter the 6 digit OTP code sent to",
+  "Failed to load categories": "Failed to load categories",
+  "Category status changed successfully": "Category status changed successfully"
 }
