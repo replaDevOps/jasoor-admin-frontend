@@ -37,7 +37,7 @@ const FinalDeal = ({ details }) => {
       variables: {
         input: {
           id: details.key,
-          status: t("COMPLETED"),
+          status: "COMPLETED",
         },
       },
     });

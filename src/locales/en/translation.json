@@ -258,6 +258,8 @@
   "Document Verification Pending": "Document Verification Pending",
   "Deal To Final Pending": "Closed Deal Verification Pending",
   "Finalizing Deal": "Finalizing Deal",
+  "Awaiting Deal Closure": "Awaiting Deal Closure",
+  "Waiting for Jusoor to complete the deal": "Waiting for Jusoor to complete the deal",
   "Bank Details": "Bank Details From Seller Pending",
   "Buyer Name": "Buyer Name",
   "Finalized Offer": "Finalized Offer",
