@@ -162,7 +162,12 @@ const ScheduleMeetingTable = () => {
           return (
             <Text className="btnpill fs-12 inactive">{t("Cancelled")}</Text>
           );
+        } else if (status === "TIMELAPSED") {
+          return (
+            <Text className="btnpill fs-12 inactive">{t("Time Lapsed")}</Text>
+          );
         }
+        
         return <Text className="btnpill fs-12 inactive">{status || "-"}</Text>;
       },
     },

@@ -991,5 +991,7 @@
   "This action cannot be undone. Are you sure you want to delete this role?": "لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من رغبتك في حذف هذا الدور؟",
   "This action cannot be undone. Are you sure you want to delete this item?": "لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من رغبتك في حذف هذا العنصر؟",
   "Scheduled": "مجدول",
-  "Rescheduled": "معاد جدولته"
+  "Rescheduled": "معاد جدولته",
+  "Cancelled": "تم الإلغاء",
+  "Time Lapsed": "انتهت المدة الزمنية"
 }
