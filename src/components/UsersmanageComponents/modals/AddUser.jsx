@@ -26,7 +26,7 @@ import { useDistricts, useCities } from "../../../shared";
 
 const { Title } = Typography;
 const AddUser = ({ visible, onClose, edititem }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const districts = useDistricts();
@@ -174,8 +174,6 @@ const AddUser = ({ visible, onClose, edititem }) => {
   const onFinish = async () => {
     try {
       const formData = form.getFieldsValue(true);
-      const lang = localStorage.getItem("lang") || i18n.language || "en";
-      const isArabic = lang.toLowerCase().startsWith("ar");
 
       if (!edititem) {
         if (documents.length === 0) {
@@ -247,7 +245,6 @@ const AddUser = ({ visible, onClose, edititem }) => {
         district: formData.district,
         city: formData.city,
         phone: formData.phoneNo,
-        language: isArabic ? "AR" : "EN",
         roleId: rolesData?.getCustomerRole?.id,
         password:
           formData.password && String(formData.password).trim().length > 0
