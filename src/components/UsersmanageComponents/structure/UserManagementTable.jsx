@@ -111,10 +111,12 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
     {
       title: t("Region"),
       dataIndex: "district",
+      render: (district) => t(district),
     },
     {
       title: t("City"),
       dataIndex: "city",
+      render: (city) => t(city),
     },
     {
       title: t("Mobile Number"),

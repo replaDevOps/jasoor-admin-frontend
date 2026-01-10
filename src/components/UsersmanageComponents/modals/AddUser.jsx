@@ -26,7 +26,7 @@ import { useDistricts, useCities } from "../../../shared";
 
 const { Title } = Typography;
 const AddUser = ({ visible, onClose, edititem }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const districts = useDistricts();
@@ -43,7 +43,6 @@ const AddUser = ({ visible, onClose, edititem }) => {
     back: "",
     passport: "",
   });
-
   // Fetch customer roles
   const [getRoles, { data: rolesData }] = useLazyQuery(GETCUSTOMERROLE, {
     fetchPolicy: "cache-first",
@@ -86,17 +85,35 @@ const AddUser = ({ visible, onClose, edititem }) => {
   // Reset form and state when modal opens/closes
   useEffect(() => {
     if (visible && edititem) {
+      // Find the district ID from its name if necessary
+      const districtObj = districts.find(
+        (d) =>
+          d.id.toLowerCase() === edititem?.district?.toLowerCase() ||
+          d.name === edititem?.district
+      );
+      const districtId = districtObj ? districtObj.id : edititem?.district;
+
+      // Find the city ID from its name if necessary
+      let cityId = edititem?.city;
+      if (districtId && cities[districtId.toLowerCase()]) {
+        const cityObj = cities[districtId.toLowerCase()].find(
+          (c) =>
+            c.id.toLowerCase() === edititem?.city?.toLowerCase() ||
+            c.name === edititem?.city
+        );
+        if (cityObj) cityId = cityObj.id;
+      }
+
       // Edit mode - populate form with existing data
       form.setFieldsValue({
         id: edititem.key,
         fullName: edititem?.fullname,
         email: edititem?.email,
-        district: edititem?.district,
-        city: edititem?.city,
+        district: districtId,
+        city: cityId,
         phoneNo: edititem?.mobileno,
       });
-      // Set selectedDistrict to enable city dropdown in edit mode
-      setSelectedDistrict(edititem?.district);
+      setSelectedDistrict(districtId);
 
       // Populate document states if documents exist
       if (edititem?.documents && edititem.documents.length > 0) {
@@ -157,6 +174,8 @@ const AddUser = ({ visible, onClose, edititem }) => {
   const onFinish = async () => {
     try {
       const formData = form.getFieldsValue(true);
+      const lang = localStorage.getItem("lang") || i18n.language || "en";
+      const isArabic = lang.toLowerCase().startsWith("ar");
 
       if (!edititem) {
         if (documents.length === 0) {
@@ -228,6 +247,7 @@ const AddUser = ({ visible, onClose, edititem }) => {
         district: formData.district,
         city: formData.city,
         phone: formData.phoneNo,
+        language: isArabic ? "AR" : "EN",
         roleId: rolesData?.getCustomerRole?.id,
         password:
           formData.password && String(formData.password).trim().length > 0
@@ -419,6 +439,7 @@ const AddUser = ({ visible, onClose, edititem }) => {
                   message={t("Please select region")}
                   placeholder={t("Select region")}
                   options={districts}
+                  showKey={true}
                   onChange={(val) => {
                     setSelectedDistrict(val);
                     form.setFieldsValue({ city: undefined });
@@ -436,6 +457,7 @@ const AddUser = ({ visible, onClose, edititem }) => {
                       ? cities[selectedDistrict.toLowerCase()] || []
                       : []
                   }
+                  showKey={true}
                   placeholder={t("Select city")}
                   disabled={!selectedDistrict}
                 />

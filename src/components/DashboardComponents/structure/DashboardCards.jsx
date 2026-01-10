@@ -2,10 +2,11 @@ import { Card, Col, Flex, Row, Typography } from 'antd'
 import { ModuleTopHeading } from '../../PageComponents'
 import { GET_BUSINESS_STATS } from '../../../graphql/query/business'
 import { useQuery } from '@apollo/client'
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography
 const DashboardCards = () => {
+    const { t } = useTranslation();
     const { data, error } = useQuery(GET_BUSINESS_STATS);
   
     if (error) {
