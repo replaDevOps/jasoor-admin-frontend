@@ -8,7 +8,8 @@ const { Text } = Typography;
 const BusinessAmountReceiptBuyer = ({ details }) => {
   const { t } = useTranslation();
   const sellerReceipt = details?.busines?.documents?.find(
-    (doc) => doc.title === "Buyer Payment Receipt"
+    (doc) =>
+      doc.title === "Buyer Payment Receipt" || doc.title === "إيصال دفع المشتري"
   );
 
   const { loading, data: banksData } = useQuery(GETUSERBANK, {

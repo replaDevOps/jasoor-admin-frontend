@@ -30,7 +30,6 @@ const BusinessVisionStep = forwardRef(({ data, setData }, ref) => {
       return JSON.stringify(updated) !== JSON.stringify(prev) ? updated : prev;
     });
   };
-  console.log("BusinessVisionStep data:", data);
   useEffect(() => {
     form.setFieldsValue({
       supportDuration: data.supportDuration
