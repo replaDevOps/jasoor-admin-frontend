@@ -1,6 +1,7 @@
 import { Button, Col, Divider, Flex, Form, Modal, Row, Typography } from "antd";
 import { MyDatepicker, MyInput } from "../../Forms";
 import { CloseOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 const RescheduleMeeting = ({
@@ -10,6 +11,7 @@ const RescheduleMeeting = ({
   updateMeeting,
   loading,
 }) => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const handleReschedule = async () => {
     try {
@@ -53,7 +55,7 @@ const RescheduleMeeting = ({
             onClick={onClose}
             className="btncancel text-black border-gray"
           >
-            Cancel
+            {t("Cancel")}
           </Button>
           <Button
             className="btnsave border0 text-white brand-bg"
@@ -61,7 +63,7 @@ const RescheduleMeeting = ({
             loading={loading}
             aria-labelledby="Reschedule Meeting"
           >
-            Reschedule Meeting
+            {t("Reschedule Meeting")}
           </Button>
         </Flex>
       }
@@ -70,7 +72,7 @@ const RescheduleMeeting = ({
         <Flex vertical className="mb-3" gap={0}>
           <Flex justify="space-between" gap={6}>
             <Title level={5} className="m-0">
-              Reschedule Virtual Meeting
+              {t("Reschedule Virtual Meeting")}
             </Title>
             <Button
               aria-labelledby="Close"
@@ -82,8 +84,7 @@ const RescheduleMeeting = ({
             </Button>
           </Flex>
           <Text className="fs-14">
-            Please select a new date and time for the virtual meeting. An
-            updated invitation will be sent to both parties upon confirmation.
+            {t("Please select a new date and time for the virtual meeting. An updated invitation will be sent to both parties upon confirmation.")}
           </Text>
         </Flex>
         <Form layout="vertical" form={form} requiredMark={false}>
@@ -91,21 +92,21 @@ const RescheduleMeeting = ({
             <Col span={24}>
               <MyDatepicker
                 datePicker
-                label="Meeting Date"
+                label={t("Meeting Date")}
                 name="date"
                 className="w-100"
               />
             </Col>
             <Col span={24}>
               <MyDatepicker
-                label="Meeting Time"
+                label={t("Meeting Time")}
                 name="time"
                 className="w-100"
                 disabledHours={() => [1, 2, 3, 4, 5, 6, 7, 8]}
               />
             </Col>
             <Col span={24}>
-              <MyInput label="Meet Link" name="link" className="w-100" />
+              <MyInput label={t("Meet Link")} name="link" className="w-100" />
             </Col>
           </Row>
         </Form>

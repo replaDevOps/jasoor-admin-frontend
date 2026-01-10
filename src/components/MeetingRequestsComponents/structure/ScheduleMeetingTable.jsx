@@ -167,7 +167,7 @@ const ScheduleMeetingTable = () => {
             <Text className="btnpill fs-12 inactive">{t("Time Lapsed")}</Text>
           );
         }
-        
+
         return <Text className="btnpill fs-12 inactive">{status || "-"}</Text>;
       },
     },
