@@ -2,10 +2,10 @@ import { Row, Col, Flex, Button } from 'antd'
 import { AddEditStaffMember, ModuleTopHeading, StaffMemberTable } from '../../components'
 import { PlusOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const StaffMembersPage = () => {
-
+    const { t } = useTranslation();
     const [ visible, setVisible ] = useState(false)
     const [ edititem, setEditItem ] = useState(null)
 

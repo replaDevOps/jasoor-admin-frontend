@@ -18,11 +18,12 @@ import { UPDATE_USER, DELETE_USER } from "../../../graphql/mutation";
 import { GETSTAFFMEMBERS, GETROLES } from "../../../graphql/query";
 import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
 import { TableLoader } from "../../Ui/TableLoader";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
 
 const StaffMemberTable = ({ setVisible, setEditItem }) => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -79,7 +80,7 @@ const StaffMemberTable = ({ setVisible, setEditItem }) => {
   const staffData = data?.getStaffMembers?.users?.map((user) => ({
     ...user,
     key: user.id,
-    role: user.role?.name || "N/A",
+    role: user.role?.name ? t(user.role.name) : t("N/A"),
   }));
 
   const handlePageChange = (page, size) => {

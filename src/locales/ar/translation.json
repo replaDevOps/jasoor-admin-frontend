@@ -959,5 +959,16 @@
   "Role created successfully!": "تم إنشاء الدور بنجاح!",
   "Please select at least one permission": "يرجى اختيار صلاحية واحدة على الأقل",
   "Please enter role name": "يرجى إدخال اسم الدور",
-  "Edit Role": "تعديل الدور"
+  "Edit Role": "تعديل الدور",
+  "Staff member updated successfully!": "تم تحديث عضو الفريق بنجاح!",
+  "Staff member created successfully!": "تم إنشاء عضو الفريق بنجاح!",
+  "Staff member deleted successfully!": "تم حذف عضو الفريق بنجاح!",
+  "Error updating staff member": "خطأ في تحديث عضو الفريق",
+  "Error creating staff member": "خطأ في إنشاء عضو الفريق",
+  "Select role": "اختر الدور",
+  "Enter password": "أدخل كلمة المرور",
+  "Phone Number (Optional)": "رقم الهاتف (اختياري)",
+  "Assign Role": "تعيين دور",
+  "Verify": "التحقق",
+  "Enter phone number": "أدخل رقم الهاتف"
 }

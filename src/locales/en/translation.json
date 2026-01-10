@@ -759,5 +759,17 @@
   "Status changed successfully!": "Status changed successfully!",
   "Please select at least one permission": "Please select at least one permission",
   "Please enter role name": "Please enter role name",
-  "Edit Role": "Edit Role"
+  "Edit Role": "Edit Role",
+  "Staff member updated successfully!": "Staff member updated successfully!",
+  "Staff member created successfully!": "Staff member created successfully!",
+  "Staff member deleted successfully!": "Staff member deleted successfully!",
+  "Error updating staff member": "Error updating staff member",
+  "Error creating staff member": "Error creating staff member",
+  "Select role": "Select role",
+  "Enter password": "Enter password",
+  "Phone Number (Optional)": "Phone Number (Optional)",
+  "Assign Role": "Assign Role",
+  "Verify": "Verify",
+  "Enter phone number": "Enter phone number",
+  "N/A": "N/A"
 }
