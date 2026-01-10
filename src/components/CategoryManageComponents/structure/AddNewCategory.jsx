@@ -14,7 +14,7 @@ import { GET_CATEGORIES_BY_ID } from "../../../graphql/query";
 import { useMutation, useQuery } from "@apollo/client";
 import { message, Spin } from "antd";
 import { TableContent } from "../../BusinesslistingComponents/structure/TableContent";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const mapDensity = (value) => {
   if (!value) return null;
@@ -43,6 +43,7 @@ const mapDensity = (value) => {
 const { Text, Title } = Typography;
 
 const AddNewCategory = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
@@ -98,7 +99,9 @@ const AddNewCategory = () => {
       }, 700);
     },
     onError: (error) => {
-      messageApi.error(t(`Error creating category: ${error.message}`));
+      messageApi.error(
+        t("Error creating category: {{message}}", { message: error.message })
+      );
     },
   });
 
@@ -122,6 +125,7 @@ const AddNewCategory = () => {
         title: editdata?.name,
         arabicTitle: editdata?.arabicName,
         category: editdata?.isDigital ? "Digital" : "Physical",
+        uploadcr: editdata?.icon,
       });
     } else {
       form.resetFields();
@@ -322,8 +326,9 @@ const AddNewCategory = () => {
                         {t("Category Icon")}
                       </Title>
                       <Text className="text-gray">
-                        {t("Accepted formats")}: JPEG, JPG & PNG, Max size: 5MB
-                        per file. Aspect Ratio: 1:1.
+                        {t(
+                          "Accepted formats: JPEG, JPG & PNG, Max size: 5MB per file. Aspect Ratio: 1:1."
+                        )}
                       </Text>
                     </Flex>
                   }

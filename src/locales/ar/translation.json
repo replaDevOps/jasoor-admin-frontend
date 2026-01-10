@@ -902,5 +902,12 @@
   "Please enter total price": "يرجى إدخال السعر الإجمالي",
   "Please choose purchase year": "يرجى اختيار سنة الشراء",
   "Multiples of Revenue & Profit": "مضاعفات الإيرادات والأرباح",
-  "currency-symbol": "رمز العملة"
+  "currency-symbol": "رمز العملة",
+  "Category created successfully": "تم إنشاء الفئة بنجاح",
+  "Category updated successfully": "تم تحديث الفئة بنجاح",
+  "Error creating category: {{message}}": "خطأ في إنشاء الفئة: {{message}}",
+  "Image uploaded successfully": "تم رفع الصورة بنجاح",
+  "Failed to upload image": "فشل رفع الصورة",
+  "Please enter arabic title": "يرجى إدخال العنوان العربي",
+  "Please upload category icon": "يرجى رفع أيقونة الفئة"
 }
