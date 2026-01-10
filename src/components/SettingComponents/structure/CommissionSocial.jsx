@@ -211,10 +211,10 @@ const CommissionSocial = ({ comssionSocial }) => {
             <Col lg={{ span: 12 }} md={{ span: 12 }} span={24}>
               <MyInput label={t("WhatsApp")} name="whatsapp" />
             </Col>
-            <Col md={{ span: 12 }} span={24}>
+            {/* <Col md={{ span: 12 }} span={24}>
               <MyInput label={t("X")} name="twitter" />
-            </Col>
-            <Col md={{ span: 12 }} span={24}>
+            </Col> */}
+            <Col lg={{ span: 12 }} md={{ span: 12 }} span={24}>
               <MyInput label={t("Email Address")} name="email" disabled />
             </Col>
           </Row>

@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { MyInput } from "../../components";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined, DownOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation } from "@apollo/client";
@@ -26,6 +26,7 @@ const { Title, Text, Paragraph } = Typography;
 
 const ForgotPassword = () => {
   const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
@@ -265,7 +266,7 @@ const ForgotPassword = () => {
                 ghost
                 className="text-black fs-18 p-0 border-0"
               >
-                <ArrowLeftOutlined />
+                {isArabic ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
               </Button>
             ) : requestState === "reset" ? (
               <Button
@@ -275,7 +276,7 @@ const ForgotPassword = () => {
                 ghost
                 className="text-black fs-18 p-0 border-0"
               >
-                <ArrowLeftOutlined />
+                {isArabic ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
               </Button>
             ) : null}
           </div>

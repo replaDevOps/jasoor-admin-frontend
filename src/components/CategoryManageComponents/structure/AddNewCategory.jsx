@@ -1,5 +1,5 @@
 import { Button, Card, Col, Flex, Form, Row, Typography } from "antd";
-import { ArrowLeftOutlined, DeleteOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import { Breadcrumb } from "antd";
 import { MyInput, MySelect, SingleFileUpload } from "../../Forms";
@@ -43,7 +43,8 @@ const mapDensity = (value) => {
 const { Text, Title } = Typography;
 
 const AddNewCategory = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const navigate = useNavigate();
   const { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
@@ -251,7 +252,7 @@ const AddNewCategory = () => {
               className="border0 p-0 bg-transparent"
               onClick={() => navigate("/categorymanagement")}
             >
-              <ArrowLeftOutlined />
+              {isArabic ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
             </Button>
             <Title level={4} className="fw-500 m-0">
               {editdata?.name ? editdata?.name : t("Add New Category")}

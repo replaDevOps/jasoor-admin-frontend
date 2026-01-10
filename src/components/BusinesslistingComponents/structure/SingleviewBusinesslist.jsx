@@ -9,7 +9,7 @@ import {
   Spin,
   message,
 } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import { Breadcrumb } from "antd";
 import { PendingUnverifiedTabs } from "./PendingUnverifiedTabs";
@@ -120,7 +120,7 @@ const SingleviewBusinesslist = () => {
               className="border0 p-0 bg-transparent"
               onClick={() => navigate("/businesslist")}
             >
-              <ArrowLeftOutlined />
+              {isArabic ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
             </Button>
             <Title level={4} className="fw-500 m-0">
               {data?.businessTitle}

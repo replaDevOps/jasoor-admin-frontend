@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, RightOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined, RightOutlined } from "@ant-design/icons";
 import {
   Breadcrumb,
   Button,
@@ -70,7 +70,8 @@ const getStatusDisplay = (deal) => {
 
 const { Title, Text } = Typography;
 const BusinessDealsDetails = ({ completedeal }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const [messageApi, contextHolder] = message.useMessage();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -198,7 +199,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
               className="border0 p-0 bg-transparent"
               onClick={() => navigate("/businessdeal")}
             >
-              <ArrowLeftOutlined />
+              {isArabic ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
             </Button>
             <Title level={4} className="m-0">
               {details?.businessTitle}

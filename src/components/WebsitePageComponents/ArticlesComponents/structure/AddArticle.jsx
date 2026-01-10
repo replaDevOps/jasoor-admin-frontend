@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, RightOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined, RightOutlined } from "@ant-design/icons";
 import {
   Breadcrumb,
   Button,
@@ -28,6 +28,7 @@ const { Title, Text } = Typography;
 
 const AddArticle = () => {
   const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const { id } = useParams();
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -266,7 +267,7 @@ const AddArticle = () => {
               className="border0 p-0 bg-transparent"
               onClick={() => navigate("/articles")}
             >
-              <ArrowLeftOutlined />
+              {isArabic ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
             </Button>
             <Title level={4} className="m-0">
               {detail

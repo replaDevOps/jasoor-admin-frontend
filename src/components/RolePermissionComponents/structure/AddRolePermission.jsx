@@ -10,7 +10,7 @@ import {
   Space,
   Typography,
 } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import { Breadcrumb } from "antd";
 import { MyInput } from "../../Forms";
@@ -24,7 +24,8 @@ import { useTranslation } from "react-i18next";
 const { Text, Title } = Typography;
 
 const AddRolePermission = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
@@ -214,7 +215,7 @@ const AddRolePermission = () => {
               onClick={() => navigate("/rolepermission")}
               aria-labelledby="Arrow left"
             >
-              <ArrowLeftOutlined />
+              {isArabic ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
             </Button>
             <Title level={4} className="fw-500 m-0">
               {detail?.name
