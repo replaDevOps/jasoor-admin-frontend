@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { NavLink } from "react-router-dom";
 import { MySelect, SearchInput } from "../../Forms";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { CustomPagination, DeleteModal, TableLoader } from "../../Ui";
 import { ScheduleMeeting } from "../modal";
 import { UPDATE_BUSINESS_MEETING } from "../../../graphql/mutation";
@@ -153,10 +153,18 @@ const MeetingRequestTable = () => {
           },
         },
       ],
-      onCompleted: () => messageApi.success("Status changed successfully!"),
+      onCompleted: () => messageApi.success(t("Status changed successfully!")),
       onError: (err) =>
-        messageApi.error(err.message || "Something went wrong!"),
+        messageApi.error(t(err.message) || t("Something went wrong!")),
     }
+  );
+
+  const meetingitemsTranslated = useMemo(
+    () => [
+      { id: "2", name: t("Pending") },
+      { id: "3", name: t("Cancel Meeting") },
+    ],
+    [t]
   );
 
   const meetingreqColumn = (setVisible, setDeleteItem) => [

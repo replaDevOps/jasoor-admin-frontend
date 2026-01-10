@@ -14,7 +14,8 @@ export const MySelect = ({
   options,
   ...props
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   return withoutForm ? (
     <Select
       maxTagCount="responsive"
@@ -26,7 +27,7 @@ export const MySelect = ({
     >
       {options?.map((opt) => (
         <Select.Option value={showKey ? opt?.id : opt?.name} key={opt?.id}>
-          {opt?.name}
+          {isArabic && opt?.arabicName ? opt.arabicName : t(opt?.name)}
         </Select.Option>
       ))}
     </Select>
@@ -67,7 +68,7 @@ export const MySelect = ({
       >
         {options?.map((opt) => (
           <Select.Option value={showKey ? opt?.id : opt?.name} key={opt?.id}>
-            {t(opt?.name)}{" "}
+            {isArabic && opt?.arabicName ? opt.arabicName : t(opt?.name)}
           </Select.Option>
         ))}
       </Select>

@@ -1,8 +1,10 @@
 import { Button, Divider, Flex, Modal, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 const BusinesslistingReviewModal = ({ visible, onClose }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <Modal
@@ -14,7 +16,7 @@ const BusinesslistingReviewModal = ({ visible, onClose }) => {
       footer={
         <Flex justify="center" gap={5}>
           <Button
-            aria-labelledby="Back to Home"
+            aria-labelledby={t("Back to Home")}
             type="button"
             className="btncancel text-black border-gray"
             onClick={() => {
@@ -22,10 +24,10 @@ const BusinesslistingReviewModal = ({ visible, onClose }) => {
               navigate("/");
             }}
           >
-            Back to Home
+            {t("Back to Home")}
           </Button>
           <Button
-            aria-labelledby="Create new list"
+            aria-labelledby={t("Create new list")}
             type="primary"
             className="btnsave border0 text-white brand-bg"
             onClick={() => {
@@ -33,7 +35,7 @@ const BusinesslistingReviewModal = ({ visible, onClose }) => {
               navigate("/sellbusinesscreate");
             }}
           >
-            Create new list
+            {t("Create new list")}
           </Button>
         </Flex>
       }
@@ -42,15 +44,16 @@ const BusinesslistingReviewModal = ({ visible, onClose }) => {
         <img
           src="/assets/icons/complete.png"
           width={50}
-          alt="complete icon"
+          alt={t("complete icon")}
           fetchPriority="high"
         />
         <Title level={4} className="mb-0 mt-2">
-          Business Listing Under Review
+          {t("Business Listing Under Review")}
         </Title>
         <Text>
-          Your business listing is currently under review. Once approved by the
-          admin,it will go live on the marketplace.
+          {t(
+            "Your business listing is currently under review. Once approved by the admin, it will go live on the marketplace."
+          )}
         </Text>
       </Flex>
       <Divider className="my-2 bg-light-brand" />

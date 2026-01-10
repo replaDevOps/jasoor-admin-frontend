@@ -49,6 +49,7 @@ const GET_BUSINESS_CATEGORY_COUNT = gql`
       category
       count
       icon
+      arabicCategory
     }
   }
 `;
@@ -81,7 +82,9 @@ const GET_BUSINESSES = gql`
         capitalRecovery
         isSold
         category {
+          id
           name
+          arabicName
         }
         savedBy {
           id
@@ -130,6 +133,7 @@ const GET_BUSINESSES_STATS_BY_ID = gql`
         category {
           id
           name
+          arabicName
         }
       }
     }

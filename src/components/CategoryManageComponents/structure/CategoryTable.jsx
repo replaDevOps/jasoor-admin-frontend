@@ -54,6 +54,7 @@ const CategoryTable = () => {
     {
       title: t("Business Type"),
       dataIndex: "businesstype",
+      render: (type) => t(type),
     },
     {
       title: t("Status"),
@@ -62,7 +63,7 @@ const CategoryTable = () => {
         return status === "UNDER_REVIEW" ? (
           <Text className="btnpill fs-12 pending">{t("Pending")}</Text>
         ) : status === "INACTIVE" ? (
-          <Text className="btnpill fs-12 inactive">Inactive</Text>
+          <Text className="btnpill fs-12 inactive">{t("Inactive")}</Text>
         ) : status === "ACTIVE" ? (
           <Text className="btnpill fs-12 success">{t("Active")}</Text>
         ) : null;

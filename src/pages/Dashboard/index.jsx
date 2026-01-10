@@ -8,30 +8,26 @@ import {
 } from "../../components";
 import { useQuery } from "@apollo/client";
 import { ME } from "../../graphql/query";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { getUserId } from "../../shared/tokenManager";
+import dayjs from "dayjs";
 
 const { Text, Title } = Typography;
 const Dashboard = () => {
-  const options = {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  };
-
-  const today = new Date().toLocaleDateString("en-US", options);
-
+  const { t, i18n } = useTranslation();
   const userId = getUserId();
   const { data, loading: isLoading } = useQuery(ME, {
     variables: { getUserId: userId },
     skip: !userId,
     fetchPolicy: "network-only",
   });
+
+  const today = dayjs().locale(i18n.language).format("dddd, D MMMM YYYY");
+
   // Show loader while fetching
   if (isLoading) {
     return (
-      <Flex justify="center" align="center" className="h-100">
+      <Flex justify="center" align="center" style={{ height: "100vh" }}>
         <Spin size="large" />
       </Flex>
     );
@@ -42,7 +38,7 @@ const Dashboard = () => {
         <Flex vertical gap={2}>
           <Text className="text-gray fs-13">{today}</Text>
           <Title level={3} className="m-0">
-            {t("Hi")} {data?.getUser?.name}!
+            {t("Hi")} {data?.getUser?.name}
           </Title>
         </Flex>
         <DashboardCards />

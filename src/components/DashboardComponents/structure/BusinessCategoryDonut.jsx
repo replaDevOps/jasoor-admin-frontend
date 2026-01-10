@@ -4,11 +4,14 @@ import { ModuleTopHeading } from "../../PageComponents";
 import { GET_BUSINESS_CATEGORY_COUNT } from "../../../graphql/query/business";
 import { useQuery } from "@apollo/client";
 import { Spin } from "antd";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
 const BusinessCategoryDonut = () => {
+  const { i18n, t } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const { data: categoryData, loading } = useQuery(GET_BUSINESS_CATEGORY_COUNT);
+  console.log("Category Data:", categoryData);
   const chartData = {
     series:
       categoryData?.getCountByEachCategory.map((item) => item.count) || [],
@@ -17,7 +20,9 @@ const BusinessCategoryDonut = () => {
         type: "donut",
       },
       labels:
-        categoryData?.getCountByEachCategory.map((item) => item.category) || [],
+        categoryData?.getCountByEachCategory.map((item) =>
+          isArabic ? item.arabicCategory : item.category
+        ) || [],
       dataLabels: {
         enabled: false,
       },
@@ -102,7 +107,11 @@ const BusinessCategoryDonut = () => {
                         fetchPriority="high"
                       />
                       <Text className="fs-16 fw-500">
-                        {categoryData?.getCountByEachCategory[index]?.category}
+                        {isArabic
+                          ? categoryData?.getCountByEachCategory[index]
+                              ?.arabicCategory
+                          : categoryData?.getCountByEachCategory[index]
+                              ?.category}
                       </Text>
                     </Flex>
                   ))}
@@ -124,10 +133,11 @@ const BusinessCategoryDonut = () => {
                         fetchPriority="high"
                       />
                       <Text className="fs-16 fw-500">
-                        {
-                          categoryData?.getCountByEachCategory[index + 5]
-                            ?.category
-                        }
+                        {isArabic
+                          ? categoryData?.getCountByEachCategory[index + 5]
+                              ?.arabicCategory
+                          : categoryData?.getCountByEachCategory[index + 5]
+                              ?.category}
                       </Text>
                     </Flex>
                   ))}

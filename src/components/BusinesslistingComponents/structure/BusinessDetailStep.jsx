@@ -49,7 +49,7 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
       categoryData?.getAllCategories?.categories?.map((cat) => ({
         id: cat.id,
         name: cat.name,
-        arabicName: cat.name,
+        arabicName: cat.arabicName,
         isDigital: cat.isDigital,
       })) || [],
     [categoryData]
