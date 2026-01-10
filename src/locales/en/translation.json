@@ -253,6 +253,7 @@
   "DSA From Seller": "DSA From Seller Pending",
   "DSA From Buyer": "DSA From Buyer Pending",
   "Buyer Payment": "Seller Payment Verification Pending",
+  "Payment Verification Pending": "Payment Verification Pending",
   "Payment Approval": "Payment Approval From Seller Pending",
   "Deal To Final Pending": "Closed Deal Verification Pending",
   "Bank Details": "Bank Details From Seller Pending",
