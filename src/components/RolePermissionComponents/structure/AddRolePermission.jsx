@@ -19,11 +19,12 @@ import { CREATE_ROLE, UPDATE_ROLE } from "../../../graphql/mutation/login";
 import { GETROLE } from "../../../graphql/query";
 import { useMutation, useQuery } from "@apollo/client";
 import { message } from "antd";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const { Text, Title } = Typography;
 
 const AddRolePermission = () => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
@@ -134,7 +135,7 @@ const AddRolePermission = () => {
       }, 1000);
     },
     onError: (err) => {
-      messageApi.error(err.message || t("Something went wrong!"));
+      messageApi.error(t(err.message) || t("Something went wrong!"));
     },
   });
 
@@ -147,7 +148,7 @@ const AddRolePermission = () => {
       }, 1000);
     },
     onError: (err) => {
-      messageApi.error(err.message || t("Something went wrong!"));
+      messageApi.error(t(err.message) || t("Something went wrong!"));
     },
   });
 

@@ -752,5 +752,12 @@
   "FAQ created successfully": "FAQ created successfully",
   "FAQ updated successfully": "FAQ updated successfully",
   "DSA term created successfully": "DSA term created successfully",
-  "DSA term updated successfully": "DSA term updated successfully"
+  "DSA term updated successfully": "DSA term updated successfully",
+  "Role deleted successfully!": "Role deleted successfully!",
+  "Role updated successfully!": "Role updated successfully!",
+  "Role created successfully!": "Role created successfully!",
+  "Status changed successfully!": "Status changed successfully!",
+  "Please select at least one permission": "Please select at least one permission",
+  "Please enter role name": "Please enter role name",
+  "Edit Role": "Edit Role"
 }

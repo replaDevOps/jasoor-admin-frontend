@@ -953,5 +953,11 @@
   "FAQ created successfully": "تم إنشاء الأسئلة الشائعة بنجاح",
   "FAQ updated successfully": "تم تحديث الأسئلة الشائعة بنجاح",
   "DSA term created successfully": "تم إنشاء شروط DSA بنجاح",
-  "DSA term updated successfully": "تم تحديث شروط DSA بنجاح"
+  "DSA term updated successfully": "تم تحديث شروط DSA بنجاح",
+  "Role deleted successfully!": "تم حذف الدور بنجاح!",
+  "Role updated successfully!": "تم تحديث الدور بنجاح!",
+  "Role created successfully!": "تم إنشاء الدور بنجاح!",
+  "Please select at least one permission": "يرجى اختيار صلاحية واحدة على الأقل",
+  "Please enter role name": "يرجى إدخال اسم الدور",
+  "Edit Role": "تعديل الدور"
 }

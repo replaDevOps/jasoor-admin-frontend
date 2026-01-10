@@ -2,9 +2,10 @@ import { Row, Col, Flex, Button } from "antd";
 import { ModuleTopHeading, RolePermissionTable } from "../../components";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const RolePermission = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <>

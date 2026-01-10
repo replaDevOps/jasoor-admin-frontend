@@ -18,10 +18,11 @@ import { GETROLES } from "../../../graphql/query/user";
 import { UPDATE_ROLE, DELETE_ROLE } from "../../../graphql/mutation";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { TableLoader } from "../../Ui/TableLoader";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
 const RolePermissionTable = () => {
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -175,20 +176,20 @@ const RolePermissionTable = () => {
   const [deleteRole, { loading: onDeleteing }] = useMutation(DELETE_ROLE, {
     refetchQueries: [GETROLES],
     onCompleted: () => {
-      messageApi.success("Role deleted successfully!");
+      messageApi.success(t("Role deleted successfully!"));
     },
     onError: (err) => {
-      messageApi.error(err.message || "Something went wrong!");
+      messageApi.error(t(err.message) || t("Something went wrong!"));
     },
   });
 
   const [updateRole] = useMutation(UPDATE_ROLE, {
     refetchQueries: [GETROLES],
     onCompleted: () => {
-      messageApi.success("Status changed successfully!");
+      messageApi.success(t("Status changed successfully!"));
     },
     onError: (err) => {
-      messageApi.error(err.message || "Something went wrong!");
+      messageApi.error(t(err.message) || t("Something went wrong!"));
     },
   });
 
@@ -257,8 +258,10 @@ const RolePermissionTable = () => {
         visible={deleteItem}
         onClose={() => setDeleteItem(false)}
         loading={onDeleteing}
-        title="Are you sure?"
-        subtitle="This action cannot be undone. Are you sure you want to delete this Role?"
+        title={t("Are you sure?")}
+        subtitle={t(
+          "This action cannot be undone. Are you sure you want to delete this Role?"
+        )}
         type="danger"
         onConfirm={() => {
           if (selectedRoleId) {
