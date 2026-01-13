@@ -1458,3 +1458,13 @@ body.ltr {
     background-color: #f5f5f5;
   }
 }
+.ql-snow .ql-picker.ql-size .ql-picker-label::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item::before {
+  content: attr(data-value) !important;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label:not([data-value])::before {
+  content: "14px" !important;
+}
+.ql-snow .ql-picker.ql-size {
+  width: 70px !important;
+}
