@@ -188,6 +188,7 @@ const GETDEAL = gql`
       isCommissionUploaded
       createdAt
       ndaPdfPath
+      arabicNdaPdfPath
       business {
         id
         businessTitle

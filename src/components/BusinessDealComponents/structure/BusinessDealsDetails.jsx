@@ -112,6 +112,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
         isBuyerCompleted: data.getDeal.isBuyerCompleted,
         isDocVedifiedBuyer: data.getDeal.isDocVedifiedBuyer,
         ndaPdfPath: data.getDeal.ndaPdfPath,
+        arabicNdaPdfPath: data.getDeal.arabicNdaPdfPath,
       }
     : null;
   const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {

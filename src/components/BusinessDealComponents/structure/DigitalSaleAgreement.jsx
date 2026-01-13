@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
 const DigitalSaleAgreement = ({ details }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   return (
     <>
       <Row gutter={[16, 24]}>
@@ -37,7 +38,9 @@ const DigitalSaleAgreement = ({ details }) => {
                 </Flex>
               </Flex>
               <a
-                href={details?.ndaPdfPath}
+                href={
+                  isArabic ? details?.arabicNdaPdfPath : details?.ndaPdfPath
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 download
