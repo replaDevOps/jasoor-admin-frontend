@@ -137,12 +137,6 @@ const AddNewCategory = () => {
     }
   }, [id, editdata, form]);
 
-  const handleInputChange = (value, index, key) => {
-    const updated = [...categoryProfData];
-    updated[index][key] = value;
-    setCategoryProfData(updated);
-  };
-
   const [updateCategory, { loading: updating }] = useMutation(UPDATE_CATEGORY, {
     refetchQueries: [
       {
