@@ -68,6 +68,8 @@ const ContactFormSentPending = ({ visible, onClose, sendview, viewitem }) => {
                 aria-labelledby="Save"
                 className={`btnsave border0 text-white brand-bg`}
                 onClick={() => form.submit()}
+                loading={loading}
+                disabled={loading}
               >
                 Save
               </Button>
@@ -86,6 +88,7 @@ const ContactFormSentPending = ({ visible, onClose, sendview, viewitem }) => {
               onClick={onClose}
               className="p-0 border-0 bg-transparent"
               loading={loading}
+              disabled={loading}
             >
               <CloseOutlined className="fs-18" />
             </Button>
