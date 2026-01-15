@@ -265,10 +265,11 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
                 message={t("Please select user")}
                 placeholder={t("Select user")}
                 showKey
+                disabled
                 options={
                   customer?.getCustomers?.map((user, index) => ({
                     name: user?.name || "Unnamed User",
-                    id: user?.id || `temp-${index}`, // fallback unique value
+                    id: user?.id || `temp-${index}`,
                   })) || []
                 }
               />
