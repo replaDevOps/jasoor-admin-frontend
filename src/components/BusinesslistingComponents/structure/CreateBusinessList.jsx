@@ -223,6 +223,7 @@ const CreateBusinessList = () => {
           ref={businessDetailFormRef}
           data={businessData}
           setData={setBusinessData}
+          editBusinessId={editBusinessId}
         />
       ),
     },
