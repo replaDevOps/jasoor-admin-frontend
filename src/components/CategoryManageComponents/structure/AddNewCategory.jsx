@@ -17,7 +17,6 @@ import {
 import { GET_CATEGORIES_BY_ID } from "../../../graphql/query";
 import { useMutation, useQuery } from "@apollo/client";
 import { message, Spin } from "antd";
-import { TableContent } from "../../BusinesslistingComponents/structure/TableContent";
 import { useTranslation } from "react-i18next";
 
 const mapDensity = (value) => {
