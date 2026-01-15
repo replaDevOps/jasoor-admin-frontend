@@ -11,7 +11,7 @@ const { Title } = Typography;
 const ContactFormSentPending = ({ visible, onClose, sendview, viewitem }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-  const [updateContactUs] = useMutation(UPDATE_CONTACT_US, {
+  const [updateContactUs, { loading }] = useMutation(UPDATE_CONTACT_US, {
     refetchQueries: ["GetAllContactUs"],
     onCompleted: () => {
       messageApi.success(t("Response sent successfully!"));
@@ -85,6 +85,7 @@ const ContactFormSentPending = ({ visible, onClose, sendview, viewitem }) => {
               type="button"
               onClick={onClose}
               className="p-0 border-0 bg-transparent"
+              loading={loading}
             >
               <CloseOutlined className="fs-18" />
             </Button>
