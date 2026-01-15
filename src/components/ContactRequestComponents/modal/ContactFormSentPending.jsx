@@ -87,8 +87,6 @@ const ContactFormSentPending = ({ visible, onClose, sendview, viewitem }) => {
               type="button"
               onClick={onClose}
               className="p-0 border-0 bg-transparent"
-              loading={loading}
-              disabled={loading}
             >
               <CloseOutlined className="fs-18" />
             </Button>
