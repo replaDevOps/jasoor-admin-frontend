@@ -8,12 +8,6 @@ import {
 } from "./tokenManager";
 import { REFRESH_TOKEN } from "../graphql/mutation/login";
 
-/**
- * Token Refresh Service
- * Handles automatic token refresh with retry logic and error handling
- * Uses dynamic import of Apollo Client to avoid circular dependency
- */
-
 let isRefreshing = false;
 let refreshSubscribers = [];
 let cachedClient = null;
@@ -29,28 +23,15 @@ const getClient = async () => {
   return cachedClient;
 };
 
-/**
- * Add callback to be executed after token refresh
- * @param {function} callback - Function to call after refresh
- */
 const subscribeTokenRefresh = (callback) => {
   refreshSubscribers.push(callback);
 };
 
-/**
- * Execute all pending callbacks after token refresh
- * @param {string} token - New access token
- */
 const onTokenRefreshed = (token) => {
   refreshSubscribers.forEach((callback) => callback(token));
   refreshSubscribers = [];
 };
 
-/**
- * Refresh the access token using the refresh token
- * Uses dynamic import of Apollo Client to avoid circular dependency
- * @returns {Promise<string|null>} New access token or null on failure
- */
 export const refreshAccessToken = async () => {
   // If already refreshing, wait for that to complete
   if (isRefreshing) {
@@ -142,10 +123,6 @@ export const refreshAccessToken = async () => {
   }
 };
 
-/**
- * Proactive token refresh - call this periodically or before important requests
- * @returns {Promise<boolean>} True if token was refreshed successfully
- */
 export const ensureValidToken = async () => {
   // First check if we have any tokens at all
   const hasRefresh = !!getRefreshToken();

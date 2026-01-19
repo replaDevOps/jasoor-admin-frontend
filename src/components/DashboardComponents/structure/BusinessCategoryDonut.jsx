@@ -11,7 +11,6 @@ const BusinessCategoryDonut = () => {
   const { i18n, t } = useTranslation();
   const isArabic = i18n.language === "ar";
   const { data: categoryData, loading } = useQuery(GET_BUSINESS_CATEGORY_COUNT);
-  console.log("Category Data:", categoryData);
   const chartData = {
     series:
       categoryData?.getCountByEachCategory.map((item) => item.count) || [],
