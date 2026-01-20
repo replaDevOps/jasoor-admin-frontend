@@ -379,7 +379,9 @@ const ScheduleMeetingTable = () => {
       scheduleDateTime: item.adminAvailabilityDate
         ? new Date(item.adminAvailabilityDate).toLocaleString()
         : "-",
-      businessPrice: item.business?.price ? formatCurrency(item.business.price) : "-",
+      businessPrice: item.business?.price
+        ? formatCurrency(item.business.price)
+        : "-",
       meetLink: item.meetingLink || "",
     };
   });
