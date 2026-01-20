@@ -359,7 +359,7 @@ const ScheduleMeetingTable = () => {
     return {
       key: item.id,
       offerId: item?.offer?.id,
-      offerPrice: item?.offer?.price,
+      offerPrice: item?.offer?.price ? formatCurrency(item?.offer?.price) : "-",
       businessId: item?.business?.id,
       buyerName: isSeller
         ? item?.requestedTo?.name || "-"
@@ -379,7 +379,7 @@ const ScheduleMeetingTable = () => {
       scheduleDateTime: item.adminAvailabilityDate
         ? new Date(item.adminAvailabilityDate).toLocaleString()
         : "-",
-      businessPrice: item.business?.price ? item.business.price : "-",
+      businessPrice: item.business?.price ? formatCurrency(item.business.price) : "-",
       meetLink: item.meetingLink || "",
     };
   });
