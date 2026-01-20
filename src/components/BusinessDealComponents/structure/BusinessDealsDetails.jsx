@@ -20,6 +20,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
 import { UPDATE_DEAL } from "../../../graphql/mutation/mutations";
+import { useFormatNumber } from "../../../hooks";
 
 // Helper function to get status display from boolean flags
 const getStatusDisplay = (deal) => {
@@ -75,6 +76,7 @@ const getStatusDisplay = (deal) => {
 const { Title, Text } = Typography;
 const BusinessDealsDetails = ({ completedeal }) => {
   const { t, i18n } = useTranslation();
+  const { formatCurrency } = useFormatNumber();
   const isArabic = i18n.language === "ar";
   const [messageApi, contextHolder] = message.useMessage();
   const { id } = useParams();
@@ -92,7 +94,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
         sellerId: data.getDeal.business?.seller?.id || "-",
         sellerName: data.getDeal.business?.seller?.name || "-",
         finalizedOffer: data.getDeal.offer?.price
-          ? `SAR ${data.getDeal.offer.price.toLocaleString()}`
+          ? formatCurrency(data.getDeal.offer.price)
           : "-",
         status: data.getDeal.status || 0,
         date: data.getDeal.createdAt
@@ -260,8 +262,8 @@ const BusinessDealsDetails = ({ completedeal }) => {
                                 isCompleted
                                   ? "success"
                                   : isCanceled
-                                  ? "dealcancelled"
-                                  : "pending"
+                                    ? "dealcancelled"
+                                    : "pending"
                               }`}
                             >
                               {list?.desc}
@@ -289,7 +291,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
                 </Title>
                 <Text className="fs-14 text-gray text-center">
                   {t(
-                    "All activities for this deal have been stopped. No further actions can be taken."
+                    "All activities for this deal have been stopped. No further actions can be taken.",
                   )}
                 </Text>
               </Flex>

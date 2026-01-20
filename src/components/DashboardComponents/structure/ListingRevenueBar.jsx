@@ -5,9 +5,11 @@ import { GET_BUSINESS_REVENUE_TIER } from "../../../graphql/query/business";
 import { useQuery } from "@apollo/client";
 import { Spin } from "antd";
 import { useTranslation } from "react-i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const ListingRevenueBar = () => {
   const { t } = useTranslation();
+  const { formatNumber } = useFormatNumber();
   const { data, loading } = useQuery(GET_BUSINESS_REVENUE_TIER);
 
   // Prepare chart series and categories dynamically

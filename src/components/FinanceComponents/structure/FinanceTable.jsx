@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import { GET_COMPLETED_DEALS } from "../../../graphql/query/business";
 import { useQuery } from "@apollo/client";
 import { t } from "i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
 const FinanceTable = () => {
@@ -16,6 +17,7 @@ const FinanceTable = () => {
   const [current, setCurrent] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchText, setSearchText] = useState("");
+  const { formatCurrency } = useFormatNumber();
   const { data, refetch, loading } = useQuery(GET_COMPLETED_DEALS, {
     variables: {
       limit: pageSize,
@@ -126,10 +128,10 @@ const FinanceTable = () => {
       businessTitle: deal.business?.businessTitle || t("N/A"),
       sellerName: deal.business?.seller?.name || t("N/A"),
       buyerName: deal.buyer?.name || t("N/A"),
-      dealAmount: `${deal.price ? Number(deal.price).toFixed(2) : "0.00"}`,
-      commissionEarn: `${
-        deal.commission ? Number(deal.commission).toFixed(2) : "0.00"
-      }`,
+      dealAmount: formatCurrency(deal.price ? Number(deal.price) : "0.00"),
+      commissionEarn: formatCurrency(
+        deal.commission ? Number(deal.commission) : "0.00",
+      ),
       dateTime: dayjs(deal.createdAt).format("DD/MM/YYYY hh:mm A"),
     })) || [];
 

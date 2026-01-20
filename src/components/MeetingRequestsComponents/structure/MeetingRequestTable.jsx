@@ -19,11 +19,13 @@ import { GETADMINPENDINGMEETINGS } from "../../../graphql/query/meeting";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
+import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
 
 const MeetingRequestTable = () => {
   const { t } = useTranslation();
+  const { formatCurrency } = useFormatNumber();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedMeetingId, setSelectedMeetingId] = useState(null);
@@ -37,7 +39,7 @@ const MeetingRequestTable = () => {
 
   const [fetchPendingMeetings, { data, loading }] = useLazyQuery(
     GETADMINPENDINGMEETINGS,
-    { fetchPolicy: "network-only" }
+    { fetchPolicy: "network-only" },
   );
 
   const computeStatusVar = () => {
@@ -88,24 +90,22 @@ const MeetingRequestTable = () => {
         sellerPhoneNumber: item.business?.seller?.phone || "-",
         buyerTime: !isSeller
           ? `${requestedDate?.format(
-              "DD MMM YYYY, hh:mm A"
+              "DD MMM YYYY, hh:mm A",
             )} - ${requestedEndDate?.format("hh:mm A")}`
           : requestedDate
-          ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
-          : "-",
+            ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
+            : "-",
         sellerTime: isSeller
           ? `${requestedDate?.format(
-              "DD MMM YYYY, hh:mm A"
+              "DD MMM YYYY, hh:mm A",
             )} - ${requestedEndDate?.format("hh:mm A")}`
           : requestedDate
-          ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
-          : "-",
+            ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
+            : "-",
         businessPrice: item.business?.price
-          ? `${item.business.price.toLocaleString()}`
+          ? formatCurrency(item.business.price)
           : "-",
-        offerPrice: item.offer?.price
-          ? `${item.offer.price.toLocaleString()}`
-          : "-",
+        offerPrice: item.offer?.price ? formatCurrency(item.offer.price) : "-",
         meetLink: item.meetingLink || "",
         status: item.status || "-",
       };
@@ -154,7 +154,7 @@ const MeetingRequestTable = () => {
       onCompleted: () => messageApi.success(t("Status changed successfully!")),
       onError: (err) =>
         messageApi.error(t(err.message) || t("Something went wrong!")),
-    }
+    },
   );
 
   const meetingitemsTranslated = useMemo(
@@ -162,7 +162,7 @@ const MeetingRequestTable = () => {
       { id: "2", name: t("Pending") },
       { id: "3", name: t("Cancel Meeting") },
     ],
-    [t]
+    [t],
   );
 
   const meetingreqColumn = (setVisible, setDeleteItem) => [

@@ -6,10 +6,12 @@ import { GETADMINCANCELMEETINGS } from "../../../graphql/query/meeting";
 import { useLazyQuery } from "@apollo/client";
 import { t } from "i18next";
 import dayjs from "dayjs";
+import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
 
 const CancelledMeetingsTable = () => {
+  const { formatCurrency } = useFormatNumber();
   const [form] = Form.useForm();
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
@@ -18,7 +20,7 @@ const CancelledMeetingsTable = () => {
 
   const [fetchCancelledMeetings, { data, loading }] = useLazyQuery(
     GETADMINCANCELMEETINGS,
-    { fetchPolicy: "network-only" }
+    { fetchPolicy: "network-only" },
   );
 
   useEffect(() => {
@@ -63,24 +65,22 @@ const CancelledMeetingsTable = () => {
         sellerPhoneNumber: item.business?.seller?.phone || "-",
         buyerTime: !isSeller
           ? `${requestedDate?.format(
-              "DD MMM YYYY, hh:mm A"
+              "DD MMM YYYY, hh:mm A",
             )} - ${requestedEndDate?.format("hh:mm A")}`
           : requestedDate
-          ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
-          : "-",
+            ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
+            : "-",
         sellerTime: isSeller
           ? `${requestedDate?.format(
-              "DD MMM YYYY, hh:mm A"
+              "DD MMM YYYY, hh:mm A",
             )} - ${requestedEndDate?.format("hh:mm A")}`
           : requestedDate
-          ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
-          : "-",
+            ? receiverAvailabilityDate?.format("DD MMM YYYY, hh:mm A")
+            : "-",
         businessPrice: item.business?.price
-          ? `${item.business.price.toLocaleString()}`
+          ? formatCurrency(item.business.price)
           : "-",
-        offerPrice: item.offer?.price
-          ? `${item.offer.price.toLocaleString()}`
-          : "-",
+        offerPrice: item.offer?.price ? formatCurrency(item.offer.price) : "-",
         status: item.status || "-",
       };
     }) || [];

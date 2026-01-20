@@ -7,12 +7,14 @@ import { GET_BUSINESS_STATS_GRAPH } from "../../../graphql/query/business";
 import { useQuery } from "@apollo/client";
 import { t } from "i18next";
 import dayjs from "dayjs"; // Import dayjs
+import { useFormatNumber } from "../../../hooks";
 
 const { Title } = Typography;
 
 const BusinessListBarChart = () => {
   // FIX 1: Initialize state with current date (dayjs object) so it isn't undefined
   const [selectedYear, setSelectedYear] = useState(dayjs());
+  const { formatNumber } = useFormatNumber();
 
   const { data, refetch } = useQuery(GET_BUSINESS_STATS_GRAPH, {
     // FIX 2: Add safety check (?.) or fallback to current year
@@ -21,8 +23,8 @@ const BusinessListBarChart = () => {
 
   const maxCount = Math.max(
     ...(data?.getBusinessStatsGraph?.monthlyStats.map(
-      (m) => m.businessCount
-    ) || [0])
+      (m) => m.businessCount,
+    ) || [0]),
   );
 
   // Determine Y-axis max based on largest count
@@ -43,7 +45,7 @@ const BusinessListBarChart = () => {
         name: t("Total Businesses"),
         data:
           data?.getBusinessStatsGraph?.monthlyStats.map(
-            (m) => m.businessCount
+            (m) => m.businessCount,
           ) || Array(12).fill(0),
       },
     ],
@@ -56,7 +58,7 @@ const BusinessListBarChart = () => {
       stroke: { curve: "smooth", width: 2 },
       xaxis: {
         categories: data?.getBusinessStatsGraph?.monthlyStats.map(
-          (m) => m.month
+          (m) => m.month,
         ) || [
           "Jan",
           "Feb",

@@ -7,6 +7,7 @@ import { GETDEALS } from "../../../graphql/query/meeting";
 import { useLazyQuery } from "@apollo/client";
 import { TableLoader } from "../../Ui/TableLoader";
 import { useTranslation } from "react-i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
 
@@ -104,6 +105,7 @@ const getStatusFromBooleans = (deal, t) => {
 
 const InprogressDealTable = () => {
   const { t } = useTranslation();
+  const { formatCurrency } = useFormatNumber();
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState(null);
   const navigate = useNavigate();
@@ -145,7 +147,7 @@ const InprogressDealTable = () => {
     buyerName: item?.buyer?.name || "-",
     sellerName: item?.business?.seller?.name || "-",
     finalizedOffer: item?.offer?.price
-      ? `${item?.offer?.price?.toLocaleString()}`
+      ? formatCurrency(item?.offer?.price)
       : "-",
     statusInfo: getStatusFromBooleans(item, t),
     date: item?.createdAt

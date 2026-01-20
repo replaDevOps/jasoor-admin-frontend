@@ -6,10 +6,12 @@ import { GETDEALS } from "../../../graphql/query/meeting";
 import { useLazyQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { t } from "i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
 const CompleteDealsTable = ({ setCompleteDeal }) => {
   const [form] = Form.useForm();
+  const { formatCurrency } = useFormatNumber();
   const navigate = useNavigate();
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
@@ -49,7 +51,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
     buyerName: item?.buyer?.name || "-",
     sellerName: item?.business?.seller?.name || "-",
     finalizedOffer: item?.offer?.price
-      ? `SAR ${item?.offer?.price?.toLocaleString()}`
+      ? formatCurrency(item?.offer?.price)
       : "-",
     status: item?.status || 0,
     date: item?.createdAt

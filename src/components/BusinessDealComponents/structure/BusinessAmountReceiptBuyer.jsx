@@ -3,13 +3,16 @@ import { useQuery } from "@apollo/client";
 import { Spin } from "antd";
 import { GETUSERBANK } from "../../../graphql/query";
 import { useTranslation } from "react-i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
 const BusinessAmountReceiptBuyer = ({ details }) => {
   const { t } = useTranslation();
+  const { formatCurrency } = useFormatNumber();
   const sellerReceipt = details?.busines?.documents?.find(
     (doc) =>
-      doc.title === "Buyer Payment Receipt" || doc.title === "إيصال دفع المشتري"
+      doc.title === "Buyer Payment Receipt" ||
+      doc.title === "إيصال دفع المشتري",
   );
 
   const { loading, data: banksData } = useQuery(GETUSERBANK, {
@@ -21,7 +24,10 @@ const BusinessAmountReceiptBuyer = ({ details }) => {
     { title: t("Seller's Bank Name"), desc: t(banks?.bankName) },
     { title: t("Seller's IBAN"), desc: banks?.iban },
     { title: t("Account Holder Name"), desc: banks?.accountTitle },
-    { title: t("Amount to Pay"), desc: details?.finalizedOffer },
+    {
+      title: t("Amount to Pay"),
+      desc: formatCurrency(details?.finalizedOffer),
+    },
   ];
 
   const renderUploadedDoc = ({ fileName, fileSize, filePath }) => (

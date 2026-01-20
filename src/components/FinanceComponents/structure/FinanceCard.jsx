@@ -2,19 +2,21 @@ import { Card, Col, Flex, Image, Row, Typography } from "antd";
 import { GET_FINANCE_COUNT } from "../../../graphql/query/";
 import { useQuery } from "@apollo/client";
 import { t } from "i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const { Title, Text } = Typography;
 const FinanceCard = () => {
   const { data: count } = useQuery(GET_FINANCE_COUNT, {
     fetchPolicy: "cache-and-network",
   });
+  const { formatCurrency } = useFormatNumber();
 
   const data = [
     {
       id: 1,
       icon: "totalbusinessprice.png",
       title: count?.getFinanceCount?.totalPrice
-        ? `${count.getFinanceCount.totalPrice.toFixed(2)}`
+        ? formatCurrency(count.getFinanceCount.totalPrice)
         : "0.00",
       subtitle: "Total Businesses Price",
     },
@@ -22,7 +24,7 @@ const FinanceCard = () => {
       id: 2,
       icon: "revgen.png",
       title: count?.getFinanceCount?.revenueGenerated
-        ? `${count.getFinanceCount.revenueGenerated.toFixed(2)}`
+        ? formatCurrency(count.getFinanceCount.revenueGenerated)
         : "0.00",
       subtitle: "Revenue Generated",
     },
@@ -30,7 +32,7 @@ const FinanceCard = () => {
       id: 3,
       icon: "revgen.png",
       title: count?.getFinanceCount?.thisMonthRevenue
-        ? `${count.getFinanceCount.thisMonthRevenue.toFixed(2)}`
+        ? formatCurrency(count.getFinanceCount.thisMonthRevenue)
         : "0.00",
       subtitle: "Revenue Generated (This Month)",
     },

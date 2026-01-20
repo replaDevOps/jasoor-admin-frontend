@@ -4,11 +4,13 @@ import ReactApexChart from "react-apexcharts";
 import axios from "axios";
 import dayjs from "dayjs";
 import { t } from "i18next";
+import { useFormatNumber } from "../../../../hooks";
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
 
 const WebsiteVisitBarChart = () => {
+  const { formatNumber } = useFormatNumber();
   const [dateRange, setDateRange] = useState([
     dayjs().subtract(7, "day"),
     dayjs(),
@@ -20,7 +22,7 @@ const WebsiteVisitBarChart = () => {
   const fetchData = async (startDate, endDate) => {
     try {
       const { data } = await axios.get(
-        `https://verify.jusoor-sa.co/api/analytics?start=${startDate}&end=${endDate}`
+        `https://verify.jusoor-sa.co/api/analytics?start=${startDate}&end=${endDate}`,
       );
       if (data.success) {
         const apiLabels = data.data.labels || [];
@@ -131,7 +133,7 @@ const WebsiteVisitBarChart = () => {
             {t("Website Visits")}
           </Title>
           <Title level={4} className="fw-600 text-black m-0">
-            {totalVisitors.toLocaleString()}
+            {formatNumber(totalVisitors)}
           </Title>
         </Flex>
         <Flex justify="end" gap={10}>

@@ -17,6 +17,7 @@ import { GET_CATEGORIES } from "../../../graphql/query/business";
 import { useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
 const BusinessListingTable = ({
@@ -33,6 +34,7 @@ const BusinessListingTable = ({
   setStatus,
 }) => {
   const { t, i18n } = useTranslation();
+  const { formatCurrency } = useFormatNumber();
   const { data } = useQuery(GET_CATEGORIES, {
     variables: {
       isAdminCategory: true,
@@ -60,7 +62,7 @@ const BusinessListingTable = ({
       { id: "REJECT", name: t("Rejected") },
       { id: "SOLD", name: t("Sold") },
     ],
-    [t]
+    [t],
   );
 
   const columns = [
@@ -96,7 +98,7 @@ const BusinessListingTable = ({
               alt={t("currency-symbol")}
               fetchPriority="high"
             />
-            <Text>{price}</Text>
+            <Text>{formatCurrency(price)}</Text>
           </Flex>
         ) : (
           <Text>-</Text>

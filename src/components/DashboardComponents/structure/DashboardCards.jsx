@@ -3,10 +3,12 @@ import { ModuleTopHeading } from "../../PageComponents";
 import { GET_BUSINESS_STATS } from "../../../graphql/query/business";
 import { useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const { Title, Text } = Typography;
 const DashboardCards = () => {
   const { t } = useTranslation();
+  const { formatNumber } = useFormatNumber();
   const { data, error } = useQuery(GET_BUSINESS_STATS);
 
   if (error) {
@@ -26,25 +28,25 @@ const DashboardCards = () => {
     {
       id: 1,
       icon: "dc-1.png",
-      title: stats.totalBusinesses || 0,
+      title: formatNumber(stats.totalBusinesses || 0),
       subtitle: "Total Businesses",
     },
     {
       id: 2,
       icon: "dc-2.png",
-      title: stats.completedDeals || 0,
+      title: formatNumber(stats.completedDeals || 0),
       subtitle: "Completed Deals",
     },
     {
       id: 3,
       icon: "dc-3.png",
-      title: stats.requestMeetings || 0,
+      title: formatNumber(stats.requestMeetings || 0),
       subtitle: "Request for Meetings",
     },
     {
       id: 4,
       icon: "dc-4.png",
-      title: stats.scheduleMeetings || 0,
+      title: formatNumber(stats.scheduleMeetings || 0),
       subtitle: "Scheduled Meetings",
     },
   ];

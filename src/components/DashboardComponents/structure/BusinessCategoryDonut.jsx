@@ -20,7 +20,7 @@ const BusinessCategoryDonut = () => {
       },
       labels:
         categoryData?.getCountByEachCategory.map((item) =>
-          isArabic ? item.arabicCategory : item.category
+          isArabic ? item.arabicCategory : item.category,
         ) || [],
       dataLabels: {
         enabled: false,

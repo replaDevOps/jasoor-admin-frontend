@@ -16,10 +16,12 @@ import { useQuery } from "@apollo/client";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TableLoader } from "../../Ui";
+import { useFormatNumber } from "../../../hooks";
 
 const { Title, Text } = Typography;
 const OfferTable = (businessId) => {
   const { t } = useTranslation();
+  const { formatCurrency } = useFormatNumber();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
@@ -39,8 +41,8 @@ const OfferTable = (businessId) => {
     data?.getOfferByBusinessId?.offers?.map((offer, index) => ({
       key: index,
       buyername: offer?.buyer?.name,
-      businessprice: `${offer?.business?.price}`,
-      offerprice: `${offer?.price}`,
+      businessprice: formatCurrency(offer?.business?.price),
+      offerprice: formatCurrency(offer?.price),
       isProceedToPay: offer?.isProceedToPay,
       status: offer?.status,
       offerdate: new Date(offer?.createdAt).toLocaleDateString(),

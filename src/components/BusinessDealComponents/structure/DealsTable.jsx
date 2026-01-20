@@ -7,6 +7,7 @@ import { GETDEALS } from "../../../graphql/query/meeting";
 import { useLazyQuery } from "@apollo/client";
 import { TableLoader } from "../../Ui/TableLoader";
 import { useTranslation } from "react-i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
 
@@ -104,6 +105,7 @@ const getStatusFromBooleans = (deal, t) => {
 
 const DealsTable = ({ dealType = "INPROGRESS", onRowClick }) => {
   const { t } = useTranslation();
+  const { formatCurrency } = useFormatNumber();
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [pageSize, setPageSize] = useState(10);
@@ -148,19 +150,20 @@ const DealsTable = ({ dealType = "INPROGRESS", onRowClick }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue, current, pageSize, dealType]);
 
-  const dealData = (data?.getDeals?.deals || []).map((item) => ({
-    key: item?.id,
-    businessTitle: item?.business?.businessTitle || "-",
-    buyerName: item?.buyer?.name || "-",
-    sellerName: item?.business?.seller?.name || "-",
-    finalizedOffer: item?.offer?.price
-      ? `${item?.offer?.price?.toLocaleString()}`
-      : "-",
-    statusInfo: getStatusFromBooleans(item, t),
-    date: item?.createdAt
-      ? new Date(item?.createdAt).toLocaleDateString()
-      : "-",
-  }));
+  const dealData =
+    (data?.getDeals?.deals || []).map((item) => ({
+      key: item?.id,
+      businessTitle: item?.business?.businessTitle || "-",
+      buyerName: item?.buyer?.name || "-",
+      sellerName: item?.business?.seller?.name || "-",
+      finalizedOffer: item?.offer?.price
+        ? formatCurrency(item?.offer?.price)
+        : "-",
+      statusInfo: getStatusFromBooleans(item, t),
+      date: item?.createdAt
+        ? new Date(item?.createdAt).toLocaleDateString()
+        : "-",
+    })) || [];
 
   const total = data?.getDeals?.totalCount || 0;
 

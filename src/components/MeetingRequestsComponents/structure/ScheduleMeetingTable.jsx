@@ -23,6 +23,7 @@ import { IS_BUSINESS_IN_DEAL_PROCESS } from "../../../graphql/query/business";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import { useTranslation } from "react-i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const GET_SETTING = gql`
   query GetSetting {
@@ -36,6 +37,7 @@ const { Text } = Typography;
 
 const ScheduleMeetingTable = () => {
   const { t } = useTranslation();
+  const { formatCurrency } = useFormatNumber();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -50,11 +52,11 @@ const ScheduleMeetingTable = () => {
   const [selectedMeetingId, setSelectedMeetingId] = useState(null);
 
   const [updateMeeting, { loading: updating }] = useMutation(
-    UPDATE_BUSINESS_MEETING
+    UPDATE_BUSINESS_MEETING,
   );
   const [openDropdownRowId, setOpenDropdownRowId] = useState(null);
   const [disabledActionBusinessIds, setDisabledActionBusinessIds] = useState(
-    new Set()
+    new Set(),
   );
 
   const { data: settingData } = useQuery(GET_SETTING, {
@@ -189,7 +191,7 @@ const ScheduleMeetingTable = () => {
                   onClick: () => {
                     if (disabledActionBusinessIds.has(row.businessId)) {
                       messageApi.warning(
-                        t("Deal already opened for this business.")
+                        t("Deal already opened for this business."),
                       );
                       return;
                     }
@@ -213,13 +215,13 @@ const ScheduleMeetingTable = () => {
                   onClick: () => {
                     if (row.status === "HELD") {
                       messageApi.warning(
-                        t("Cannot reschedule a held meeting.")
+                        t("Cannot reschedule a held meeting."),
                       );
                       return;
                     }
                     if (row.status === "CANCELED") {
                       messageApi.warning(
-                        t("Cannot reschedule a cancelled meeting.")
+                        t("Cannot reschedule a cancelled meeting."),
                       );
                       return;
                     }
@@ -274,7 +276,7 @@ const ScheduleMeetingTable = () => {
                     return next;
                   });
                   messageApi.warning(
-                    t("Deal already opened for this business.")
+                    t("Deal already opened for this business."),
                   );
                   setOpenDropdownRowId(row.key);
                 } else {
@@ -313,13 +315,13 @@ const ScheduleMeetingTable = () => {
     GETADMINSCHEDULEMEETINGS,
     {
       fetchPolicy: "network-only",
-    }
+    },
   );
   const [checkBusinessInDealProcess] = useLazyQuery(
     IS_BUSINESS_IN_DEAL_PROCESS,
     {
       fetchPolicy: "network-only",
-    }
+    },
   );
 
   // map UI-selected status to API variable
@@ -440,7 +442,7 @@ const ScheduleMeetingTable = () => {
     const value = parseFloat(e.target.value) || 0;
     const commission = value * (commissionRate / 100);
     form.setFieldsValue({
-      commission: `SAR ${commission.toLocaleString()}`,
+      commission: formatCurrency(commission),
     });
   };
 
@@ -452,7 +454,7 @@ const ScheduleMeetingTable = () => {
       const commission = priceValue * (commissionRate / 100);
       form.setFieldsValue({
         offerPrice: priceValue,
-        commission: `SAR ${commission.toLocaleString()}`,
+        commission: formatCurrency(commission),
       });
     } else {
       // Reset form when modal closes
@@ -563,7 +565,7 @@ const ScheduleMeetingTable = () => {
         onClose={() => setDeleteItem(false)}
         title={t("Are you sure?")}
         subtitle={t(
-          "This action cannot be undone. Are you sure you want to cancel this Meeting?"
+          "This action cannot be undone. Are you sure you want to cancel this Meeting?",
         )}
         type="danger"
         loading={updating}

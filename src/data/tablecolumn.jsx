@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 const { Text } = Typography;
 import { t } from "i18next";
 import { PercentageOutlined } from "@ant-design/icons";
+import { useFormatNumber } from "../hooks";
 
 const usePostSaleColumn = () => {
   const { t } = useTranslation();
@@ -45,6 +46,7 @@ const usePostSaleColumn = () => {
 
 const useOfferTableColumn = () => {
   const { t } = useTranslation();
+  const { formatCurrency } = useFormatNumber();
   return [
     {
       title: t("Buyer Name"),
@@ -61,6 +63,9 @@ const useOfferTableColumn = () => {
     {
       title: t("Business Price"),
       dataIndex: "businessprice",
+      render: (businessprice) => {
+        return <Text>{formatCurrency(businessprice)}</Text>;
+      },
     },
     {
       title: t("Offer Price"),
@@ -69,7 +74,7 @@ const useOfferTableColumn = () => {
         return (
           <>
             <Flex gap={10} align="center">
-              {row?.offerprice}
+              {formatCurrency(row?.offerprice)}
               {row?.priceType === 1 ? (
                 <Tooltip title="CO - Counteroffer">
                   <Text className="brand-bg radius-4 p-1 fs-11 text-white">
