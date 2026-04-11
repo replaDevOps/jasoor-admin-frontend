@@ -1,5 +1,6 @@
 import { Flex } from 'antd'
-import { BankAccountCard, CommissionBrackets, CommissionSocial, ModuleTopHeading, PasswordManager } from '../../components';
+import { ModuleTopHeading } from '../PageComponents';
+import { BankAccountCard, CommissionBrackets, CommissionSocial, PasswordManager } from './structure';
 import {GET_SETTINGS} from '../../graphql/query';
 import {useQuery} from '@apollo/client';
 import { useEffect,useState } from 'react'

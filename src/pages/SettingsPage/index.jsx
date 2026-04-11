@@ -1,15 +1,18 @@
-import { Flex } from 'antd'
-import { BankAccountCard, CommissionSocial, ModuleTopHeading, PasswordManager } from '../../components';
-import {GET_SETTINGS} from '../../graphql/query';
-import {useQuery} from '@apollo/client';
-import { useEffect,useState } from 'react'
+import { Flex } from "antd";
+import {
+  BankAccountCard,
+  CommissionSocial,
+  ModuleTopHeading,
+  PasswordManager,
+} from "../../components";
+import { GET_SETTINGS } from "../../graphql/query";
+import { useQuery } from "@apollo/client";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 const SettingsPage = () => {
-  
   const { t, i18n } = useTranslation();
-  const [language, setLanguage] = useState();
-  const { data, loading, error } = useQuery(GET_SETTINGS);
+  const { data } = useQuery(GET_SETTINGS);
 
   const comssionSocial = data?.getSetting
     ? {
@@ -30,19 +33,21 @@ const SettingsPage = () => {
     const finalLang = backendLang || storedLang || "en";
     i18n.changeLanguage(finalLang);
     localStorage.setItem("lang", finalLang);
-    document.documentElement.setAttribute("dir", finalLang === "ar" ? "rtl" : "ltr");
-
+    document.documentElement.setAttribute(
+      "dir",
+      finalLang === "ar" ? "rtl" : "ltr",
+    );
   }, [comssionSocial?.language, i18n]);
 
   const settingId = comssionSocial ? comssionSocial.id : null;
-    return (
-        <Flex vertical gap={20}>
-            <ModuleTopHeading level={4}  name={t('Settings')} />
-            <CommissionSocial comssionSocial={comssionSocial} />
-            <PasswordManager />
-            <BankAccountCard settingId={settingId} />
-        </Flex>
-    )
-}
+  return (
+    <Flex vertical gap={20}>
+      <ModuleTopHeading level={4} name={t("Settings")} />
+      <CommissionSocial comssionSocial={comssionSocial} />
+      <PasswordManager />
+      <BankAccountCard settingId={settingId} />
+    </Flex>
+  );
+};
 
-export {SettingsPage}
+export { SettingsPage };
