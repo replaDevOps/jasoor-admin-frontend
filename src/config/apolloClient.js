@@ -43,7 +43,7 @@ const authLink = setContext(async (operation, { headers, skipAuth }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer${token}` : "",
+      authorization: token ? `Bearer ${token}` : "",
     },
   };
 });
@@ -56,7 +56,7 @@ const wsLink = new WebSocketLink({
     connectionParams: () => {
       const token = getAccessToken();
       return {
-        authorization: token ? `Bearer${token}` : "",
+        authorization: token ? `Bearer ${token}` : "",
       };
     },
   },
@@ -106,7 +106,7 @@ const errorLink = onError(
                   operation.setContext({
                     headers: {
                       ...oldHeaders,
-                      authorization: `Bearer${newToken}`,
+                      authorization: `Bearer ${newToken}`,
                     },
                   });
 

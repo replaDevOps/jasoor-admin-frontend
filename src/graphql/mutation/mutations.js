@@ -112,13 +112,7 @@ const UPLOAD_DOC = gql`
     }
   }
 `;
-const FINALIZE_DEAL = gql`
-  mutation UpdateDeal($input: UpdateDealInput!) {
-    updateDeal(input: $input) {
-      id
-    }
-  }
-`;
+// C9: FINALIZE_DEAL removed — was a duplicate of UPDATE_DEAL (same GQL operation)
 const CREATE_CATEGORY = gql`
   mutation CreateCategory($input: CreateCategoryInput!) {
     createCategory(input: $input) {
@@ -318,7 +312,6 @@ export {
   UPDATE_MEETING,
   APPROVE_MEETING,
   UPLOAD_DOC,
-  FINALIZE_DEAL,
   CREATE_CATEGORY,
   CREATE_CAMPAIGN,
   UPDATE_CAMPAIGN,
