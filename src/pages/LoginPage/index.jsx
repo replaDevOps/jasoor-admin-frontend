@@ -107,8 +107,12 @@ const LoginPage = () => {
           return;
         }
 
-        // Use the new token management system
-        login(data.staffLogin.token, data.staffLogin.refreshToken, user);
+        // Use the new token management system — returns false if Customer role (not an admin)
+        const loginSuccess = login(data.staffLogin.token, data.staffLogin.refreshToken, user);
+        if (!loginSuccess) {
+          messageApi.error(t("Access denied: This portal is for admin users only."));
+          return;
+        }
 
         messageApi.success(t("Login successful! Redirecting..."));
 

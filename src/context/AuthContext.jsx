@@ -53,12 +53,19 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (token, refreshToken, user) => {
+    // Reject Customer accounts — they cannot access the admin panel
+    const roleName = user?.role?.name ?? user?.role ?? '';
+    if (roleName === 'Customer' || !roleName) {
+      return false;
+    }
+
     setAuthTokens(token, refreshToken, user);
     setIsLoggedIn(true);
     setUserData(getUserData());
 
     // Start auto-refresh after login
     startAutoRefresh();
+    return true;
   };
 
   const logout = () => {
