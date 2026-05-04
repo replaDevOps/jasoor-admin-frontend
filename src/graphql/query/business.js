@@ -307,6 +307,7 @@ const GET_BUSINESS = gql`
       totalViews
       business {
         id
+        image
         businessTitle
         isSupportVerified
         reference

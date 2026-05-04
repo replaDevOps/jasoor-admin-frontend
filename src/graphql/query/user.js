@@ -71,15 +71,18 @@ const CUSTOMER = gql`
   }
 `;
 const NOTIFICATION = gql`
-  query GetNotifications($userId: ID!) {
-    getNotifications(userId: $userId) {
-      id
-      isRead
-      name
-      message
-      user {
+  query GetNotifications($limit: Int, $offSet: Int) {
+    getNotifications(limit: $limit, offSet: $offSet) {
+      count
+      notifications {
         id
+        isRead
         name
+        message
+        user {
+          id
+          name
+        }
       }
     }
   }
@@ -405,15 +408,20 @@ const GET_CAMPAIGNS = gql`
   }
 `;
 const GET_NOTIFICATIONS = gql`
-  query GetNotifications($userId: ID!) {
-    getNotifications(userId: $userId) {
+  query GetNotifications($limit: Int, $offSet: Int) {
+    getNotifications(limit: $limit, offSet: $offSet) {
       count
       notifications {
         id
         createdAt
         isRead
         name
+        nameAr
         message
+        messageAr
+        entityType
+        entityId
+        actionType
         user {
           id
           name
@@ -428,8 +436,8 @@ const GET_NOTIFICATION_COUNT = gql`
   }
 `;
 const GET_ALERTS = gql`
-  query Notifications($userId: ID, $offset: Int, $limit: Int) {
-    getAlerts(userId: $userId, offset: $offset, limit: $limit) {
+  query Notifications($offset: Int, $limit: Int) {
+    getAlerts(offset: $offset, limit: $limit) {
       count
       groups {
         notifications {

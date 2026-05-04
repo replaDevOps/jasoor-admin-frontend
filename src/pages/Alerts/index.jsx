@@ -4,11 +4,9 @@ import { ModuleTopHeading } from "../../components";
 import { GET_ALERTS } from "../../graphql/query";
 import { useLazyQuery } from "@apollo/client";
 import { t } from "i18next";
-import Cookies from "js-cookie";
 
 const { Text, Title } = Typography;
 const Alerts = () => {
-  const userId = Cookies.get("userId");
   const LIMIT = 10;
 
   const [groups, setGroups] = useState([]);
@@ -32,14 +30,13 @@ const Alerts = () => {
     }
   );
 
-  // trigger initial load when userId becomes available
+  // trigger initial load on mount
   useEffect(() => {
-    if (!userId) return;
     if (!called) {
-      loadAlerts({ variables: { userId, offset: 0, limit: LIMIT } });
+      loadAlerts({ variables: { offset: 0, limit: LIMIT } });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, []);
 
   const loadMore = async () => {
     if (!hasMore || loadingMore) return;
@@ -47,12 +44,12 @@ const Alerts = () => {
     try {
       // if the lazy query hasn't been called yet, trigger initial load
       if (!called) {
-        await loadAlerts({ variables: { userId, offset: 0, limit: LIMIT } });
+        await loadAlerts({ variables: { offset: 0, limit: LIMIT } });
         return;
       }
 
       const res = await fetchMore({
-        variables: { userId, offset: offset, limit: LIMIT },
+        variables: { offset: offset, limit: LIMIT },
       });
       const newGroups = res?.data?.getAlerts?.groups || [];
       const total = res?.data?.getAlerts?.count || 0;

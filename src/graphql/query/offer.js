@@ -211,6 +211,13 @@ const GETDEAL = gql`
         price
         status
       }
+      documents {
+        id
+        title
+        filePath
+        type
+        createdAt
+      }
     }
   }
 `;

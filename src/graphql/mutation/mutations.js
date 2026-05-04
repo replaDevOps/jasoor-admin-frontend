@@ -198,9 +198,15 @@ const UPLOAD_DOCUMENT = gql`
   }
 `;
 const SEND_BANK = gql`
-  mutation SendBankToBuyer($sendBankToBuyerId: ID) {
+  mutation SendBankToBuyer($sendBankToBuyerId: ID!) {
     sendBankToBuyer(id: $sendBankToBuyerId) {
-      iban
+      id
+      isSend
+      bank {
+        iban
+        bankName
+        accountTitle
+      }
     }
   }
 `;
