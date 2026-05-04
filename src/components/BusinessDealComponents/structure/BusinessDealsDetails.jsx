@@ -115,6 +115,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
         isDocVedifiedBuyer: data.getDeal.isDocVedifiedBuyer,
         ndaPdfPath: data.getDeal.ndaPdfPath,
         arabicNdaPdfPath: data.getDeal.arabicNdaPdfPath,
+        documents: data.getDeal.documents || [],
       }
     : null;
   const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
@@ -217,18 +218,18 @@ const BusinessDealsDetails = ({ completedeal }) => {
               aria-labelledby="Cancel Deal"
               type="primary"
               className={`btnsave border0 text-white ${
-                data?.getDeal?.busines?.isSold || details?.status === "CANCEL"
+                data?.getDeal?.business?.isSold || details?.status === "CANCEL"
                   ? ""
                   : "bg-red"
               }`}
               disabled={
-                details?.getDeal?.status === "COMPLETED" ||
+                details?.status === "COMPLETED" ||
                 details?.status === "CANCEL"
               }
               onClick={handleMCancelDeal}
               loading={updating}
               style={
-                data?.getDeal?.busines?.isSold || details?.status === "CANCEL"
+                data?.getDeal?.business?.isSold || details?.status === "CANCEL"
                   ? {
                       backgroundColor: "#d9d9d9",
                       borderColor: "#d9d9d9",

@@ -1,24 +1,61 @@
 import React, { useState } from "react";
-import { Button, Divider, Flex, Modal, Typography } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
+import { Button, Divider, Flex, Modal, Typography, message, Space } from "antd";
+import { CloseOutlined, CheckOutlined, StopOutlined } from "@ant-design/icons";
 import { t } from "i18next";
+import { useMutation } from "@apollo/client";
+import { UPDATE_USER } from "../../../graphql/mutation";
+import { USERS } from "../../../graphql/query/user";
 
-const { Title } = Typography;
-const ViewIdentity = ({ visible, onClose, viewstate }) => {
+const { Title, Text } = Typography;
+
+const ViewIdentity = ({ visible, onClose, viewstate, onStatusChanged }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewData, setPreviewData] = useState({
     url: "",
     type: "",
     title: "",
   });
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const [updateUser, { loading: updating }] = useMutation(UPDATE_USER, {
+    refetchQueries: [USERS],
+    onCompleted: () => {
+      if (onStatusChanged) onStatusChanged();
+    },
+    onError: (err) => {
+      messageApi.error(err.message || t("Something went wrong!"));
+    },
+  });
+
+  const handleApprove = async () => {
+    if (!viewstate?.key) return;
+    await updateUser({
+      variables: { input: { id: viewstate.key, status: "verified" } },
+    });
+    messageApi.success(t("User verified successfully!"));
+    onClose();
+  };
+
+  const handleReject = async () => {
+    if (!viewstate?.key) return;
+    await updateUser({
+      variables: { input: { id: viewstate.key, status: "pending" } },
+    });
+    messageApi.success(t("User verification rejected."));
+    onClose();
+  };
 
   const handlePreview = (url, type, title) => {
     setPreviewData({ url, type, title });
     setPreviewOpen(true);
   };
 
+  const isUnderReview = viewstate?.status === "under_review";
+  const isVerified    = viewstate?.status === "verified";
+
   return (
     <>
+      {contextHolder}
       <Modal
         title={null}
         open={visible}
@@ -41,6 +78,43 @@ const ViewIdentity = ({ visible, onClose, viewstate }) => {
               <CloseOutlined className="fs-18" />
             </Button>
           </Flex>
+
+          {/* User info */}
+          {viewstate && (
+            <div style={{ marginBottom: 12 }}>
+              <Text strong>{viewstate.fullname}</Text>
+              {viewstate.status && (
+                <span
+                  style={{
+                    marginLeft: 8,
+                    fontSize: 12,
+                    padding: "2px 8px",
+                    borderRadius: 20,
+                    fontWeight: 600,
+                    background:
+                      viewstate.status === "verified"
+                        ? "#f0fdf4"
+                        : viewstate.status === "under_review"
+                        ? "#fffbeb"
+                        : "#f9fafb",
+                    color:
+                      viewstate.status === "verified"
+                        ? "#166534"
+                        : viewstate.status === "under_review"
+                        ? "#d97706"
+                        : "#6b7280",
+                  }}
+                >
+                  {viewstate.status === "verified"
+                    ? t("Verified")
+                    : viewstate.status === "under_review"
+                    ? t("Under Review")
+                    : t(viewstate.status)}
+                </span>
+              )}
+            </div>
+          )}
+
           <Flex gap={10} wrap>
             {viewstate?.documents?.map((doc, index) => {
               const fileUrl = doc?.filePath;
@@ -108,9 +182,50 @@ const ViewIdentity = ({ visible, onClose, viewstate }) => {
                 </div>
               );
             })}
+
+            {(!viewstate?.documents || viewstate.documents.length === 0) && (
+              <Text type="secondary">{t("No documents uploaded yet.")}</Text>
+            )}
           </Flex>
         </div>
-        <Divider className="my-2 bg-light-brand" />
+
+        <Divider className="my-3 bg-light-brand" />
+
+        {/* Approve / Reject actions — shown for any non-verified user */}
+        {viewstate && !isVerified && (
+          <Space>
+            <Button
+              type="primary"
+              icon={<CheckOutlined />}
+              loading={updating}
+              onClick={handleApprove}
+              style={{ background: "#008A66", borderColor: "#008A66" }}
+            >
+              {t("Approve")}
+            </Button>
+            <Button
+              danger
+              icon={<StopOutlined />}
+              loading={updating}
+              onClick={handleReject}
+            >
+              {t("Reject")}
+            </Button>
+          </Space>
+        )}
+
+        {isVerified && (
+          <Space>
+            <Button
+              danger
+              icon={<StopOutlined />}
+              loading={updating}
+              onClick={handleReject}
+            >
+              {t("Revoke Verification")}
+            </Button>
+          </Space>
+        )}
       </Modal>
 
       <Modal

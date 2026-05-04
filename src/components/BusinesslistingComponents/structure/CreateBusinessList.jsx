@@ -57,6 +57,7 @@ const CreateBusinessList = () => {
     // Don't load draft in edit mode
     if (editBusinessId) {
       return {
+        image: null,
         isByTakbeer: null,
         businessTitle: null,
         categoryId: null,
@@ -110,6 +111,7 @@ const CreateBusinessList = () => {
       };
     }
     return {
+      image: null,
       isByTakbeer: null,
       businessTitle: null,
       categoryId: null,
@@ -162,6 +164,7 @@ const CreateBusinessList = () => {
       const profitTimeValue = profTime === "6" || profTime === 6 ? 1 : 2;
 
       setBusinessData({
+        image: business.image || null,
         isByTakbeer: business.isByTakbeer,
         businessTitle: business.businessTitle,
         categoryId: business.category?.id,
@@ -340,11 +343,12 @@ const CreateBusinessList = () => {
     }
 
     // eslint-disable-next-line no-unused-vars
-    const { categoryName, username, userId, recoveryTime, ...rest } =
+    const { categoryName, username, userId, recoveryTime, image, ...rest } =
       businessData;
     try {
       const inputData = {
         ...rest,
+        ...(image ? { image } : {}),
         createdBy: businessData.userId,
         revenueTime: businessData.revenueTime === 1 ? "6" : "12",
         profittime: businessData.profittime === 1 ? "6" : "12",
@@ -449,6 +453,7 @@ const CreateBusinessList = () => {
         localStorage.removeItem(LOCAL_STORAGE_KEY);
 
         setBusinessData({
+          image: null,
           isByTakbeer: null,
           businessTitle: null,
           categoryId: null,

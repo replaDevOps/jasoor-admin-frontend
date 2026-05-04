@@ -10,17 +10,15 @@ const { Text } = Typography;
 const NotificationsDrawer = ({ visible, onClose }) => {
   const userId = getUserId();
   const { data } = useQuery(GET_NOTIFICATIONS, {
-    variables: { userId },
-    skip: !userId,
     fetchPolicy: "network-only",
   });
 
   const [markAsRead] = useMutation(MARK_AS_READ, {
-    refetchQueries: [{ query: GET_NOTIFICATIONS, variables: { userId } }],
+    refetchQueries: [{ query: GET_NOTIFICATIONS }],
   });
 
   useEffect(() => {
-    if (visible && userId) {
+    if (visible) {
       markAsRead({ variables: { markNotificationAsReadId: userId } });
     }
   }, [visible, userId, markAsRead]);

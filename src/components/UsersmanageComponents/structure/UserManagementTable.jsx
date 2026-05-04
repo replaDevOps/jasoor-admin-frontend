@@ -144,7 +144,14 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
           return (
             <Text className="btnpill fs-12 inactive">{t("Inactive")}</Text>
           );
+        } else if (status === "under_review") {
+          return (
+            <Text className="btnpill fs-12 pending" style={{ color: "#d97706", background: "#fffbeb" }}>
+              {t("Under Review")}
+            </Text>
+          );
         }
+        return null;
       },
     },
     {
@@ -342,6 +349,7 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
     { id: "verified", name: t("Active") },
     { id: "inactive", name: t("Inactive") },
     { id: "pending", name: t("Pending") },
+    { id: "under_review", name: t("Under Review") },
   ];
 
   return (

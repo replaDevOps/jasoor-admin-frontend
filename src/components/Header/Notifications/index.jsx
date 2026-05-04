@@ -1,16 +1,11 @@
 import { useState, useEffect } from "react";
 import { Badge, Button, Image } from "antd";
 import NotificationsDrawer from "./NotificationsDrawer";
-import {
-  GET_NOTIFICATIONS,
-  GET_NOTIFICATION_COUNT,
-} from "../../../graphql/query";
+import { GET_NOTIFICATION_COUNT } from "../../../graphql/query";
 import { NEW_NOTIFICATION_SUBSCRIPTION } from "../../../graphql/subscription";
 import { useQuery, useSubscription } from "@apollo/client";
-import { getUserId } from "../../../shared/tokenManager";
 
 export const Notifications = () => {
-  const userId = getUserId();
 
   // Count API
   const { data: countData, refetch: refetchCount } = useQuery(
@@ -22,13 +17,12 @@ export const Notifications = () => {
 
   const [visible, setVisible] = useState(false);
 
-  // Subscribe to new notifications
+  // Subscribe to new notifications — refetch real count from server on each arrival
   useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
     onSubscriptionData: ({ subscriptionData }) => {
       const newNotif = subscriptionData.data?.newNotification;
       if (newNotif) {
-        // Increment unread count when new notification arrives
-        setLocalCount((prev) => prev + 1);
+        refetchCount();
       }
     },
   });

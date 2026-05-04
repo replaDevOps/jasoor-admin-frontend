@@ -15,6 +15,7 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
   const [form] = Form.useForm();
   const [uploadingCR, setUploadingCR] = useState(false);
   const [uploadingSupport, setUploadingSupport] = useState(false);
+  const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
   const [initialCrList, setInitialCrList] = useState([]);
   const [initialSupportList, setInitialSupportList] = useState([]);
 
@@ -370,6 +371,27 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
       console.error("handleMultipleFileRemove error:", err);
     }
   };
+  const handleCoverImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingCoverImage(true);
+    try {
+      const fileInfo = await uploadFileToServer(file);
+      setData({ ...data, image: fileInfo.filePath });
+      messageApi.success(t("Cover image uploaded successfully"));
+    } catch {
+      messageApi.error(t("Failed to upload cover image"));
+    } finally {
+      setUploadingCoverImage(false);
+      // reset input so same file can be re-selected if needed
+      e.target.value = "";
+    }
+  };
+
+  const handleCoverImageRemove = () => {
+    setData({ ...data, image: null });
+  };
+
   return (
     <>
       {contextHolder}
@@ -399,6 +421,80 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
           </Text>
         </Flex>
       </Flex>
+
+      {/* Cover Image Card — admin-controlled public listing image */}
+      <Card className="shadow-d radius-12 border-gray mb-3">
+        <Flex vertical gap={10} className="w-100">
+          <Flex vertical gap={2}>
+            <Title level={5} className="m-0 fw-500">
+              {t("Listing Cover Image")}
+            </Title>
+            <Text className="text-gray">
+              {t("Public card image shown to buyers. JPG, PNG, WEBP only. Recommended 3:2 ratio.")}
+            </Text>
+          </Flex>
+
+          {data?.image ? (
+            <Flex vertical gap={8}>
+              <img
+                src={data.image}
+                alt={t("Cover preview")}
+                style={{ width: "100%", maxWidth: 360, aspectRatio: "3/2", objectFit: "cover", borderRadius: 8, border: "1px solid #e8e8e8" }}
+              />
+              <Flex gap={8}>
+                <label style={{ cursor: "pointer" }}>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    style={{ display: "none" }}
+                    onChange={handleCoverImageUpload}
+                  />
+                  <span className="btn border-gray text-black" style={{ padding: "4px 12px", borderRadius: 6, fontSize: 13 }}>
+                    {uploadingCoverImage ? t("Uploading…") : t("Change Image")}
+                  </span>
+                </label>
+                <Button
+                  danger
+                  size="small"
+                  onClick={handleCoverImageRemove}
+                  disabled={uploadingCoverImage}
+                >
+                  {t("Remove")}
+                </Button>
+              </Flex>
+            </Flex>
+          ) : (
+            <label style={{ display: "block", cursor: "pointer" }}>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                style={{ display: "none" }}
+                onChange={handleCoverImageUpload}
+              />
+              <Flex
+                align="center"
+                justify="center"
+                style={{
+                  border: "2px dashed #d9d9d9",
+                  borderRadius: 8,
+                  padding: "32px 16px",
+                  background: uploadingCoverImage ? "#fafafa" : "white",
+                  textAlign: "center",
+                  flexDirection: "column",
+                  gap: 8,
+                }}
+              >
+                <Text className="text-gray">
+                  {uploadingCoverImage ? t("Uploading…") : t("Click to upload cover image")}
+                </Text>
+                <Button type="dashed" disabled={uploadingCoverImage}>
+                  {t("Upload")}
+                </Button>
+              </Flex>
+            </label>
+          )}
+        </Flex>
+      </Card>
 
       <Form layout="vertical" form={form} requiredMark={false}>
         <Card className="shadow-d radius-12 border-gray mb-3">

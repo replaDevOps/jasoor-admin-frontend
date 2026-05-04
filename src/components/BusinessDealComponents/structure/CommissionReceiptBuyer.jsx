@@ -18,13 +18,18 @@ import { useTranslation } from "react-i18next";
 const { Text } = Typography;
 const CommissionReceiptBuyer = ({ details }) => {
   const { t } = useTranslation();
-  const commission = details?.busines;
-  const jasoorDoc = commission?.documents?.find(
+  // Payment proofs are uploaded by the buyer as deal-level documents with type PAYMENT_PROOF.
+  // Fall back to scanning business documents by title for backwards compatibility.
+  const paymentProofs = (details?.documents || []).filter(
+    (doc) => doc.type === "PAYMENT_PROOF"
+  );
+  const legacyDoc = (details?.busines?.documents || []).find(
     (doc) =>
       doc.title === "Jasoor Commission" ||
       doc.title === "جسور العمولة" ||
       doc.title === "عمولة جسور"
   );
+  const hasProof = paymentProofs.length > 0 || !!legacyDoc;
   const [messageApi, contextHolder] = message.useMessage();
   const [updateDeals, { loading: updating, data, error }] = useMutation(
     UPDATE_DEAL,
@@ -103,12 +108,23 @@ const CommissionReceiptBuyer = ({ details }) => {
             <Text className="fw-600 text-medium-gray fs-13">
               {t("Jusoor's Commission bank statement or screenshot")}
             </Text>
-            {jasoorDoc &&
-              renderUploadedDoc({
-                fileName: jasoorDoc?.title,
-                // fileSize: "5.3 MB",
-                filePath: jasoorDoc?.filePath,
-              })}
+            {paymentProofs.length > 0
+              ? paymentProofs.map((doc) => (
+                  <div key={doc.id}>
+                    {renderUploadedDoc({
+                      fileName: doc.title || t("Payment Proof"),
+                      filePath: doc.filePath,
+                    })}
+                  </div>
+                ))
+              : legacyDoc &&
+                renderUploadedDoc({
+                  fileName: legacyDoc.title,
+                  filePath: legacyDoc.filePath,
+                })}
+            {!hasProof && (
+              <Text className="fs-13 text-gray">{t("No proof uploaded yet")}</Text>
+            )}
           </Flex>
         </Col>
         <Col span={24}>
@@ -118,7 +134,7 @@ const CommissionReceiptBuyer = ({ details }) => {
               className="btnsave bg-brand"
               onClick={handleMarkVerified}
               aria-labelledby="Mark as Verified"
-              disabled={!(jasoorDoc && !details?.isCommissionVerified)}
+              disabled={!(hasProof && !details?.isCommissionVerified)}
             >
               {t("Mark as Verified")}
             </Button>

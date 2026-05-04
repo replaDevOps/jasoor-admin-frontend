@@ -46,7 +46,7 @@ const FinalDeal = ({ details }) => {
         input: {
           id: details?.busines?.id,
           isSold: true,
-          businessStatus: t("SOLD"),
+          businessStatus: "SOLD",
         },
       },
     });
