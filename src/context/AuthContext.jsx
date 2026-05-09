@@ -54,8 +54,13 @@ export const AuthProvider = ({ children }) => {
 
   const login = (token, refreshToken, user) => {
     // Reject Customer accounts — they cannot access the admin panel
-    const roleName = user?.role?.name ?? user?.role ?? '';
-    if (roleName === 'Customer' || !roleName) {
+    const roleName =
+      user?.role?.name ??
+      user?.roles?.name ??
+      user?.roleName ??
+      (typeof user?.role === "string" ? user.role : "");
+    const normalizedRole = String(roleName || "").trim().toLowerCase();
+    if (!normalizedRole || normalizedRole === "customer") {
       return false;
     }
 

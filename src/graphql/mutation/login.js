@@ -25,7 +25,13 @@ export const LOGIN = gql`
       refreshToken
       user {
         id
+        name
+        email
         status
+        role {
+          id
+          name
+        }
       }
     }
   }
@@ -38,7 +44,13 @@ export const REFRESH_TOKEN = gql`
       refreshToken
       user {
         id
+        name
+        email
         status
+        role {
+          id
+          name
+        }
       }
     }
   }

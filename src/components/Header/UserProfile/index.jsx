@@ -1,10 +1,14 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Space, Typography, Avatar, Flex} from "antd"
 import UserProfileDrawer from "./UserProfileDrawer"
+import { AuthContext } from "../../../context/AuthContext"
 const { Text }= Typography
 
 export const UserProfile = () => {
     const [visible, setVisible]= useState(false)
+    const { userData } = useContext(AuthContext)
+    const displayName = userData?.name || userData?.email || "Admin"
+    const displayEmail = userData?.email || ""
     return (
         <>
           <Space 
@@ -18,10 +22,10 @@ export const UserProfile = () => {
             />
             <Flex vertical gap={0}>
               <Text className="fs-12" strong>
-                Mark Ferdinand
+                {displayName}
               </Text>
               <Text className="fs-10 text-gray">
-                mkferdinand@gmail.com
+                {displayEmail}
               </Text>
             </Flex>
           </Space>
