@@ -4,7 +4,7 @@ import {
 } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
@@ -72,7 +72,7 @@ const CommissionBrackets = () => {
   const refetchOptions = { refetchQueries: [{ query: GET_COMMISSION_BRACKETS }], awaitRefetchQueries: true };
 
   const { data, loading } = useQuery(GET_COMMISSION_BRACKETS);
-  const [previewCommission, { loading: previewing }] = useQuery(PREVIEW_COMMISSION, { skip: true });
+  const [previewCommission, { loading: previewing }] = useLazyQuery(PREVIEW_COMMISSION, { fetchPolicy: 'network-only' });
   const [createBracket, { loading: creating }] = useMutation(CREATE_BRACKET, { ...refetchOptions, onCompleted: () => { messageApi.success(t('Bracket created')); closeModal(); }, onError: (e) => messageApi.error(e.message) });
   const [updateBracket, { loading: updating }] = useMutation(UPDATE_BRACKET, { ...refetchOptions, onCompleted: () => { messageApi.success(t('Bracket updated')); closeModal(); }, onError: (e) => messageApi.error(e.message) });
   const [deleteBracket]                        = useMutation(DELETE_BRACKET, { ...refetchOptions, onCompleted: () => messageApi.success(t('Bracket deleted')), onError: (e) => messageApi.error(e.message) });
