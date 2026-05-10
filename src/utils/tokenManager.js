@@ -82,6 +82,17 @@ export const setAuthTokens = (accessToken, refreshToken, user) => {
       Cookies.set("userStatus", user.status, {
         expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
       });
+
+      const role = user.role ?? user.roles ?? null;
+      if (role) {
+        try {
+          Cookies.set("userRole", JSON.stringify(role), {
+            expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
+          });
+        } catch (_) {
+          // ignore serialization errors
+        }
+      }
     }
 
     // Set token refresh timestamp
@@ -130,6 +141,15 @@ export const getUserStatus = () => {
   return Cookies.get("userStatus") || null;
 };
 
+export const getUserRole = () => {
+  try {
+    const raw = Cookies.get("userRole");
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) {
+    return null;
+  }
+};
+
 /**
  * Check if user is authenticated
  * @returns {boolean} True if access token exists
@@ -164,6 +184,7 @@ export const clearAuthTokens = () => {
     Cookies.remove("_rt"); // refresh token
     Cookies.remove("userId");
     Cookies.remove("userStatus");
+    Cookies.remove("userRole");
     Cookies.remove("tokenRefreshedAt");
 
     // Also remove old cookie names for backward compatibility
@@ -216,6 +237,7 @@ export const getUserData = () => {
   return {
     id: getUserId(),
     status: getUserStatus(),
+    role: getUserRole(),
     isAuthenticated: isAuthenticated(),
     hasRefreshToken: hasRefreshToken(),
   };
