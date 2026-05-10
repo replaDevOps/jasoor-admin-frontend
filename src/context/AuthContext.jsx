@@ -5,7 +5,10 @@ import {
   setAuthTokens,
   getUserData,
   getUserRole,
+  getUserId,
 } from "../shared/tokenManager";
+import { client } from "../config/apolloClient";
+import { ME } from "../graphql/query/user";
 import {
   startAutoRefresh,
   stopAutoRefresh,
@@ -28,7 +31,29 @@ export const AuthProvider = ({ children }) => {
       if (success) {
         setIsLoggedIn(true);
         setUserData(getUserData());
-        setUserPermissions(getUserRole());
+        // Restore role from cookie; if missing (pre-update session), refetch from API.
+        let role = getUserRole();
+        if (!role) {
+          const uid = getUserId();
+          if (uid) {
+            try {
+              const { data } = await client.query({
+                query: ME,
+                variables: { getUserId: uid },
+                fetchPolicy: "network-only",
+              });
+              role = data?.getUser?.role ?? null;
+              if (role) {
+                // Persist for next cold-start (reuse shared tokenManager helper)
+                const { default: Cookies } = await import("js-cookie");
+                Cookies.set("userRole", JSON.stringify(role), { expires: 9.75 });
+              }
+            } catch (_) {
+              // Silently ignore — Sidebar will deny non-dashboard routes when null
+            }
+          }
+        }
+        setUserPermissions(role);
       } else {
         setIsLoggedIn(false);
         setUserData({});

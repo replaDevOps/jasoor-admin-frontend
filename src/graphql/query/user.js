@@ -24,6 +24,26 @@ const ME = gql`
       role {
         id
         name
+        viewDashboard
+        viewListings
+        editListings
+        approveRejectListings
+        viewMeetingRequests
+        scheduleMeetings
+        editMeetingDetails
+        cancelMeetings
+        viewDeals
+        trackDealProgress
+        verifyDocuments
+        finalizeDeal
+        viewFinanceDashboard
+        downloadFinancialReports
+        viewWebsitePages
+        editArticle
+        deleteArticle
+        publishArticle
+        viewAlerts
+        manageRoles
       }
     }
   }

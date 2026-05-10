@@ -31,6 +31,26 @@ export const LOGIN = gql`
         role {
           id
           name
+          viewDashboard
+          viewListings
+          editListings
+          approveRejectListings
+          viewMeetingRequests
+          scheduleMeetings
+          editMeetingDetails
+          cancelMeetings
+          viewDeals
+          trackDealProgress
+          verifyDocuments
+          finalizeDeal
+          viewFinanceDashboard
+          downloadFinancialReports
+          viewWebsitePages
+          editArticle
+          deleteArticle
+          publishArticle
+          viewAlerts
+          manageRoles
         }
       }
     }
@@ -50,6 +70,26 @@ export const REFRESH_TOKEN = gql`
         role {
           id
           name
+          viewDashboard
+          viewListings
+          editListings
+          approveRejectListings
+          viewMeetingRequests
+          scheduleMeetings
+          editMeetingDetails
+          cancelMeetings
+          viewDeals
+          trackDealProgress
+          verifyDocuments
+          finalizeDeal
+          viewFinanceDashboard
+          downloadFinancialReports
+          viewWebsitePages
+          editArticle
+          deleteArticle
+          publishArticle
+          viewAlerts
+          manageRoles
         }
       }
     }

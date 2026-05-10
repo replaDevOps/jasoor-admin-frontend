@@ -96,11 +96,16 @@ const Sidebar = () => {
   const [completedeal, setCompleteDeal] = useState(null);
 
   // Returns true when the current user may access the given route path.
-  // If userPermissions is null (e.g. super-admin with no role object stored yet), allow all.
+  // When userPermissions is null (cookie missing / mid-recovery), deny all permission-gated
+  // routes. "/" (Dashboard) is unconditionally allowed here; "/settings" is always accessible
+  // because its <Route> is not wrapped with PermissionRoute. The auth recovery flow in
+  // AuthContext refetches permissions from the API and re-renders once they arrive.
+  const ALWAYS_ALLOWED_PATHS = new Set(["/"]);
   const canAccess = (path) => {
-    if (!userPermissions) return true;
+    if (ALWAYS_ALLOWED_PATHS.has(path)) return true;
+    if (!userPermissions) return false; // deny until permissions are loaded
     const key = ROUTE_PERMISSIONS[path];
-    if (!key) return true; // no restriction defined
+    if (!key) return true; // no restriction defined — accessible to all staff
     return !!userPermissions[key];
   };
 
@@ -186,9 +191,9 @@ const Sidebar = () => {
 
   // Returns true when the user may see the given menu key.
   const canSeeKey = (key) => {
-    if (!userPermissions) return true;
+    if (!userPermissions) return false; // deny until permissions are loaded
     const perm = MENU_KEY_PERMISSIONS[key];
-    if (!perm) return true;
+    if (!perm) return true; // no restriction defined — show to all staff
     return !!userPermissions[perm];
   };
 
