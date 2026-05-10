@@ -28,9 +28,11 @@ export const AuthProvider = ({ children }) => {
       if (success) {
         setIsLoggedIn(true);
         setUserData(getUserData());
+        setUserPermissions(getUserRole());
       } else {
         setIsLoggedIn(false);
         setUserData({});
+        setUserPermissions(null);
       }
 
       setIsInitializing(false);
@@ -69,6 +71,7 @@ export const AuthProvider = ({ children }) => {
     setAuthTokens(token, refreshToken, user);
     setIsLoggedIn(true);
     setUserData(getUserData());
+    setUserPermissions(getUserRole());
 
     // Start auto-refresh after login
     startAutoRefresh();
@@ -79,6 +82,7 @@ export const AuthProvider = ({ children }) => {
     serviceLogout();
     setIsLoggedIn(false);
     setUserData({});
+    setUserPermissions(null);
   };
 
   return (
@@ -88,6 +92,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         userData,
+        userPermissions,
         isInitializing,
       }}
     >

@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo } from "react";
-import { useNavigate, Route, Routes, useLocation } from "react-router-dom";
+import { useState, useEffect, useMemo, useContext } from "react";
+import { useNavigate, Route, Routes, useLocation, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./index.css";
 import { Layout, Menu, Image, Space, Divider } from "antd";
+import { AuthContext } from "../../context/AuthContext";
 import { Notifications, UserDropdown } from "../../components/Header";
 import { BusinesslIstingPage } from "../BusinesslIstingPage";
 import {
@@ -34,14 +35,80 @@ import { Dashboard } from "../Dashboard";
 import { DSATermsPage } from "../DSATermsPage";
 
 const { Header, Sider, Content } = Layout;
+
+// Maps each route to the permission field that must be true on userPermissions.
+// If a route has no entry, it is accessible to all authenticated admin/staff users.
+const ROUTE_PERMISSIONS = {
+  "/businesslist":          "viewListings",
+  "/businesslisting":       "viewListings",
+  "/createbusinesslist":    "editListings",
+  "/categorymanagement":    "viewWebsitePages",
+  "/addnewcategory":        "viewWebsitePages",
+  "/usermanagement":        "manageRoles",
+  "/meetingrequest":        "viewMeetingRequests",
+  "/businessdeal":          "viewDeals",
+  "/rolepermission":        "manageRoles",
+  "/addrolepermission":     "manageRoles",
+  "/staffmembers":          "manageRoles",
+  "/finance":               "viewFinanceDashboard",
+  "/webtrafficanalysis":    "viewWebsitePages",
+  "/articles":              "viewWebsitePages",
+  "/faqs":                  "viewWebsitePages",
+  "/termofuse":             "viewWebsitePages",
+  "/endaterm":              "viewWebsitePages",
+  "/dsaterms":              "viewWebsitePages",
+  "/privacypolicy":         "viewWebsitePages",
+  "/contactrequests":       "viewAlerts",
+  "/pushnotificationmanager": "viewAlerts",
+  "/alertpage":             "viewAlerts",
+};
+
+// Maps sidebar menu key → required permission (same mapping, keyed by menu key).
+const MENU_KEY_PERMISSIONS = {
+  "2":   "viewListings",
+  "3":   "viewWebsitePages",
+  "4":   "manageRoles",
+  "5":   "viewMeetingRequests",
+  "6":   "viewDeals",
+  "7":   "manageRoles",
+  "8":   "manageRoles",
+  "9":   "viewFinanceDashboard",
+  "10":  "viewWebsitePages",
+  "11a": "viewWebsitePages",
+  "11":  "viewWebsitePages",
+  "12":  "viewWebsitePages",
+  "13":  "viewWebsitePages",
+  "14":  "viewWebsitePages",
+  "19":  "viewWebsitePages",
+  "15":  "viewAlerts",
+  "16":  "viewAlerts",
+  "17":  "viewAlerts",
+};
+
 const Sidebar = () => {
   let navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const location = useLocation();
+  const { userPermissions } = useContext(AuthContext);
   const [collapsed, setCollapsed] = useState(false);
   const [currentTab, setCurrentTab] = useState("1");
   const [openKeys, setOpenKeys] = useState([""]);
   const [completedeal, setCompleteDeal] = useState(null);
+
+  // Returns true when the current user may access the given route path.
+  // If userPermissions is null (e.g. super-admin with no role object stored yet), allow all.
+  const canAccess = (path) => {
+    if (!userPermissions) return true;
+    const key = ROUTE_PERMISSIONS[path];
+    if (!key) return true; // no restriction defined
+    return !!userPermissions[key];
+  };
+
+  // A route wrapper that redirects to "/" when the user lacks the required permission.
+  const PermissionRoute = ({ path, element }) => {
+    if (!canAccess(path)) return <Navigate to="/" replace />;
+    return element;
+  };
 
   useEffect(() => {
     const storedLang = localStorage.getItem("lang") || "en";
@@ -117,18 +184,17 @@ const Sidebar = () => {
     setCurrentTab(tab);
   }, [location]);
 
+  // Returns true when the user may see the given menu key.
+  const canSeeKey = (key) => {
+    if (!userPermissions) return true;
+    const perm = MENU_KEY_PERMISSIONS[key];
+    if (!perm) return true;
+    return !!userPermissions[perm];
+  };
+
   const menuItems = useMemo(
-    () => [
-      getItem(t("Dashboard"), "1"),
-      getItem(t("Business Listing"), "2"),
-      getItem(t("Categories Management"), "3"),
-      getItem(t("User Management"), "4"),
-      getItem(t("Meeting Requests"), "5"),
-      getItem(t("Business Deals"), "6"),
-      getItem(t("Roles & Permissions"), "7"),
-      getItem(t("Staff Members"), "8"),
-      getItem(t("Finance"), "9"),
-      getItem(t("Website Pages"), "sub1", null, [
+    () => {
+      const websiteSubItems = [
         getItem(t("Website Traffic Analysis"), "10"),
         getItem(t("Articles"), "11a"),
         getItem(t("FAQs"), "11"),
@@ -136,13 +202,28 @@ const Sidebar = () => {
         getItem(t("E-NDA Term"), "13"),
         getItem(t("DSA Term"), "19"),
         getItem(t("Privacy Policy"), "14"),
-      ]),
-      getItem(t("Contact Requests"), "15"),
-      getItem(t("Push Notification Manager"), "16"),
-      getItem(t("Alert"), "17"),
-      getItem(t("Settings"), "18"),
-    ],
-    [i18n.language]
+      ].filter((item) => canSeeKey(item.key));
+
+      const allItems = [
+        getItem(t("Dashboard"), "1"),
+        canSeeKey("2")  && getItem(t("Business Listing"), "2"),
+        canSeeKey("3")  && getItem(t("Categories Management"), "3"),
+        canSeeKey("4")  && getItem(t("User Management"), "4"),
+        canSeeKey("5")  && getItem(t("Meeting Requests"), "5"),
+        canSeeKey("6")  && getItem(t("Business Deals"), "6"),
+        canSeeKey("7")  && getItem(t("Roles & Permissions"), "7"),
+        canSeeKey("8")  && getItem(t("Staff Members"), "8"),
+        canSeeKey("9")  && getItem(t("Finance"), "9"),
+        websiteSubItems.length > 0 && getItem(t("Website Pages"), "sub1", null, websiteSubItems),
+        canSeeKey("15") && getItem(t("Contact Requests"), "15"),
+        canSeeKey("16") && getItem(t("Push Notification Manager"), "16"),
+        canSeeKey("17") && getItem(t("Alert"), "17"),
+        getItem(t("Settings"), "18"),
+      ].filter(Boolean);
+
+      return allItems;
+    },
+    [i18n.language, userPermissions]
   );
 
   const handleMenuClick = (e) => {
@@ -280,61 +361,60 @@ const Sidebar = () => {
         <Content className="scroll-bar structure-content-area-cs">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/businesslist" element={<BusinesslIstingPage />} />
+            <Route path="/businesslist" element={<PermissionRoute path="/businesslist" element={<BusinesslIstingPage />} />} />
             <Route
               path="/businesslisting/details/:id"
-              element={<SingleviewBusinesslist />}
+              element={<PermissionRoute path="/businesslisting" element={<SingleviewBusinesslist />} />}
             />
             <Route
               path="/createbusinesslist"
-              element={<CreateBusinessList />}
+              element={<PermissionRoute path="/createbusinesslist" element={<CreateBusinessList />} />}
             />
             <Route
               path="/categorymanagement"
-              element={<CategoriesManagement />}
+              element={<PermissionRoute path="/categorymanagement" element={<CategoriesManagement />} />}
             />
-            <Route path="/addnewcategory" element={<AddNewCategory />} />
+            <Route path="/addnewcategory" element={<PermissionRoute path="/addnewcategory" element={<AddNewCategory />} />} />
             <Route
               path="/addnewcategory/detail/:id"
-              element={<AddNewCategory />}
+              element={<PermissionRoute path="/addnewcategory" element={<AddNewCategory />} />}
             />
-            <Route path="/usermanagement" element={<UserManagement />} />
-            <Route path="/meetingrequest" element={<MeetingRequestPage />} />
+            <Route path="/usermanagement" element={<PermissionRoute path="/usermanagement" element={<UserManagement />} />} />
+            <Route path="/meetingrequest" element={<PermissionRoute path="/meetingrequest" element={<MeetingRequestPage />} />} />
             <Route
               path="/businessdeal"
-              element={<BusinessDealsPage setCompleteDeal={setCompleteDeal} />}
+              element={<PermissionRoute path="/businessdeal" element={<BusinessDealsPage setCompleteDeal={setCompleteDeal} />} />}
             />
             <Route
               path="/businessdeal/details/:id"
-              element={<BusinessDealsDetails completedeal={completedeal} />}
+              element={<PermissionRoute path="/businessdeal" element={<BusinessDealsDetails completedeal={completedeal} />} />}
             />
-            <Route path="/rolepermission" element={<RolePermission />} />
-            <Route path="/staffmembers" element={<StaffMembersPage />} />
+            <Route path="/rolepermission" element={<PermissionRoute path="/rolepermission" element={<RolePermission />} />} />
+            <Route path="/staffmembers" element={<PermissionRoute path="/staffmembers" element={<StaffMembersPage />} />} />
             <Route
               path="/webtrafficanalysis"
-              element={<WebsiteTraficAnalysisPage />}
+              element={<PermissionRoute path="/webtrafficanalysis" element={<WebsiteTraficAnalysisPage />} />}
             />
-            <Route path="/articles" element={<ArticlePage />} />
-            <Route path="/articles/add" element={<AddArticle />} />
-            <Route path="/articles/add/:id" element={<AddArticle />} />
-            <Route path="/termofuse" element={<TermOfUsePage />} />
-            <Route path="/endaterm" element={<EndaTermPage />} />
-            <Route path="/dsaterms" element={<DSATermsPage />} />
-            <Route path="/privacypolicy" element={<PrivacyPolicyPage />} />
-            <Route path="/contactrequests" element={<ContactRequestPage />} />
+            <Route path="/articles" element={<PermissionRoute path="/articles" element={<ArticlePage />} />} />
+            <Route path="/articles/add" element={<PermissionRoute path="/articles" element={<AddArticle />} />} />
+            <Route path="/articles/add/:id" element={<PermissionRoute path="/articles" element={<AddArticle />} />} />
+            <Route path="/termofuse" element={<PermissionRoute path="/termofuse" element={<TermOfUsePage />} />} />
+            <Route path="/endaterm" element={<PermissionRoute path="/endaterm" element={<EndaTermPage />} />} />
+            <Route path="/dsaterms" element={<PermissionRoute path="/dsaterms" element={<DSATermsPage />} />} />
+            <Route path="/privacypolicy" element={<PermissionRoute path="/privacypolicy" element={<PrivacyPolicyPage />} />} />
+            <Route path="/contactrequests" element={<PermissionRoute path="/contactrequests" element={<ContactRequestPage />} />} />
             <Route
               path="/pushnotificationmanager"
-              element={<PushNotificationManagerPage />}
+              element={<PermissionRoute path="/pushnotificationmanager" element={<PushNotificationManagerPage />} />}
             />
-            <Route path="/alertpage" element={<Alerts />} />
+            <Route path="/alertpage" element={<PermissionRoute path="/alertpage" element={<Alerts />} />} />
             <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/finance" element={<FinancePage />} />
-            <Route path="/faqs" element={<FaqsPage />} />
-            <Route path="/rolepermission" element={<RolePermission />} />
-            <Route path="/addrolepermission" element={<AddRolePermission />} />
+            <Route path="/finance" element={<PermissionRoute path="/finance" element={<FinancePage />} />} />
+            <Route path="/faqs" element={<PermissionRoute path="/faqs" element={<FaqsPage />} />} />
+            <Route path="/addrolepermission" element={<PermissionRoute path="/addrolepermission" element={<AddRolePermission />} />} />
             <Route
               path="/addrolepermission/:id"
-              element={<AddRolePermission />}
+              element={<PermissionRoute path="/addrolepermission" element={<AddRolePermission />} />}
             />
           </Routes>
         </Content>
