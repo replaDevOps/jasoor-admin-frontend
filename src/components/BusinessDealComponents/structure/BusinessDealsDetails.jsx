@@ -93,9 +93,9 @@ const BusinessDealsDetails = ({ completedeal }) => {
         buyerName: data.getDeal.buyer?.name || "-",
         sellerId: data.getDeal.business?.seller?.id || "-",
         sellerName: data.getDeal.business?.seller?.name || "-",
-        finalizedOffer: data.getDeal.offer?.price
-          ? formatCurrency(data.getDeal.offer.price)
-          : "-",
+        // Keep as raw number — formatCurrency is applied at each render site.
+        // Pre-formatting here caused double-formatting in BusinessAmountReceiptBuyer.
+        finalizedOffer: data.getDeal.offer?.price ?? null,
         status: data.getDeal.status || 0,
         date: data.getDeal.createdAt
           ? new Date(data.getDeal.createdAt).toLocaleDateString()
@@ -146,7 +146,7 @@ const BusinessDealsDetails = ({ completedeal }) => {
     },
     {
       title: "Finalized Offer",
-      desc: details?.finalizedOffer,
+      desc: details?.finalizedOffer != null ? formatCurrency(details.finalizedOffer) : "-",
     },
     {
       title: "Status",

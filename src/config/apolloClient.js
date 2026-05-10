@@ -16,7 +16,7 @@ import {
   isAuthenticated,
 } from "../shared/tokenManager";
 
-const API_URL = "https://verify.jusoor-sa.co/graphql";
+const API_URL = import.meta.env.VITE_GRAPHQL_URL || "https://verify.jusoor-sa.co/graphql";
 
 // HTTP Link
 const httpLink = createHttpLink({
@@ -50,7 +50,7 @@ const authLink = setContext(async (operation, { headers, skipAuth }) => {
 
 // WebSocket link for subscriptions
 const wsLink = new WebSocketLink({
-  uri: "wss://verify.jusoor-sa.co/subscriptions",
+  uri: import.meta.env.VITE_WS_URL || "wss://verify.jusoor-sa.co/subscriptions",
   options: {
     reconnect: true,
     connectionParams: () => {

@@ -1,9 +1,6 @@
 import { Button, Col, Flex, Row, message } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
-import {
-  UPDATE_DEAL,
-  UPDATE_BUSINESS,
-} from "../../../graphql/mutation/mutations";
+import { UPDATE_DEAL } from "../../../graphql/mutation/mutations";
 import { useMutation } from "@apollo/client";
 import { GETDEAL } from "../../../graphql/query";
 import { useEffect } from "react";
@@ -12,12 +9,13 @@ import { useTranslation } from "react-i18next";
 const FinalDeal = ({ details }) => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
+  // updateDeal with status COMPLETED now also marks the business as SOLD in the
+  // same backend transaction — no second mutation needed.
   const [updateDeals, { loading, data, error }] = useMutation(UPDATE_DEAL, {
     refetchQueries: [
       { query: GETDEAL, variables: { getDealId: details?.key } },
     ],
   });
-  const [updateBusiness] = useMutation(UPDATE_BUSINESS);
 
   useEffect(() => {
     if (data?.updateDeal?.id) {
@@ -38,15 +36,6 @@ const FinalDeal = ({ details }) => {
         input: {
           id: details.key,
           status: "COMPLETED",
-        },
-      },
-    });
-    await updateBusiness({
-      variables: {
-        input: {
-          id: details?.busines?.id,
-          isSold: true,
-          businessStatus: "SOLD",
         },
       },
     });

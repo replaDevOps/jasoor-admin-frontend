@@ -127,6 +127,8 @@ const OfferTable = (businessId) => {
           <Text className="btnpill fs-12 inactive">{t("Reject")}</Text>
         ) : status === "PENDING" ? (
           <Text className="btnpill fs-12 inactive">{t("Pending")}</Text>
+        ) : status === "MEETING" ? (
+          <Text className="btnpill fs-12 pending">{t("In Meeting")}</Text>
         ) : status ? (
           <Text className="btnpill fs-12 success">{t("Received")}</Text>
         ) : null;

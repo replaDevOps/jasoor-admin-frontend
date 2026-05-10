@@ -76,6 +76,19 @@ export const setAuthTokens = (accessToken, refreshToken, user) => {
       Cookies.set("userStatus", user.status, {
         expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
       });
+
+      // Store role permissions so the UI can gate menus/routes without an extra round-trip.
+      // The role object comes from the login mutation response (user.role).
+      const role = user.role ?? user.roles ?? null;
+      if (role) {
+        try {
+          Cookies.set("userRole", JSON.stringify(role), {
+            expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
+          });
+        } catch (_) {
+          // ignore serialization errors — UI will fall back to showing all items
+        }
+      }
     }
 
     // IMPORTANT: Only set tokenIssuedAt on initial login, not on refresh
@@ -115,6 +128,15 @@ export const getUserStatus = () => {
   return Cookies.get("userStatus") || null;
 };
 
+export const getUserRole = () => {
+  try {
+    const raw = Cookies.get("userRole");
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) {
+    return null;
+  }
+};
+
 export const isAuthenticated = () => {
   return !!getAccessToken();
 };
@@ -145,6 +167,7 @@ export const clearAuthTokens = () => {
     Cookies.remove("_rt"); // refresh token
     Cookies.remove("userId");
     Cookies.remove("userStatus");
+    Cookies.remove("userRole"); // role permissions
     Cookies.remove("tokenRefreshedAt"); // Last refresh time
     Cookies.remove("tokenIssuedAt"); // Token issue time (IMPORTANT!)
 
@@ -212,6 +235,7 @@ export const getUserData = () => {
   return {
     id: getUserId(),
     status: getUserStatus(),
+    role: getUserRole(),
     isAuthenticated: isAuthenticated(),
     hasRefreshToken: hasRefreshToken(),
   };
