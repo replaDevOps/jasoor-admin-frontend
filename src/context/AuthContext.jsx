@@ -4,6 +4,7 @@ import {
   isAuthenticated,
   setAuthTokens,
   getUserData,
+  getUserRole,
 } from "../shared/tokenManager";
 import {
   startAutoRefresh,
@@ -16,6 +17,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
   const [userData, setUserData] = useState(getUserData());
+  const [userPermissions, setUserPermissions] = useState(getUserRole());
   const [isInitializing, setIsInitializing] = useState(true);
 
   // Initialize auth and start auto-refresh on app load
