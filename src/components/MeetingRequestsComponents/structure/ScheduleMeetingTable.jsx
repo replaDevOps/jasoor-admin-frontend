@@ -451,7 +451,7 @@ const ScheduleMeetingTable = () => {
   useEffect(() => {
     if (selectedOffer) {
       const priceValue =
-        parseFloat(String(selectedOffer.price).replace("⃁", "").replace("SAR", "").trim()) || 0;
+        parseFloat(String(selectedOffer.price).replace("SAR", "").replace("SAR", "").trim()) || 0;
 
       const commission = priceValue * (commissionRate / 100);
       form.setFieldsValue({
@@ -549,7 +549,7 @@ const ScheduleMeetingTable = () => {
             >
               <Input
                 type="number"
-                prefix="⃁"
+                prefix="SAR"
                 placeholder={t("Enter offer price")}
                 onChange={handlePriceChange}
               />

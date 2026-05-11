@@ -140,18 +140,18 @@ const CommissionBrackets = () => {
 
   const commissionFormula = (r) => {
     if (r.type === 'PERCENTAGE') return `${r.percentageValue}%`;
-    if (r.type === 'FIXED')      return `${formatAmount(r.fixedValue)} ⃁`;
-    return `${formatAmount(r.fixedValue)} ⃁ + ${r.percentageValue}%`;
+    if (r.type === 'FIXED')      return `${formatAmount(r.fixedValue)} SAR`;
+    return `${formatAmount(r.fixedValue)} SAR + ${r.percentageValue}%`;
   };
 
   const columns = [
     {
-      title: t('From (⃁)'),
+      title: t('From (SAR)'),
       dataIndex: 'fromAmount',
       render: (v) => formatAmount(v),
     },
     {
-      title: t('To (⃁)'),
+      title: t('To (SAR)'),
       dataIndex: 'toAmount',
       render: (v) => Number(v) === 0 ? <Text type="secondary">{t('Unlimited')}</Text> : formatAmount(v),
     },
@@ -223,7 +223,7 @@ const CommissionBrackets = () => {
               <InputNumber
                 min={0}
                 step={1000}
-                placeholder={t('Enter deal price (⃁)')}
+                placeholder={t('Enter deal price (SAR)')}
                 style={{ width: 220 }}
                 formatter={(v) => v ? `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}
                 parser={(v) => v ? v.replace(/,/g, '') : ''}
@@ -237,7 +237,7 @@ const CommissionBrackets = () => {
             {previewResult != null && (
               <Form.Item>
                 <Tag color="green" style={{ fontSize: 14, padding: '4px 12px' }}>
-                  {t('Commission')}: {Number(previewResult).toLocaleString()} ⃁
+                  {t('Commission')}: {Number(previewResult).toLocaleString()} SAR
                 </Tag>
               </Form.Item>
             )}
@@ -270,14 +270,14 @@ const CommissionBrackets = () => {
             <Col span={12}>
               <Form.Item
                 name="fromAmount"
-                label={t('From Amount (⃁)')}
+                label={t('From Amount (SAR)')}
                 rules={[{ required: true, message: t('Required') }]}
               >
                 <InputNumber min={0} style={{ width: '100%' }} placeholder="0" />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name="toAmount" label={t('To Amount (⃁ — 0 = unlimited)')}>
+              <Form.Item name="toAmount" label={t('To Amount (SAR — 0 = unlimited)')}>
                 <InputNumber min={0} style={{ width: '100%' }} placeholder="0" />
               </Form.Item>
             </Col>
@@ -291,7 +291,7 @@ const CommissionBrackets = () => {
             <Select
               options={[
                 { value: 'PERCENTAGE', label: t('Percentage of price') },
-                { value: 'FIXED',      label: t('Fixed ⃁ amount') },
+                { value: 'FIXED',      label: t('Fixed SAR amount') },
                 { value: 'HYBRID',     label: t('Fixed + Percentage (Hybrid)') },
               ]}
             />
@@ -314,10 +314,10 @@ const CommissionBrackets = () => {
                   {(type === 'FIXED' || type === 'HYBRID') && (
                     <Form.Item
                       name="fixedValue"
-                      label={t('Fixed Amount (⃁)')}
+                      label={t('Fixed Amount (SAR)')}
                       rules={[{ required: true, message: t('Required') }]}
                     >
-                      <InputNumber min={0} step={100} addonAfter="⃁" style={{ width: '100%' }} />
+                      <InputNumber min={0} step={100} addonAfter="SAR" style={{ width: '100%' }} />
                     </Form.Item>
                   )}
                 </>

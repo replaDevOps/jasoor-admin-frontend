@@ -28,11 +28,11 @@ const ListingRevenueBar = () => {
       stroke: { curve: "smooth", width: 2 },
       xaxis: {
         categories: [
-          "⃁ (0-50k)",
-          "⃁ (50k-100k)",
-          "⃁ (100k-250k)",
-          "⃁ (250k-500k)",
-          "⃁ (500k+)",
+          "SAR (0-50k)",
+          "SAR (50k-100k)",
+          "SAR (100k-250k)",
+          "SAR (250k-500k)",
+          "SAR (500k+)",
         ],
         labels: {
           style: { colors: "#000", fontSize: "11px" },
