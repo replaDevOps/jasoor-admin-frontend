@@ -245,7 +245,6 @@ const AddUser = ({ visible, onClose, edititem }) => {
         district: formData.district,
         city: formData.city,
         phone: formData.phoneNo,
-        roleId: rolesData?.getCustomerRole?.id,
         password:
           formData.password && String(formData.password).trim().length > 0
             ? formData.password
@@ -263,6 +262,7 @@ const AddUser = ({ visible, onClose, edititem }) => {
         const input = {
           ...basePayload,
           email: formData.email.toLowerCase(),
+          roleId: rolesData?.getCustomerRole?.id,
         };
         await createStaff({ variables: { input } });
         messageApi.success(t("User account created successfully!"));
@@ -647,14 +647,14 @@ const AddUser = ({ visible, onClose, edititem }) => {
                   )}
                 </Row>
               </Col>
-              <Col span={24}>
-                <MyInput
-                  label={t("Password")}
-                  type="password"
-                  name="password"
-                  size="large"
-                  className="fs-14"
-                  placeholder={t("Enter password")}
+	              <Col span={24}>
+	                <MyInput
+	                  label={edititem ? t("New Password (optional)") : t("Password")}
+	                  type="password"
+	                  name="password"
+	                  size="large"
+	                  className="fs-14"
+	                  placeholder={edititem ? t("Leave blank to keep current password") : t("Enter password")}
                   rules={
                     edititem
                       ? [
@@ -710,9 +710,9 @@ const AddUser = ({ visible, onClose, edititem }) => {
                   }
                 />
               </Col>
-              <Col span={24}>
-                <MyInput
-                  label={t("Re-Type Password")}
+	              <Col span={24}>
+	                <MyInput
+	                  label={edititem ? t("Re-Type New Password") : t("Re-Type Password")}
                   type="password"
                   name="confirmationPassword"
                   size="large"

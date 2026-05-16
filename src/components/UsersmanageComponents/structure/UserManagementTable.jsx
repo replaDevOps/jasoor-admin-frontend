@@ -179,20 +179,34 @@ const UserManagementTable = ({ setVisible, setEditItem }) => {
           <Dropdown
             menu={{
               items: [
-                {
-                  label: (
-                    <NavLink
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setVisible(true);
-                        setEditItem(row);
-                      }}
-                    >
-                      {t("Edit")}
-                    </NavLink>
-                  ),
-                  key: "1",
-                },
+	                {
+	                  label: (
+	                    <NavLink
+	                      onClick={(e) => {
+	                        e.preventDefault();
+	                        setVisible(true);
+	                        setEditItem(row);
+	                      }}
+	                    >
+	                      {t("Edit")}
+	                    </NavLink>
+	                  ),
+	                  key: "1",
+	                },
+	                {
+	                  label: (
+	                    <NavLink
+	                      onClick={(e) => {
+	                        e.preventDefault();
+	                        setVisible(true);
+	                        setEditItem(row);
+	                      }}
+	                    >
+	                      {t("Change Password")}
+	                    </NavLink>
+	                  ),
+	                  key: "change-password",
+	                },
                 ...(row.status === "verified"
                   ? [
                       {
